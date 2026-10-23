@@ -1,36 +1,27 @@
 {
-  "name": "English Explorer – Oman",
+  "name": "English Explorer | رحلتي مع الإنجليزية",
   "short_name": "English Explorer",
-  "description": "Interactive English learning for Oman school curriculum",
+  "description": "Wadi Al Hawasna School — interactive English language practice Levels 0–12",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#155eef",
+  "background_color": "#f3f6ff",
+  "theme_color": "#3547ca",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-maskable-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }

@@ -24,3 +24,11 @@ Google Sheets:
 
 For standalone use, open Wadi_English_Explorer_Mobile_Mic_Audio_Fixed.html;
 PWA installation needs the whole directory above.
+
+Placement test update (October 2026):
+- Select/save the student's registered grade before placement.
+- Grade 7 samples only Levels 0-7; other grades work the same way.
+- Other/Foundation samples only Levels 0-5.
+- The 24 questions are spread across eligible levels, weighted slightly toward the highest ones.
+- Placement never exceeds the student's registered grade; the normal progression system is unchanged.
+- Cache version updated so installed PWAs can receive the new test.

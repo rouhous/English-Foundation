@@ -1,5 +1,5 @@
 // English Explorer PWA – core offline cache, no caching of Google reporting requests.
-const CACHE='english-explorer-2026-v4-mic-audio';
+const CACHE='english-explorer-2026-v5-grade-placement';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));

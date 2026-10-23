@@ -148,8 +148,44 @@ function addUser(){let p=newProfile();db.profiles[p.id]=p;db.active=p.id;activeS
 function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}db.active=id;activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}
 function checkAccess(g){if(!permitted(g)){toast('المستوى مقفل. أكمل التشخيص ثم أتقن 70٪ من المستوى السابق.');return false}return true}
 function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">المستوى 0 مفتوح للجميع. المستويات الأخرى تحتاج إلى تشخيص ثم يتوسع المسار بعد إتقان 140 عنصرًا من أصل 200 في المستويات المطلوبة. لإتقان العنصر، أجب عنه بشكل صحيح مرتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك. يمكنك لعب المستوى صفر من الآن.</div>':''}<div class="actions"><button class="btn mint" onclick="beginLevel(0)">🔤 المستوى صفر — مفتوح</button><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>{const m=countMaster(g),can=permitted(g),done=achieved(g);return `<div class="level ${can?'':'locked'}"><span class="level-index">${g===0?'✨ OPEN LEVEL 0':'LEVEL '+g} • ${can?'🔓':'🔒'}</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,200)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/200</b> • ${pct(m,200)}% • ${done?'🏅 أكمل 70٪':can?'متاح':'مقفل'}</div><div class="actions"><button class="btn small ${g===0?'gold':'mint'}" ${can?'':'disabled'} onclick="beginLevel(${g})">▶ لعب</button><button class="btn small light" ${can?'':'disabled'} onclick="learnLevel(${g})">📘 تعلّم</button><button class="btn small light" ${can?'':'disabled'} onclick="trainWrong(${g})">🔁 أخطائي</button></div></div>`}).join('')}</div>`}
-function diagnosticLanding(){const p=active();document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> موزعة على مستويات مختلفة. نتيجته تقديرية وتساعد على فتح مستويات مناسبة كبداية.</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'المستويات 1–12 مقفلة حتى إكمال التشخيص. المستوى صفر يبقى مفتوحًا.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button><button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button></div></section>`}
-function startDiagnostic(){if(!active().name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return}const ids=[];for(let g=1;g<=12;g++){let pool=byGrade[g].filter(x=>x.mode==='mcq'&&x.type!=='Listening');ids.push(...shuffle(pool).slice(0,2).map(x=>x.id))}activeSession={kind:'diagnostic',ids:shuffle(ids),index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
+// The school grade limits both placement questions and the suggested placement level.
+// "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
+// An unselected grade must be saved before a placement attempt.
+function placementCeiling(p=active()){
+  const selected=String(p.grade??'').trim();
+  if(selected==='other')return 5;
+  const g=Number(selected);
+  return selected!==''&&Number.isInteger(g)&&g>=6&&g<=12?g:null;
+}
+function placementPlan(ceiling,questionCount=24){
+  const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
+  const perLevel=Math.floor(questionCount/eligible.length);
+  let remaining=questionCount%eligible.length;
+  const ids=[];
+  // Extra questions go to the highest eligible levels, never above the saved grade.
+  for(const g of eligible){
+    const requested=perLevel+(g>ceiling-remaining?1:0);
+    const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+    if(pool.length<requested)throw new Error('Insufficient placement questions for level '+g);
+    ids.push(...shuffle(pool).slice(0,requested).map(q=>q.id));
+  }
+  return shuffle(ids);
+}
+function diagnosticLanding(){
+  const p=active(),cap=placementCeiling(p);
+  const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
+  const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
+  document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button></div></section>`;
+}
+function startDiagnostic(){
+  const p=active();
+  if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
+  const cap=placementCeiling(p);
+  if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
+  const ids=placementPlan(cap,24);
+  activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
+  displayQuestion();
+}
 function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let pool=byGrade[g].filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
 function trainWrong(g){beginLevel(g,null,true)}
 function displayQuestion(){if(!activeSession){route('levels');return}if(activeSession.index>=activeSession.ids.length){endSession();return}const q=questionById[activeSession.ids[activeSession.index]];shownId=q.id;answerLock=false;let step=activeSession.index+1;const pctQ=pct(step-1,activeSession.ids.length);let visual=q.pic||q.word||q.answer;let showPicture=q.type==='Match'||q.type==='Describe'||q.type==='Blend'||q.g===0||q.type==='Vocabulary';let show=showPicture?imageHtml(visual):'';
@@ -172,11 +208,14 @@ function stopQuiz(){activeSession=null;route('levels')}
 function endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.
-  const bounds=[[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
-  let grade=1;for(let [min,g] of bounds){if(pc>=min){grade=g;break}}
+  const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
+  let grade=1;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
+  // Cap the placement recommendation to the registered grade used at test start.
+  const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
+  grade=Math.min(ceiling,grade);
   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
 }else persist();activeSession=null;
-document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b>. المستويات من 1 إلى ${s.placed} متاحة. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ مستويات جديدة بعد إتقان 140 عنصرًا في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('levels')">خريطة المستويات</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade})">جولة جديدة</button>`:''}</div></div>`}
+document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستويات من 1 إلى ${s.placed} متاحة. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ مستويات جديدة بعد إتقان 140 عنصرًا في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('levels')">خريطة المستويات</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade})">جولة جديدة</button>`:''}</div></div>`}
 function learnLevel(g){if(!checkAccess(g))return;let items=byGrade[g].filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
 if(g===0){items=byGrade[0].filter(q=>q.type==='Blend').slice(0,60)}
 const phonics=g===0?`<div class="bi-guide"><div class="guide-en" lang="en">🔤 Blend the sounds: 1) Listen to the sounds. 2) Say the sounds slowly. 3) Join them: /c/ + /a/ + /t/ → cat. 4) Listen to the whole word and read aloud.</div><div class="guide-ar" lang="ar">🔤 طريقة المزج الصوتي: ١) استمع إلى الأصوات. ٢) انطق كل صوت ببطء. ٣) اجمعها لتكوين الكلمة: /c/ + /a/ + /t/ → cat. ٤) استمع للكلمة كاملة ثم اقرأها وكرر التدريب.</div></div>`:'';

@@ -1,21 +1,24 @@
-/** STAGING diagnostic only: no student operations. Deploy manually to Apps Script as a NEW file and add a separate doGet route. */
-function eeRecoveryBridgeDiagnosticPage_() {
+/** Diagnostic-only nonce handshake. No student records or recovery operations. */
+function eeRecoveryBridgeDiagnosticPage_(nonce) {
   eeAssertStagingConfigured_();
-  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Recovery bridge diagnostic</title></head><body>
-<script>
+  nonce = String(nonce || '');
+  if (!/^[a-f0-9]{32}$/.test(nonce)) {
+    return HtmlService.createHtmlOutput('Invalid diagnostic nonce');
+  }
+  const safeNonce = JSON.stringify(nonce);
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Bridge diagnostic</title></head><body><script>
 (function(){
   'use strict';
-  var APP_ORIGIN = 'https://rouhous.github.io';
-  function announce(){
-    try { window.top.postMessage({eeRecoveryBridge:true,ready:true,diagnostic:'top-ready-v1'}, APP_ORIGIN); }
-    catch(err) {}
+  var nonce = ${safeNonce};
+  var target = 'https://rouhous.github.io';
+  function announce() {
+    window.top.postMessage({eeRecoveryBridge:true,ready:true,diagnostic:'nonce-v2',nonce:nonce},target);
   }
   announce();
   window.addEventListener('load',announce);
-  // No requests or student data accepted.
 })();
 <\/script></body></html>`;
   return HtmlService.createHtmlOutput(html)
-    .setTitle('My English Journey STAGING Recovery Diagnostic')
+    .setTitle('My English Journey STAGING diagnostic')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }

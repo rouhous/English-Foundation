@@ -42,10 +42,10 @@ function rpc(action,payload){return new Promise((resolve,reject)=>{
     if(!html.includes(old))throw new Error('Recovery iframe endpoint not found.');
     html=html.replace(old,'exec?studentRecoveryV2=1&nonce='+hex);
     // Keep resources at the original root, while retaining this unique STAGING URL.
-    html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+root+'"><script>window.__EE_RECOVERY_NONCE="'+hex+'";<\\/script>');
+    html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+root+'"><script>window.__EE_RECOVERY_NONCE="'+hex+'";<'+'/script>');
     document.open();document.write(html);document.close();
   }catch(err){
     document.getElementById('message').textContent='تعذّر تجهيز نسخة STAGING: '+err.message;
   }
 })();
-<\/script></body></html>
+</script></body></html>

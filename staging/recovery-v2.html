@@ -1,0 +1,51 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My English Journey · Recovery V2 STAGING</title><style>body{font:17px system-ui;margin:12vh auto;max-width:660px;padding:20px;color:#15455c}#message{padding:20px;background:#eef7fc;border-radius:16px}</style></head><body><div id="message">جار تحميل النسخة التجريبية المستقلة للحفظ السحابي…</div><script>
+(async function(){
+  const root='/English-Foundation/';
+  const hex=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');
+  try{
+    const response=await fetch(root+'index.html',{cache:'no-store'});
+    if(!response.ok)throw new Error('Cannot load original app ('+response.status+')');
+    let html=await response.text();
+    const startMarker="window.addEventListener('message',function(event){";
+    const endMarker='function error(e){setStatus(';
+    const scope=html.indexOf("const KEY='EE_V38_RECOVERY_SESSIONS'");
+    const a=html.indexOf(startMarker,scope),b=html.indexOf(endMarker,a);
+    if(scope<0||a<0||b<0)throw new Error('The app recovery integration has changed: no safe patch applied.');
+    const fresh=`let recoveryWindow=null,recoveryOrigin='';
+function isGoogleRecoveryOrigin(origin){
+ return /^https:\/\/[a-z0-9-]+\\.googleusercontent\\.com$/.test(origin);
+}
+window.addEventListener('message',function(event){
+ const d=event.data||{};
+ if(d.eeRecoveryBridge!==true||d.nonce!==window.__EE_RECOVERY_NONCE)return;
+ if(!isGoogleRecoveryOrigin(event.origin))return;
+ if(d.ready===true&&d.protocol===2){
+   recoveryWindow=event.source;recoveryOrigin=event.origin;
+   ready=true;setStatus('✅ متصل بخادم الحفظ السحابي التجريبي');show();return;
+ }
+ if(!ready||event.source!==recoveryWindow||event.origin!==recoveryOrigin)return;
+ const item=pending[d.requestId];if(!item)return;
+ delete pending[d.requestId];clearTimeout(item.timeout);
+ d.error?item.reject(Error(d.error)):item.resolve(d.payload);
+});
+function rpc(action,payload){return new Promise((resolve,reject)=>{
+ if(!ready||!recoveryWindow){reject(Error('تعذّر الاتصال بالخادم. أعد تحميل النسخة التجريبية.'));return;}
+ const requestId='ee'+Date.now()+'_'+(++seq);
+ const timeout=setTimeout(()=>{delete pending[requestId];reject(Error('انتهت مهلة طلب الحفظ السحابي'))},45000);
+ pending[requestId]={resolve,reject,timeout};
+ try{recoveryWindow.postMessage({eeRecoveryRequest:true,nonce:window.__EE_RECOVERY_NONCE,requestId,action,payload},recoveryOrigin)}
+ catch(e){clearTimeout(timeout);delete pending[requestId];reject(e)}
+})}
+`;
+    html=html.slice(0,a)+fresh+html.slice(b);
+    const old='exec?studentRecovery=1';
+    if(!html.includes(old))throw new Error('Recovery iframe endpoint not found.');
+    html=html.replace(old,'exec?studentRecoveryV2=1&nonce='+hex);
+    // Keep resources at the original root, while retaining this unique STAGING URL.
+    html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+root+'"><script>window.__EE_RECOVERY_NONCE="'+hex+'";<\\/script>');
+    document.open();document.write(html);document.close();
+  }catch(err){
+    document.getElementById('message').textContent='تعذّر تجهيز نسخة STAGING: '+err.message;
+  }
+})();
+<\/script></body></html>

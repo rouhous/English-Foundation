@@ -97,3 +97,31 @@ const JOURNEY_BADGES=[['🌱','الرحّالة الصغير'],['🧭','المغ
 function currentIsland(p=active()){if(Number.isInteger(Number(p.journeyIsland))&&p.journeyIsland!==undefined&&permitted(Number(p.journeyIsland)))return Number(p.journeyIsland);if(p.diagnosed)return Math.min(12,Math.max(0,Number(p.assigned)||0));return 0}
 function islandBadges(g,p=active()){let m=countMaster(g,p);return JOURNEY_BADGES.map(([em,name],i)=>({em,name,earned:m>=(i+1)*20,target:(i+1)*20}))}
 function voyageArt(){return `<div class="voyage-scene" id="voyageScene" role="img" aria-label="طفل عماني يقود سفينة خشبية بعلم عمان باتجاه جزر تعليم الإنجليزية"><img src="data:image/webp;base64,UklGRvZKAQBXRUJQVlA4IOpKAQBQ1wSdASqtA8wBPm0ukkYkIqGpLfN9SSANiWpse4gUyWANkcBlD1TWLI8QOmjj/zt/D/z37lf5H92PlP4569/bP3n/L/8L/GfuT9yn8vrM97/5fly+t/zv/f/0f5QfML/hf/X/Zf7P4c/0r/P/+v/R/vh9Bv65/9b/I/6H/3f6b6Qf+j9vffJ/hf/J6mf65/s//n/t/+Z8Ov/a/cn3s/3X/oftf/t/kM/sP+Y/8v5//HZ///dr/0//n///uN/1z/o//f17P3a/5Xy8/2P/t/un/x/kj/aD/3/6f9//kA///t28y/Cp8l/of+d+Yvnb+RfX/7P+//57/u/5H3YP+j/R+ZHsf/2f771M/m35k/o/5D/S+6b/C/9f+y8vfy/+a/8f+l9hf8s/p3+8/wH5KfFj+d4nu7f9f0Kfe/8P+1Pku/+PrL+tf8T/0etD/B/+D2w/7Hlr/1fUT/xnon/7X/1/5H5z/GT8u/4P/2/23wO/zj/Af9wbayKP9tNz6vIAJ10TsRdHgkvaKQWRnGU4+0MWJDdXEWFOO6XWVbA93vaIGyWQhTVUxLbkhwKlAzS64YqROigY89JVr0JXn7qdm5JEFxt/3vYajU5dfR/309pr+bVoWt0fC7D26c56pttMjXQOiJ7OUnItf/FHKgt7DnzH37k60ug0B0wtcr9OzuSQLG22O7WF7Ah0VBJe9c6NJAi5H7wID8ljzFXMUy2O30eX6i/QPP6LBYCE/3AUXTp5xIABSeoiwvru/ephALxiHbtufHedGpTWnBWgv2dANijXAYGu5ntOlQ+e/SXB6mvUfgAERx/T+7eET+/Me9jFk3wXEWe5YRInIImA9kNvC/aKeJWs9pWCBMVrmQQQciBVKVA+2vFROjvvJ2l+k3RZDTWim+/mQbP5W+cJQSp9TnEavZr2apUQk1UfCpBC/fO1TRdEDzvnjcFeI680qY55UBz4zg962ivqQ+hMhGCKUasTQDWkKe8VMy25IeNuCrLGlO+22rCWhE7KtM9j+Ae9i4TOi0zv/xtX6GHj/L3f/1qY5bKg05HpE3q7YjOMLrFcCKXcsT9GmhWh3Rau3zsAEfYNszB7auz9+e8vjxzDIdYnnMiYce24M6xGUgam56/atDCCJfheiRoBkfSnB3Y5yfWI/PHwFeK72ev7bVURadjzHwnSBab6J/S5/G5qLKLpLeZGMyI/49JQz5O0ytMqHGwuUiZGKfEJC9FV5oEGdJ8mD30HtZvmA8belrrKqMBU
+START function imageHtml(
+function imageHtml(word,size='standard'){let src=realPhoto(word);return src?`<img src="${src}" alt="${esc(word)}" loading="lazy">`:''}
+function speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}
+
+// Give beginner learners bilingual procedural guidance without revealing an answer.
+function beginnerGuide(q){
+  if(!q||q.g>6)return '';
+  const text={
+    Phonics:['Listen and identify the correct letter sound.','استمع جيدًا ثم اختر صوت الحرف أو الحروف الصحيح.'],
+    Blend:['Listen to the complete word and choose the matching written word.','استمع إلى الكلمة كاملة ثم اختر الكلمة المكتوبة المطابقة لما سمعت.'],
+    Vocabulary:['Read the question, then choose the matching word or meaning.','اقرأ السؤال ثم اختر الكلمة أو المعنى المناسب.'],
+    Spelling:['Study the spelling clues and write or choose the correct word.','ادرس الحروف والدلائل ثم اكتب الكلمة أو اختر تهجئتها الصحيحة دون صوت.'],
+    Listening:['Tap Listen, focus on the sounds, and choose an answer.','اضغط «استمع»، وركّز في المسموع، ثم اختر الإجابة.'],
+    Grammar:['Read the full sentence and choose the correct form.','اقرأ الجملة كاملة ثم اختر الصيغة الصحيحة.'],
+    Reading:['Read the text carefully and answer the question.','اقرأ النص بعناية ثم أجب عن السؤال.'],
+    Writing:['Look at the model and choose the best written answer.','انظر إلى النموذج ثم اختر الإجابة المكتوبة الأنسب.'],
+    'Writing Builder':['Put the words in a correct sentence.','رتّب الكلمات لتكوين جملة صحيحة.'],
+    Order:['Choose the correct order of words.','اختر الترتيب الصحيح للكلمات.'],
+    Match:['Match the picture to its correct description.','طابق الصورة مع الوصف الصحيح.'],
+    Describe:['Look at the picture and choose the best description.','تأمل الصورة ثم اختر الوصف الصحيح.']
+  };
+  const guide=(q.g===0&&q.type==='Spelling'&&q.mode==='type')
+    ? ['Listen to the phonics word. Tap the mixed letters in the correct order.','في لعبة دمج الأصوات، استمع إلى الكلمة ثم رتّب الحروف المبعثرة.']
+    : (text[q.type]||['Read or listen, then choose the correct answer.','اقرأ أو استمع ثم اختر الإجابة الصحيحة.']);
+  return `<div class="bi-guide" role="note"><div class="guide-en" lang="en">🇬🇧 ${esc(guide[0])}</div><div class="guide-ar" lang="ar">🇴🇲 ${esc(guide[1])}</div></div>`;
+}
+// Only questions that actually test listening or sound blending may speak before the answer.
+// This avoids revealing the solution in spelling, grammar, translation, pictur

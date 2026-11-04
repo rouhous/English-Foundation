@@ -1,0 +1,20 @@
+name: Audit prelaunch app structure
+on:
+  push:
+    paths:
+      - scripts/audit_prelaunch.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/audit_prelaunch.py
+      - name: Record report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/prelaunch-code-audit.txt
+          if ! git diff --cached --quiet; then git commit -m "Record prelaunch structural audit"; git push; fi

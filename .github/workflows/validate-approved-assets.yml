@@ -1,0 +1,24 @@
+name: Validate approved images and release wiring
+on:
+  push:
+    paths:
+      - scripts/check_prelaunch_assets.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript image bundles
+        run: |
+          for file in assets/approved-images-*.js; do node --check "$file"; done
+      - name: Validate 1136 image records and all references
+        run: python3 scripts/check_prelaunch_assets.py
+      - name: Publish verification results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/prelaunch-asset-validation.json
+          if ! git diff --cached --quiet; then git commit -m "Record approved vocabulary asset integrity checks"; git push; fi

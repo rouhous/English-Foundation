@@ -1,0 +1,21 @@
+name: Activate reviewed vocabulary images
+on:
+  push:
+    paths:
+      - scripts/install_approved_images.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install and validate approved-only image lookup
+        run: python3 scripts/install_approved_images.py
+      - name: Save integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          if ! git diff --cached --quiet; then git commit -m "Activate 1136 reviewed vocabulary images in existing app"; git push; fi

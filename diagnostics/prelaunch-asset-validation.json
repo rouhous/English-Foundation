@@ -1,0 +1,15 @@
+{
+  "approved_images": 1136,
+  "unique_image_ids": 1136,
+  "distinct_word_labels": 971,
+  "preferred_images": 36,
+  "dimensions": {
+    "316x316": 708,
+    "384x384": 428
+  },
+  "mobile_stylesheet_linked": true,
+  "two_levels": true,
+  "rejected_images_imported": 0,
+  "status": "STATIC_ASSET_CHECKS_PASSED",
+  "release_note": "Not a security or end-to-end student-account certification."
+}

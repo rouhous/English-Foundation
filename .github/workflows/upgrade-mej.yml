@@ -1,0 +1,27 @@
+name: Update My English Journey stage layout
+on:
+  push:
+    paths:
+      - scripts/upgrade_mej.py
+      - .github/workflows/upgrade-mej.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Upgrade existing application
+        run: python3 scripts/upgrade_mej.py
+      - name: Commit application update
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Apply two sublevels and restore homepage boat image"
+            git push
+          fi

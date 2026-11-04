@@ -117,4 +117,87 @@ w=sw.read_text(encoding="utf-8")
 w2=re.sub(r"const CACHE='[^']+';","const CACHE='english-explorer-2026-home-boat-fix-20261104';",w,count=1)
 if w2==w:raise RuntimeError("Could not update offline cache key")
 sw.write_text(w2,encoding="utf-8")
-print("Home scene visibility CSS applied; image sources and student data unchanged.")
+
+# Dedicated phone viewport layout patch, idempotent for workflow reruns.
+responsive_start='<style id="mej-home-mobile-viewport-v1">'
+if responsive_start in s:
+    s=re.sub(re.escape(responsive_start)+r".*?</style>","",s,flags=re.S)
+responsive_css="""<style id="mej-home-mobile-viewport-v1">
+@media(max-width:900px){
+  html:has(#app .mobile-ocean-v31),body:has(#app .mobile-ocean-v31){
+    min-height:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow-x:hidden!important;
+    background:#065cb1!important;
+  }
+  body:has(#app .mobile-ocean-v31) #app{
+    width:100%!important;max-width:100%!important;
+    min-height:100dvh!important;
+    margin:0!important;padding:0!important;
+    overflow:visible!important;
+  }
+  body:has(#app .mobile-ocean-v31) #app>.mobile-ocean-v31{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:space-between!important;
+    align-items:stretch!important;
+    width:100%!important;max-width:none!important;
+    min-height:100dvh!important;
+    height:auto!important;
+    margin:0!important;
+    padding:env(safe-area-inset-top,0px) clamp(9px,3vw,18px) calc(12px + env(safe-area-inset-bottom,0px))!important;
+    border:0!important;border-radius:0!important;
+    overflow:hidden!important;
+    gap:clamp(12px,2vh,24px)!important;
+  }
+  #app .mobile-ocean-v31>.m31-head{
+    order:1!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:clamp(8px,1.5vh,18px) 0 0!important;
+    margin:0!important;
+    gap:clamp(7px,1.1vh,13px)!important;
+  }
+  #app .mobile-ocean-v31>.m31-lower{
+    order:2!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    gap:clamp(8px,1.4vh,15px)!important;
+  }
+  #app .mobile-ocean-v31 .m31-logos{
+    max-width:100%!important;
+    max-height:clamp(65px,11vh,112px)!important;
+    height:auto!important;
+    object-fit:contain!important;
+  }
+  #app .mobile-ocean-v31 .m31-start{
+    max-width:min(94%,480px)!important;
+    width:100%!important;
+    margin:0 auto!important;
+  }
+  #app .mobile-ocean-v31 .m31-art>img.m31-boat-restored{
+    top:37%!important;
+    height:46%!important;
+    width:96%!important;
+    left:2%!important;
+    opacity:.92!important;
+  }
+}
+@media(max-width:900px) and (max-height:700px){
+ #app .mobile-ocean-v31>.m31-head{gap:5px!important}
+ #app .mobile-ocean-v31>.m31-lower{gap:6px!important}
+}
+</style>"""
+s=s.replace("</head>",responsive_css+"</head>",1)
+sw=Path("sw.js")
+cache=sw.read_text(encoding="utf-8")
+cache=re.sub(r"const CACHE='[^']+';","const CACHE='english-explorer-2026-mobile-viewport-20261104-v1';",cache,count=1)
+sw.write_text(cache,encoding="utf-8")
+
+print("Home scene and viewport layout updated; student data unchanged.")

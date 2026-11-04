@@ -195,6 +195,7 @@ responsive_css="""<style id="mej-home-mobile-viewport-v1">
 }
 </style>"""
 s=s.replace("</head>",responsive_css+"</head>",1)
+p.write_text(s,encoding="utf-8")
 sw=Path("sw.js")
 cache=sw.read_text(encoding="utf-8")
 cache=re.sub(r"const CACHE='[^']+';","const CACHE='english-explorer-2026-mobile-viewport-20261104-v1';",cache,count=1)

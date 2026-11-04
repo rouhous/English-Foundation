@@ -1,0 +1,71 @@
+## question_store
+1033: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
+1050: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
+1100:   let text=q.audio||q.word||'';
+1263: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
+1284:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+1335: function learnLevel(g,part=null){if(!checkAccess(g))return;let items=(part?mejStageQuestions(g,part):byGrade[g]).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
+1336: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
+1341: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
+MATCHED_LINES: 8
+## learning_render
+1045: function active(){return db.profiles[db.active]};
+1162: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+MATCHED_LINES: 2
+## data_security
+761:  .journey-v23 .j26-status .j26-stars{grid-column:2;grid-row:1}
+781: .journey-v23 .j26-count,.journey-v23 .j26-stars{font-weight:800;font-size:13px;white-space:nowrap}
+1029: const ENDPOINT='[GOOGLE_SCRIPT_ENDPOINT]/exec';
+1034: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
+1036:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
+1042:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
+1048: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
+1210:  modal.id='journeySettingsModal';modal.className='journey-modal';
+1232:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
+1535:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1579:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1595:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
+1601:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+1718: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
+1724: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
+1728: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
+1752:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
+1757:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
+1759:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
+1766:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
+1768:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
+1779:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
+1783:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
+1784:  localStorage.setItem(DBKEY,JSON.stringify(db));
+1793:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
+MATCHED_LINES: 25
+## viewport
+586: /* Right-to-left order for all viewport sizes: home, levels, skills, diagnosis, preview; launch at far left. */
+663: #app .actual-v18{padding:clamp(10px,1.5vw,22px)!important;gap:10px!important;min-height:100dvh!important;justify-content:space-between!important}
+877: .mobile-ocean-v31{display:none}
+906: @media(min-width:901px){#app .mobile-ocean-v31{display:none!important}}
+912:  #app .mobile-ocean-v31>.m31-head{order:1!important;position:relative!important;z-index:2!important;padding:12px 0 3px!important;gap:8px!important}
+915:  #app .mobile-ocean-v31>.m31-lower{order:3!important;position:relative!important;z-index:3!important;margin: -14px 0 0!important;padding:0 0 4px!important;gap:15px!important}
+916:  #app .mobile-ocean-v31 .m31-start{margin:0!important;width:min(78%,380px)!important;min-height:72px!important;z-index:5!important;}
+917:  #app .mobile-ocean-v31 .m31-nav{margin-top:3px!important;position:relative!important;z-index:1!important}
+918:  #app .mobile-ocean-v31 .m31-profile{grid-template-columns: minmax(0,1fr) minmax(120px,36%)!important}
+920: @media(min-width:901px){#app .mobile-ocean-v31{display:none!important}}
+928: #app .mobile-ocean-v31{
+933: #app .mobile-ocean-v31>.m31-art{
+952: #app .mobile-ocean-v31>.m31-art>img.m31-sea{
+966: #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
+984: #app .mobile-ocean-v31>.m31-head,
+985: #app .mobile-ocean-v31>.m31-lower{
+990:  #app .mobile-ocean-v31>.m31-art{
+1000:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
+1008:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
+1163: <section class="mobile-ocean-v31" aria-label="My English Journey home">
+1165:  <div class="m31-head">
+1173:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
+MATCHED_LINES: 22
+
+## summary
+index_bytes: 4089244
+questions_occurrences: 12
+has_mobile_css_link: False
+has_mej_home_mobile_patch: False

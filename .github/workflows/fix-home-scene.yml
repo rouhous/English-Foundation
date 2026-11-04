@@ -1,0 +1,25 @@
+name: Repair My English Journey home scene
+on:
+  push:
+    paths:
+      - scripts/fix_home_scene.py
+      - .github/workflows/fix-home-scene.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Repair existing full home scene without changing learning content
+        run: python3 scripts/fix_home_scene.py
+      - name: Commit verified repairs
+        run: |
+          if ! git diff --quiet -- index.html sw.js; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html sw.js
+            git commit -m "Fix boat scene stacking and responsive desktop/mobile visibility"
+            git push
+          fi

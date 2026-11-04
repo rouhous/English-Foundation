@@ -30,5 +30,14 @@ out.append('index_bytes: '+str(len(s.encode('utf8'))))
 out.append('questions_occurrences: '+str(s.count('byGrade')))
 out.append('has_mobile_css_link: '+str('mobile-home-fix.css' in s))
 out.append('has_mej_home_mobile_patch: '+str('mej-home-mobile-viewport-v1' in s))
+
+out.append('\n## key_functions_full')
+for start in ['function learnLevel(', 'function displayQuestion(', 'function renderQuestion(', 'const BANK=', 'let BANK=', 'function register(', 'function home(', 'function route(', 'function save(']:
+ pos=s.find(start)
+ if pos<0: continue
+ fragment=s[pos:pos+2600]
+ fragment=re.sub(r'data:image/[^\\s"\\x27]{30,}', '[EMBEDDED_IMAGE]', fragment)
+ out.append('START '+start+'\n'+fragment)
+
 Path('diagnostics/prelaunch-code-audit.txt').write_text('\n'.join(out),encoding='utf8')
 print('Wrote non-sensitive diagnostic')

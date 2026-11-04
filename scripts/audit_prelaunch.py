@@ -32,7 +32,7 @@ out.append('has_mobile_css_link: '+str('mobile-home-fix.css' in s))
 out.append('has_mej_home_mobile_patch: '+str('mej-home-mobile-viewport-v1' in s))
 
 out.append('\n## key_functions_full')
-for start in ['function learnLevel(', 'function displayQuestion(', 'function renderQuestion(', 'const BANK=', 'let BANK=', 'function register(', 'function home(', 'function route(', 'function save(']:
+for start in ['function learnLevel(', 'function displayQuestion(', 'function renderQuestion(', 'const BANK=', 'let BANK=', 'function register(', 'function home(', 'function route(', 'function imageHtml(', 'function save(']:
  pos=s.find(start)
  if pos<0: continue
  fragment=s[pos:pos+2600]

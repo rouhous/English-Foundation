@@ -1,0 +1,12 @@
+/* My English Journey class leaderboard (not enabled for live students) */
+.mej-class-ranking,.mej-rank-unavailable{direction:rtl;color:#18382d;background:#fff;border:1px solid #d7e8de;border-radius:20px;padding:18px;box-shadow:0 7px 25px #12392a13;font-family:system-ui,sans-serif;max-width:720px;margin:16px auto}
+.mej-ranking-title,.mej-rank-unavailable h2{font-size:clamp(19px,4vw,26px);margin:0 0 8px}
+.mej-ranking-subtitle,.mej-ranking-footnote,.mej-rank-unavailable p{font-size:14px;color:#516458;line-height:1.6;margin:4px 0 15px}
+.mej-ranking-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.mej-ranking-student{display:flex;align-items:center;gap:12px;min-width:0;background:#f4f9f5;border:1px solid #e5efe7;border-radius:14px;padding:10px 12px}
+.mej-ranking-self{background:#fff9df;border:1px solid #e1c269}
+.mej-ranking-rank{display:grid;place-items:center;flex:none;width:35px;height:35px;border-radius:50%;font-weight:800;color:#24533d;background:#e0efe6}
+.mej-ranking-name{flex:1;min-width:0;font-size:15px;font-weight:650;overflow-wrap:anywhere}
+.mej-ranking-stars{font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mej-ranking-footnote{margin-top:12px}
+@media(max-width:390px){.mej-class-ranking{padding:12px}.mej-ranking-student{gap:8px;padding:9px}.mej-ranking-name{font-size:14px}}

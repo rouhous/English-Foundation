@@ -7,6 +7,8 @@
   "app_loaded": true,
   "bridge_frame_found": true,
   "bridge_origin_is_google": true,
+  "status_element_found": true,
+  "status_text": "⏳ الاتصال بخادم STAGING...",
   "staging_ready_message": false,
   "script_errors": []
 }

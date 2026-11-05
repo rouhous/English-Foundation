@@ -26,15 +26,18 @@ try:
   if not result["bridge_origin_is_google"]:raise RuntimeError("UNEXPECTED_BRIDGE_ORIGIN")
   # The existing browser receives a ready postMessage when the STAGING page
   # successfully executes its embedded google.script.run bridge.
-  page.wait_for_function("""() => {
-    const frame=document.getElementById('ee-recovery-frame');
-    return Boolean(frame && frame.contentWindow && (
-      document.body.textContent.includes('متصل بخادم STAGING') ||
-      document.body.textContent.includes('فشل الاتصال بخادم STAGING')
-    ));
-  }""",timeout=35000)
-  text=page.locator("body").inner_text(timeout=5000)
-  result["staging_ready_message"]= "متصل بخادم STAGING" in text
+  try:
+   page.wait_for_function("""() => {
+     const status=document.getElementById('ee-cloud-status');
+     return Boolean(status && /متصل بخادم STAGING|فشل الاتصال|خطأ|غير متصل/.test(status.textContent));
+   }""",timeout=35000)
+  except Exception: pass
+  status=page.locator("#ee-cloud-status")
+  # Only inspect the status UI; never expose student tokens or cloud rows.
+  result["status_element_found"]=status.count()==1
+  status_text=(status.text_content(timeout=5000) or "") if status.count() else ""
+  result["status_text"]=status_text[:170]
+  result["staging_ready_message"]="متصل بخادم STAGING" in status_text
   result["script_errors"]=console_errors[:6]
   result["status"]="STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED" if result["staging_ready_message"] else "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED"
   browser.close()

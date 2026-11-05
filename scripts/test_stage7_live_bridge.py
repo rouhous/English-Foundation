@@ -16,6 +16,23 @@ try:
  with sync_playwright() as p:
   browser=p.chromium.launch(channel="chrome",headless=True,args=["--no-sandbox"])
   page=browser.new_page(viewport={"width":390,"height":844})
+  # Observe bridge message presence without copying secrets or payloads.
+  page.add_init_script("""() => {
+    window.__mejBridgeObservations=[];
+    window.addEventListener('message',e=>{
+      if(e.data&&e.data.eeRecoveryBridge){
+        const f=document.getElementById('ee-recovery-frame');
+        const inner=f&&f.contentWindow&&f.contentWindow.frames[0];
+        window.__mejBridgeObservations.push({
+          fromGoogle:/googleusercontent\\.com$/.test(new URL(e.origin).hostname),
+          nestedSource:e.source===inner,
+          hasNonce:typeof e.data.bridgeNonce==='string'&&e.data.bridgeNonce.length===32,
+          ready:e.data.ready===true
+        });
+      }
+    });
+  }""")
+
   console_errors=[]
   request_failures=[]
   bridge_http=[]
@@ -42,6 +59,18 @@ try:
   result["status_element_found"]=status.count()==1
   status_text=(status.text_content(timeout=5000) or "") if status.count() else ""
   result["status_text"]=status_text[:170]
+  result["nonce_in_frame_url"]="bridgeNonce=" in (frame.get_attribute("src") or "")
+  result["observed_bridge_messages"]=page.evaluate("window.__mejBridgeObservations||[]")[:5]
+  result["google_inner_bridge_loaded"]=[]
+  for inner in page.frames[1:]:
+   if "googleusercontent.com" in inner.url:
+    try:
+     result["google_inner_bridge_loaded"].append(inner.evaluate("""() => ({
+       title:document.title,
+       nonceBasedScript:document.documentElement.innerHTML.includes('bridgeNonce'),
+       isNested:window.parent!==window.top
+     })"""))
+    except Exception: pass
   result["staging_ready_message"]="متصل بخادم STAGING" in status_text
   result["script_errors"]=console_errors[:6]
   result["request_failures"]=request_failures[:8]

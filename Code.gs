@@ -272,7 +272,7 @@ function doGet(e) {
     let configured=false,code='OK';
     try {configured=!!wadiSpreadsheet_();}
     catch(err){code=wadiCode_(err)}
-    const data=JSON.stringify({ready:true,version:WADI_CONFIG.RECEIVER_VERSION,configured,code});
+    const data=JSON.stringify({ready:true,version:WADI_CONFIG.RECEIVER_VERSION,configured,code,scoreVerification:'CLIENT_REPORTED_UNVERIFIED'});
     return ContentService.createTextOutput('window.WADI_HEALTH_CALLBACK&&window.WADI_HEALTH_CALLBACK('+data+');')
       .setMimeType(ContentService.MimeType.JAVASCRIPT);
   }

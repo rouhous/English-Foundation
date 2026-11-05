@@ -35,7 +35,7 @@ try:
   if not ready:
    raise AssertionError("PWA service worker not registered; offline-first installation cannot be certified.")
   page.wait_for_function("""async () => {
-   const c=await caches.open('english-explorer-stage5-offline-20261105-v1');
+   const c=await caches.open('english-explorer-fast-launch-20261105-v1');
    const names=Array.from({length:12},(_,i)=>'./assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261104-approved');
    return (await Promise.all(names.map(n=>c.match(n).then(Boolean)))).every(Boolean);
   }""",timeout=90000)

@@ -1,0 +1,73 @@
+{
+  "status": "STAGE5_BROWSER_CHECKS_PASSED",
+  "engine": "headless Chrome/Chromium",
+  "viewports": [
+    {
+      "width": 320,
+      "height": 700,
+      "viewport": 320,
+      "overflow": 0,
+      "hasApp": true,
+      "appWidth": 320,
+      "navCount": 6,
+      "rankingNav": true,
+      "viewportMeta": true,
+      "responsiveCSS": true,
+      "appChildCount": 2
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "viewport": 390,
+      "overflow": 0,
+      "hasApp": true,
+      "appWidth": 390,
+      "navCount": 6,
+      "rankingNav": true,
+      "viewportMeta": true,
+      "responsiveCSS": true,
+      "appChildCount": 2
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "viewport": 768,
+      "overflow": 0,
+      "hasApp": true,
+      "appWidth": 768,
+      "navCount": 6,
+      "rankingNav": true,
+      "viewportMeta": true,
+      "responsiveCSS": true,
+      "appChildCount": 2
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "viewport": 1280,
+      "overflow": 0,
+      "hasApp": true,
+      "appWidth": 1280,
+      "navCount": 6,
+      "rankingNav": true,
+      "viewportMeta": true,
+      "responsiveCSS": true,
+      "appChildCount": 2
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "viewport": 844,
+      "overflow": 0,
+      "hasApp": true,
+      "appWidth": 829,
+      "navCount": 6,
+      "rankingNav": true,
+      "viewportMeta": true,
+      "responsiveCSS": true,
+      "appChildCount": 2
+    }
+  ],
+  "failures": [],
+  "notes": "Desktop-engine emulation of width/height; not an actual Android or iPhone device test."
+}

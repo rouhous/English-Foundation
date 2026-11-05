@@ -390,9 +390,9 @@ function mejV2Table_(name,headers){
 function mejV2Tables_(){
   return {
     students:mejV2Table_(MEJ_V2_TABS.students,
-      ['Student ID','Token Hash','Display Name','Grade','Class','Created']),
+      ['Student ID','Token Hash','Display Name','Grade','Class','Created','Cohort']),
     invites:mejV2Table_(MEJ_V2_TABS.invites,
-      ['Invite Hash','Grade','Class','Used By','Created']),
+      ['Invite Hash','Grade','Class','Used By','Created','Cohort']),
     attempts:mejV2Table_(MEJ_V2_TABS.attempts,
       ['Event ID','Student ID','Question ID','Answer Hash','Correct','Received']),
     mastery:mejV2Table_(MEJ_V2_TABS.mastery,
@@ -445,14 +445,15 @@ function mejV2Stars_(mastery,studentId){
  * Admin-only: run from a school-owned Apps Script editor to create
  * a single-use invitation. Do NOT expose this function through doPost.
  */
-function mejV2IssueInvite_(grade,className){
+function mejV2IssueInvite_(grade,className,cohortId){
   const lock=LockService.getScriptLock();lock.waitLock(20000);
   try{
     const g=mejV2Grade_(grade),group=wadiClass_(className,g);
+    const cohort=mejV2Cohort_(cohortId);
     const code=mejV2Secret_();
     mejV2Table_(MEJ_V2_TABS.invites,
-      ['Invite Hash','Grade','Class','Used By','Created'])
-      .appendRow([mejV2Hash_(code),g,group,'',new Date()]);
+      ['Invite Hash','Grade','Class','Used By','Created','Cohort'])
+      .appendRow([mejV2Hash_(code),g,group,'',new Date(),cohort]);
     return code;
   }finally{lock.releaseLock()}
 }
@@ -491,7 +492,7 @@ function mejV2Handle_(d){
   mejV2RequireEnabled_();
   if(!d||d.schema!==MEJ_V2_SCHEMA)throw new Error('INVALID_V2_REQUEST');
   const action=String(d.action||'');
-  if(!['enroll','answer','summary'].includes(action))throw new Error('INVALID_V2_ACTION');
+  if(!['enroll','answer','summary','leaderboard'].includes(action))throw new Error('INVALID_V2_ACTION');
   const lock=LockService.getScriptLock();lock.waitLock(20000);
   try {
     const t=mejV2Tables_();
@@ -507,11 +508,16 @@ function mejV2Handle_(d){
          String(match.values[2])!==group)throw new Error('INVALID_OR_USED_INVITE');
       const uid='mejv2-'+Utilities.getUuid().replace(/-/g,'').toLowerCase();
       const token=mejV2Secret_().toLowerCase();
-      t.students.appendRow([uid,mejV2Hash_(token),name,grade,group,new Date()]);
+      const cohort=mejV2Cohort_(match.values[5]);
+      t.students.appendRow([uid,mejV2Hash_(token),name,grade,group,new Date(),cohort]);
       t.invites.getRange(match.row,4).setValue(uid);
       return {ok:true,studentId:uid,deviceToken:token,stars:0,scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
     }
     const user=mejV2Auth_(d,t.students), studentId=String(user[0]);
+    if(action==='leaderboard'){
+      mejV2RequireRankingEnabled_();
+      return mejV2Leaderboard_(t,user);
+    }
     if(action==='summary'){
       return {ok:true,studentId,stars:mejV2Stars_(t.mastery,studentId),
         scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
@@ -567,4 +573,55 @@ function mejV2Handle_(d){
     return {ok:true,correct,duplicate:false,stars:mejV2Stars_(t.mastery,studentId),
       scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
   }finally{lock.releaseLock()}
+}
+
+
+/**
+ * STAGE 3: CLASS-ONLY VERIFIED RANKING. Disabled unless an administrator
+ * explicitly enables both MEJ_V2_ENABLED and MEJ_V2_RANKING_ENABLED.
+ * Never use the legacy self-reported score to rank students.
+ */
+function mejV2Cohort_(value){
+  const s=String(value||'').trim();
+  if(!/^[A-Z0-9][A-Z0-9_-]{7,63}$/.test(s))
+    throw new Error('INVALID_COHORT_SCOPE');
+  return s;
+}
+function mejV2RequireRankingEnabled_(){
+  mejV2RequireEnabled_();
+  const state=String(PropertiesService.getScriptProperties()
+    .getProperty('MEJ_V2_RANKING_ENABLED')||'').toLowerCase();
+  if(state!=='true')throw new Error('CLASS_RANKING_DISABLED');
+}
+function mejV2Leaderboard_(tables,requestingStudent){
+  const requestingId=String(requestingStudent[0]);
+  const grade=Number(requestingStudent[3]);
+  const className=String(requestingStudent[4]);
+  const cohort=mejV2Cohort_(requestingStudent[6]);
+  const students=mejV2Rows_(tables.students).filter(function(row){
+    return Number(row[3])===grade&&String(row[4])===className&&
+      String(row[6])===cohort;
+  });
+  if(students.length>100)throw new Error('COHORT_TOO_LARGE');
+  const counts=Object.create(null);
+  students.forEach(function(row){counts[String(row[0])]=0});
+  mejV2Rows_(tables.mastery).forEach(function(row){
+    const id=String(row[0]);
+    if(Object.prototype.hasOwnProperty.call(counts,id)&&Number(row[2])>=2)counts[id]++;
+  });
+  const ranked=students.map(function(row){
+    return {id:String(row[0]),name:String(row[2]),stars:counts[String(row[0])]||0};
+  }).sort(function(a,b){
+    return b.stars-a.stars||a.name.localeCompare(b.name,'ar')||a.id.localeCompare(b.id);
+  });
+  let previousStars=null,previousRank=0;
+  const entries=ranked.map(function(row,index){
+    const rank=row.stars===previousStars?previousRank:index+1;
+    previousStars=row.stars;previousRank=rank;
+    return {rank,name:row.name,stars:row.stars,isMe:row.id===requestingId};
+  });
+  if(!entries.some(function(row){return row.isMe}))
+    throw new Error('STUDENT_NOT_IN_COHORT');
+  return {ok:true,pilot:true,scope:'OWN_VERIFIED_CLASS',className,
+    count:entries.length,entries,scoreVerification:'SERVER_CHECKED_PILOT'};
 }

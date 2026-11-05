@@ -9,6 +9,20 @@
   "bridge_origin_is_google": true,
   "status_element_found": true,
   "status_text": "⏳ الاتصال بخادم STAGING...",
+  "nonce_in_frame_url": true,
+  "observed_bridge_messages": [],
+  "google_inner_bridge_loaded": [
+    {
+      "title": "",
+      "nonceBasedScript": false,
+      "isNested": true
+    },
+    {
+      "title": "Recovery bridge",
+      "nonceBasedScript": true,
+      "isNested": true
+    }
+  ],
   "staging_ready_message": false,
   "script_errors": [],
   "request_failures": [],

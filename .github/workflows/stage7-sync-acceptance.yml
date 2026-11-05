@@ -1,0 +1,25 @@
+name: Stage 7 staging sync transport acceptance
+on:
+  push:
+    paths:
+      - assets/verified-sync-bridge-v1.js
+      - scripts/test_stage7_sync_adapter.js
+      - .github/workflows/stage7-sync-acceptance.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check stage 7 source syntax
+        run: |
+          node --check assets/verified-offline-outbox-v1.js
+          node --check assets/verified-sync-bridge-v1.js
+          node --check scripts/test_stage7_sync_adapter.js
+      - name: Test offline sync with synthetic students and mocked trusted transport
+        run: node scripts/test_stage7_sync_adapter.js

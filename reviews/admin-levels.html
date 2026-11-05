@@ -100,7 +100,7 @@ $('loadPics').addEventListener('click',async()=>{
  if(loading)return;loading=true;pics=false;$('status').textContent='جار تحميل صور المفردات...';
  try{
   for(let i=1;i<=12;i++){
-   const src='../assets/approved-images-'+String(i).padStart(2,'0')+'.js?v=20261104-approved';
+   const src='../assets/approved-images-'+String(i).padStart(2,'0')+'.js?v=20261105-stage0-69';
    await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.append(s)});
   }
   pics=true;$('loadPics').textContent='🔄 إعادة تحميل الصور';

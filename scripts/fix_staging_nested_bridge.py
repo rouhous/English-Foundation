@@ -22,8 +22,9 @@ if marker not in s:
  let bridgeOrigin='';
  const trustedBridgeOrigin=origin=>/^https:\\/\\/[a-z0-9-]+-script\\.googleusercontent\\.com$/.test(origin);
  frame.src=frame.dataset.stagingUrl+'&bridgeNonce='+bridgeNonce;"""
-  if s.count(old)!=1:raise RuntimeError("Cannot identify bridge client startup")
-  s=s.replace(old,new,1)
+  startup=r"const frame\s*=\s*document\.getElementById\('ee-recovery-frame'\);\s*const status\s*=\s*document\.getElementById\('ee-cloud-status'\);"
+  s,n=re.subn(startup,lambda _:new,s,count=1)
+  if n!=1:raise RuntimeError("Cannot identify bridge client startup")
   old="""window.addEventListener('message',function(event){
   if(event.source!==frame.contentWindow)return;
   const d=event.data||{};

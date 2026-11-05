@@ -1,0 +1,24 @@
+name: Verify isolated student progress pilot
+on:
+  push:
+    paths:
+      - Code.gs
+      - scripts/test_verified_pilot.js
+      - .github/workflows/verify-student-pilot.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  security-pilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate server-side script syntax
+        run: |
+          cp Code.gs /tmp/mej-verified-server.js
+          node --check /tmp/mej-verified-server.js
+      - name: Simulate enrollment and server scoring (synthetic accounts only)
+        run: node scripts/test_verified_pilot.js

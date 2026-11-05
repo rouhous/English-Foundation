@@ -28,7 +28,7 @@ button,a.btn{font:700 14px system-ui;padding:10px 12px;min-height:44px;cursor:po
 <label>المستوى <select id="part"><option value="all">الاثنان</option><option value="1">الأول</option><option value="2">الثاني</option></select></label>
 <label>المهارة <select id="type"><option value="all">جميع المهارات</option></select></label>
 <label>بحث <input id="search" placeholder="كلمة، سؤال، أو رقم"></label></div>
-<div class="controls"><button id="loadPics">🖼️ تحميل الصور اختياريًا</button><button id="reset">إعادة التصفية</button><a class="btn" href="../">العودة للتطبيق</a></div>
+<div class="controls"><button id="loadPics">🖼️ إعادة تحميل صور المفردات</button><button id="reset">إعادة التصفية</button><a class="btn" href="../">العودة للتطبيق</a></div>
 <p id="status" class="muted" aria-live="polite">جار تحميل قائمة الأسئلة...</p><strong id="summary"></strong>
 </section>
 <section><h2>معاينة الأسئلة الفعلية</h2><div id="cards" class="cards"></div>
@@ -58,10 +58,24 @@ function draw(){
   c.append(elt('h3','',q.id+' — '+(q.word||'سؤال')));
   if(q.prompt)c.append(elt('p','',q.prompt));
   q.options.forEach((v,i)=>c.append(elt('div','choice',(i+1)+'. '+v)));
-  if(pics&&q.pictureWord){
-   const a=(window.MEJ_APPROVED_IMAGES||{})[q.pictureWord.toLowerCase().trim()]||[];
-   const v=a.find(x=>x.preferred)||a[0];
-   if(v&&v.src){const im=elt('img','figure');im.src=v.src;im.alt=q.pictureWord;im.loading='lazy';c.append(im)}
+  // Resolve an approved image independently for EVERY question occurrence,
+  // including words repeated in other grades and levels.
+  if(pics){
+   const bank=window.MEJ_APPROVED_IMAGES||{};
+   const normalize=s=>String(s||'').normalize('NFKC').toLowerCase().trim().replace(/[’‘]/g,"'").replace(/\\s+/g,' ');
+   const terms=[q.pictureWord,q.word].filter(Boolean).map(normalize);
+   let entries=[];
+   for(const term of terms){
+    const found=bank[term]||bank[term.replace(/-/g,' ')]||bank[term.replace(/ /g,'-')];
+    if(found){entries=Array.isArray(found)?found:[found];break}
+   }
+   const approved=entries.filter(x=>x&&x.src&&x.rejected!==true&&x.status!=='rejected'&&x.status!=='مرفوض');
+   const chosen=approved.find(x=>x.preferred)||approved[0];
+   if(chosen){
+    const im=elt('img','figure');im.src=chosen.src;im.alt=q.pictureWord||q.word||'Vocabulary';im.loading='lazy';
+    im.addEventListener('error',()=>{im.replaceWith(elt('p','muted','الصورة المعتمدة غير متاحة في هذا المسار'))});
+    c.append(im);
+   }else if(terms.length){c.append(elt('p','muted','لا توجد صورة معتمدة مرتبطة بهذه المفردة'))}
   }
   const value=elt('div','answer hidden','الإجابة المعتمدة: '+(q.answer||'غير محددة'));
   const b=elt('button','','👁️ إظهار الإجابة');
@@ -73,7 +87,7 @@ function draw(){
  });
  $('counter').textContent=filtered.length?'صفحة '+(page+1)+' من '+Math.ceil(filtered.length/perPage):'لا توجد نتائج';
  $('prev').disabled=page<=0;$('next').disabled=(page+1)*perPage>=filtered.length;
- if(!loading)$('status').textContent=pics?'صور المفردات جاهزة.':'الصور اختيارية لتقليل استهلاك بيانات الهاتف.';
+ if(!loading)$('status').textContent=pics?'تم تحميل بنك الصور، وتُراجع الصورة لكل ظهور للمفردة.':'جار تجهيز صور المفردات...';
 }
 for(const id of ['grade','part','type'])$(id).addEventListener('change',filter);
 $('search').addEventListener('input',filter);
@@ -83,13 +97,13 @@ $('reset').addEventListener('click',()=>{
 $('prev').addEventListener('click',()=>{if(page){page--;draw()}});
 $('next').addEventListener('click',()=>{if((page+1)*perPage<filtered.length){page++;draw()}});
 $('loadPics').addEventListener('click',async()=>{
- if(pics||loading)return;loading=true;$('status').textContent='جار تحميل صور المفردات...';
+ if(loading)return;loading=true;pics=false;$('status').textContent='جار تحميل صور المفردات...';
  try{
   for(let i=1;i<=12;i++){
    const src='../assets/approved-images-'+String(i).padStart(2,'0')+'.js?v=20261104-approved';
    await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.append(s)});
   }
-  pics=true;$('loadPics').textContent='✅ الصور جاهزة';
+  pics=true;$('loadPics').textContent='🔄 إعادة تحميل الصور';
  }catch(_){$('status').textContent='تعذر تحميل بعض الصور. يمكن متابعة المراجعة دون صور.'}
  finally{loading=false;draw()}
 });

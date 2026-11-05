@@ -11,6 +11,7 @@
   "two_levels": true,
   "stage5_responsive_css": true,
   "offline_image_shards_pre_cache": 12,
+  "fast_cached_pwa_launch": true,
   "rejected_images_imported": 0,
   "status": "STATIC_ASSET_CHECKS_PASSED",
   "release_note": "Not a security or end-to-end student-account certification."

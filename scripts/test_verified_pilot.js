@@ -57,7 +57,7 @@ function post(d){return JSON.parse(context.doPost({postData:{contents:JSON.strin
 const p=(action,fields={})=>({schema:"mej-verified-v2",action,...fields});
 const key=context.mejV2Table_("MEJ_V2_QuestionKeys",["Question ID","Stage","Correct Answer"]);
 key.appendRow(["L1-001",1,"apple"]);key.appendRow(["L1-002",1,"banana"]);key.appendRow(["L1-101",1,"window"]);key.appendRow(["L2-001",2,"tree"]);
-const invite=context.mejV2IssueInvite_(1,"1A");assert.equal(invite.length,64);
+const invite=context.mejV2IssueInvite_(1,"1A","TEST_SCHOOL_A_1A");assert.equal(invite.length,64);
 bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"bad",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite})),"INVALID_TEACHER_CODE");
 const enrol=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite,stars:2600}));
 assert.equal(enrol.ok,true);assert.equal(enrol.stars,0);assert.equal(enrol.studentId.startsWith("mejv2-"),true);assert.equal(enrol.deviceToken.length,64);
@@ -75,16 +75,45 @@ bad(()=>context.mejV2Handle_(p("summary",{...auth,deviceToken:"0".repeat(64)})),
 bad(()=>context.mejV2Handle_(attempt(E(5),"L2-001","tree")),"QUESTION_ABOVE_SCHOOL_GRADE");
 bad(()=>context.mejV2Handle_(attempt(E(6),"L1-101","window")),"SUBLEVEL_LOCKED");
 assert.equal(context.mejV2Handle_(p("summary",auth)).stars,1);
-const invite2=context.mejV2IssueInvite_(2,"2B");
+const invite2=context.mejV2IssueInvite_(2,"2B","TEST_SCHOOL_A_2B");
 const other=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST B",grade:2,className:"2B",inviteCode:invite2}));
 assert.equal(context.mejV2Handle_(p("summary",{studentId:other.studentId,deviceToken:other.deviceToken})).stars,0);
 assert.equal(context.mejV2Handle_(p("summary",auth)).stars,1);
 const response=post(p("summary",auth));assert.equal(response.ok,true);assert.equal(response.stars,1);
+// Stage 3: leaderboard is OFF by default even while verified pilot is enabled.
+bad(()=>context.mejV2Handle_(p("leaderboard",auth)),"CLASS_RANKING_DISABLED");
+// Two different schools may both have a class named 1A.
+const inviteA2=context.mejV2IssueInvite_(1,"1A","TEST_SCHOOL_A_1A");
+const peer=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST PEER",grade:1,className:"1A",inviteCode:inviteA2}));
+const inviteA3=context.mejV2IssueInvite_(1,"1A","TEST_SCHOOL_A_1A");
+const peer2=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST NO STARS",grade:1,className:"1A",inviteCode:inviteA3}));
+const inviteB=context.mejV2IssueInvite_(1,"1A","TEST_SCHOOL_B_1A");
+const foreign=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"OTHER SCHOOL",grade:1,className:"1A",inviteCode:inviteB}));
+props.MEJ_V2_RANKING_ENABLED="true";
+const ranked=context.mejV2Handle_(p("leaderboard",auth));
+assert.equal(ranked.ok,true);assert.equal(ranked.count,3);
+assert.equal(ranked.scope,"OWN_VERIFIED_CLASS");
+assert.deepEqual(Array.from(ranked.entries,r=>r.stars),[1,0,0]);
+assert.deepEqual(Array.from(ranked.entries,r=>r.rank),[1,2,2]);
+assert.equal(ranked.entries.filter(r=>r.isMe).length,1);
+assert(!ranked.entries.some(r=>r.name==="OTHER SCHOOL"||r.name==="TEST B"));
+assert(!JSON.stringify(ranked).includes(foreign.studentId));
+for(const row of ranked.entries){
+ assert.deepEqual(Object.keys(row).sort(),["isMe","name","rank","stars"]);
+}
+const peerRank=context.mejV2Handle_(p("leaderboard",{studentId:peer.studentId,deviceToken:peer.deviceToken}));
+assert.equal(peerRank.count,3);
+const otherSchoolRank=context.mejV2Handle_(p("leaderboard",{studentId:foreign.studentId,deviceToken:foreign.deviceToken}));
+assert.equal(otherSchoolRank.count,1);
+assert.equal(otherSchoolRank.entries[0].name,"OTHER SCHOOL");
+bad(()=>context.mejV2Handle_(p("leaderboard",{...auth,deviceToken:"0".repeat(64)})),"INVALID_STUDENT_CREDENTIALS");
+props.MEJ_V2_RANKING_ENABLED="false";
+bad(()=>context.mejV2Handle_(p("leaderboard",auth)),"CLASS_RANKING_DISABLED");
 assert.equal(response.scoreVerification,"SERVER_CHECKED_PILOT");
 props.MEJ_V2_ENABLED="false";
 bad(()=>context.mejV2Handle_(p("summary",auth)),"VERIFIED_PILOT_DISABLED");
 assert.equal(activeLocks,0,"Locks released");
-assert.equal(db.get("MEJ_V2_Students").getLastRow(),3);
+assert.equal(db.get("MEJ_V2_Students").getLastRow(),6);
 assert.equal(db.get("MEJ_V2_Attempts").getLastRow(),5);
 assert.equal(db.get("MEJ_V2_Mastery").getLastRow(),2);
-console.log("VERIFIED_PILOT_SYNTHETIC_TESTS_PASSED (enrollment, invite, auth, replay, grade, server stars, isolation, disabled default)");
+console.log("VERIFIED_PILOT_SYNTHETIC_TESTS_PASSED: student auth, secure stars, rank ties, school cohort isolation, no levels, ranking disabled default");

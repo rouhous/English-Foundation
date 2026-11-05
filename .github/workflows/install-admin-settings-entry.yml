@@ -1,0 +1,37 @@
+name: Install safe Admin review entry in Settings
+on:
+  push:
+    paths:
+      - scripts/install_admin_settings_entry.py
+      - .github/workflows/install-admin-settings-entry.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Insert safe settings entry without affecting student access
+        run: python3 scripts/install_admin_settings_entry.py
+      - name: Validate embedded JS syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('MEJ_SAFE_ADMIN_SETTINGS_ENTRY_V1') == 1
+          assert 'reviews/owner-review.html' in s
+          assert 'adminFullAccess=true' not in s
+          print('ADMIN_ENTRY_CHECK_PASSED')
+          PY
+      - name: Commit review link to existing application
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Add nonprivileged Admin content review entry in settings"
+            git push
+          fi

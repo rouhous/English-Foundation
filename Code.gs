@@ -177,6 +177,7 @@ function doPost(e) {
     const body=String(e && e.postData && e.postData.contents || '');
     if (!body || body.length>WADI_CONFIG.MAX_POST_CHARS) throw new Error('Missing/oversize request');
     const d=JSON.parse(body);
+    if (d.schema==='mej-verified-v2') return wadiJson_(mejV2Handle_(d));
     reportId=String(d.reportId||'').trim();
     if (d.schema!=='english-foundation-oman-progress-v1') throw new Error('Unexpected report format');
     if (!d.studentId || !d.studentName) throw new Error('Missing student ID or name');
@@ -342,4 +343,209 @@ function testStage2Envelope_() {
   expectReject({masteredItems:3000});
   expectReject({stars:2,masteredItems:3});
   return 'STAGE2_ENVELOPE_CHECKS_PASSED';
+}
+
+
+/**
+ * MEJ VERIFIED PROGRESS PILOT V2 — DISABLED unless MEJ_V2_ENABLED=true
+ *
+ * Separate, append-only attempt ledger and student-scoped credentials.
+ * Does not read, rewrite, migrate, or delete legacy progress.
+ * Never expose the protected sheets, tokens, or invite codes to clients other
+ * than the single token returned once to its enrolling student.
+ *
+ * IMPORTANT: The question answers are also embedded in the public legacy
+ * app. This verifies that stars match submitted answers, but does NOT prove
+ * that a learner solved a question without looking at the answer key.
+ * Only use for synthetic pilot accounts pending school privacy approval.
+ */
+const MEJ_V2_SCHEMA='mej-verified-v2';
+const MEJ_V2_TABS={
+  students:'MEJ_V2_Students',invites:'MEJ_V2_Invites',
+  attempts:'MEJ_V2_Attempts',mastery:'MEJ_V2_Mastery',keys:'MEJ_V2_QuestionKeys'
+};
+function mejV2RequireEnabled_(){
+  if(String(PropertiesService.getScriptProperties().getProperty('MEJ_V2_ENABLED')||'').toLowerCase()!=='true')
+    throw new Error('VERIFIED_PILOT_DISABLED');
+}
+function mejV2Hash_(value){
+  const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,String(value),Utilities.Charset.UTF_8);
+  return bytes.map(function(b){return ('0'+(b<0?b+256:b).toString(16)).slice(-2)}).join('');
+}
+function mejV2Secret_(){
+  return Utilities.getUuid().replace(/-/g,'')+Utilities.getUuid().replace(/-/g,'');
+}
+function mejV2Table_(name,headers){
+  const ss=wadiSpreadsheet_();
+  let sh=ss.getSheetByName(name);
+  if(!sh)sh=ss.insertSheet(name);
+  if(sh.getLastRow()===0){sh.appendRow(headers);sh.setFrozenRows(1)}
+  else {
+    const current=sh.getRange(1,1,1,headers.length).getValues()[0].map(String);
+    if(headers.some(function(h,i){return h!==current[i]}))
+      throw new Error('VERIFIED_SCHEMA_CONFLICT_'+name);
+  }
+  return sh;
+}
+function mejV2Tables_(){
+  return {
+    students:mejV2Table_(MEJ_V2_TABS.students,
+      ['Student ID','Token Hash','Display Name','Grade','Class','Created']),
+    invites:mejV2Table_(MEJ_V2_TABS.invites,
+      ['Invite Hash','Grade','Class','Used By','Created']),
+    attempts:mejV2Table_(MEJ_V2_TABS.attempts,
+      ['Event ID','Student ID','Question ID','Answer Hash','Correct','Received']),
+    mastery:mejV2Table_(MEJ_V2_TABS.mastery,
+      ['Student ID','Question ID','Correct Count','Updated']),
+    keys:mejV2Table_(MEJ_V2_TABS.keys,
+      ['Question ID','Stage','Correct Answer'])
+  };
+}
+function mejV2Rows_(sheet){
+  const end=sheet.getLastRow();
+  if(end<2)return [];
+  return sheet.getRange(2,1,end-1,sheet.getLastColumn()).getValues();
+}
+function mejV2Find_(sheet,col,value){
+  const rows=mejV2Rows_(sheet);
+  for(let i=0;i<rows.length;i++)if(String(rows[i][col])===String(value))return {row:i+2,values:rows[i]};
+  return null;
+}
+function mejV2Name_(name){
+  const s=String(name||'').trim();
+  if(s.length<2||s.length>80||/^[=+\-@]/.test(s))throw new Error('INVALID_LEARNER_NAME');
+  return s;
+}
+function mejV2Grade_(grade){
+  const g=Number(grade);
+  if(!Number.isInteger(g)||g<1||g>12)throw new Error('INVALID_LEARNER_GRADE');
+  return g;
+}
+function mejV2Answer_(value){
+  const s=String(value==null?'':value).trim().toLocaleLowerCase('en');
+  if(!s||s.length>300)throw new Error('INVALID_ANSWER');
+  return s.replace(/\s+/g,' ');
+}
+function mejV2Auth_(d,students){
+  const id=String(d.studentId||'');
+  const token=String(d.deviceToken||'');
+  if(!/^mejv2-[a-z0-9]{32}$/.test(id)||!/^[a-f0-9]{64}$/.test(token))
+    throw new Error('INVALID_STUDENT_CREDENTIALS');
+  const found=mejV2Find_(students,0,id);
+  if(!found||String(found.values[1])!==mejV2Hash_(token))
+    throw new Error('INVALID_STUDENT_CREDENTIALS');
+  return found.values;
+}
+function mejV2Stars_(mastery,studentId){
+  return mejV2Rows_(mastery).filter(function(row){
+    return String(row[0])===studentId&&Number(row[2])>=2;
+  }).length;
+}
+/**
+ * Admin-only: run from a school-owned Apps Script editor to create
+ * a single-use invitation. Do NOT expose this function through doPost.
+ */
+function mejV2IssueInvite_(grade,className){
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try{
+    const g=mejV2Grade_(grade),group=wadiClass_(className,g);
+    const code=mejV2Secret_();
+    mejV2Table_(MEJ_V2_TABS.invites,
+      ['Invite Hash','Grade','Class','Used By','Created'])
+      .appendRow([mejV2Hash_(code),g,group,'',new Date()]);
+    return code;
+  }finally{lock.releaseLock()}
+}
+/**
+ * Admin-only: initialize the server-side answer table from the CURRENT
+ * public GitHub bank. No student records or tokens are involved.
+ * Answers are publicly inspectable in the existing browser bundle,
+ * so this is score integrity, not a cheat-proof examination.
+ */
+function mejV2InstallQuestionKeys_(){
+  const rawUrl='https://raw.githubusercontent.com/rouhous/English-Foundation/main/index.html';
+  const html=UrlFetchApp.fetch(rawUrl,{muteHttpExceptions:false}).getContentText();
+  const match=html.match(/const BANK=(\[.*?\]);\s*const PHOTO=/s);
+  if(!match)throw new Error('QUESTION_BANK_NOT_FOUND');
+  const questions=JSON.parse(match[1]);
+  if(questions.length!==2600)throw new Error('UNEXPECTED_QUESTION_COUNT');
+  const ids={}, rows=[];
+  questions.forEach(function(q){
+    if(!/^L(?:[0-9]|1[0-2])-[0-9]{3}$/.test(String(q.id||''))||ids[q.id])
+      throw new Error('INVALID_QUESTION_ID');
+    ids[q.id]=true;
+    rows.push([q.id,Number(q.g),mejV2Answer_(q.answer)]);
+  });
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try{
+    const keySheet=mejV2Table_(MEJ_V2_TABS.keys,['Question ID','Stage','Correct Answer']);
+    if(keySheet.getLastRow()>1)throw new Error('QUESTION_KEYS_ALREADY_INSTALLED');
+    keySheet.getRange(2,1,rows.length,3).setValues(rows);
+    return 'INSTALLED_'+rows.length;
+  }finally{lock.releaseLock()}
+}
+/** Publicly reachable ONLY after school explicitly enables the pilot.
+ * No student enumeration, score submission, ranking, or student search.
+ */
+function mejV2Handle_(d){
+  mejV2RequireEnabled_();
+  if(!d||d.schema!==MEJ_V2_SCHEMA)throw new Error('INVALID_V2_REQUEST');
+  const action=String(d.action||'');
+  if(!['enroll','answer','summary'].includes(action))throw new Error('INVALID_V2_ACTION');
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try {
+    const t=mejV2Tables_();
+    if(t.keys.getLastRow()<2)throw new Error('QUESTION_KEYS_NOT_INSTALLED');
+    if(action==='enroll'){
+      wadiValidateTeacherCode_(d.teacherCode);
+      const name=mejV2Name_(d.studentName),grade=mejV2Grade_(d.grade);
+      const group=wadiClass_(d.className,grade);
+      const invite=String(d.inviteCode||'');
+      if(!/^[a-f0-9]{64}$/.test(invite))throw new Error('INVALID_INVITE');
+      const match=mejV2Find_(t.invites,0,mejV2Hash_(invite));
+      if(!match||match.values[3]||Number(match.values[1])!==grade||
+         String(match.values[2])!==group)throw new Error('INVALID_OR_USED_INVITE');
+      const uid='mejv2-'+Utilities.getUuid().replace(/-/g,'').toLowerCase();
+      const token=mejV2Secret_().toLowerCase();
+      t.students.appendRow([uid,mejV2Hash_(token),name,grade,group,new Date()]);
+      t.invites.getRange(match.row,4).setValue(uid);
+      return {ok:true,studentId:uid,deviceToken:token,stars:0,scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+    }
+    const user=mejV2Auth_(d,t.students), studentId=String(user[0]);
+    if(action==='summary'){
+      return {ok:true,studentId,stars:mejV2Stars_(t.mastery,studentId),
+        scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+    }
+    const eventId=String(d.eventId||''),qid=String(d.questionId||'');
+    if(!/^[a-zA-Z0-9_-]{16,96}$/.test(eventId))throw new Error('INVALID_EVENT_ID');
+    if(!/^L(?:[0-9]|1[0-2])-[0-9]{3}$/.test(qid))throw new Error('INVALID_QUESTION_ID');
+    const response=mejV2Answer_(d.answer);
+    const answerHash=mejV2Hash_(response);
+    const previous=mejV2Find_(t.attempts,0,eventId);
+    if(previous){
+      if(String(previous.values[1])!==studentId||String(previous.values[2])!==qid||
+         String(previous.values[3])!==answerHash)throw new Error('EVENT_ID_CONFLICT');
+      return {ok:true,duplicate:true,correct:previous.values[4]===true,
+        stars:mejV2Stars_(t.mastery,studentId),scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+    }
+    const key=mejV2Find_(t.keys,0,qid);
+    if(!key)throw new Error('UNKNOWN_QUESTION');
+    if(Number(key.values[1])>Number(user[3]))throw new Error('QUESTION_ABOVE_SCHOOL_GRADE');
+    const correct=response===String(key.values[2]);
+    if(correct){
+      const rows=mejV2Rows_(t.mastery);
+      let match=null;
+      for(let i=0;i<rows.length;i++)if(String(rows[i][0])===studentId&&String(rows[i][1])===qid){
+        match={row:i+2,correctCount:Number(rows[i][2])||0};break;
+      }
+      if(match){
+        t.mastery.getRange(match.row,3,1,2).setValues([[Math.min(2,match.correctCount+1),new Date()]]);
+      }else{
+        t.mastery.appendRow([studentId,qid,1,new Date()]);
+      }
+    }
+    t.attempts.appendRow([eventId,studentId,qid,answerHash,correct,new Date()]);
+    return {ok:true,correct,duplicate:false,stars:mejV2Stars_(t.mastery,studentId),
+      scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+  }finally{lock.releaseLock()}
 }

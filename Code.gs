@@ -531,6 +531,25 @@ function mejV2Handle_(d){
     const key=mejV2Find_(t.keys,0,qid);
     if(!key)throw new Error('UNKNOWN_QUESTION');
     if(Number(key.values[1])>Number(user[3]))throw new Error('QUESTION_ABOVE_SCHOOL_GRADE');
+    // Match the existing two-part journey: the second 100 questions remain
+    // locked until the first 100 questions of this stage are mastered.
+    const stage=Number(key.values[1]),questionIndex=Number(qid.slice(-3));
+    if(questionIndex>=100){
+      const prefix='L'+stage+'-';
+      const firstPartMastered=mejV2Rows_(t.mastery).filter(function(row){
+        const id=String(row[1]);
+        return String(row[0])===studentId&&id.startsWith(prefix)&&
+          Number(id.slice(-3))<100&&Number(row[2])>=2;
+      }).length;
+      if(firstPartMastered<100)throw new Error('SUBLEVEL_LOCKED');
+    }
+    // Limit accidental loops and unauthorized bulk requests in the pilot.
+    const today=new Date().toISOString().slice(0,10);
+    const recentAttempts=mejV2Rows_(t.attempts).filter(function(row){
+      return String(row[1])===studentId&&
+        row[5]&&new Date(row[5]).toISOString().slice(0,10)===today;
+    }).length;
+    if(recentAttempts>=600)throw new Error('DAILY_PILOT_LIMIT');
     const correct=response===String(key.values[2]);
     if(correct){
       const rows=mejV2Rows_(t.mastery);

@@ -1,3 +1,15 @@
+## Final Stage 6 update — 2026-11-05
+
+**Automated acceptance succeeded (10/10); the production decision remains NO-GO for real students.**
+
+The prior paragraphs below reflect a 2026-11-04 baseline audit and are preserved for traceability. Subsequent work added isolated verified-scoring, recovery and class-ranking **pilot code** and completed authorized cleanup of known test records (with backups). These pilot features are **not deployed or integrated** with the live student browser.
+
+Latest evidence: [Stage 6 browser acceptance](diagnostics/stage6-learner-browser.json), [Stage 6 release decision](diagnostics/stage6-release-gate.json), [Final acceptance report](STAGE6_FINAL_ACCEPTANCE.md).
+
+The actual offline-first learning workflow was tested in Chromium with a fictitious account: 24-item diagnostic initialization, one star only after two correct answers, no repeat credit, stage-two lock, and local progress surviving an offline reload. The existing cloud flow remains legacy/unverified and the new authenticated sync remains staged. **Do not advertise production classroom readiness** until verified service deployment, browser integration, phone testing and school privacy approval are complete.
+
+---
+
 # My English Journey — Pre-release readiness (2026-11-04)
 
 ## Implemented and checked in repository

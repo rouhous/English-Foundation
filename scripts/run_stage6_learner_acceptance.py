@@ -27,7 +27,7 @@ try:
   # No real name, school ID or teacher code. The service worker must have
   # cached all bundles before the browser is deliberately disconnected.
   page.wait_for_function("""async () => {
-   const c=await caches.open('english-explorer-stage5-offline-20261105-v1');
+   const c=await caches.open('english-explorer-fast-launch-20261105-v1');
    return (await Promise.all(Array.from({length:12},(_,i)=>
       c.match('./assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261104-approved').then(Boolean)))).every(Boolean);
   }""",timeout=90000)

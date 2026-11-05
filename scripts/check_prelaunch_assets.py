@@ -30,7 +30,7 @@ assert "let src=mejApprovedPhoto(word)" in html
 assert 'mobile-home-fix.css?v=20261104-release' in html
 assert 'mejStageQuestions(g,part)' in html
 sw=(root/'sw.js').read_text(encoding='utf8')
-assert 'english-explorer-approved-vocabulary-20261105-stage2-v1' in sw
+assert 'english-explorer-test-reset-20261105-v1' in sw
 report={
  'approved_images':len(items),'unique_image_ids':len({c['id'] for _,c in items}),
  'distinct_word_labels':len({w for w,_ in items}),

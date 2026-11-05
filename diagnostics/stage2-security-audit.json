@@ -1,9 +1,11 @@
 {
   "status": "STAGE2_STATIC_CHECKS_PASSED",
   "local_star_reconciliation": "derived_from_unique_mastered_question_ids",
-  "server_input_validation": "bounds_and_correct_attempt_consistency",
-  "offline_stale_reports": "ignored_without_replacing_newer_star_total",
+  "server_input_validation": "bounds, stars_equal_mastery, correct_attempt_consistency, identity_collision",
+  "offline_stale_reports": "do_not_replace_larger_stars_or_attempts",
   "server_score_label": "CLIENT_REPORTED_UNVERIFIED",
+  "recovery_bridge_origin_check": true,
+  "teacher_code_excluded_from_exports": true,
   "fully_authenticated_students": false,
   "server_verified_answers": false,
   "server_deployment_verified": false,

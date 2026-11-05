@@ -1630,7 +1630,8 @@ async function sendReport(manual=false){
  }
 }
 window.addEventListener('online',()=>{if(active().name)scheduleReport()});
-function exportProgress(){let blob=new Blob([JSON.stringify({app:'wadi-english-explorer',version:1,savedAt:new Date().toISOString(),profiles:db.profiles,active:db.active},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='My_English_Journey_Progress_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('✅ تم تنزيل نسخة التقدّم الاحتياطية. احتفظ بها في مكان آمن.') }
+// MEJ_STAGE2_PRIVACY_HARDENING_V2
+function exportProgress(){let blob=new Blob([JSON.stringify({app:'wadi-english-explorer',version:1,savedAt:new Date().toISOString(),profiles:Object.fromEntries(Object.entries(db.profiles).map(([id,profile])=>[id,{...profile,teacherCode:''}])),active:db.active},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='My_English_Journey_Progress_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('✅ تم تنزيل نسخة التقدّم الاحتياطية. احتفظ بها في مكان آمن.') }
 // Validate a student backup before it can replace locally saved progress.
 // Keep only known fields and question IDs; an imported file must never overwrite
 // healthy data with malformed values or prototype keys.
@@ -1778,7 +1779,7 @@ function show(){
  document.getElementById('ee-cloud-current').textContent=info?'رمز استرجاع الطالب الحالي: '+info.recoveryId+' — الحفظ السحابي مفعّل':'الطالب الحالي غير مسجّل للحفظ السحابي.';
 }
 window.addEventListener('message',function(event){
- if(event.source!==frame.contentWindow)return;
+ if(event.source!==frame.contentWindow || !['https://script.google.com','https://script.googleusercontent.com'].includes(event.origin))return;
  const d=event.data||{};
  if(d.eeRecoveryBridge!==true)return;
  if(d.ready){ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}

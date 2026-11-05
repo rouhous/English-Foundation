@@ -8,6 +8,13 @@ server=(root/'Code.gs').read_text(encoding='utf8')
 assert html.count('MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1')==1
 assert 'function mejReconcileLocalStars(profile)' in html
 assert 'function persist(send=true){mejReconcileLocalStars(active());' in html
+assert 'MEJ_STAGE2_PRIVACY_HARDENING_V2' in html
+assert "event.origin" in html and "script.googleusercontent.com" in html
+assert "profiles:Object.fromEntries(Object.entries(db.profiles)" in html
+assert "profiles:db.profiles,active:db.active" not in html
+assert "INVALID_PROGRESS_STARS_MASTERY" in server
+assert "STUDENT_IDENTITY_CONFLICT" in server
+assert "Number(d.attempts)<previousAttempts" in server
 assert server.count('CLIENT_REPORTED_UNVERIFIED')>=4
 assert 'wadiValidateProgressEnvelope_(d);' in server
 assert 'STALE_IGNORED' in server
@@ -42,9 +49,11 @@ if result.returncode:raise RuntimeError('Local score behavior test: '+result.std
 report={
  'status':'STAGE2_STATIC_CHECKS_PASSED',
  'local_star_reconciliation':'derived_from_unique_mastered_question_ids',
- 'server_input_validation':'bounds_and_correct_attempt_consistency',
- 'offline_stale_reports':'ignored_without_replacing_newer_star_total',
+ 'server_input_validation':'bounds, stars_equal_mastery, correct_attempt_consistency, identity_collision',
+ 'offline_stale_reports':'do_not_replace_larger_stars_or_attempts',
  'server_score_label':'CLIENT_REPORTED_UNVERIFIED',
+ 'recovery_bridge_origin_check':True,
+ 'teacher_code_excluded_from_exports':True,
  'fully_authenticated_students':False,
  'server_verified_answers':False,
  'server_deployment_verified':False,

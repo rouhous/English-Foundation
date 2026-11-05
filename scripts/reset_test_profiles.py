@@ -8,7 +8,6 @@ import re,subprocess,tempfile
 p=Path("index.html")
 html=p.read_text(encoding="utf8")
 marker="MEJ_TEST_ACCOUNT_RESET_20261105_V1"
-reset=String.raw if False else None
 if marker not in html:
  old="const DBKEY='WADI_ENGLISH_EXPLORER_PROFILES_V1';"
  new="""const DBKEY='WADI_ENGLISH_EXPLORER_PROFILES_V1';

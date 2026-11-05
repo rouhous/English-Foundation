@@ -1,0 +1,43 @@
+/* Stage 5: responsive, accessible refinements. Preserves original Oman sea/boat artwork. */
+:root{--mej-safe-top:env(safe-area-inset-top,0px);--mej-safe-right:env(safe-area-inset-right,0px);--mej-safe-bottom:env(safe-area-inset-bottom,0px);--mej-safe-left:env(safe-area-inset-left,0px)}
+html{max-width:100%;scroll-padding-top:12px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+img,svg,video,canvas{max-width:100%}
+button,input,textarea,select{font:inherit}
+button,.navbutton,[role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:where(button,.navbutton,a,input,select,textarea):focus-visible{outline:3px solid #e9b83e;outline-offset:3px}
+#app{min-width:0;overflow-wrap:break-word}
+#app :where(.card,.level,.question,.quiz,.panel){min-width:0}
+#app img{height:auto}
+#app :where(input,textarea,select){max-width:100%}
+.navbar .menu{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-width:0}
+.navbar .navbutton{min-height:44px;min-width:44px;white-space:normal;line-height:1.25;flex:0 1 auto;padding:10px 12px}
+#toast{max-width:min(94vw,560px);overflow-wrap:anywhere}
+@media(max-width:900px){
+  #app.container{max-width:100%;width:100%;padding-inline:max(10px,var(--mej-safe-left)) max(10px,var(--mej-safe-right))}
+  .navbar{max-width:100%;width:100%}
+  .navbar .menu{width:100%;max-width:100%;padding-inline:max(6px,var(--mej-safe-left)) max(6px,var(--mej-safe-right));gap:4px}
+  .navbar .navbutton{flex:1 1 auto;font-size:clamp(12px,3vw,15px);padding:9px 6px}
+  #app>.mobile-ocean-v31{min-height:100svh!important;min-height:100dvh!important;padding-top:max(10px,var(--mej-safe-top))!important;padding-right:max(12px,var(--mej-safe-right))!important;padding-bottom:max(18px,var(--mej-safe-bottom))!important;padding-left:max(12px,var(--mej-safe-left))!important;overflow:hidden}
+  #app>.mobile-ocean-v31>.m31-art{inset:0!important}
+  #app .mobile-ocean-v31 .m31-start{min-height:44px}
+  #app .mobile-ocean-v31 .m31-nav :where(button,a){min-height:44px}
+}
+@media(max-width:390px){
+  .navbar .menu{gap:3px}
+  .navbar .navbutton{font-size:12px;padding:8px 4px;flex:1 1 28%}
+  #app>.mobile-ocean-v31{gap:8px!important}
+  #app .mobile-ocean-v31>.m31-head{gap:4px!important}
+  #app .mobile-ocean-v31>.m31-lower{gap:6px!important}
+}
+@media(max-height:590px) and (orientation:landscape){
+  #app>.mobile-ocean-v31{min-height:100dvh!important;height:auto!important;overflow:visible!important;gap:12px!important}
+  #app>.mobile-ocean-v31>.m31-lower{margin-top:12px!important}
+  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{top:24%!important;height:56%!important}
+  .navbar .navbutton{font-size:13px;padding:7px}
+}
+@media(prefers-reduced-motion:reduce){
+  html:focus-within{scroll-behavior:auto}
+  #app *{scroll-behavior:auto!important}
+}

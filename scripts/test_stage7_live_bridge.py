@@ -17,7 +17,7 @@ try:
   browser=p.chromium.launch(channel="chrome",headless=True,args=["--no-sandbox"])
   page=browser.new_page(viewport={"width":390,"height":844})
   # Observe bridge message presence without copying secrets or payloads.
-  page.add_init_script("""() => {
+  page.add_init_script("""(() => {
     window.__mejBridgeObservations=[];
     window.addEventListener('message',e=>{
       if(e.data&&e.data.eeRecoveryBridge){
@@ -31,7 +31,7 @@ try:
         });
       }
     });
-  }""")
+  })()""")
 
   console_errors=[]
   request_failures=[]
@@ -84,6 +84,16 @@ try:
     except Exception: pass
   page.wait_for_timeout(300)
   result["observed_bridge_messages_after_probe"]=page.evaluate("window.__mejBridgeObservations||[]")[:5]
+  result["deep_window_access"]=page.evaluate("""() => {
+    const outer=document.getElementById('ee-recovery-frame').contentWindow;
+    try {
+      return {
+        first:!!outer.frames[0],
+        second:!!outer.frames[0].frames[0],
+        third:!!outer.frames[0].frames[0].frames[0]
+      };
+    }catch(e){return {error:e.name}}
+  }""")
   result["script_errors"]=console_errors[:6]
   result["request_failures"]=request_failures[:8]
   result["google_responses"]=bridge_http[:12]

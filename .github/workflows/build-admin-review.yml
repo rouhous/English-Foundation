@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - scripts/export_admin_review_catalog.py
+      - scripts/test_admin_reviewer.py
       - reviews/admin-levels.html
       - .github/workflows/build-admin-review.yml
   workflow_dispatch:
@@ -34,6 +35,8 @@ jobs:
           assert 'teacherCode' not in Path('reviews/admin-levels-catalog.json').read_text()
           print('ADMIN_CURRICULUM_READONLY_CHECKS_PASSED: 26 parts, 2600 questions, no student credentials')
           PY
+      - name: Validate responsive reviewer in Chromium
+        run: python3 scripts/test_admin_reviewer.py
       - name: Publish curriculum review catalog
         run: |
           git add reviews/admin-levels-catalog.json

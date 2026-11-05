@@ -12,7 +12,7 @@ const WADI_CONFIG = {
   SUMMARY_TAB: 'Student_Progress',
   HISTORY_TAB: 'Progress_Log',
   MAX_POST_CHARS: 120000,
-  RECEIVER_VERSION: '2026-10-23-teacher-code-v1',
+  RECEIVER_VERSION: '2026-11-05-unverified-scores-v2',
   LIVE_WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbzyPJ9z93yJbEUx_XCbkPO_FPSoAEy_nXHvBPQ1-a1DrxrzUXAv8veIsYNIFfVvnZvv1w/exec'
 };
 
@@ -24,11 +24,11 @@ const WADI_HEADERS = [
   'Weekly Attempts','Writing Drafts',
   'L0 %','L1 %','L2 %','L3 %','L4 %','L5 %','L6 %',
   'L7 %','L8 %','L9 %','L10 %','L11 %','L12 %','Level Details JSON',
-  'Last Event','Last Receipt ID','Class'
+  'Last Event','Last Receipt ID','Class','Score Verification'
 ];
 const WADI_LOG_HEADERS = [
   'Report ID','Received At','Student ID','Student Name','Grade','Event',
-  'Stars','Attempts','Accuracy %','Mastered Items','Max Level','Level Details JSON','Class'
+  'Stars','Attempts','Accuracy %','Mastered Items','Max Level','Level Details JSON','Class','Score Verification'
 ];
 
 function wadiSpreadsheet_() {
@@ -116,7 +116,7 @@ function wadiRow_(d, reportId) {
     wadiInt_(d.masteredItems,2600), 2600,
     wadiText_(d.lastActivity,40), wadiInt_(d.weeklyAttempts,100000),
     wadiInt_(d.writingDraftCount,10000), ...levelPct, levelDetails,
-    wadiText_(d.event,35), reportId, wadiClass_(d.className,d.studentGrade)
+    wadiText_(d.event,35), reportId, wadiClass_(d.className,d.studentGrade), 'CLIENT_REPORTED_UNVERIFIED'
   ];
 }
 function wadiFind_(sheet, column, key) {
@@ -143,12 +143,30 @@ function wadiCode_(error) {
   if (/Missing student/.test(msg)) return 'MISSING_STUDENT';
   if (/TEACHER_CODE_NOT_CONFIGURED/.test(msg)) return 'TEACHER_CODE_NOT_CONFIGURED';
   if (/INVALID_TEACHER_CODE/.test(msg)) return 'INVALID_TEACHER_CODE';
+  if (/INVALID_PROGRESS_/.test(msg)) return 'INVALID_PROGRESS';
   if (/reportId/.test(msg)) return 'INVALID_RECEIPT';
   if (/No linked Google Sheet/.test(msg)) return 'SPREADSHEET_NOT_CONFIGURED';
   if (/incompatible header/.test(msg)) return 'WRONG_TAB_HEADERS';
   if (/Permission|permission|authorization|Access denied/i.test(msg)) return 'GOOGLE_PERMISSION';
   return 'RECEIVER_ERROR';
 }
+/** Stage 2: reject impossible totals; never treat self-reported values as verified.
+ * This receiver has no per-student authentication or private answer validation.
+ * Class rankings must NOT use these reports until a trusted scoring service exists.
+ */
+function wadiValidateProgressEnvelope_(d) {
+  const fields={stars:2600,attempts:100000000,correctAnswers:100000000,masteredItems:2600};
+  Object.keys(fields).forEach(function(field){
+    const value=Number(d[field]);
+    if(!Number.isSafeInteger(value)||value<0||value>fields[field])
+      throw new Error('INVALID_PROGRESS_COUNTER_'+field);
+  });
+  if(Number(d.correctAnswers)>Number(d.attempts))
+    throw new Error('INVALID_PROGRESS_CORRECT_GT_ATTEMPTS');
+  // A mastered question requires two correct practice answers in this app.
+  // Do not assume other reported statistics, identities, or star totals are genuine.
+}
+
 function doPost(e) {
   const lock=LockService.getScriptLock();
   let locked=false, reportId='';
@@ -160,6 +178,7 @@ function doPost(e) {
     if (d.schema!=='english-foundation-oman-progress-v1') throw new Error('Unexpected report format');
     if (!d.studentId || !d.studentName) throw new Error('Missing student ID or name');
     wadiValidateTeacherCode_(d.teacherCode);
+    wadiValidateProgressEnvelope_(d);
     reportId=wadiReceipt_(reportId);
     lock.waitLock(20000); locked=true;
     const ss=wadiSpreadsheet_();
@@ -168,11 +187,29 @@ function doPost(e) {
     const classSheet=wadiClassTab_(ss,d.studentGrade,d.className);
     if (wadiFind_(history,1,reportId)) {
       wadiFlag_(reportId,'stored','DUPLICATE_OK');
-      return wadiJson_({ok:true,duplicate:true,reportId,version:WADI_CONFIG.RECEIVER_VERSION});
+      return wadiJson_({ok:true,duplicate:true,reportId,scoreVerification:'CLIENT_REPORTED_UNVERIFIED',version:WADI_CONFIG.RECEIVER_VERSION});
     }
     const row=wadiRow_(d,reportId);
     const identity=wadiText_(d.studentId,100);
     const oldRow=wadiFind_(summary,1,identity);
+    // Offline reports may arrive out of order. Never overwrite a larger saved
+    // star count with an older report. Receipt remains permanently in history.
+    if(oldRow){
+      const previousStars=Number(summary.getRange(oldRow.getRow(),13).getValue())||0;
+      if(Number(d.stars)<previousStars){
+        history.appendRow([
+          reportId,new Date(),identity,wadiText_(d.studentName,100),
+          wadiText_(d.studentGrade,20),'STALE_IGNORED',
+          wadiInt_(d.stars,2600),wadiInt_(d.attempts,100000000),
+          wadiPct_(d.accuracyPercent),wadiInt_(d.masteredItems,2600),
+          wadiInt_(d.maxAccessibleLevel,12),row[34],
+          wadiClass_(d.className,d.studentGrade),'CLIENT_REPORTED_UNVERIFIED'
+        ]);
+        SpreadsheetApp.flush();
+        wadiFlag_(reportId,'stored','STALE_IGNORED');
+        return wadiJson_({ok:true,stale:true,reportId,scoreVerification:'CLIENT_REPORTED_UNVERIFIED',version:WADI_CONFIG.RECEIVER_VERSION});
+      }
+    }
     if (oldRow) summary.getRange(oldRow.getRow(),1,1,row.length).setValues([row]);
     else summary.appendRow(row);
     const existingClassRow=wadiFind_(classSheet,1,identity);
@@ -183,11 +220,11 @@ function doPost(e) {
       wadiText_(d.studentGrade,20),wadiText_(d.event,35),
       wadiInt_(d.stars,100000000),wadiInt_(d.attempts,100000000),
       wadiPct_(d.accuracyPercent),wadiInt_(d.masteredItems,2600),
-      wadiInt_(d.maxAccessibleLevel,12),row[34],wadiClass_(d.className,d.studentGrade)
+      wadiInt_(d.maxAccessibleLevel,12),row[34],wadiClass_(d.className,d.studentGrade),'CLIENT_REPORTED_UNVERIFIED'
     ]);
     SpreadsheetApp.flush();
     wadiFlag_(reportId,'stored','SAVED');
-    return wadiJson_({ok:true,reportId,version:WADI_CONFIG.RECEIVER_VERSION});
+    return wadiJson_({ok:true,reportId,scoreVerification:'CLIENT_REPORTED_UNVERIFIED',version:WADI_CONFIG.RECEIVER_VERSION});
   } catch(err) {
     const code=wadiCode_(err);
     console.error('Wadi report error ['+code+']: '+String(err && err.stack || err));
@@ -270,4 +307,22 @@ function testLiveDeployment() {
   const found=!!(log && wadiFind_(log,1,sample.reportId));
   Logger.log('LIVE SHEET WRITE: '+(found?'CONFIRMED':'NOT FOUND'));
   if(!found) throw new Error('The deployed /exec endpoint did not write to the spreadsheet! Check HTTP status, latest deployment, permissions and whether the URL belongs to this project.');
+}
+
+/** Stage 2 offline-only unit checks; requires no spreadsheet authorization. */
+function testStage2Envelope_() {
+  const base={stars:3,attempts:7,correctAnswers:6,masteredItems:3};
+  wadiValidateProgressEnvelope_(base);
+  function expectReject(patch){
+    let rejected=false;
+    try{wadiValidateProgressEnvelope_(Object.assign({},base,patch));}
+    catch(err){rejected=true;}
+    if(!rejected)throw new Error('Expected progress envelope rejection');
+  }
+  expectReject({stars:2601});
+  expectReject({stars:-1});
+  expectReject({correctAnswers:8});
+  expectReject({attempts:NaN});
+  expectReject({masteredItems:3000});
+  return 'STAGE2_ENVELOPE_CHECKS_PASSED';
 }

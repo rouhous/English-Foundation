@@ -3,6 +3,18 @@
 /* Synthetic-data-only tests of the disabled Apps Script verification pilot. */
 const fs=require("fs"),vm=require("vm"),crypto=require("crypto"),assert=require("assert");
 const code=fs.readFileSync("Code.gs","utf8");
+const publicHtml=fs.readFileSync("index.html","utf8");
+const extracted=publicHtml.match(/const BANK=(\[.*?\]);\s*const PHOTO=/s);
+assert(extracted,"Server key-import parser must match current published bank");
+const publicBank=JSON.parse(extracted[1]);
+assert.equal(publicBank.length,2600,"Server key-import expects exactly 2600 questions");
+assert.equal(new Set(publicBank.map(q=>q.id)).size,2600,"Every question needs a unique key");
+for(const q of publicBank){
+ assert(/^L(?:[0-9]|1[0-2])-[0-9]{3}$/.test(q.id),"Invalid question key "+q.id);
+ assert(String(q.answer??"").trim().length>0&&String(q.answer).trim().length<=300,
+   "Question has no server-comparable answer: "+q.id);
+}
+
 const db=new Map();
 let uidCounter=0,activeLocks=0;
 const props={MEJ_V2_ENABLED:"true",TEACHER_REGISTRATION_CODE:"TEST-TEACHER-CODE"};

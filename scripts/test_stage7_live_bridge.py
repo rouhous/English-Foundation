@@ -48,6 +48,15 @@ try:
   result["google_responses"]=bridge_http[:12]
   result["iframe_hosts"]=[urlparse(f.url).hostname for f in page.frames][1:8]
   result["iframe_titles"]=[f.title()[:65] for f in page.frames[1:5] if f.url.startswith("https://") and f.url != "about:blank"]
+  result["inner_frame_access"]=page.evaluate("""() => {
+    const outer=document.getElementById('ee-recovery-frame').contentWindow;
+    const attempt=(fn)=>{try{return fn()}catch(e){return e.name}};
+    return {
+      childFrames:attempt(()=>outer.length),
+      innerFrameExists:attempt(()=>Boolean(outer.frames[0])),
+      innerFramePostMessageCallable:attempt(()=>typeof outer.frames[0].postMessage === 'function')
+    };
+  }""")
   result["status"]="STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED" if result["staging_ready_message"] else "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED"
   browser.close()
 except Exception as error:

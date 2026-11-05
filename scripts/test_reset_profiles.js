@@ -2,7 +2,7 @@
 "use strict";
 const assert=require("node:assert/strict"),fs=require("node:fs"),vm=require("node:vm");
 const html=fs.readFileSync("index.html","utf8");
-const match=html.match(/const DBKEY='WADI_ENGLISH_EXPLORER_PROFILES_V1';[\s\S]*?(?=let db=\{profiles:)/);
+const match=html.match(/const DBKEY='WADI_ENGLISH_EXPLORER_PROFILES_V1';[\s\S]*?(?=const questionById=)/);
 assert(match,"Reset must precede database loading");
 assert(match[0].includes("MEJ_TEST_ACCOUNT_RESET_20261105_V1"),"Reset marker missing");
 const data=new Map([

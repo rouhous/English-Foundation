@@ -4,6 +4,10 @@ on:
     paths:
       - Code.gs
       - scripts/test_verified_pilot.js
+      - scripts/test_stage3_ranking_view.js
+      - assets/class-ranking-v1.js
+      - assets/class-ranking-v1.css
+      - reviews/stage3-ranking-preview.html
       - .github/workflows/verify-student-pilot.yml
   workflow_dispatch:
 permissions:
@@ -22,3 +26,7 @@ jobs:
           node --check /tmp/mej-verified-server.js
       - name: Simulate enrollment and server scoring (synthetic accounts only)
         run: node scripts/test_verified_pilot.js
+      - name: Test protected class-ranking display (synthetic only)
+        run: |
+          node --check assets/class-ranking-v1.js
+          node scripts/test_stage3_ranking_view.js

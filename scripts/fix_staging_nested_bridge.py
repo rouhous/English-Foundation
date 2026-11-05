@@ -42,7 +42,7 @@ if marker not in s:
             r"if\(d\.ready\)\{ready=true;setStatus\('✅ متصل بخادم STAGING — للاختبارات فقط'\);show\(\);return;\}")
   s,n=re.subn(listener,lambda _:new,s,count=1)
   if n!=1:
-    ix=s.find("if(event.source!==frame.contentWindow)")
+    ix=s.find("if(d.eeRecoveryBridge!==true)")
     raise RuntimeError("Cannot identify expected bridge listener: "+repr(s[max(0,ix-90):ix+580]))
   old="frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');"
   new="""const nested=frame.contentWindow&&frame.contentWindow.frames[0];

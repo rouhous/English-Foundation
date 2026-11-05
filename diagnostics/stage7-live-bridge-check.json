@@ -3,14 +3,21 @@
   "source_url": "GitHub Pages live application",
   "uses_credentials": false,
   "writes_student_data": false,
-  "status": "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED",
+  "status": "STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED",
   "app_loaded": true,
   "bridge_frame_found": true,
   "bridge_origin_is_google": true,
   "status_element_found": true,
-  "status_text": "⏳ الاتصال بخادم STAGING...",
+  "status_text": "✅ متصل بخادم STAGING — للاختبارات فقط",
   "nonce_in_frame_url": true,
-  "observed_bridge_messages": [],
+  "observed_bridge_messages": [
+    {
+      "fromGoogle": true,
+      "nestedSource": false,
+      "hasNonce": true,
+      "ready": true
+    }
+  ],
   "google_inner_bridge_loaded": [
     {
       "title": "",
@@ -27,8 +34,24 @@
       "isNested": true
     }
   ],
-  "staging_ready_message": false,
-  "observed_bridge_messages_after_probe": [],
+  "staging_ready_message": true,
+  "observed_bridge_messages_after_probe": [
+    {
+      "fromGoogle": true,
+      "nestedSource": false,
+      "hasNonce": true,
+      "ready": true
+    },
+    {
+      "fromGoogle": true,
+      "nestedSource": false,
+      "hasNonce": false,
+      "ready": false
+    }
+  ],
+  "deep_window_access": {
+    "error": "SecurityError"
+  },
   "script_errors": [],
   "request_failures": [],
   "google_responses": [

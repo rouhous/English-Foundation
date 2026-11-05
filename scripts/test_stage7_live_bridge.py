@@ -19,7 +19,12 @@ try:
   # Observe bridge message presence without copying secrets or payloads.
   page.add_init_script("""(() => {
     window.__mejBridgeObservations=[];
+    window.__mejBridgeOrigin='';
+    window.__mejBridgeRpcReply=null;
     window.addEventListener('message',e=>{
+      if(e.data&&e.data.eeRecoveryBridge&&e.data.ready===true)window.__mejBridgeOrigin=e.origin;
+      if(e.data&&e.data.eeRecoveryBridge&&e.data.requestId==='MEJ_READONLY_BRIDGE_PROBE')
+        window.__mejBridgeRpcReply={error:String(e.data.error||''),hasPayload:!!e.data.payload};
       if(e.data&&e.data.eeRecoveryBridge){
         const f=document.getElementById('ee-recovery-frame');
         const inner=f&&f.contentWindow&&f.contentWindow.frames[0];
@@ -74,6 +79,31 @@ try:
      })"""))
     except Exception: pass
   result["staging_ready_message"]="متصل بخادم STAGING" in status_text
+  if result["staging_ready_message"]:
+   # Request an invalid action only. Apps Script rejects it before any account
+   # lookup or cloud mutation; this proves reverse request/response delivery.
+   result["client_to_server_probe_sent"]=page.evaluate("""() => {
+     const frame=document.getElementById('ee-recovery-frame');
+     const nonce=new URL(frame.src).searchParams.get('bridgeNonce');
+     let target=frame.contentWindow;
+     for(let i=0;i<4;i++){
+       try{if(!target||!target.frames.length)break;target=target.frames[0];}
+       catch(e){break;}
+     }
+     if(!target||!window.__mejBridgeOrigin||!nonce)return false;
+     target.postMessage({eeRecoveryRequest:true,bridgeNonce:nonce,
+       requestId:'MEJ_READONLY_BRIDGE_PROBE',action:'unsupported-readonly-test',payload:{}},
+       window.__mejBridgeOrigin);
+     return true;
+   }""")
+   if result["client_to_server_probe_sent"]:
+    try:
+     page.wait_for_function("window.__mejBridgeRpcReply!==null",timeout=18000)
+    except Exception:pass
+   reply=page.evaluate("window.__mejBridgeRpcReply")
+   result["invalid_action_properly_rejected"]=bool(reply and reply.get("error")=="INVALID_ACTION")
+   if not result["invalid_action_properly_rejected"]:
+    result["status"]="STAGE7_LIVE_BRIDGE_RPC_NOT_CONFIRMED"
   # Read-only synthetic message probe: verifies nested frame can post to the
   # GitHub app top-level window. No credential or recovery data is included.
   for inner in page.frames[1:]:
@@ -108,7 +138,7 @@ try:
       innerFramePostMessageCallable:attempt(()=>typeof outer.frames[0].postMessage === 'function')
     };
   }""")
-  result["status"]="STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED" if result["staging_ready_message"] else "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED"
+  result["status"]="STAGE7_LIVE_BRIDGE_RPC_PASSED" if result["staging_ready_message"] and result.get("invalid_action_properly_rejected") else "STAGE7_LIVE_BRIDGE_RPC_NOT_CONFIRMED"
   browser.close()
 except Exception as error:
  result["status"]="STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED"
@@ -117,4 +147,4 @@ finally:
  path=Path("diagnostics/stage7-live-bridge-check.json")
  path.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
  print(json.dumps(result,ensure_ascii=False))
- if result["status"]!="STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED":raise SystemExit(1)
+ if result["status"]!="STAGE7_LIVE_BRIDGE_RPC_PASSED":raise SystemExit(1)

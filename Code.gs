@@ -12,7 +12,7 @@ const WADI_CONFIG = {
   SUMMARY_TAB: 'Student_Progress',
   HISTORY_TAB: 'Progress_Log',
   MAX_POST_CHARS: 120000,
-  RECEIVER_VERSION: '2026-11-05-unverified-scores-v2',
+  RECEIVER_VERSION: '2026-11-05-unverified-scores-v3',
   LIVE_WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbzyPJ9z93yJbEUx_XCbkPO_FPSoAEy_nXHvBPQ1-a1DrxrzUXAv8veIsYNIFfVvnZvv1w/exec'
 };
 
@@ -143,6 +143,7 @@ function wadiCode_(error) {
   if (/Missing student/.test(msg)) return 'MISSING_STUDENT';
   if (/TEACHER_CODE_NOT_CONFIGURED/.test(msg)) return 'TEACHER_CODE_NOT_CONFIGURED';
   if (/INVALID_TEACHER_CODE/.test(msg)) return 'INVALID_TEACHER_CODE';
+  if (/STUDENT_IDENTITY_CONFLICT/.test(msg)) return 'STUDENT_IDENTITY_CONFLICT';
   if (/INVALID_PROGRESS_/.test(msg)) return 'INVALID_PROGRESS';
   if (/reportId/.test(msg)) return 'INVALID_RECEIPT';
   if (/No linked Google Sheet/.test(msg)) return 'SPREADSHEET_NOT_CONFIGURED';
@@ -161,6 +162,8 @@ function wadiValidateProgressEnvelope_(d) {
     if(!Number.isSafeInteger(value)||value<0||value>fields[field])
       throw new Error('INVALID_PROGRESS_COUNTER_'+field);
   });
+  if(Number(d.stars)!==Number(d.masteredItems))
+    throw new Error('INVALID_PROGRESS_STARS_MASTERY');
   if(Number(d.correctAnswers)>Number(d.attempts))
     throw new Error('INVALID_PROGRESS_CORRECT_GT_ATTEMPTS');
   // A mastered question requires two correct practice answers in this app.
@@ -192,11 +195,24 @@ function doPost(e) {
     const row=wadiRow_(d,reportId);
     const identity=wadiText_(d.studentId,100);
     const oldRow=wadiFind_(summary,1,identity);
+    // A shared teacher code is not sufficient proof of identity. This check
+    // prevents accidental profile collisions but does not replace auth.
+    if(oldRow){
+      const saved=summary.getRange(oldRow.getRow(),1,1,row.length).getValues()[0];
+      const previousName=String(saved[1]||'').trim();
+      const previousGrade=String(saved[2]||'').trim();
+      const previousClass=String(saved[37]||'').trim();
+      if((previousName&&previousName!==String(row[1])) ||
+         (previousGrade&&previousGrade!==String(row[2])) ||
+         (previousClass&&previousClass!==String(row[37])))
+        throw new Error('STUDENT_IDENTITY_CONFLICT');
+    }
     // Offline reports may arrive out of order. Never overwrite a larger saved
     // star count with an older report. Receipt remains permanently in history.
     if(oldRow){
       const previousStars=Number(summary.getRange(oldRow.getRow(),13).getValue())||0;
-      if(Number(d.stars)<previousStars){
+      const previousAttempts=Number(summary.getRange(oldRow.getRow(),14).getValue())||0;
+      if(Number(d.stars)<previousStars || Number(d.attempts)<previousAttempts){
         history.appendRow([
           reportId,new Date(),identity,wadiText_(d.studentName,100),
           wadiText_(d.studentGrade,20),'STALE_IGNORED',
@@ -324,5 +340,6 @@ function testStage2Envelope_() {
   expectReject({correctAnswers:8});
   expectReject({attempts:NaN});
   expectReject({masteredItems:3000});
+  expectReject({stars:2,masteredItems:3});
   return 'STAGE2_ENVELOPE_CHECKS_PASSED';
 }

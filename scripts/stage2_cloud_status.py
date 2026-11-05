@@ -12,6 +12,13 @@ if marker not in s:
  one("p.syncStatus='✅ تم التأكد من حفظ تقدم '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+').'","p.syncStatus='✅ تم استلام تقرير '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+'). النتائج المرسلة من الجهاز غير موثقة بعد، ولا تُستخدم للترتيب.'","receipt acknowledgement")
  one("else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). أرسل تقريرًا فعليًا للتحقق من تسجيله.';}","else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). '+(status.scoreVerification==='SERVER_VERIFIED'?'الخادم يعلن تحقق النتائج؛ يلزم اختبار مستقل قبل اعتمادها.':'⚠️ النتائج غير موثقة على الخادم، ولا تُستخدم لترتيب الطلاب.');}","health trust label")
  one("const REPORT_ERROR_AR={","// MEJ_STAGE2_CLOUD_TRUST_LABEL_V1\nconst REPORT_ERROR_AR={","version marker")
+ # Recognize the repository's newer (still unverified) receiver if the school later deploys it.
+ old_version="else if(status.version!==RECEIVER_EXPECTED_VERSION){"
+ new_version="else if(![RECEIVER_EXPECTED_VERSION,'2026-11-05-unverified-scores-v3'].includes(status.version)){"
+ if old_version in s:
+  if s.count(old_version)!=1:raise RuntimeError('Ambiguous receiver version condition')
+  s=s.replace(old_version,new_version,1)
+ elif new_version not in s:raise RuntimeError('Receiver version check not found')
  scripts=re.findall(r'<script[^>]*>(.*?)</script>',s,re.I|re.S)
  with tempfile.TemporaryDirectory() as d:
   for i,b in enumerate(scripts):

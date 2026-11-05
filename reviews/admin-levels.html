@@ -62,7 +62,7 @@ function draw(){
   // including words repeated in other grades and levels.
   if(pics){
    const bank=window.MEJ_APPROVED_IMAGES||{};
-   const normalize=s=>String(s||'').normalize('NFKC').toLowerCase().trim().replace(/[’‘]/g,"'").replace(/\\s+/g,' ');
+   const normalize=s=>String(s||'').normalize('NFKC').toLowerCase().trim().replace(/[’‘]/g,"'").replace(/\s+/g,' ');
    const terms=[q.pictureWord,q.word].filter(Boolean).map(normalize);
    let entries=[];
    for(const term of terms){

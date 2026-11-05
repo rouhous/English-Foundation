@@ -1,0 +1,31 @@
+{
+  "stage": "4 — Account recovery and offline synchronization",
+  "status": "STAGING_CODE_AND_SYNTHETIC_TESTS_PASSED_NOT_LIVE",
+  "student_recovery": {
+    "one_time_recovery_code": true,
+    "recovery_code_stored_as_sha256_hash": true,
+    "device_credential_rotated_on_transfer": true,
+    "old_device_revoked_after_transfer": true,
+    "used_recovery_codes_rejected": true,
+    "mastered_question_counts_restored": true,
+    "diagnostic_placement_restored": false,
+    "writing_drafts_restored": false
+  },
+  "offline_outbox": {
+    "isolated_browser_module": true,
+    "offline_answer_queue": true,
+    "idempotent_event_ids": true,
+    "unverified_ack_does_not_remove_pending": true,
+    "retry_after_network_restored": true,
+    "integrated_into_live_student_app": false,
+    "pending_answers_recoverable_if_device_lost": false
+  },
+  "verification": {
+    "github_synthetic_tests_passed": true,
+    "real_appscript_deployment_tested": false,
+    "android_iphone_multidevice_tested": false,
+    "student_privacy_approval_verified": false,
+    "safe_for_student_rollout": false
+  },
+  "notes": "Code.gs contains an opt-in default-disabled verified pilot. Existing Google Apps Script /exec is not automatically updated by GitHub. Current browser continues using legacy sync. Stage 4 demo uses fictional data."
+}

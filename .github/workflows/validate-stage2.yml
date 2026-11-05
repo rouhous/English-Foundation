@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - scripts/stage2_star_consistency.py
+      - scripts/stage2_privacy_hardening.py
       - scripts/test_stage2.py
       - Code.gs
       - .github/workflows/validate-stage2.yml
@@ -20,7 +21,9 @@ jobs:
         with:
           node-version: '22'
       - name: Apply local star-consistency patch without touching student data
-        run: python3 scripts/stage2_star_consistency.py
+        run: |
+          python3 scripts/stage2_star_consistency.py
+          python3 scripts/stage2_privacy_hardening.py
       - name: Validate browser and Apps Script code
         run: python3 scripts/test_stage2.py
       - name: Commit validated app and security audit

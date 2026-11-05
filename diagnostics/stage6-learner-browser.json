@@ -1,0 +1,19 @@
+{
+  "status": "STAGE6_OFFLINE_LEARNER_ACCEPTANCE_PASSED",
+  "test": "Offline learner diagnostic and local scoring",
+  "uses_synthetic_student_only": true,
+  "real_school_cloud_access": false,
+  "diagnosticQuestions": 24,
+  "questionId": "L0-000",
+  "stars": 1,
+  "mastered": 2,
+  "attempts": 3,
+  "stage2Locked": true,
+  "restored_after_offline_reload": {
+    "name": "TEST STAGE6 STUDENT",
+    "stars": 1,
+    "questionCount": 1,
+    "attempts": 3,
+    "stage2Locked": true
+  }
+}

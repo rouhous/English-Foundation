@@ -1,0 +1,35 @@
+{
+  "product": "My English Journey",
+  "stage": 6,
+  "tested_at_utc": "2026-11-05 (CI run; see GitHub Actions timestamps)",
+  "status": "TEST_SUITE_PASSED_WITH_RELEASE_BLOCKERS",
+  "release_decision": "NO_GO_FOR_REAL_STUDENTS",
+  "offline_first_requirement": "MANDATORY",
+  "checked": {
+    "approved_images_1136": true,
+    "two_sublevels_present": true,
+    "mobile_widths_no_overflow": true,
+    "offline_app_shell_and_12_image_shards": true,
+    "offline_local_learning_and_star_persistence": true,
+    "client_score_consistency_static": true,
+    "isolated_verified_student_pilot_exists": true,
+    "isolated_restore_endpoint_exists": true,
+    "isolated_class_ranking_endpoint_exists": true,
+    "class_ranking_disabled_by_default": true
+  },
+  "passed_checks": 10,
+  "total_checks": 10,
+  "remaining_blockers": [
+    "Verified student account service is not deployed to a school-controlled Apps Script /exec production endpoint.",
+    "Existing browser registration, answer grading and cloud reports have not been switched to authenticated verified scoring.",
+    "Offline verified answer outbox is a tested module but is not wired into the current browser's practice flow.",
+    "Verified class leaderboard is deliberately disabled; school-approved class membership and name-visibility review remain pending.",
+    "Diagnostic placement and writing drafts have not been added to the verified cross-device progress snapshot.",
+    "Physical Android Chrome/Firefox and iPhone Safari real-device tests are not completed.",
+    "School privacy and authorization requirements for real student records are not yet confirmed.",
+    "708 approved images are 316×316, below the preferred 384×384 quality threshold; do not silently replace approved assets."
+  ],
+  "student_data_used": "Synthetic account and local-only browser. No real student account registration.",
+  "last_cleanup": "Existing trial cloud records reset during prior stage, do not delete any additional records automatically.",
+  "recommendation": "Preserve offline app; deploy verified v2 to isolated school-owned staging, securely connect client, then repeat full end-to-end device and student privacy checks before GO."
+}

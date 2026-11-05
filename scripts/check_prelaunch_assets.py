@@ -29,14 +29,17 @@ assert 'function mejApprovedPhoto(word)' in html
 assert "let src=mejApprovedPhoto(word)" in html
 assert 'mobile-home-fix.css?v=20261104-release' in html
 assert 'mejStageQuestions(g,part)' in html
+assert 'MEJ_STAGE5_RESPONSIVE_V1' in html
+assert './assets/stage5-responsive.css?v=20261105-stage5' in html
 sw=(root/'sw.js').read_text(encoding='utf8')
-assert 'english-explorer-stage3-ranking-20261105-v1' in sw
+assert 'english-explorer-stage5-offline-20261105-v1' in sw
 report={
  'approved_images':len(items),'unique_image_ids':len({c['id'] for _,c in items}),
  'distinct_word_labels':len({w for w,_ in items}),
  'preferred_images':sum(bool(c['preferred']) for _,c in items),
  'dimensions':{f'{w}x{h}':n for (w,h),n in sorted(sizes.items())},
  'mobile_stylesheet_linked':True,'two_levels':True,
+ 'stage5_responsive_css':True,'offline_image_shards_pre_cache':12,
  'rejected_images_imported':0,
  'status':'STATIC_ASSET_CHECKS_PASSED',
  'release_note':'Not a security or end-to-end student-account certification.'

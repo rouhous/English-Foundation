@@ -1,16 +1,15 @@
 ## question_store
 1047: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
 1064: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1121:   let text=q.audio||q.word||'';
-1284: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-1307:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
-1358: function learnLevel(g,part=null){if(!checkAccess(g))return;let items=(part?mejStageQuestions(g,part):byGrade[g]).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
-1359: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
-1364: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
-MATCHED_LINES: 8
+1130:   let text=q.audio||q.word||'';
+1293: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
+1316:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+1369: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
+1374: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
+MATCHED_LINES: 7
 ## learning_render
 1059: function active(){return db.profiles[db.active]};
-1183: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+1192: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
 MATCHED_LINES: 2
 ## data_security
 761:  .journey-v23 .j26-status .j26-stars{grid-column:2;grid-row:1}
@@ -20,24 +19,24 @@ MATCHED_LINES: 2
 1050:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
 1056:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
 1062: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
-1231:  modal.id='journeySettingsModal';modal.className='journey-modal';
-1253:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
-1558:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1602:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1618:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
-1624:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
-1741: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
-1747: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
-1751: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
-1775:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
-1780:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
-1782:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
-1789:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
-1791:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
-1802:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
-1806:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
-1807:  localStorage.setItem(DBKEY,JSON.stringify(db));
-1816:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
+1240:  modal.id='journeySettingsModal';modal.className='journey-modal';
+1262:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
+1568:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1612:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1628:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
+1634:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+1751: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
+1757: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
+1761: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
+1785:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
+1790:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
+1792:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
+1799:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
+1801:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
+1812:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
+1816:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
+1817:  localStorage.setItem(DBKEY,JSON.stringify(db));
+1826:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
 MATCHED_LINES: 25
 ## viewport
 586: /* Right-to-left order for all viewport sizes: home, levels, skills, diagnosis, preview; launch at far left. */
@@ -60,26 +59,25 @@ MATCHED_LINES: 25
 1000:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
 1008:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
 1028: <link rel="stylesheet" href="./mobile-home-fix.css?v=20261104-release">
-1184: <section class="mobile-ocean-v31" aria-label="My English Journey home">
-1186:  <div class="m31-head">
-1194:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
+1193: <section class="mobile-ocean-v31" aria-label="My English Journey home">
+1195:  <div class="m31-head">
+1203:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
 MATCHED_LINES: 23
 
 ## summary
-index_bytes: 4091293
+index_bytes: 4091574
 questions_occurrences: 12
 has_mobile_css_link: True
 has_mej_home_mobile_patch: False
 
 ## key_functions_full
 START function learnLevel(
-function learnLevel(g,part=null){if(!checkAccess(g))return;let items=(part?mejStageQuestions(g,part):byGrade[g]).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
+function learnLevel(g,part=null){if(!checkAccess(g))return;if(part&&!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}let items=(part?mejStageQuestions(g,part):(mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1))).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
 if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
 const phonics=g===0?`<div class="bi-guide"><div class="guide-en" lang="en">🔤 Blend the sounds: 1) Listen to the sounds. 2) Say the sounds slowly. 3) Join them: /c/ + /a/ + /t/ → cat. 4) Listen to the whole word and read aloud.</div><div class="guide-ar" lang="ar">🔤 طريقة المزج الصوتي: ١) استمع إلى الأصوات. ٢) انطق كل صوت ببطء. ٣) اجمعها لتكوين الكلمة: /c/ + /a/ + /t/ → cat. ٤) استمع للكلمة كاملة ثم اقرأها وكرر التدريب.</div></div>`:'';
 const soundLab=g===0?`<h3>🔡 الحرف وصوته • Letters and sounds</h3><p class="caption">Tap a card to hear an example word. Listen to its first sound. • اضغط البطاقة لسماع كلمة نموذجية وركّز على صوت البداية.</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(105px,1fr))">${PHONICS.map(([ph,ex])=>`<button class="btn light" style="font-size:16px;line-height:1.65;direction:ltr" onclick="speak(${jsStr(ex)},.75)">/${esc(ph)}/<br><small>${esc(ex)} 🔊</small></button>`).join('')}</div><h3>🧩 لعبة دمج الأصوات</h3><div id="blendLab" class="notice blue"></div>`:'';
 document.getElementById('app').innerHTML=`<section class="card"><h2 class="section-title">📘 التعلّم • Level ${g}</h2><p>${esc(LV[g][1])}</p>${g<=6?`<div class="bi-guide"><div class="guide-en">🇬🇧 Listen to the example words, practice reading, then play the activities.</div><div class="guide-ar">🇴🇲 استمع إلى الكلمات النموذجية، وتدرّب على قراءتها، ثم انتقل إلى الأنشطة.</div></div>`:''}${phonics}${soundLab}<div class="actions"><button class="btn mint" onclick="${part ? 'beginStagePart('+g+','+part+')' : 'beginLevel('+g+')'}">▶ ابدأ اللعب</button><button class="btn light" onclick="route('levels')">عودة إلى المستويات</button></div><div class="grid">${items.map(q=>`<div class="learning"><div>${imageHtml(q.word)}</div><div style="flex:1"><strong class="ltr">${esc(q.word)}</strong><small class="muted">${esc(q.type==='Blend'?q.prompt:(q.prompt||'انطق الكلمة'))}</small><button class="btn small light" style="display:block;margin-top:6px" onclick="speak(${jsStr(q.word)},.72)">🔊 استمع</button></div></div>`).join('')}</div></section>`;if(g===0)newBlend()}
-let blendTarget='',blendOrder=[],blendPicked='';
-function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blend
+let blend
 START function displayQuestion(
 function displayQuestion(){if(!activeSession){route('levels');return}if(activeSession.index>=activeSession.ids.length){endSession();return}const q=questionById[activeSession.ids[activeSession.index]];shownId=q.id;answerLock=false;let step=activeSession.index+1;const pctQ=pct(step-1,activeSession.ids.length);let visual=q.pic||q.word||q.answer;let showPicture=q.type==='Match'||q.type==='Describe'||q.type==='Blend'||(q.g===0&&q.type==='Phonics');let show=showPicture?imageHtml(visual):'';
 let opts=shuffle(q.options||[]);let builder=isWordBuilder(q),ordering=isSentenceOrder(q);if(builder){builderTiles=mixedLetters(q.answer);builderPicked=[]}if(ordering)initSentenceOrder(q);let promptRaw=ordering?'Arrange the words to make a correct sentence.':builder?'Listen carefully, then build the word with the mixed-up letters.':(q.g===0&&q.type==='Blend'?'Listen to the word. Which written word matches what you hear?':q.prompt);let promptText=esc(promptRaw);let left=/[A-Za-z]/.test(promptRaw)&&!/[\u0600-\u06FF]/.test(promptRaw);const inp=ordering?sentenceOrderMarkup():builder?wordBuilderMarkup():(q.mode==='type'?`<div class="type-box"><input class="answer-input" id="typed" autocomplete="off" spellcheck="false" aria-label="Answer" onkeydown="if(event.key==='Enter')submitTyped()"><button class="btn mint" onclick="submitTyped()">تحقق ✓</button></div>`:
@@ -128,34 +126,46 @@ function beginnerGuide(q){
 // This avoids revealing the solution in spelling, grammar, translation,
 
 ## stage1_diagnostic_functions
+FUNCTION function persist( @ 1060
+function persist(send=true){active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
+let reportTimer=null,reportBusy=false,reportDirty=false;
 FUNCTION function achieved( @ 1066
 function achieved(g,p=active()){return countMaster(g,p)>=200}
-FUNCTION function maxAllowed( @ 1067
-function maxAllowed(p=active()){if(!p.diagnosed)return 0;let cap=Math.max(1,Math.min(12,Number(p.assigned)||1));while(cap<12){let all=true;for(let j=1;j<=cap;j++)if(!achieved(j,p)){all=false;break}if(!all)break;cap++}return cap}
-FUNCTION function permitted( @ 1068
+// MEJ_STAGE1_LEVEL_UNLOCK_V2
+FUNCTION function maxAllowed( @ 1068
+function maxAllowed(p=active()){
+ if(!p.diagnosed)return 0;
+ let cap=Math.max(0,Math.min(12,Number(p.assigned)||0));
+ while(cap<12){
+  if(!achieved(cap,p))break;
+  cap++;
+ }
+ return cap
+}
+FUNCTION function permitted( @ 1077
 function permitted(g){return Number(g)===0 || (active().diagnosed&&Number(g)<=maxAllowed())}
-FUNCTION function checkAccess( @ 1283
+FUNCTION function checkAccess( @ 1292
 function checkAccess(g){if(!permitted(g)){toast('المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
-FUNCTION function mejStageQuestions( @ 1284
+FUNCTION function mejStageQuestions( @ 1293
 function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-FUNCTION function mejStageMastered( @ 1285
+FUNCTION function mejStageMastered( @ 1294
 function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
 // MEJ_STAGE1_DIAGNOSTIC_V1
-FUNCTION function beginStagePart( @ 1288
+FUNCTION function beginStagePart( @ 1297
 function beginStagePart(g,part){if(!checkAccess(g))return;if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
-FUNCTION function levels( @ 1289
+FUNCTION function levels( @ 1298
 function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
 // The school grade limits both placement questions and the suggested placement level.
 // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
 // An unselected grade must be saved before a placement attempt.
-FUNCTION function placementCeiling( @ 1293
+FUNCTION function placementCeiling( @ 1302
 function placementCeiling(p=active()){
   const selected=String(p.grade??'').trim();
   if(selected==='other')return 5;
   const g=Number(selected);
   return selected!==''&&Number.isInteger(g)&&g>=1&&g<=12?g:null;
 }
-FUNCTION function placementPlan( @ 1299
+FUNCTION function placementPlan( @ 1308
 function placementPlan(ceiling,questionCount=24){
   const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
   const perLevel=Math.floor(questionCount/eligible.length);
@@ -170,14 +180,14 @@ function placementPlan(ceiling,questionCount=24){
   }
   return shuffle(ids);
 }
-FUNCTION function diagnosticLanding( @ 1313
+FUNCTION function diagnosticLanding( @ 1322
 function diagnosticLanding(){
   const p=active(),cap=placementCeiling(p);
   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('home')">🏠 العودة إلى الرئيسية</button></div></section>`;
 }
-FUNCTION function startDiagnostic( @ 1319
+FUNCTION function startDiagnostic( @ 1328
 function startDiagnostic(){
   const p=active();
   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
@@ -187,23 +197,24 @@ function startDiagnostic(){
   activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
   displayQuestion();
 }
-FUNCTION function beginLevel( @ 1328
-function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let pool=byGrade[g].filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
-FUNCTION function choose( @ 1337
+// MEJ_STAGE1_ALL_PATHS_GUARDED_V3
+FUNCTION function beginLevel( @ 1338
+function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let permittedPool=mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1);let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
+FUNCTION function choose( @ 1347
 function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
-FUNCTION function submitTyped( @ 1338
+FUNCTION function submitTyped( @ 1348
 function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
-FUNCTION function gradeAnswer( @ 1339
+FUNCTION function gradeAnswer( @ 1349
 function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
   p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
 if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
 document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';}
-FUNCTION function skipQuestion( @ 1344
+FUNCTION function skipQuestion( @ 1354
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
-FUNCTION function nextQuestion( @ 1345
+FUNCTION function nextQuestion( @ 1355
 function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
-FUNCTION function endSession( @ 1347
+FUNCTION function endSession( @ 1357
 function endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.

@@ -1057,7 +1057,21 @@ if(!Object.keys(db.profiles).length){
 }
 if(!db.profiles[db.active])db.active=Object.keys(db.profiles)[0];
 function active(){return db.profiles[db.active]};
-function persist(send=true){active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
+// MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1
+// Browser scores are advisory: only the authenticated server can certify a ranking.
+function mejReconcileLocalStars(profile){
+ if(!profile)return 0;
+ const raw=profile.correct&&typeof profile.correct==='object'?profile.correct:{};
+ let total=0;
+ for(const [id,value] of Object.entries(raw)){
+  if(!Object.prototype.hasOwnProperty.call(questionById,id))continue;
+  const n=Number(value);
+  if(Number.isFinite(n)&&n>=2)total++;
+ }
+ profile.stars=Math.min(2600,total);
+ return profile.stars
+}
+function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
 let reportTimer=null,reportBusy=false,reportDirty=false;
 function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
 function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}

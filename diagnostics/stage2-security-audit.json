@@ -1,0 +1,12 @@
+{
+  "status": "STAGE2_STATIC_CHECKS_PASSED",
+  "local_star_reconciliation": "derived_from_unique_mastered_question_ids",
+  "server_input_validation": "bounds_and_correct_attempt_consistency",
+  "offline_stale_reports": "ignored_without_replacing_newer_star_total",
+  "server_score_label": "CLIENT_REPORTED_UNVERIFIED",
+  "fully_authenticated_students": false,
+  "server_verified_answers": false,
+  "server_deployment_verified": false,
+  "safe_for_real_student_leaderboards": false,
+  "note": "Static tests only. Must deploy revised Apps Script and implement per-student authentication plus authoritative server-side scoring before public launch."
+}

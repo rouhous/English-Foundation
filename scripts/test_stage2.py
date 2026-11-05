@@ -27,11 +27,11 @@ with tempfile.TemporaryDirectory() as temp:
  r=subprocess.run(['node','-e',tester,str(f)],capture_output=True,text=True)
  if r.returncode:raise RuntimeError('Server envelope unit tests: '+r.stderr[:1000])
 # Exercise the real deterministic scoring function on malformed and duplicate states.
-match=re.search(r'function mejReconcileLocalStars\\(profile\\)\\{[\\s\\S]*?^\\}',html,re.M)
+match=re.search(r'function mejReconcileLocalStars\(profile\)\{[\s\S]*?^\}',html,re.M)
 if not match:raise RuntimeError('Local star reconciliation function not found')
 star_test=(
- 'const questionById={A:{},B:{},C:{}};\\n'+match.group(0)+
- '\\nconst p={stars:999,correct:{A:2,B:2,C:1,unknown:2}};'
+ 'const questionById={A:{},B:{},C:{}};\n'+match.group(0)+
+ '\nconst p={stars:999,correct:{A:2,B:2,C:1,unknown:2}};'
  'if(mejReconcileLocalStars(p)!==2||p.stars!==2)throw Error("Recount failed");'
  'if(mejReconcileLocalStars(p)!==2)throw Error("Non-idempotent recount");'
  'p.correct.A=1;'

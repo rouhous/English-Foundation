@@ -44,7 +44,7 @@ function bad(fn,errorCode){assert.throws(fn,e=>String(e.message).includes(errorC
 function post(d){return JSON.parse(context.doPost({postData:{contents:JSON.stringify(d)}}).getContent())}
 const p=(action,fields={})=>({schema:"mej-verified-v2",action,...fields});
 const key=context.mejV2Table_("MEJ_V2_QuestionKeys",["Question ID","Stage","Correct Answer"]);
-key.appendRow(["L1-001",1,"apple"]);key.appendRow(["L1-002",1,"banana"]);key.appendRow(["L2-001",2,"tree"]);
+key.appendRow(["L1-001",1,"apple"]);key.appendRow(["L1-002",1,"banana"]);key.appendRow(["L1-101",1,"window"]);key.appendRow(["L2-001",2,"tree"]);
 const invite=context.mejV2IssueInvite_(1,"1A");assert.equal(invite.length,64);
 bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"bad",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite})),"INVALID_TEACHER_CODE");
 const enrol=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite,stars:2600}));
@@ -61,6 +61,7 @@ assert.equal(context.mejV2Handle_(attempt(E(3),"L1-001","apple",{stars:2600})).s
 assert.equal(context.mejV2Handle_(attempt(E(4),"L1-001","apple")).stars,1,"One star per mastered question");
 bad(()=>context.mejV2Handle_(p("summary",{...auth,deviceToken:"0".repeat(64)})),"INVALID_STUDENT_CREDENTIALS");
 bad(()=>context.mejV2Handle_(attempt(E(5),"L2-001","tree")),"QUESTION_ABOVE_SCHOOL_GRADE");
+bad(()=>context.mejV2Handle_(attempt(E(6),"L1-101","window")),"SUBLEVEL_LOCKED");
 assert.equal(context.mejV2Handle_(p("summary",auth)).stars,1);
 const invite2=context.mejV2IssueInvite_(2,"2B");
 const other=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST B",grade:2,className:"2B",inviteCode:invite2}));

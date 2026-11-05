@@ -62,6 +62,9 @@ bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"bad",studentName:"TEST A",
 const enrol=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite,stars:2600}));
 assert.equal(enrol.ok,true);assert.equal(enrol.stars,0);assert.equal(enrol.studentId.startsWith("mejv2-"),true);assert.equal(enrol.deviceToken.length,64);
 assert.equal(enrol.recoveryCode.length,64);assert.equal(enrol.revision,1);
+const storedRecovery=db.get("MEJ_V2_Recovery").rows[1][1];
+assert.equal(storedRecovery.length,64);
+assert.notEqual(storedRecovery,enrol.recoveryCode,"Recovery secrets must never be stored in plaintext");
 bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite})),"INVALID_OR_USED_INVITE");
 const auth={studentId:enrol.studentId,deviceToken:enrol.deviceToken};
 const attempt=(eventId,questionId,answer,extra={})=>p("answer",{...auth,eventId,questionId,answer,...extra});

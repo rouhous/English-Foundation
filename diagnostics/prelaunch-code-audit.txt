@@ -128,10 +128,16 @@ function beginnerGuide(q){
 // This avoids revealing the solution in spelling, grammar, translation,
 
 ## stage1_diagnostic_functions
+FUNCTION function maxAllowed( @ 1067
+function maxAllowed(p=active()){if(!p.diagnosed)return 0;let cap=Math.max(1,Math.min(12,Number(p.assigned)||1));while(cap<12){let all=true;for(let j=1;j<=cap;j++)if(!achieved(j,p)){all=false;break}if(!all)break;cap++}return cap}
 FUNCTION function permitted( @ 1068
 function permitted(g){return Number(g)===0 || (active().diagnosed&&Number(g)<=maxAllowed())}
 FUNCTION function checkAccess( @ 1283
 function checkAccess(g){if(!permitted(g)){toast('المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
+FUNCTION function mejStageQuestions( @ 1284
+function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
+FUNCTION function mejStageMastered( @ 1285
+function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
 FUNCTION function beginStagePart( @ 1286
 function beginStagePart(g,part){if(!checkAccess(g))return;const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
 FUNCTION function levels( @ 1287
@@ -139,6 +145,28 @@ function levels(){const p=active();document.getElementById('app').innerHTML=`<se
 // The school grade limits both placement questions and the suggested placement level.
 // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
 // An unselected grade must be saved before a placement attempt.
+FUNCTION function placementCeiling( @ 1291
+function placementCeiling(p=active()){
+  const selected=String(p.grade??'').trim();
+  if(selected==='other')return 5;
+  const g=Number(selected);
+  return selected!==''&&Number.isInteger(g)&&g>=1&&g<=12?g:null;
+}
+FUNCTION function placementPlan( @ 1297
+function placementPlan(ceiling,questionCount=24){
+  const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
+  const perLevel=Math.floor(questionCount/eligible.length);
+  let remaining=questionCount%eligible.length;
+  const ids=[];
+  // Extra questions go to the highest eligible levels, never above the saved grade.
+  for(const g of eligible){
+    const requested=perLevel+(g>ceiling-remaining?1:0);
+    const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+    if(pool.length<requested)throw new Error('Insufficient placement questions for level '+g);
+    ids.push(...shuffle(pool).slice(0,requested).map(q=>q.id));
+  }
+  return shuffle(ids);
+}
 FUNCTION function diagnosticLanding( @ 1311
 function diagnosticLanding(){
   const p=active(),cap=placementCeiling(p);
@@ -162,8 +190,16 @@ FUNCTION function choose( @ 1335
 function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
 FUNCTION function submitTyped( @ 1336
 function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
+FUNCTION function gradeAnswer( @ 1337
+function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
+  p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
+  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
+if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
+document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';}
 FUNCTION function skipQuestion( @ 1342
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
+FUNCTION function nextQuestion( @ 1343
+function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
 FUNCTION function endSession( @ 1345
 function endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){

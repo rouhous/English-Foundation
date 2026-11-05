@@ -15,15 +15,20 @@
     {
       "title": "",
       "nonceBasedScript": false,
+      "nonceLength": 0,
+      "googleScriptRunPresent": false,
       "isNested": true
     },
     {
       "title": "Recovery bridge",
       "nonceBasedScript": true,
+      "nonceLength": 32,
+      "googleScriptRunPresent": true,
       "isNested": true
     }
   ],
   "staging_ready_message": false,
+  "observed_bridge_messages_after_probe": [],
   "script_errors": [],
   "request_failures": [],
   "google_responses": [

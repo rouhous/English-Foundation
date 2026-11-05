@@ -36,10 +36,10 @@ jobs:
           PY
       - name: Publish curriculum review catalog
         run: |
-          if ! git diff --quiet -- reviews/admin-levels-catalog.json; then
+          git add reviews/admin-levels-catalog.json
+          if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add reviews/admin-levels-catalog.json
             git commit -m "Generate complete read-only curriculum review data from app"
             git push
           fi

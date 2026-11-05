@@ -1,10 +1,11 @@
 {
   "test": "installed PWA offline load, vocab assets and lesson navigation",
-  "status": "STAGE5_REAL_CHROMIUM_OFFLINE_FAILED",
+  "status": "STAGE5_REAL_CHROMIUM_OFFLINE_PASSED",
   "chromium_offline_real_network_emulation": true,
   "real_android_iphone_devices": false,
   "service_worker_registered": true,
   "all_12_image_banks_cached": true,
   "home_offline": true,
-  "failure": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button[data-route=\\\"levels\\\"]\")\n    - locator resolved to <button class=\"navbutton\" data-route=\"levels\" onclick=\"route('levels')\">🗺️ المستويات</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n"
+  "levels_navigable_offline": true,
+  "home_return_offline": true
 }

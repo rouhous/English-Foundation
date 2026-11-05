@@ -26,11 +26,6 @@ function mejReconcileLocalStars(profile){
 function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;"""
     if s.count(original)!=1:raise RuntimeError("Cannot safely locate existing persist function")
     s=s.replace(original,patched,1)
-    # Reconcile previously cached totals when the student opens the homepage.
-    home_old="function home(){const p=active();"
-    home_new="function home(){const p=active();mejReconcileLocalStars(p);"
-    if s.count(home_old)!=1:raise RuntimeError("Home entry not found")
-    s=s.replace(home_old,home_new,1)
     assert s.count(marker)==1
     assert "function gradeAnswer(response,node)" in s
     blocks=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)
@@ -41,4 +36,10 @@ function persist(send=true){mejReconcileLocalStars(active());active().lastActivi
       check=subprocess.run(["node","--check",str(f)],capture_output=True,text=True)
       if check.returncode:raise RuntimeError(f"Invalid JS in inline block {i}: {check.stderr[:1200]}")
     p.write_text(s,encoding="utf8")
+home_old="function home(){const p=active();"
+home_new="function home(){const p=active();mejReconcileLocalStars(p);"
+if home_new not in s:
+ if s.count(home_old)!=1:raise RuntimeError("Home entry not found")
+ s=s.replace(home_old,home_new,1)
+ p.write_text(s,encoding="utf8")
 print("Stage 2: local stars reconciled from unique mastered question IDs; no student data changed in repository.")

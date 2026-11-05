@@ -51,5 +51,10 @@
     "My English Journey STAGING Recovery",
     "",
     "Recovery bridge"
-  ]
+  ],
+  "inner_frame_access": {
+    "childFrames": 1,
+    "innerFrameExists": true,
+    "innerFramePostMessageCallable": true
+  }
 }

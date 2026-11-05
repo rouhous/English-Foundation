@@ -1,0 +1,12 @@
+{
+  "test": "Read-only Google Apps Script STAGING recovery bridge handshake",
+  "source_url": "GitHub Pages live application",
+  "uses_credentials": false,
+  "writes_student_data": false,
+  "status": "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED",
+  "app_loaded": true,
+  "bridge_frame_found": true,
+  "bridge_origin_is_google": true,
+  "staging_ready_message": false,
+  "script_errors": []
+}

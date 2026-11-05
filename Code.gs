@@ -362,7 +362,7 @@ function testStage2Envelope_() {
 const MEJ_V2_SCHEMA='mej-verified-v2';
 const MEJ_V2_TABS={
   students:'MEJ_V2_Students',invites:'MEJ_V2_Invites',
-  attempts:'MEJ_V2_Attempts',mastery:'MEJ_V2_Mastery',keys:'MEJ_V2_QuestionKeys'
+  attempts:'MEJ_V2_Attempts',mastery:'MEJ_V2_Mastery',keys:'MEJ_V2_QuestionKeys',recovery:'MEJ_V2_Recovery'
 };
 function mejV2RequireEnabled_(){
   if(String(PropertiesService.getScriptProperties().getProperty('MEJ_V2_ENABLED')||'').toLowerCase()!=='true')
@@ -398,7 +398,9 @@ function mejV2Tables_(){
     mastery:mejV2Table_(MEJ_V2_TABS.mastery,
       ['Student ID','Question ID','Correct Count','Updated']),
     keys:mejV2Table_(MEJ_V2_TABS.keys,
-      ['Question ID','Stage','Correct Answer'])
+      ['Question ID','Stage','Correct Answer']),
+    recovery:mejV2Table_(MEJ_V2_TABS.recovery,
+      ['Student ID','Recovery Hash','Revision','Last Rotated'])
   };
 }
 function mejV2Rows_(sheet){
@@ -492,7 +494,7 @@ function mejV2Handle_(d){
   mejV2RequireEnabled_();
   if(!d||d.schema!==MEJ_V2_SCHEMA)throw new Error('INVALID_V2_REQUEST');
   const action=String(d.action||'');
-  if(!['enroll','answer','summary','leaderboard'].includes(action))throw new Error('INVALID_V2_ACTION');
+  if(!['enroll','answer','summary','leaderboard','recover','rotateRecovery'].includes(action))throw new Error('INVALID_V2_ACTION');
   const lock=LockService.getScriptLock();lock.waitLock(20000);
   try {
     const t=mejV2Tables_();
@@ -509,11 +511,39 @@ function mejV2Handle_(d){
       const uid='mejv2-'+Utilities.getUuid().replace(/-/g,'').toLowerCase();
       const token=mejV2Secret_().toLowerCase();
       const cohort=mejV2Cohort_(match.values[5]);
+      const recoveryCode=mejV2Secret_().toLowerCase();
       t.students.appendRow([uid,mejV2Hash_(token),name,grade,group,new Date(),cohort]);
+      t.recovery.appendRow([uid,mejV2Hash_(recoveryCode),1,new Date()]);
       t.invites.getRange(match.row,4).setValue(uid);
-      return {ok:true,studentId:uid,deviceToken:token,stars:0,scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+      return {ok:true,studentId:uid,deviceToken:token,recoveryCode,revision:1,stars:0,scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+    }
+    if(action==='recover'){
+      const studentId=String(d.studentId||'');
+      const recoveryCode=String(d.recoveryCode||'');
+      if(!/^mejv2-[a-z0-9]{32}$/.test(studentId)||!/^[a-f0-9]{64}$/.test(recoveryCode))
+        throw new Error('INVALID_RECOVERY_CREDENTIALS');
+      const saved=mejV2Find_(t.recovery,0,studentId);
+      const owner=mejV2Find_(t.students,0,studentId);
+      if(!saved||!owner||String(saved.values[1])!==mejV2Hash_(recoveryCode))
+        throw new Error('INVALID_RECOVERY_CREDENTIALS');
+      const newToken=mejV2Secret_().toLowerCase();
+      const newRecovery=mejV2Secret_().toLowerCase();
+      const revision=(Number(saved.values[2])||1)+1;
+      t.students.getRange(owner.row,2).setValue(mejV2Hash_(newToken));
+      t.recovery.getRange(saved.row,2,1,3).setValues([[mejV2Hash_(newRecovery),revision,new Date()]]);
+      return {ok:true,studentId,deviceToken:newToken,recoveryCode:newRecovery,revision,
+        stars:mejV2Stars_(t.mastery,studentId),scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
     }
     const user=mejV2Auth_(d,t.students), studentId=String(user[0]);
+    if(action==='rotateRecovery'){
+      const saved=mejV2Find_(t.recovery,0,studentId);
+      if(!saved)throw new Error('RECOVERY_NOT_CONFIGURED');
+      const newRecovery=mejV2Secret_().toLowerCase();
+      const revision=(Number(saved.values[2])||1)+1;
+      t.recovery.getRange(saved.row,2,1,3).setValues([[mejV2Hash_(newRecovery),revision,new Date()]]);
+      return {ok:true,studentId,recoveryCode:newRecovery,revision,
+        scoreVerification:'SERVER_CHECKED_PILOT',pilot:true};
+    }
     if(action==='leaderboard'){
       mejV2RequireRankingEnabled_();
       return mejV2Leaderboard_(t,user);

@@ -8,7 +8,7 @@ p=Path("index.html")
 s=p.read_text(encoding="utf8")
 marker="MEJ_STAGING_NESTED_BRIDGE_NONCE_V1"
 if marker not in s:
-  frame_pattern=r'(<iframe\b[^>]*\bid="ee-recovery-frame"\b[^>]*?)\bsrc="(https://script\.google\.com/macros/s/[^"]+/exec\?studentRecovery=1)"'
+  frame_pattern=r'(<iframe\b[^>]*\bid="ee-recovery-frame"[^>]*?)\bsrc="(https://script\.google\.com/macros/s/[^"]+/exec\?studentRecovery=1)"'
   m=re.search(frame_pattern,s)
   if not m:raise RuntimeError("Expected STAGING recovery frame not found")
   s=s[:m.start()]+m.group(1)+'data-staging-url="'+m.group(2)+'" src="about:blank"'+s[m.end():]

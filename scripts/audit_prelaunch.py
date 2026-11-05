@@ -39,5 +39,16 @@ for start in ['function learnLevel(', 'function displayQuestion(', 'function ren
  fragment=re.sub(r'data:image/[^\\s"\\x27]{30,}', '[EMBEDDED_IMAGE]', fragment)
  out.append('START '+start+'\n'+fragment)
 
+
+out.append('\n## stage1_diagnostic_functions')
+for match in re.finditer(r'(?m)^function (?:diagnosticLanding|beginDiagnostic|startDiagnostic|endSession|beginStagePart|levels|checkAccess|beginLevel|skipQuestion|choose|submitTyped|processAnswer|diagnostic|permitted|award|endDiagnostic)\\s*\\(',s):
+    st=match.start()
+    tail=s[st:]
+    nxt=re.search(r'\\n(?:async )?function [A-Za-z_$][\\w$]*\\s*\\(',tail[20:])
+    length=(nxt.start()+20) if nxt else 8000
+    frag=tail[:min(length,14000)]
+    frag=re.sub(r'data:image/[^\\s"\\x27]{30,}', '[EMBEDDED_IMAGE]', frag)
+    out.append(f'FUNCTION {match.group(0).strip()} @ {s[:st].count(chr(10))+1}\\n'+frag)
+
 Path('diagnostics/prelaunch-code-audit.txt').write_text('\n'.join(out),encoding='utf8')
 print('Wrote non-sensitive diagnostic')

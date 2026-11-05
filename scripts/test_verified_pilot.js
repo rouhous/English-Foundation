@@ -111,6 +111,16 @@ bad(()=>context.mejV2Handle_(p("leaderboard",{...auth,deviceToken:"0".repeat(64)
 props.MEJ_V2_RANKING_ENABLED="false";
 bad(()=>context.mejV2Handle_(p("leaderboard",auth)),"CLASS_RANKING_DISABLED");
 assert.equal(response.scoreVerification,"SERVER_CHECKED_PILOT");
+// Restore detailed mastery counts from the authenticated server, not just stars.
+const snapshot=context.mejV2Handle_(p("progress",auth));
+assert.equal(snapshot.scope,"OWN_STUDENT_PROGRESS");
+assert.equal(snapshot.stars,1);
+assert(!JSON.stringify(snapshot).includes("answer"));
+assert(snapshot.mastered.some(x=>x.questionId==="L1-001"&&x.correctCount===2));
+bad(()=>context.mejV2Handle_(p("progress",{studentId:enrol.studentId,deviceToken:"0".repeat(64)})),"INVALID_STUDENT_CREDENTIALS");
+const otherSnapshot=context.mejV2Handle_(p("progress",{studentId:other.studentId,deviceToken:other.deviceToken}));
+assert.equal(otherSnapshot.stars,0);
+assert.equal(otherSnapshot.mastered.length,0);
 // Stage 4 — secure transfer: old device credential revoked after recovery.
 const originalToken=enrol.deviceToken;
 const previousRecovery=enrol.recoveryCode;
@@ -128,6 +138,9 @@ const device2=context.mejV2Handle_(p("recover",{studentId:enrol.studentId,recove
 assert.equal(device2.stars,1);assert.equal(device2.revision,4);
 bad(()=>context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:recovery.deviceToken})),"INVALID_STUDENT_CREDENTIALS");
 assert.equal(context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:device2.deviceToken})).stars,1);
+const recoveredSnapshot=context.mejV2Handle_(p("progress",{studentId:enrol.studentId,deviceToken:device2.deviceToken}));
+assert.equal(recoveredSnapshot.stars,1);
+assert(recoveredSnapshot.mastered.some(x=>x.questionId==="L1-001"&&x.correctCount===2));
 assert.equal(db.get("MEJ_V2_Recovery").getLastRow(),6);
 props.MEJ_V2_ENABLED="false";
 bad(()=>context.mejV2Handle_(p("summary",auth)),"VERIFIED_PILOT_DISABLED");

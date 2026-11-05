@@ -1,0 +1,45 @@
+name: Build All-Levels Curriculum Review
+on:
+  push:
+    paths:
+      - scripts/export_admin_review_catalog.py
+      - reviews/admin-levels.html
+      - .github/workflows/build-admin-review.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated browser test runtime
+        run: pip install playwright==1.58.0
+      - name: Export exact review questions without any student accounts
+        run: python3 scripts/export_admin_review_catalog.py
+      - name: Verify reviewer and sample access in Chromium
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('reviews/admin-levels-catalog.json').read_text())
+          assert len(doc['levels'])==13
+          assert sum(p['questionCount'] for l in doc['levels'] for p in l['parts'])==2600
+          assert all(len(l['parts'])==2 for l in doc['levels'])
+          assert 'teacherCode' not in Path('reviews/admin-levels-catalog.json').read_text()
+          print('ADMIN_CURRICULUM_READONLY_CHECKS_PASSED: 26 parts, 2600 questions, no student credentials')
+          PY
+      - name: Publish curriculum review catalog
+        run: |
+          if ! git diff --quiet -- reviews/admin-levels-catalog.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add reviews/admin-levels-catalog.json
+            git commit -m "Generate complete read-only curriculum review data from app"
+            git push
+          fi

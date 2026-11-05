@@ -8,6 +8,9 @@ server=(root/'Code.gs').read_text(encoding='utf8')
 assert html.count('MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1')==1
 assert 'function mejReconcileLocalStars(profile)' in html
 assert 'function persist(send=true){mejReconcileLocalStars(active());' in html
+assert 'MEJ_STAGE2_CLOUD_TRUST_LABEL_V1' in html
+assert "النتائج غير موثقة" in html
+assert "scoreVerification:'CLIENT_REPORTED_UNVERIFIED'" in server
 assert 'MEJ_STAGE2_PRIVACY_HARDENING_V2' in html
 assert "event.origin" in html and "script.googleusercontent.com" in html
 assert "profiles:Object.fromEntries(Object.entries(db.profiles)" in html
@@ -54,6 +57,7 @@ report={
  'server_score_label':'CLIENT_REPORTED_UNVERIFIED',
  'recovery_bridge_origin_check':True,
  'teacher_code_excluded_from_exports':True,
+ 'cloud_reports_labeled_unverified':True,
  'fully_authenticated_students':False,
  'server_verified_answers':False,
  'server_deployment_verified':False,

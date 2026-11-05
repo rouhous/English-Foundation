@@ -3,6 +3,7 @@
 Do not attempt registration, recovery challenge, or cloud write.
 """
 import json
+from urllib.parse import urlparse
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -16,6 +17,10 @@ try:
   browser=p.chromium.launch(channel="chrome",headless=True,args=["--no-sandbox"])
   page=browser.new_page(viewport={"width":390,"height":844})
   console_errors=[]
+  request_failures=[]
+  bridge_http=[]
+  page.on("requestfailed",lambda req:request_failures.append({"host":urlparse(req.url).hostname,"kind":req.resource_type}))
+  page.on("response",lambda resp:bridge_http.append({"host":urlparse(resp.url).hostname,"status":resp.status}) if "script.google" in resp.url else None)
   page.on("pageerror",lambda error:console_errors.append(str(error)[:250]))
   page.goto(url,wait_until="domcontentloaded",timeout=60000)
   result["app_loaded"]=page.locator("#app").count()==1
@@ -39,6 +44,10 @@ try:
   result["status_text"]=status_text[:170]
   result["staging_ready_message"]="متصل بخادم STAGING" in status_text
   result["script_errors"]=console_errors[:6]
+  result["request_failures"]=request_failures[:8]
+  result["google_responses"]=bridge_http[:12]
+  result["iframe_hosts"]=[urlparse(f.url).hostname for f in page.frames][1:8]
+  result["iframe_titles"]=[f.title()[:65] for f in page.frames[1:5] if f.url.startswith("https://") and f.url != "about:blank"]
   result["status"]="STAGE7_LIVE_BRIDGE_HANDSHAKE_PASSED" if result["staging_ready_message"] else "STAGE7_LIVE_BRIDGE_HANDSHAKE_FAILED"
   browser.close()
 except Exception as error:

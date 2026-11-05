@@ -1,0 +1,34 @@
+name: Validate stage 2 student score consistency
+on:
+  push:
+    paths:
+      - scripts/stage2_star_consistency.py
+      - scripts/test_stage2.py
+      - Code.gs
+      - .github/workflows/validate-stage2.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply local star-consistency patch without touching student data
+        run: python3 scripts/stage2_star_consistency.py
+      - name: Validate browser and Apps Script code
+        run: python3 scripts/test_stage2.py
+      - name: Commit validated app and security audit
+        run: |
+          if ! git diff --quiet -- index.html diagnostics/stage2-security-audit.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html diagnostics/stage2-security-audit.json
+            git commit -m "Validate stage 2 local star consistency and unverified report safeguards"
+            git push
+          fi

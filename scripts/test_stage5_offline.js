@@ -18,14 +18,19 @@ assert(js.includes("url.origin!==self.location.origin"),"Remote sync must bypass
 assert(js.includes("if(request.method!=='GET')return"),"Never cache score submission");
 const registrations={};
 const cacheDB=new Map();
+function normalized(u){
+ const value=typeof u==="string"?u:u.url;
+ if(value.startsWith("https://school.example/"))return "./"+value.slice("https://school.example/".length);
+ return value;
+}
 function getCache(name){
  if(!cacheDB.has(name)){
   const records=new Map();
   cacheDB.set(name,{
    async addAll(paths){for(const path of paths)records.set(path,{ok:true,url:path,body:"cached"})},
    async add(path){records.set(path,{ok:true,url:path,body:"cached"})},
-   async match(path){return records.get(typeof path==="string"?path:path.url)||null},
-   async put(path,value){records.set(typeof path==="string"?path:path.url,value)}
+   async match(path){return records.get(normalized(path))||null},
+   async put(path,value){records.set(normalized(path),value)}
   });
  }
  return cacheDB.get(name);
@@ -43,7 +48,7 @@ const caches={
  delete:async key=>cacheDB.delete(key),
  async match(path,opts){
   for(const cache of cacheDB.values()){
-   const target=typeof path==="string"?path:path.url;
+   const target=normalized(path);
    const value=await cache.match(opts?.ignoreSearch?target.split("?")[0]:target);
    if(value)return value;
   }

@@ -13,7 +13,9 @@ assert "[RECEIVER_EXPECTED_VERSION,'2026-11-05-unverified-scores-v3']" in html
 assert "النتائج غير موثقة" in html
 assert "scoreVerification:'CLIENT_REPORTED_UNVERIFIED'" in server
 assert 'MEJ_STAGE2_PRIVACY_HARDENING_V2' in html
-assert "event.origin" in html and "script.googleusercontent.com" in html
+assert "event.origin" in html and "trustedBridgeOrigin(event.origin)" in html
+assert "MEJ_STAGING_BRIDGE_DEEP_FRAME_V2" in html
+assert "d.bridgeNonce!==bridgeNonce" in html
 assert "profiles:Object.fromEntries(Object.entries(db.profiles)" in html
 assert "profiles:db.profiles,active:db.active" not in html
 assert "INVALID_PROGRESS_STARS_MASTERY" in server

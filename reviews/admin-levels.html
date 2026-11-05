@@ -112,7 +112,7 @@ fetch('./admin-levels-catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 
  catalog=data;
  addOptions($('grade'),data.levels.map(l=>[String(l.grade),l.grade===0?'مرحلة التأسيس':'الصف '+l.grade+' — '+l.title]));
  addOptions($('type'),[...new Set(all().map(x=>x.type).filter(Boolean))].sort().map(t=>[t,t]));
- filter();
+ const params=new URLSearchParams(location.search);const g=params.get('grade'),p=params.get('part');if(g!==null&&[...$('grade').options].some(o=>o.value===g))$('grade').value=g;if(p==='1'||p==='2')$('part').value=p;filter();
  $('loadPics').click();
 }).catch(()=>{$('status').textContent='تعذر تحميل المحتوى. تأكد من اتصالك بالإنترنت.'});
 </script></body></html>

@@ -1,0 +1,103 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>My English Journey — مراجعة جميع المستويات</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#edf5f0;color:#153f32;margin:0;padding:14px;direction:rtl}
+main,header,footer{max-width:1100px;margin:auto}h1{font-size:clamp(21px,5vw,30px)}
+p{line-height:1.7}.note{background:#fff4d6;border:1px solid #e3cf91;border-radius:12px;padding:12px}
+section{background:white;border-radius:18px;padding:15px;margin:13px 0;border:1px solid #d3e3da}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
+label{display:grid;gap:5px;font-weight:700}select,input{width:100%;min-height:44px;border:1px solid #b8cfc3;border-radius:10px;padding:9px;font:inherit}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+button,a.btn{font:700 14px system-ui;padding:10px 12px;min-height:44px;cursor:pointer;border:1px solid #b1cbbd;background:white;border-radius:11px;color:#135d44;text-decoration:none}
+.primary{background:#0c745a!important;color:white!important}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:10px}
+.card{background:#f8fcf9;border:1px solid #d4e6d8;border-radius:13px;padding:12px;overflow-wrap:anywhere}
+.card h3{font-size:16px;margin:8px 0}.tag{background:#e3f1e8;border-radius:25px;padding:4px 9px;font-size:12px}
+.choice{background:white;border:1px solid #e2e8e4;margin:5px 0;padding:8px;border-radius:8px}
+.answer{background:#e1f2e5;border-right:3px solid #197656;padding:9px;margin-top:8px}
+.hidden{display:none}.pager{display:flex;gap:9px;justify-content:center;align-items:center;flex-wrap:wrap}
+.figure{max-width:140px;max-height:140px;object-fit:contain;border:1px solid #d2e5db;border-radius:10px}
+.muted{font-size:13px;color:#547367}button:focus-visible{outline:3px solid #dcab35;outline-offset:2px}
+</style></head><body><header>
+<h1>🧭 رحلتي مع الإنجليزية — مراجعة جميع المستويات</h1>
+<p>عرض مستقل للأسئلة الأصلية في الصفوف 1–12 والتأسيس، بمستويين لكل مرحلة، دون تغيير تقدم أي طالب.</p>
+<div class="note"><b>مهم:</b> هذه صفحة لمراجعة المحتوى، وليست تسجيل دخول Admin موثقًا. لا تمنح أي صلاحية على حسابات الطلاب أو الحفظ السحابي. لا تدخل أي كلمات مرور أو رموز معلمين.</div>
+</header><main>
+<section><div class="filters">
+<label>الصف <select id="grade"><option value="all">جميع الصفوف</option></select></label>
+<label>المستوى <select id="part"><option value="all">الاثنان</option><option value="1">الأول</option><option value="2">الثاني</option></select></label>
+<label>المهارة <select id="type"><option value="all">جميع المهارات</option></select></label>
+<label>بحث <input id="search" placeholder="كلمة، سؤال، أو رقم"></label></div>
+<div class="controls"><button id="loadPics">🖼️ تحميل الصور اختياريًا</button><button id="reset">إعادة التصفية</button><a class="btn" href="../">العودة للتطبيق</a></div>
+<p id="status" class="muted" aria-live="polite">جار تحميل قائمة الأسئلة...</p><strong id="summary"></strong>
+</section>
+<section><h2>معاينة الأسئلة الفعلية</h2><div id="cards" class="cards"></div>
+<div class="pager"><button id="prev">السابق</button><span id="counter"></span><button id="next">التالي</button></div>
+</section>
+</main><footer class="muted">المراجعة لا تحتسب نجومًا ولا تتصل بنظام الطلاب. الإجابات مخفية حتى يختار المراجع إظهارها.</footer>
+<script>
+'use strict';
+let catalog=null,filtered=[],page=0,pics=false,loading=false;
+const perPage=12,$=id=>document.getElementById(id);
+function elt(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=String(txt);return e}
+function addOptions(select,items){items.forEach(x=>{const e=elt('option','',x[1]);e.value=x[0];select.append(e)})}
+function all(){return catalog.levels.flatMap(l=>l.parts.flatMap(p=>p.questions.map(q=>Object.assign({},q,{grade:l.grade,part:p.part}))))}
+function filter(){
+ if(!catalog)return;
+ const g=$('grade').value,p=$('part').value,t=$('type').value,k=$('search').value.trim().toLowerCase();
+ filtered=all().filter(q=>(g==='all'||String(q.grade)===g)&&(p==='all'||String(q.part)===p)&&
+ (t==='all'||q.type===t)&&(!k||[q.id,q.word,q.prompt,q.type,q.answer,...q.options].join(' ').toLowerCase().includes(k)));
+ page=0;draw();
+}
+function draw(){
+ const box=$('cards');box.replaceChildren();
+ $('summary').textContent='الأسئلة المطابقة: '+filtered.length+' من أصل 2,600 سؤال';
+ filtered.slice(page*perPage,(page+1)*perPage).forEach(q=>{
+  const c=elt('article','card');
+  c.append(elt('span','tag','الصف '+(q.grade||'التأسيس')+' • المستوى '+q.part+' • '+q.type));
+  c.append(elt('h3','',q.id+' — '+(q.word||'سؤال')));
+  if(q.prompt)c.append(elt('p','',q.prompt));
+  q.options.forEach((v,i)=>c.append(elt('div','choice',(i+1)+'. '+v)));
+  if(pics&&q.pictureWord){
+   const a=(window.MEJ_APPROVED_IMAGES||{})[q.pictureWord.toLowerCase().trim()]||[];
+   const v=a.find(x=>x.preferred)||a[0];
+   if(v&&v.src){const im=elt('img','figure');im.src=v.src;im.alt=q.pictureWord;im.loading='lazy';c.append(im)}
+  }
+  const value=elt('div','answer hidden','الإجابة المعتمدة: '+(q.answer||'غير محددة'));
+  const b=elt('button','','👁️ إظهار الإجابة');
+  b.addEventListener('click',()=>{
+    value.classList.toggle('hidden');
+    b.textContent=value.classList.contains('hidden')?'👁️ إظهار الإجابة':'إخفاء الإجابة';
+  });
+  c.append(b,value);box.append(c);
+ });
+ $('counter').textContent=filtered.length?'صفحة '+(page+1)+' من '+Math.ceil(filtered.length/perPage):'لا توجد نتائج';
+ $('prev').disabled=page<=0;$('next').disabled=(page+1)*perPage>=filtered.length;
+ if(!loading)$('status').textContent=pics?'صور المفردات جاهزة.':'الصور اختيارية لتقليل استهلاك بيانات الهاتف.';
+}
+for(const id of ['grade','part','type'])$(id).addEventListener('change',filter);
+$('search').addEventListener('input',filter);
+$('reset').addEventListener('click',()=>{
+ $('grade').value='all';$('part').value='all';$('type').value='all';$('search').value='';filter();
+});
+$('prev').addEventListener('click',()=>{if(page){page--;draw()}});
+$('next').addEventListener('click',()=>{if((page+1)*perPage<filtered.length){page++;draw()}});
+$('loadPics').addEventListener('click',async()=>{
+ if(pics||loading)return;loading=true;$('status').textContent='جار تحميل صور المفردات...';
+ try{
+  for(let i=1;i<=12;i++){
+   const src='../assets/approved-images-'+String(i).padStart(2,'0')+'.js?v=20261104-approved';
+   await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.append(s)});
+  }
+  pics=true;$('loadPics').textContent='✅ الصور جاهزة';
+ }catch(_){$('status').textContent='تعذر تحميل بعض الصور. يمكن متابعة المراجعة دون صور.'}
+ finally{loading=false;draw()}
+});
+fetch('./admin-levels-catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('catalog');return r.json()}).then(data=>{
+ if(data.schema!=='mej-admin-curriculum-review-v1'||data.levels.length!==13)throw Error('schema');
+ catalog=data;
+ addOptions($('grade'),data.levels.map(l=>[String(l.grade),l.grade===0?'مرحلة التأسيس':'الصف '+l.grade+' — '+l.title]));
+ addOptions($('type'),[...new Set(all().map(x=>x.type).filter(Boolean))].sort().map(t=>[t,t]));
+ filter();
+}).catch(()=>{$('status').textContent='تعذر تحميل المحتوى. تأكد من اتصالك بالإنترنت.'});
+</script></body></html>

@@ -1,0 +1,38 @@
+name: Stage 5 mobile responsive and offline-first tests
+on:
+  push:
+    paths:
+      - scripts/install_stage5_mobile.py
+      - scripts/test_stage5_offline.js
+      - assets/stage5-responsive.css
+      - sw.js
+      - .github/workflows/stage5-mobile-offline.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add safe-area and narrow-screen stylesheet
+        run: python3 scripts/install_stage5_mobile.py
+      - name: Syntax and offline cache simulation
+        run: |
+          node --check sw.js
+          node scripts/test_stage5_offline.js
+          python3 scripts/check_prelaunch_assets.py
+      - name: Commit tested mobile improvements
+        run: |
+          if ! git diff --quiet -- index.html diagnostics/prelaunch-asset-validation.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html diagnostics/prelaunch-asset-validation.json
+            git commit -m "Install Stage 5 responsive UI with offline image caching"
+            git push
+          fi

@@ -36,8 +36,12 @@ if marker not in s:
   const d=event.data||{};
   if(d.eeRecoveryBridge!==true||d.bridgeNonce!==bridgeNonce)return;
   if(d.ready){bridgeOrigin=event.origin;ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}"""
-  if s.count(old)!=1:raise RuntimeError("Cannot identify expected bridge listener")
-  s=s.replace(old,new,1)
+  listener=(r"window\.addEventListener\('message',function\(event\)\{\s*"
+            r"if\(event\.source!==frame\.contentWindow\)return;"
+            r"[\s\S]{0,480}?"
+            r"if\(d\.ready\)\{ready=true;setStatus\('✅ متصل بخادم STAGING — للاختبارات فقط'\);show\(\);return;\}")
+  s,n=re.subn(listener,lambda _:new,s,count=1)
+  if n!=1:raise RuntimeError("Cannot identify expected bridge listener")
   old="frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');"
   new="""const nested=frame.contentWindow&&frame.contentWindow.frames[0];
   if(!nested||!bridgeOrigin){clearTimeout(timeout);delete pending[requestId];reject(Error('تعذر تأمين اتصال STAGING'));return;}

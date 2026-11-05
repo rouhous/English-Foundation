@@ -1,0 +1,21 @@
+{
+  "status": "VERIFIED_PROGRESS_PILOT_SYNTHETIC_TESTS_PASSED",
+  "source": "GitHub Actions verify-student-pilot.yml",
+  "question_bank_checked": 2600,
+  "per_student_credentials": true,
+  "one_time_invites": true,
+  "duplicate_attempt_replay_protected": true,
+  "star_totals_server_derived": true,
+  "grade_boundary_enforced": true,
+  "second_sublevel_locked_until_first_100_mastered": true,
+  "per_day_pilot_attempt_limit": 600,
+  "cross_student_summary_access_blocked": true,
+  "pilot_feature_flag_default": "disabled",
+  "existing_legacy_flow_unchanged": true,
+  "live_apps_script_deployed": false,
+  "browser_integration_enabled": false,
+  "real_student_data_tested": false,
+  "cheat_proof": false,
+  "safe_for_real_student_leaderboard": false,
+  "note": "Existing browser answer bank is public. A synthetic simulation validates score integrity only; real credentials, recovery, server-side diagnostic placement and protected API delivery remain untested."
+}

@@ -61,6 +61,7 @@ const invite=context.mejV2IssueInvite_(1,"1A","TEST_SCHOOL_A_1A");assert.equal(i
 bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"bad",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite})),"INVALID_TEACHER_CODE");
 const enrol=context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite,stars:2600}));
 assert.equal(enrol.ok,true);assert.equal(enrol.stars,0);assert.equal(enrol.studentId.startsWith("mejv2-"),true);assert.equal(enrol.deviceToken.length,64);
+assert.equal(enrol.recoveryCode.length,64);assert.equal(enrol.revision,1);
 bad(()=>context.mejV2Handle_(p("enroll",{teacherCode:"TEST-TEACHER-CODE",studentName:"TEST A",grade:1,className:"1A",inviteCode:invite})),"INVALID_OR_USED_INVITE");
 const auth={studentId:enrol.studentId,deviceToken:enrol.deviceToken};
 const attempt=(eventId,questionId,answer,extra={})=>p("answer",{...auth,eventId,questionId,answer,...extra});
@@ -110,10 +111,28 @@ bad(()=>context.mejV2Handle_(p("leaderboard",{...auth,deviceToken:"0".repeat(64)
 props.MEJ_V2_RANKING_ENABLED="false";
 bad(()=>context.mejV2Handle_(p("leaderboard",auth)),"CLASS_RANKING_DISABLED");
 assert.equal(response.scoreVerification,"SERVER_CHECKED_PILOT");
+// Stage 4 — secure transfer: old device credential revoked after recovery.
+const originalToken=enrol.deviceToken;
+const previousRecovery=enrol.recoveryCode;
+const recovery=context.mejV2Handle_(p("recover",{studentId:enrol.studentId,recoveryCode:previousRecovery}));
+assert.equal(recovery.ok,true);assert.equal(recovery.stars,1);
+assert.equal(recovery.revision,2);assert.notEqual(recovery.deviceToken,originalToken);
+assert.notEqual(recovery.recoveryCode,previousRecovery);
+bad(()=>context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:originalToken})),"INVALID_STUDENT_CREDENTIALS");
+bad(()=>context.mejV2Handle_(p("recover",{studentId:enrol.studentId,recoveryCode:previousRecovery})),"INVALID_RECOVERY_CREDENTIALS");
+assert.equal(context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:recovery.deviceToken})).stars,1);
+const rotated=context.mejV2Handle_(p("rotateRecovery",{studentId:enrol.studentId,deviceToken:recovery.deviceToken}));
+assert.equal(rotated.revision,3);
+bad(()=>context.mejV2Handle_(p("recover",{studentId:enrol.studentId,recoveryCode:recovery.recoveryCode})),"INVALID_RECOVERY_CREDENTIALS");
+const device2=context.mejV2Handle_(p("recover",{studentId:enrol.studentId,recoveryCode:rotated.recoveryCode}));
+assert.equal(device2.stars,1);assert.equal(device2.revision,4);
+bad(()=>context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:recovery.deviceToken})),"INVALID_STUDENT_CREDENTIALS");
+assert.equal(context.mejV2Handle_(p("summary",{studentId:enrol.studentId,deviceToken:device2.deviceToken})).stars,1);
+assert.equal(db.get("MEJ_V2_Recovery").getLastRow(),6);
 props.MEJ_V2_ENABLED="false";
 bad(()=>context.mejV2Handle_(p("summary",auth)),"VERIFIED_PILOT_DISABLED");
 assert.equal(activeLocks,0,"Locks released");
 assert.equal(db.get("MEJ_V2_Students").getLastRow(),6);
 assert.equal(db.get("MEJ_V2_Attempts").getLastRow(),5);
 assert.equal(db.get("MEJ_V2_Mastery").getLastRow(),2);
-console.log("VERIFIED_PILOT_SYNTHETIC_TESTS_PASSED: student auth, secure stars, rank ties, school cohort isolation, no levels, ranking disabled default");
+console.log("VERIFIED_PILOT_SYNTHETIC_TESTS_PASSED: verified stars, isolated ranking, secure device recovery, token rotation, old device revocation");

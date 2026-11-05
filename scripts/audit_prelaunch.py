@@ -41,7 +41,7 @@ for start in ['function learnLevel(', 'function displayQuestion(', 'function ren
 
 
 out.append('\n## stage1_diagnostic_functions')
-for match in re.finditer(r'(?m)^function (?:diagnosticLanding|beginDiagnostic|startDiagnostic|endSession|beginStagePart|levels|checkAccess|beginLevel|skipQuestion|choose|submitTyped|processAnswer|diagnostic|permitted|award|endDiagnostic|gradeAnswer|placementPlan|placementCeiling|maxAllowed|mejStageQuestions|mejStageMastered|nextQuestion|achieved)\s*\(',s):
+for match in re.finditer(r'(?m)^function (?:diagnosticLanding|beginDiagnostic|startDiagnostic|endSession|beginStagePart|levels|checkAccess|beginLevel|skipQuestion|choose|submitTyped|processAnswer|diagnostic|permitted|award|endDiagnostic|gradeAnswer|placementPlan|placementCeiling|maxAllowed|mejStageQuestions|mejStageMastered|nextQuestion|achieved|persist|sendReport|sync|saveProfile|loadProfile)\s*\(',s):
     st=match.start()
     tail=s[st:]
     nxt=re.search(r'\n(?:async )?function [A-Za-z_$][\w$]*\s*\(',tail[20:])

@@ -9,6 +9,7 @@ assert html.count('MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1')==1
 assert 'function mejReconcileLocalStars(profile)' in html
 assert 'function persist(send=true){mejReconcileLocalStars(active());' in html
 assert 'MEJ_STAGE2_CLOUD_TRUST_LABEL_V1' in html
+assert "[RECEIVER_EXPECTED_VERSION,'2026-11-05-unverified-scores-v3']" in html
 assert "النتائج غير موثقة" in html
 assert "scoreVerification:'CLIENT_REPORTED_UNVERIFIED'" in server
 assert 'MEJ_STAGE2_PRIVACY_HARDENING_V2' in html

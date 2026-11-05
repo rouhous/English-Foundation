@@ -1,0 +1,25 @@
+name: Audit Admin authentication integration
+on:
+  push:
+    paths:
+      - scripts/audit_admin_auth.py
+      - .github/workflows/audit-admin-auth.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect current application authentication references
+        run: python3 scripts/audit_admin_auth.py
+      - name: Commit non-sensitive audit summary
+        run: |
+          git add diagnostics/admin-auth-audit.md
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Record authentication integration audit"
+            git push
+          fi

@@ -49,5 +49,15 @@ for match in re.finditer(r'(?m)^function (?:diagnosticLanding|beginDiagnostic|st
     frag=tail[:min(length,14000)]
     frag=re.sub(r'data:image/[^\s"\x27]{30,}', '[EMBEDDED_IMAGE]', frag)
     out.append(f'FUNCTION {match.group(0).strip()} @ {s[:st].count(chr(10))+1}\n'+frag)
+
+out.append('\n## stage2_report_sender')
+for lineA,lineB in [(1030,1105),(1540,1650),(1710,1815)]:
+ out.append('=== SOURCE LINES '+str(lineA)+'-'+str(lineB)+' ===')
+ for lineNo in range(lineA,min(lineB+1,len(lines)+1)):
+  v=lines[lineNo-1]
+  v=re.sub(r'data:image/[^\\s"\\x27]{30,}','[EMBEDDED_IMAGE]',v)
+  v=re.sub(r'https://script\.google\.com/macros/s/[^/\\s]+','[GOOGLE_SCRIPT_ENDPOINT]',v)
+  out.append(f'{lineNo}: {v[:1300]}')
+
 Path('diagnostics/prelaunch-code-audit.txt').write_text('\n'.join(out),encoding='utf8')
 print('Wrote non-sensitive diagnostic')

@@ -26,6 +26,11 @@ function mejReconcileLocalStars(profile){
 function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;"""
     if s.count(original)!=1:raise RuntimeError("Cannot safely locate existing persist function")
     s=s.replace(original,patched,1)
+    # Reconcile previously cached totals when the student opens the homepage.
+    home_old="function home(){const p=active();"
+    home_new="function home(){const p=active();mejReconcileLocalStars(p);"
+    if s.count(home_old)!=1:raise RuntimeError("Home entry not found")
+    s=s.replace(home_old,home_new,1)
     assert s.count(marker)==1
     assert "function gradeAnswer(response,node)" in s
     blocks=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)

@@ -1,15 +1,15 @@
 ## question_store
 1047: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
-1064: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1130:   let text=q.audio||q.word||'';
-1293: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-1316:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
-1369: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
-1374: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
+1078: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
+1144:   let text=q.audio||q.word||'';
+1307: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
+1330:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+1383: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
+1388: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
 MATCHED_LINES: 7
 ## learning_render
 1059: function active(){return db.profiles[db.active]};
-1192: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+1206: function home(){const p=active();mejReconcileLocalStars(p);document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
 MATCHED_LINES: 2
 ## data_security
 761:  .journey-v23 .j26-status .j26-stars{grid-column:2;grid-row:1}
@@ -18,26 +18,30 @@ MATCHED_LINES: 2
 1048: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
 1050:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
 1056:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
-1062: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
-1240:  modal.id='journeySettingsModal';modal.className='journey-modal';
-1262:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
-1568:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1612:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1628:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
-1634:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
-1751: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
-1757: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
-1761: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
-1785:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
-1790:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
-1792:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
-1799:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
-1801:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
-1812:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
-1816:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
-1817:  localStorage.setItem(DBKEY,JSON.stringify(db));
-1826:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
-MATCHED_LINES: 25
+1062: function mejReconcileLocalStars(profile){
+1071:  profile.stars=Math.min(2600,total);
+1072:  return profile.stars
+1076: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
+1206: function home(){const p=active();mejReconcileLocalStars(p);document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+1254:  modal.id='journeySettingsModal';modal.className='journey-modal';
+1276:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
+1582:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1626:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1642:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
+1648:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+1765: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
+1771: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
+1775: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
+1799:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
+1804:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
+1806:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
+1813:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
+1815:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
+1826:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
+1830:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
+1831:  localStorage.setItem(DBKEY,JSON.stringify(db));
+1840:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
+MATCHED_LINES: 29
 ## viewport
 586: /* Right-to-left order for all viewport sizes: home, levels, skills, diagnosis, preview; launch at far left. */
 663: #app .actual-v18{padding:clamp(10px,1.5vw,22px)!important;gap:10px!important;min-height:100dvh!important;justify-content:space-between!important}
@@ -59,13 +63,13 @@ MATCHED_LINES: 25
 1000:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
 1008:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
 1028: <link rel="stylesheet" href="./mobile-home-fix.css?v=20261104-release">
-1193: <section class="mobile-ocean-v31" aria-label="My English Journey home">
-1195:  <div class="m31-head">
-1203:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
+1207: <section class="mobile-ocean-v31" aria-label="My English Journey home">
+1209:  <div class="m31-head">
+1217:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
 MATCHED_LINES: 23
 
 ## summary
-index_bytes: 4091574
+index_bytes: 4092164
 questions_occurrences: 12
 has_mobile_css_link: True
 has_mej_home_mobile_patch: False
@@ -87,9 +91,9 @@ document.getElementById('app').innerHTML=`<div class="quiz"><div class="card"><d
 START const BANK=
 const BANK=[{"g":0,"type":"Phonics","prompt":"Listen to “moon”. Which letter(s) make its first sound?","answer":"m","options":["n","a","m","s"],"audio":"moon","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"moon","pic":"moon","passage":"","mode":"mcq","id":"L0-000"},{"g":0,"type":"Phonics","prompt":"Listen to “sun”. Which letter(s) make its first sound?","answer":"s","options":["p","g","s","u"],"audio":"sun","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"sun","pic":"sun","passage":"","mode":"mcq","id":"L0-001"},{"g":0,"type":"Phonics","prompt":"Listen to “top”. Which letter(s) make its first sound?","answer":"t","options":["m","n","t","r"],"audio":"top","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"top","pic":"top","passage":"","mode":"mcq","id":"L0-002"},{"g":0,"type":"Phonics","prompt":"Listen to “apple”. Which letter(s) make its first sound?","answer":"a","options":["c","a","e","m"],"audio":"apple","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"apple","pic":"apple","passage":"","mode":"mcq","id":"L0-003"},{"g":0,"type":"Phonics","prompt":"Listen to “pen”. Which letter(s) make its first sound?","answer":"p","options":["p","u","t","ch"],"audio":"pen","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"pen","pic":"pen","passage":"","mode":"mcq","id":"L0-004"},{"g":0,"type":"Phonics","prompt":"Listen to “ink”. Which letter(s) make its first sound?","answer":"i","options":["t","u","i","h"],"audio":"ink","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"ink","pic":"ink","passage":"","mode":"mcq","id":"L0-005"},{"g":0,"type":"Phonics","prompt":"Listen to “net”. Which letter(s) make its first sound?","answer":"n","options":["b","c","n","u"],"audio":"net","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"net","pic":"net","passage":"","mode":"mcq","id":"L0-006"},{"g":0,"type":"Phonics","prompt":"Listen to “cat”. Which letter(s) make its first sound?","answer":"c","options":["p","c","o","sh"],"audio":"cat","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"cat","pic":"cat","passage":"","mode":"mcq","id":"L0-007"},{"g":0,"type":"Phonics","prompt":"Listen to “orange”. Which letter(s) make its first sound?","answer":"o","options":["s","i","m","o"],"audio":"orange","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"orange","pic":"orange","passage":"","mode":"mcq","id":"L0-008"},{"g":0,"type":"Phonics","prompt":"Listen to “dog”. Which letter(s) make its first sound?","answe
 START function home(
-function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+function home(){const p=active();mejReconcileLocalStars(p);document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
 <section class="mobile-ocean-v31" aria-label="My English Journey home">
- <div class="m31-art" aria-hidden="true"><img class="m31-sea" src="data:image/webp;base64,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
+ <div class="m31-art" aria-hidden="true"><img class="m31-sea" src="data:image/webp;base64,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
 START function route(
 function route(page){current=page;document.getElementById('journeyNav')?.classList.toggle('open',page!=='home'&&page!=='journey');document.querySelectorAll('.navbutton').forEach(b=>b.classList.toggle('active',b.dataset.route===page));if(page==='home')home();else if(page==='journey')journey();else if(page==='levels')levels();else if(page==='skills')skills();else if(page==='diagnostic')diagnosticLanding();else if(page==='reports')reports();window.scrollTo({top:0,behavior:'instant'});}
 const JOURNEY_BADGES=[['🌱','الرحّالة الصغير'],['🧭','المغامر'],['📖','مكتشف الكلمات'],['⭐','صياد النجوم'],['🏝️','مرشد الجزر'],['🌊','قاهر البحار'],['⚓','ربان المعرفة'],['⛵','القبطان الصغير'],['🗺️','ابن ماجد'],['🏆','أسطورة الرحلة']];
@@ -126,13 +130,13 @@ function beginnerGuide(q){
 // This avoids revealing the solution in spelling, grammar, translation,
 
 ## stage1_diagnostic_functions
-FUNCTION function persist( @ 1060
-function persist(send=true){active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
+FUNCTION function persist( @ 1074
+function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
 let reportTimer=null,reportBusy=false,reportDirty=false;
-FUNCTION function achieved( @ 1066
+FUNCTION function achieved( @ 1080
 function achieved(g,p=active()){return countMaster(g,p)>=200}
 // MEJ_STAGE1_LEVEL_UNLOCK_V2
-FUNCTION function maxAllowed( @ 1068
+FUNCTION function maxAllowed( @ 1082
 function maxAllowed(p=active()){
  if(!p.diagnosed)return 0;
  let cap=Math.max(0,Math.min(12,Number(p.assigned)||0));
@@ -142,30 +146,30 @@ function maxAllowed(p=active()){
  }
  return cap
 }
-FUNCTION function permitted( @ 1077
+FUNCTION function permitted( @ 1091
 function permitted(g){return Number(g)===0 || (active().diagnosed&&Number(g)<=maxAllowed())}
-FUNCTION function checkAccess( @ 1292
+FUNCTION function checkAccess( @ 1306
 function checkAccess(g){if(!permitted(g)){toast('المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
-FUNCTION function mejStageQuestions( @ 1293
+FUNCTION function mejStageQuestions( @ 1307
 function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-FUNCTION function mejStageMastered( @ 1294
+FUNCTION function mejStageMastered( @ 1308
 function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
 // MEJ_STAGE1_DIAGNOSTIC_V1
-FUNCTION function beginStagePart( @ 1297
+FUNCTION function beginStagePart( @ 1311
 function beginStagePart(g,part){if(!checkAccess(g))return;if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
-FUNCTION function levels( @ 1298
+FUNCTION function levels( @ 1312
 function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
 // The school grade limits both placement questions and the suggested placement level.
 // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
 // An unselected grade must be saved before a placement attempt.
-FUNCTION function placementCeiling( @ 1302
+FUNCTION function placementCeiling( @ 1316
 function placementCeiling(p=active()){
   const selected=String(p.grade??'').trim();
   if(selected==='other')return 5;
   const g=Number(selected);
   return selected!==''&&Number.isInteger(g)&&g>=1&&g<=12?g:null;
 }
-FUNCTION function placementPlan( @ 1308
+FUNCTION function placementPlan( @ 1322
 function placementPlan(ceiling,questionCount=24){
   const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
   const perLevel=Math.floor(questionCount/eligible.length);
@@ -180,14 +184,14 @@ function placementPlan(ceiling,questionCount=24){
   }
   return shuffle(ids);
 }
-FUNCTION function diagnosticLanding( @ 1322
+FUNCTION function diagnosticLanding( @ 1336
 function diagnosticLanding(){
   const p=active(),cap=placementCeiling(p);
   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('home')">🏠 العودة إلى الرئيسية</button></div></section>`;
 }
-FUNCTION function startDiagnostic( @ 1328
+FUNCTION function startDiagnostic( @ 1342
 function startDiagnostic(){
   const p=active();
   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
@@ -198,23 +202,23 @@ function startDiagnostic(){
   displayQuestion();
 }
 // MEJ_STAGE1_ALL_PATHS_GUARDED_V3
-FUNCTION function beginLevel( @ 1338
+FUNCTION function beginLevel( @ 1352
 function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let permittedPool=mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1);let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
-FUNCTION function choose( @ 1347
+FUNCTION function choose( @ 1361
 function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
-FUNCTION function submitTyped( @ 1348
+FUNCTION function submitTyped( @ 1362
 function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
-FUNCTION function gradeAnswer( @ 1349
+FUNCTION function gradeAnswer( @ 1363
 function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
   p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
 if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
 document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';}
-FUNCTION function skipQuestion( @ 1354
+FUNCTION function skipQuestion( @ 1368
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
-FUNCTION function nextQuestion( @ 1355
+FUNCTION function nextQuestion( @ 1369
 function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
-FUNCTION function endSession( @ 1357
+FUNCTION function endSession( @ 1371
 function endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.
@@ -226,3 +230,301 @@ if(s.kind==='diagnostic'){
   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
 }else persist();activeSession=null;
 document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستوى التأسيسي متاح دائمًا، والمراحل الأعلى تُفتح بحسب التقدم. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ رحلة جديدة بعد إتقان 200 عنصر في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('levels')">خريطة المستويات</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade})">جولة جديدة</button>`:''}</div></div>`}
+
+## stage2_report_sender
+=== SOURCE LINES 1030-1105 ===
+1030: <body><header class="head" style="display:none"><div class="container headinner"><div class="identity"><div class="brand" style="background:none;box-shadow:none"><img src="data:image/webp;base64,UklGRvw9AABXRUJQVlA4IPA9AAAQ1QCdASoYARgBPmEoj0UkIqkWu458kAYEtgBmwI5da58fzf5UflN8sdY/uv9y/xf+X/un7b/en+/7qOtPLW5z/33+J/yP7SfLj/Tf+H/Ke6v8/f9D/Ffvv9Av6l/7r/A/lP9Hv+Z64P3d9RP9Y/z37Se8h/uP2l91X9y/2369/6r5CP6t/kP+12G37v+wd+6npwfuh/4vlS/s//G/c34Gf2j/+HsAf/v2wP4B//9Z15ofnvDXyl++v3j9zf8N7jec+0n+V/kb+L/kfTX9mfIf5I/7n+T9hT8n/oH+q+4r5AYm3YT730EfeP7j/3P8h6+X1Xm9+//6T/le4F+uX/C8sTxEPWf2P+AD+jf3T9oPZp/+P9x6PPrn9tfgS/n3+I64zX96vdeFVTAMzABgh36AYBEl+brWTSw5fu6zFnJSA0SoCURX5xUxaRHlQClcrnjV6v/piy82Aw7NSn46P77OQdfEO4vZkGlY41RTLXcatXiuLFGkaMHJ1JLSRponDouVGYs6kfr8md6dFHt/4Ws0UDo4MGUCe14hUUBOH3+WOzg9cs8j68OwOdcGP0Al7EObPGs/PRZ40k6hW27FeSKjhUsU6+asADyom+8X+EJY/Qfruhsz0jllSCwpq3Zqzsj6ERv5ClGWSZDwTnJc5zt367czM/5QD9elneFmkVbiLEOX53YToTE6lew3VCARrLYq/qQnQ5xUnxQu1VcC+PbNwJxegcjlamu3hrdGAkvXSgr/QyN1AubNEhTaa5QK/a0TdmxcsVp+bJvW6m7H/+iztFJ7KcDRVt8Lz+gRcdfgpWvYW6ENIx/FgYLRT79eZyF72wGawlDO4oRu7JRbB46CVbmvKSRDL0edzrEGuWIpY101KKI+rFzpOfiZrauEqoOcpUz7+9hOAxUhayYTmnUFjhiPxAOLWhN3/9ylB1P8O6SaiAKElnBTUk3PLbouhyh5T9DWFqGFlCKR+tPw+kc/fWdCvULloEzczcGcmu6OVibSuo+qoAaVx+/ACTZ+P9esXkX8HqvoaN8ql2ggOwYNkQyy8RII9aynQwDm5B8hHn6W9iKty1Juz
+1031: <nav class="navbar" id="journeyNav"><div class="container menu"><button class="navbutton active" data-route="home" onclick="route('home')">⌂ الرئيسية</button><button class="navbutton" data-route="levels" onclick="route('levels')">🗺️ المستويات</button><button class="navbutton" data-route="skills" onclick="route('skills')">🎯 المهارات</button><button class="navbutton" data-route="diagnostic" onclick="route('diagnostic')">🧭 التشخيص</button><button class="navbutton" data-route="reports" onclick="route('reports')">📊 معاينة</button></div></nav>
+1032: <main class="container" id="app" aria-live="polite"></main><footer class="footer">My English Journey · Designed by Teacher Houssem Rouatbi</footer><div id="toast" role="status"></div>
+1033: <script>
+1034: const J24_BADGES=["data:image/webp;base64,UklGRgIoAABXRUJQVlA4IPYnAACQhgCdASrIALkAPlkijUSjoiEY7CbUOAWEtgBdmarDC+c/I38ivkiqH9W/sv99/xH9w/9/+i+T/+3+0DwM6O/4HnSc5/73++/vT/pfl7/mP2f90X5//8vuB/pj/nv7R/if2I+Lf1j/ud6i/6N/kf/b/nPeW/1X7Ge6j/C/8L9m/9H8gf9h/w3/R7Cr9xvYT/o/+u/+/s//9P9y/+78n/9d/3/7bfAp+xf/u9gD/9e2L/AP/z0o8QnmV/E8PfyP6//P/3/9xOcTEs+Zfjf+P/ifTbwj+Vmoj+Tfzz/Mfmrx0wC/z3+1/83j8/h/UF88PDpoH/pb0eNI/6B/svYV/nn9t/7yXF4eWN7JXtbL9W/Gbm4dM+FkTuDViTQzOxISbR/c2Q8/wcaP+o5JDck3O5K9KbS6Q9kXV6W8XJcaZ80iDvNyZNP/WJormRST1UJ/vsBCIYC1MQVg69D81xBDor2LRpP4YI6LOUjrTtzUbG20IPCZU1OD6Y++b53ghiOt1cw/nAeQJYpp8KJopo9Jx9gpKQmV+jIb+TOrD1R7wQHv4lZ/X0WpfFRU2o+h2//3G3smr/NvaNFaVAf9kkHo4N1X/kk6I7naYNer4xfgjfhDqX1x8lXMZFOogq1/ha96rKi6E+6/zjnQuPIoiu2U/YBS5jyyQKQ/oSk7LUYGBrJcZK89AcpjZVgDwor0c363y3dzl8g/+SI2+UgXDZ+THesdPXGWw8RV6WPDKFGUwp2DYMdJSetdADdEcVr1fX2ZvleY3CplXrxud3tVg8/vMgK2KtoaBqXXqwUvhmRpKoj6E5z5w9qYeE4Cqe/pDKz5cBufdlStq90MqWKt7THMumta8n9q2UpTnQyZqV9fYD3BcvCPsxD4hzvGhdbLqA7kCLS7IAoSd38UQ5aE7xHNg8JXnE5CMtDP9j0R0GY2M/fCMay6Ff+MauLbl8W4CxCKHeKoEBjm8et23OkahTkKZJH2eb/m7Gp+P0I75I2T8J//+21AqeLWwCQHAH2XTcVO5roirJ404GhY5lpwtWH9jdPgKJVDK3VEXypIr1ofoX3NvgfOEl+oEKpQjyIUgmUJt1hVhSbM/E7o/Ls85zDqS8+ONj9Nh+o70IetJsITPWmlidqrrGbQkK4OqCHZypG5Z0YJi/s9sp65Hnisd0Sb3O8yFg5CCfyg/jt+ieX3Kexr1BjeqwuvKfbbjmvdyyjwZ+WC8rmc1ftXyfpIUH
+1035: const J24_ACT=["data:image/webp;base64,UklGRrZVAABXRUJQVlA4IKpVAACwDQGdASpAASgBPl0kj0SjoiEW+m7QOAXEtjbwHfbPwwXaE1/5T8gOvI996L/Cftb+Y/y28e9cXpT7t/lP9d/e/3H+Wn/V7u+tvLW6Q/6X+E/Kf5j/7T/z/4X3Z/0v/Ef9X8+PoE/XP/rf2n3U/+D1mf37/q+o7+q/539pvd7/4f7ce6j+8f7P9uPgG/qX+s///rv+yL+7/sJ/tj/8vXl/dH4Xv7T/0v3L9rT//+wB/+fbc/gGql80P03hT+QfU/5//A/uR/h//h8H+Z/tO1IPmn4i/a/4P9z/8B+5Pzp/z/E/5cf6PqEfj/8//0f9w/dj/Efu19YET3qR+Z6C/uL9f/2v+C/e3/ceox/w+mX7z/o/+x7gf6z/8j/AfkL7XPjHeuewR/U/8R/4v9D+Wv01/4f/2/3Xp1/Of9f/6v9P8CH80/un/U/wv72fv////K96TKZ8YzxNU++WYo/ivNFnKidpXYrKXV5O60tzy41QhmWSCTrWz9yleg03HL0GyyDYYFq4Culfo8akiNaTten6N/tSXpGwP/rl5VXEjbei5whxIvNGLzRb+2tkkgNsikvOFxXCm5b0Amv9gQYJgLAtQNHD1tmLfinUHxeWJ2lZDv9kMXtrG83gAyhI9NzNsZESxg9yew4Mu97e6SroWsxpjQ3Sghr4fu/uMGPDe9piw28H+euZh7LtyOhHOrJbouqp7yr7jhXj/9hzE3dbxEm29LewO8BeO33O0GbL9tzah+NqwGa0JkyO8nKWkFG4Z0R00ihWxUZlw882bpuYE2rFt7XY8gUOAVqYyOerMdSP21pvovd961VwONT1MKz0gc0Pfnkh7B9S6HDsbpKOTeLNWkUGjm4Jib9pWV8uin2JRGiv0S/TbvA85/zgMlJUcalrV3X4lYeoJ3JyLvvwqjlzhmrNZ2hIe3ZSWr/j35BJBge5rFfWrrVltXbB/JBYWuPGyfYW0bGghJ4YvMApCqdWbHvlHtDexs0mbyVa22FkG/Ia9f1trOtvvQ4etwPnMysKb6VR8MoPT+ML0LgdSRwSP3BzNoxnyLa/49dNZphzh0o2LEjN+oWFN+6Ucgn1KSmwOpb8pdPoET9mXh9NUJNQ+k0rpmEH8G/aFF48gRjtIzKiptJf2qRiv98kVyKnlX0JA7Z0cB+6TuIPngbRr40G6ookD9nhqhfDwks68FW3CYv8nMXS2G6dAHBvGg8Q+s6QY0Wy16uAD+SzPt3/+
+1036: 
+1037: const BANK=[{"g":0,"type":"Phonics","prompt":"Listen to “moon”. Which letter(s) make its first sound?","answer":"m","options":["n","a","m","s"],"audio":"moon","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"moon","pic":"moon","passage":"","mode":"mcq","id":"L0-000"},{"g":0,"type":"Phonics","prompt":"Listen to “sun”. Which letter(s) make its first sound?","answer":"s","options":["p","g","s","u"],"audio":"sun","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"sun","pic":"sun","passage":"","mode":"mcq","id":"L0-001"},{"g":0,"type":"Phonics","prompt":"Listen to “top”. Which letter(s) make its first sound?","answer":"t","options":["m","n","t","r"],"audio":"top","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"top","pic":"top","passage":"","mode":"mcq","id":"L0-002"},{"g":0,"type":"Phonics","prompt":"Listen to “apple”. Which letter(s) make its first sound?","answer":"a","options":["c","a","e","m"],"audio":"apple","tip":"استمع للكلمة، وانتبه إلى صوت البداية لا إلى اسم الحرف.","word":"apple","pic":"apple","passage":"","mode":"mcq","id":"L0-003"},{"g":0,"type":"Phonics","prompt":"Listen to “pen”. Which letter(s) make its first sound?","answer":"p","options":["p","u","t","ch"],"audio":"pen","tip":"استمع للكلمة، وانتبه إلى صو
+1038: const PHOTO={"apple":"data:image/webp;base64,UklGRoAXAABXRUJQVlA4IHQXAAAwaQCdASrAAMAAPok+mEklI6IhKTZLQKARCWIAvnvfVE/h+ddx/4VhXuvB7fMA6EHm686r08bz90UfrLf3vGlJTPMrGO3duW7KHbfNRhwcolZJoAeUX4HP3jfmmNsm6YYmvo4MkXkBbABC3RI9WlK16IW0AhwIKSPkkwCpLk50d0ZSA3zqZR/h4z/3hFU8cLT5gyctXBh5UOzFDEloSCPatWfXKIvtF7cA1JWY2SdaJo50XoVy+Wp++RL6fRyXuOhd3BmmcOKw6hhmc876oglD0ZL7yBWZb18v5wSQS9J60OYu+7cW+VPmoRaQVRebzz4hBeyVFnBGYr7BCHcDhMron/TNwUT1z3BUtdaaL037BwOUtX2a9kUYl8Zjoaerkrsec/leSLE0+PdfAU8+MzwQhuZw+pXDTdsX4pqQ8WKcwuDIN1ssJ6yaJpUSelNbaxx+fqMMLi9n39leBuedqu67ZUxwZrkfMzChbxSATC63vsvrRMU6m7KR4Iki+mqIkJeNM0tzHxD5EF6w0mBxgsNsAwLntDqqg0kwsMUvP/tqlQ0sVqNO75IIRI36gzolAk4jQIZdMqowhrnImKA4ybqE3diytoVxh4lPrjyGRUN17w+6JP3pXkvGFCW7BsA7W35hoh2P2bdtzT3r+88rNgRRt/kBOupEV6LQtRvBIstZfbMGHBjWQgwIE1k6cj7qCJJJqI57Mv4yTa9r6PN1OMUrL7IfZJ3mYBFoiWj56SpJYVfUOmOLbdp1adETkD/MS2ugfPsNHDZ1MKWRZoq+xuKyv4A1YZjmF628GQmx+3rL28AMVwAr1z8k3uRoJlJsP3k+ChZm3afYP1yv6LFc2UjgXTiY90xgrZgSAwZXwSVDBqey6kTdSftRI0P4ygxe3USCMzd9bb+svwZUeaHC9ZC+jRJNZMMQvjyZrOZDbRyKl1jkeybONkkp6Y87C+9vd3sbyS59ihDT8yy/UVKbJvJTqGOc7tT1nzNy+weyQFd+no67HLcaLKpaHxTZt20uc8SNHlJsQemzVxcol8tq3xC5CVMp/CSnLUJpb76KcqzDvO8B7lqAQruJOeB83wkaqbqnaAeu24FBA+3m4X5mYZ5KmUOcI12pLiQtMbHQr+y5SJ6AAP7qiNZaW4rVBcDHq4o1yCqzw7Sb6ih3+pDvYPXr9VjW4rnr/LyH+QS/aEPj9+QH54YkBt3rW7AeCOW0Bupb/3qrSt3daHm
+1039: const LV={"0":["Phonics Lab • مختبر الأصوات","Letters → sounds → blending → real words","المستوى صفر مفتوح للجميع"],"1":["First Words • الكلمات الأولى","First reading • basic words • sentences","التأسيس"],"2":["Everyday English • الإنجليزية اليومية","Family • food • home • routines","الحياة اليومية"],"3":["Reading Builder • بناء القراءة","Time • hobbies • present simple","قراءة وقواعد"],"4":["Confident Reader • القارئ المتقدم","School • places • past simple","قراءة وفهم"],"5":["Bridge to Grade 6 • الجسر للسادس","Future plans • technology • description","الجسر للسادس"],"6":["Grade 6 • الصف السادس","Free-time / Technology / Places • Homes / Clothes / Adventures","Team Together Oman 6A"],"7":["Grade 7 • الصف السابع","Entertainment / Animals / Travel • City Life / Our Future / Reading","Team Together Oman 7A"],"8":["Grade 8 • الصف الثامن","Our planet / Sports / Spending • Communication / Inventions / Learning","Team Together Oman 8A"],"9":["Grade 9 • الصف التاسع","Identity • Connections • The future is now","Gold Experience Oman 9A"],"10":["Grade 10 • الصف العاشر","New Media / Climate / Energy / Civilisation • Stories / Health / Transport / Business","English for Me 10A"],"11":["Grade 11 • الصف الحادي عشر","Communication / Teenage / Tourism / Innovation • Inspiration / Connections","
+1040: const GLOSS={"1":[{"en":"family","ar":"عائلة","img":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+CjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiByeD0iMjQiIGZpbGw9IiNkYmVhZmUiLz4KPHRleHQgeD0iODAiIHk9IjEwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI3MiI+8J+RqOKAjfCfkanigI3wn5GnPC90ZXh0Pgo8L3N2Zz4=","emoji":"👨‍👩‍👧"},{"en":"mother","ar":"أم","img":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+CjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiByeD0iMjQiIGZpbGw9IiNmY2U3ZjMiLz4KPHRleHQgeD0iODAiIHk9IjEwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI3MiI+8J+RqTwvdGV4dD4KPC9zdmc+","emoji":"👩"},{"en":"father","ar":"أب","img":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+CjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiByeD0iMjQiIGZpbGw9IiNlMGU3ZmYiLz4KPHRleHQgeD0iODAiIHk9IjEwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI3MiI+8J+RqDwvdGV4dD4KPC9zdmc+","emoji":"👨"},{"en":"friend","ar":"صديق","img":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIw
+1041: const LEGACY_MAP={"0":"L1-000","1":"L1-001","2":"L1-002","3":"L1-003","4":"L1-004","5":"L1-005","6":"L1-006","7":"L1-007","8":"L1-008","9":"L1-009","10":"L1-010","11":"L1-011","12":"L1-012","13":"L1-013","14":"L1-014","15":"L1-015","16":"L1-016","17":"L1-017","18":"L1-018","19":"L1-019","20":"L1-020","21":"L1-021","22":"L1-022","23":"L1-023","24":"L1-024","25":"L1-025","26":"L1-026","27":"L1-027","28":"L1-028","29":"L1-029","30":"L1-030","31":"L1-031","32":"L1-032","33":"L1-033","34":"L1-034","35":"L1-035","36":"L1-036","37":"L1-037","38":"L1-038","39":"L1-039","40":"L1-040","41":"L1-041","42":"L1-042","43":"L1-043","44":"L1-044","45":"L1-045","46":"L1-046","47":"L1-047","48":"L1-048","49":"L1-049","50":"L1-050","51":"L1-051","52":"L1-052","53":"L1-053","54":"L1-054","55":"L1-055","56":"L1-056","57":"L1-057","58":"L1-058","59":"L1-059","60":"L1-060","61":"L1-061","62":"L1-062","63":"L1-063","64":"L1-064","65":"L1-065","66":"L1-066","67":"L1-067","68":"L1-068","69":"L1-069","70":"L1-070","71":"L1-071","358":"L1-072","359":"L1-073","360":"L1-074","361":"L1-075","362":"L1-076","363":"L1-077","364":"L1-078","365":"L1-079","366":"L1-080","367":"L1-081","368":"L1-082","369":"L1-083","370":"L1-084","371":"L1-085","372":"L1-086","373":"L1-087","374":"L1-088","375":"L1-089","376":"L1-090"
+1042: const PHONICS=[['m','moon'],['s','sun'],['t','top'],['a','apple'],['p','pen'],['i','ink'],['n','net'],['c','cat'],['o','orange'],['d','dog'],['g','goat'],['e','egg'],['h','hat'],['r','red'],['b','bag'],['f','fish'],['l','leg'],['u','up'],['sh','ship'],['ch','chair']];
+1043: const ENDPOINT='[GOOGLE_SCRIPT_ENDPOINT]s3Ell7MODDKiMIr0fEAwqZsqbOsh1VFTRi3aQWb9TpXg/exec';
+1044: const JOURNEY_BANNER='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAB9ArQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKACiiigAooooAKKKjku4oZ44mkRZJc7FLAF8cnA70ASUUjNtGTTYJ0uoVkjdZI3GVZTkMPY0APooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKwPiD41fwDpMOoNYy3lgk6pfSROA1jCc5nKn7yKcbschSTzjFF7DjFydkb9FeW3f7WHhy08QeJNP3LNJoUVnJamC4jlOsNdIzRJAiksSduORjv0BNejeH7q7vdFtpb+2SzvJIw00CSeYIWPJXdgZx0zUxnGXws2rYarSt7SNr/5XLlFFFUYBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFF
+1045: const DBKEY='WADI_ENGLISH_EXPLORER_PROFILES_V1';
+1046: const questionById=Object.fromEntries(BANK.map(x=>[x.id,x]));
+1047: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
+1048: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
+1049: if(!Object.keys(db.profiles).length){
+1050:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
+1051:     const id='legacy-'+Date.now().toString(36);const p={id,name:old.studentName||old.studentId||'',grade:'',school:'Wadi Al Hawasna School',correct:{},wrong:{},stars:Number(old.stars)||0,attempts:Number(old.attempts)||0,right:Number(old.right)||0,diagnosed:!!old.diagnosticDone,assigned:Number(old.assignedLevel)||0,diagnosticScore:old.diagnosticScore??null,diagnosticDate:old.diagnosticDate||'',completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};
+1052:     for(const [legacyId,count] of Object.entries(old.correct||{})){const qid=LEGACY_MAP[legacyId];if(qid)p.correct[qid]=Number(count)||0}
+1053:     for(const [legacyId,count] of Object.entries(old.wrong||{})){const qid=LEGACY_MAP[legacyId];if(qid)p.wrong[qid]=Number(count)||0}
+1054:     db.profiles[id]=p;db.active=id;migrated=true;
+1055:   }}catch(e){}
+1056:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
+1057: }
+1058: if(!db.profiles[db.active])db.active=Object.keys(db.profiles)[0];
+1059: function active(){return db.profiles[db.active]};
+1060: // MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1
+1061: // Browser scores are advisory: only the authenticated server can certify a ranking.
+1062: function mejReconcileLocalStars(profile){
+1063:  if(!profile)return 0;
+1064:  const raw=profile.correct&&typeof profile.correct==='object'?profile.correct:{};
+1065:  let total=0;
+1066:  for(const [id,value] of Object.entries(raw)){
+1067:   if(!Object.prototype.hasOwnProperty.call(questionById,id))continue;
+1068:   const n=Number(value);
+1069:   if(Number.isFinite(n)&&n>=2)total++;
+1070:  }
+1071:  profile.stars=Math.min(2600,total);
+1072:  return profile.stars
+1073: }
+1074: function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
+1075: let reportTimer=null,reportBusy=false,reportDirty=false;
+1076: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
+1077: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
+1078: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
+1079: function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
+1080: function achieved(g,p=active()){return countMaster(g,p)>=200}
+1081: // MEJ_STAGE1_LEVEL_UNLOCK_V2
+1082: function maxAllowed(p=active()){
+1083:  if(!p.diagnosed)return 0;
+1084:  let cap=Math.max(0,Math.min(12,Number(p.assigned)||0));
+1085:  while(cap<12){
+1086:   if(!achieved(cap,p))break;
+1087:   cap++;
+1088:  }
+1089:  return cap
+1090: }
+1091: function permitted(g){return Number(g)===0 || (active().diagnosed&&Number(g)<=maxAllowed())}
+1092: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
+1093: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
+1094: function jsStr(v){return JSON.stringify(String(v)).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
+1095: function pct(x,t){return t?Math.round(x*100/t):0}
+1096: function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>e.style.display='none',3300)}
+1097: function shuffle(a){let r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+1098: function photoKey(value){let s=String(value||'').toLowerCase().trim();if(PHOTO[s])return s;
+1099:  const cands={'apple':'apple','cat':'cat','dog':'dog','family':'family','father':'family','mother':'family','football':'football','soccer':'football','bike':'bicycle','cycling':'bicycle','bicycle':'bicycle','school':'classroom','classroom':'classroom','teacher':'classroom','book':'book','library':'book','pencil':'pencil','bag':'bag','backpack':'bag','rice':'rice','water':'water','phone':'phone','mobile phone':'phone','computer':'computer','laptop':'computer','recycle':'recycling','recycling':'recycling','renewable energy':'wind','wind power':'wind','turbine':'wind','sun':'sun','solar power':'sun','fort':'fort','castle':'fort','desert':'mountain','mountain':'mountain','boat':'boat','island':'beach','beach':'beach','coast':'beach','tree':'tree','bus':'bus','transport':'bus','reading':'reading','museum':'fort'};
+1100:  return cands[s]||''}
+1101: function realPhoto(word){let k=photoKey(word);return k?PHOTO[k]:null}
+1102: function mejApprovedPhoto(word){
+1103:  const key=String(word||'').trim().toLowerCase();
+1104:  const choices=(window.MEJ_APPROVED_IMAGES||{})[key]||[];
+1105:  if(!choices.length)return '';
+=== SOURCE LINES 1540-1650 ===
+1540:  return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};
+1541: }
+1542: function makeReportId(){
+1543:  let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}
+1544:  return 'wadi-'+Date.now().toString(36)+'-'+random;
+1545: }
+1546: // A separate anonymous acknowledgement check: only a random receipt ID is sent, never a student's name.
+1547: const pendingReceipts=new Map();
+1548: const RECEIVER_EXPECTED_VERSION='2026-10-23-verified-ministry-six-digits-v4';
+1549: window.WADI_RECEIPT_CALLBACK=function(data){
+1550:  const pending=data&&pendingReceipts.get(data.reportId);
+1551:  if(pending) pending(data);
+1552: };
+1553: let wadiHealthResolve=null;
+1554: window.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};
+1555: function lookupReportReceipt(reportId){return new Promise(resolve=>{
+1556:  let finished=false;const js=document.createElement('script');
+1557:  function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}
+1558:  let timer=setTimeout(()=>done(null),6500);
+1559:  pendingReceipts.set(reportId,done);
+1560:  js.onerror=()=>done(null);
+1561:  js.src=ENDPOINT+'?ack='+encodeURIComponent(reportId)+'&_='+Date.now();
+1562:  document.head.appendChild(js);
+1563: });}
+1564: function testReceiverHealth(){return new Promise(resolve=>{
+1565:  let done=false;const js=document.createElement('script');
+1566:  function finish(d){if(done)return;done=true;clearTimeout(timer);js.remove();wadiHealthResolve=null;resolve(d||null)}
+1567:  const timer=setTimeout(()=>finish(null),7500);
+1568:  wadiHealthResolve=finish;
+1569:  js.onerror=()=>finish(null);
+1570:  js.src=ENDPOINT+'?health=1&_='+Date.now();
+1571:  document.head.appendChild(js);
+1572: });}
+1573: async function checkSheetConnection(){
+1574:  const p=active(),el=document.getElementById('syncStatus');
+1575:  p.syncStatus='⏳ نفحص إصدار خدمة استقبال التقارير...';if(el)el.textContent=p.syncStatus;
+1576:  const status=await testReceiverHealth();
+1577:  if(!status){p.syncStatus='❌ لم يستجب رابط الخدمة لفحص الاتصال. تأكد من نشر Web App بصلاحية Anyone وإمكانية الوصول إليه من المتصفح.';}
+1578:  else if(status.version!==RECEIVER_EXPECTED_VERSION){p.syncStatus='⚠️ الخدمة تعمل لكنها بإصدار قديم أو غير مطابق ('+(status.version||'غير معروف')+'). افتح Deploy ← Manage deployments ← Edit ← New version ← Deploy.';}
+1579:  else if(!status.configured){p.syncStatus='❌ تم الوصول إلى الخدمة، لكن جدول البيانات غير مربوط. تحقق من SPREADSHEET_ID وصلاحيات السكربت.';}
+1580:  else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). أرسل تقريرًا فعليًا للتحقق من تسجيله.';}
+1581:  if(el)el.textContent=p.syncStatus;
+1582:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1583:  return status;
+1584: }
+1585: async function verifyReportReceipt(reportId){
+1586:  let status=null;
+1587:  for(const delay of [1500,2500,4500]){
+1588:   await new Promise(resolve=>setTimeout(resolve,delay));
+1589:   status=await lookupReportReceipt(reportId);
+1590:   if(status&&(status.received||status.state==='stored'||status.state==='rejected'||status.state==='receiver-error'))return status;
+1591:  }
+1592:  return status;
+1593: }
+1594: const REPORT_ERROR_AR={EMPTY_OR_TOO_LARGE:'الطلب فارغ أو أكبر من الحد المسموح.',SCHEMA_MISMATCH:'تنسيق التقرير لا يطابق سكربت الاستقبال.',MISSING_STUDENT:'اسم الطالب أو معرّفه غير موجود في التقرير.',INVALID_RECEIPT:'معرّف الإرسال غير صالح.',SPREADSHEET_NOT_CONFIGURED:'سكربت الاستقبال غير مرتبط بجدول البيانات الصحيح.',WRONG_TAB_HEADERS:'عناوين الأعمدة في Google Sheets غير متطابقة مع النسخة الجديدة.',GOOGLE_PERMISSION:'لا توجد صلاحيات كافية للكتابة في Google Sheets.',RECEIVER_ERROR:'حدث خطأ أثناء معالجة التقرير في السكربت.',INVALID_TEACHER_CODE:'رمز المعلم غير صحيح. راجع المعلم وتأكد من كتابته كما هو.',TEACHER_CODE_NOT_CONFIGURED:'لم يتم تهيئة رمز المعلم في Google Apps Script.'};
+1595: async function sendReport(manual=false){
+1596:  if(reportBusy){reportDirty=true;if(manual)toast('هناك تقرير جارٍ إرساله؛ سنحاول مجددًا.');return;}
+1597:  const p=active();if(!p.name){if(manual)toast('احفظ اسم الطالب أولًا.');return;}if(!String(p.teacherCode||'').trim()){p.syncStatus='🔒 لا تُرسل التقارير دون رمز المعلم. يمكن متابعة الدراسة محليًا.';let st=document.getElementById('syncStatus');if(st)st.textContent=p.syncStatus;if(manual)toast('أدخل رمز المعلم من الصفحة الرئيسية، ثم احفظ ملف الطالب.');return;}
+1598:  if(!navigator.onLine){p.syncStatus='⚠️ لا يوجد اتصال بالإنترنت. التقدم محفوظ محليًا.';if(manual)toast(p.syncStatus);return;}
+1599:  const pid=p.id,receipt=makeReportId();reportBusy=true;
+1600:  p.lastReportId=receipt;
+1601:  p.syncStatus='⏳ إرسال تقرير '+receipt+' ...';
+1602:  let output=document.getElementById('syncStatus');if(output)output.textContent=p.syncStatus;
+1603:  try{
+1604:   await fetch(ENDPOINT,{method:'POST',mode:'no-cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(p,manual?'manual-sync':'progress',receipt))});
+1605:   const result=await verifyReportReceipt(receipt);
+1606:   if(result&&(result.received||result.state==='stored')){
+1607:    p.syncStatus='✅ تم التأكد من حفظ تقدم '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+').';
+1608:    p.lastConfirmedReport=receipt;
+1609:    if(manual)toast('✅ تم تأكيد وصول التقرير إلى الجدول.');
+1610:   }else if(result&&['rejected','receiver-error'].includes(result.state)){
+1611:    const code=result.code||'RECEIVER_ERROR';
+1612:    p.syncStatus='❌ رفض السكربت التقرير: '+(REPORT_ERROR_AR[code]||code)+' • رمز الخطأ: '+code+' • رقم التقرير: '+receipt;
+1613:    if(manual)toast('❌ لم يُحفظ التقرير. راجع رسالة الخطأ في المعاينة.');
+1614:   }else if(result&&!result.version){
+1615:    p.syncStatus='⚠️ السكربت المستجيب قديم؛ لم يقدّم تأكيدًا. أعد نشر الإصدار الجديد. رقم التقرير: '+receipt;
+1616:    if(manual)toast('لم يتم تأكيد الحفظ؛ حدّث السكربت المنشور.');
+1617:   }else{
+1618:    p.syncStatus='⚠️ لم نتأكد من الحفظ. ربما الطلب محجوب أو السكربت المنشور قديم. اضغط «فحص الاتصال» ثم راجع Executions. رقم التقرير: '+receipt;
+1619:    if(manual)toast('لم يصل تأكيد بحفظ التقرير في Sheets.');
+1620:   }
+1621:  }catch(err){
+1622:   p.syncStatus='❌ فشل الإرسال قبل التأكيد: '+String(err.message).slice(0,110)+' • رقم التقرير: '+receipt;
+1623:   if(manual)toast('فشل الإرسال، لكن تقدم الطالب محفوظ على الجهاز.');
+1624:  }finally{
+1625:   reportBusy=false;
+1626:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1627:   const t=document.getElementById('syncStatus');if(t&&db.active===pid)t.textContent=db.profiles[pid]?.syncStatus||'';
+1628:   refreshJourneySettingsStatus();
+1629:   if(reportDirty){reportDirty=false;scheduleReport();}
+1630:  }
+1631: }
+1632: window.addEventListener('online',()=>{if(active().name)scheduleReport()});
+1633: function exportProgress(){let blob=new Blob([JSON.stringify({app:'wadi-english-explorer',version:1,savedAt:new Date().toISOString(),profiles:db.profiles,active:db.active},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='My_English_Journey_Progress_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('✅ تم تنزيل نسخة التقدّم الاحتياطية. احتفظ بها في مكان آمن.') }
+1634: // Validate a student backup before it can replace locally saved progress.
+1635: // Keep only known fields and question IDs; an imported file must never overwrite
+1636: // healthy data with malformed values or prototype keys.
+1637: function normalizeBackupProfile(id,raw){
+1638:  if(!raw||typeof raw!=='object'||Array.isArray(raw)||typeof id!=='string'||
+1639:     !/^([a-zA-Z0-9_-]{1,90})$/.test(id)||['__proto__','constructor','prototype'].includes(id))return null;
+1640:  if(typeof raw.id!=='string'||raw.id!==id||typeof raw.name!=='string'||raw.name.length>180)return null;
+1641:  const p=newProfile();p.id=id;
+1642:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
+1643:   if(typeof raw[k]==='string')p[k]=raw[k].slice(0,k==='school'?180:100);
+1644:  }
+1645:  p.diagnosed=raw.diagnosed===true;
+1646:  p.assigned=Number.isFinite(+raw.assigned)?Math.max(0,Math.min(12,Math.floor(+raw.assigned))):0;
+1647:  p.diagnosticScore=raw.diagnosticScore==null?null:(Number.isFinite(+raw.diagnosticScore)?Math.max(0,Math.min(100,+raw.diagnosticScore)):null);
+1648:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+1649:  for(const k of ['createdAt','lastActivity'])p[k]=Number.isFinite(raw[k])&&raw[k]>=0&&raw[k]<=Date.now()+86400000?raw[k]:Date.now();
+1650:  for(const k of ['correct','wrong']){
+=== SOURCE LINES 1710-1815 ===
+1710: }
+1711: </script>
+1712: <!-- V37: Recovery bridge: existing export/import work now; cloud restore remains disabled until verified -->
+1713: <style>
+1714: #ee-recovery-entry{position:static;border:1px solid #90dbff;border-radius:25px;background:linear-gradient(110deg,#095c8d,#16858a);color:white;padding:11px 15px;font:700 13px system-ui;box-shadow:0 6px 24px #083d6499;cursor:pointer;max-width:75vw}
+1715: #ee-recovery-dialog{position:fixed;inset:0;z-index:9998;background:#001b31aa;display:none;align-items:center;justify-content:center;padding:16px;direction:rtl;font:15px system-ui}
+1716: #ee-recovery-dialog.open{display:flex}
+1717: #ee-recovery-dialog .ee-panel{width:min(100%,540px);max-height:90vh;overflow:auto;border:2px solid #8ed7ec;border-radius:22px;background:#f6fbff;color:#17374b;padding:20px;box-shadow:0 12px 48px #021e3877}
+1718: #ee-recovery-dialog h2{font-size:22px;color:#084c75;margin:0 0 10px}
+1719: #ee-recovery-dialog p{line-height:1.7}
+1720: #ee-recovery-dialog .ee-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
+1721: #ee-recovery-dialog button{font:700 14px system-ui;padding:11px;border-radius:12px;border:0;cursor:pointer}
+1722: #ee-recovery-dialog .ee-action{background:#0b6a96;color:white}
+1723: #ee-recovery-dialog .ee-close{background:#e0eaf0;color:#103b52}
+1724: #ee-recovery-dialog .ee-note{border-right:4px solid #c48a14;padding:10px 12px;background:#fff4d9;border-radius:8px}
+1725: @media(max-width:400px){#ee-recovery-dialog .ee-actions{grid-template-columns:1fr}#ee-recovery-entry{width:100%;margin-top:8px}}
+1726: </style>
+1727: 
+1728: <div id="ee-recovery-dialog" role="dialog" aria-modal="true" aria-labelledby="ee-recovery-title">
+1729:  <section class="ee-panel">
+1730:  <h2 id="ee-recovery-title">🧭 حفظ واسترجاع تقدمي</h2>
+1731:  <p>يمكنك الآن حفظ ملف احتياطي يحتوي على تقدم الطلاب على جهازك واستيراده عند استخدام جهاز آخر.</p>
+1732:  <div class="ee-actions">
+1733:  <button type="button" class="ee-action" onclick="exportProgress()">⬇️ حفظ نسخة التقدم</button>
+1734:  <button type="button" class="ee-action" onclick="importProgress()">⬆️ استيراد نسخة محفوظة</button>
+1735:  </div>
+1736:  <div class="ee-note" id="ee-cloud-status">⏳ الاتصال بخادم STAGING...</div>
+1737:  <div id="ee-cloud-current" style="padding:9px;font-weight:700"></div>
+1738:  <div class="ee-cloud-grid">
+1739:   <section><h3>🔑 أول تسجيل للحفظ السحابي</h3>
+1740:   <p>اختَر إجابتين يصعب على الآخرين تخمينهما. احتفظ بالرمز الذي يظهر بعد التسجيل.</p>
+1741:   <label>سؤال 1: ما عنوان كتاب تختاره؟ <input id="ee-q1" maxlength="90" autocomplete="off" placeholder="إجابة لا تقل عن 5 أحرف"></label>
+1742:   <label>سؤال 2: ما عبارة خاصة تود تذكرها؟ <input id="ee-q2" maxlength="90" autocomplete="off" placeholder="إجابة مختلفة"></label>
+1743:   <button class="ee-action" type="button" onclick="eeCloudEnroll()">إنشاء رمز وحفظ الطالب الحالي</button></section>
+1744:   <section><h3>📲 استرجاع على جهاز آخر</h3>
+1745:   <label>رمز المعلم <input id="ee-restore-teacher" inputmode="numeric" autocomplete="off"></label>
+1746:   <label>رمز الطالب <input id="ee-restore-id" inputmode="numeric" maxlength="9" autocomplete="off"></label>
+1747:   <button class="ee-action" type="button" onclick="eeCloudChallenge()">إظهار السؤال العشوائي</button>
+1748:   <label id="ee-challenge-label" hidden>سؤال التحقق <span id="ee-challenge-text"></span><input id="ee-restore-answer" maxlength="150" autocomplete="off"></label>
+1749:   <button class="ee-action" type="button" id="ee-restore-confirm" hidden onclick="eeCloudRestore()">التحقق واسترجاع التقدم</button></section>
+1750:  </div>
+1751:  <p class="ee-note"><strong>STAGING فقط:</strong> اختبر بحسابات وهمية. بعد نجاح الاسترجاع على الجهاز الثاني سنراجع الحماية والتجهيز للإنتاج.</p>
+1752:  <p style="font-size:12px">النسخة الاحتياطية قد تحتوي على بيانات الطالب. احتفظ بها في مكان خاص، ولا تشاركها مع الآخرين.</p>
+1753:  <button type="button" class="ee-close" onclick="document.getElementById('ee-recovery-dialog').classList.remove('open')">إغلاق</button>
+1754:  </section>
+1755: </div>
+1756: <style>
+1757: #ee-recovery-dialog .ee-cloud-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+1758: #ee-recovery-dialog .ee-cloud-grid section{padding:12px;background:#ecf5fa;border:1px solid #a1cddd;border-radius:14px}
+1759: #ee-recovery-dialog .ee-cloud-grid h3{margin:0 0 10px;font-size:16px}
+1760: #ee-recovery-dialog .ee-cloud-grid label{display:block;font-size:13px;margin:9px 0}
+1761: #ee-recovery-dialog .ee-cloud-grid input{display:block;box-sizing:border-box;width:100%;margin:5px 0;border:1px solid #8fb8cc;border-radius:9px;padding:9px;font-size:16px;direction:auto}
+1762: #ee-recovery-dialog .ee-cloud-grid button{width:100%;background:#0b6a96;color:white}
+1763: @media(max-width:580px){#ee-recovery-dialog .ee-cloud-grid{grid-template-columns:1fr}}
+1764: </style>
+1765: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]s3Ell7MODDKiMIr0fEAwqZsqbOsh1VFTRi3aQWb9TpXg/exec?studentRecovery=1"></iframe>
+1766: <script>
+1767: (function(){
+1768: const frame=document.getElementById('ee-recovery-frame');
+1769: const status=document.getElementById('ee-cloud-status');
+1770: const KEY='EE_V38_RECOVERY_SESSIONS';
+1771: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
+1772: let ready=false;let pending={};let seq=0;let activeChallenge=null;let saving=false;let timer;
+1773: function setStatus(msg){status.textContent=msg}
+1774: function thisSession(){try{return sessions[active().id]||null}catch(_){return null}}
+1775: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
+1776: function show(){
+1777:  const p=typeof active==='function'?active():null,info=p&&thisSession();
+1778:  document.getElementById('ee-cloud-current').textContent=info?'رمز استرجاع الطالب الحالي: '+info.recoveryId+' — الحفظ السحابي مفعّل':'الطالب الحالي غير مسجّل للحفظ السحابي.';
+1779: }
+1780: window.addEventListener('message',function(event){
+1781:  if(event.source!==frame.contentWindow)return;
+1782:  const d=event.data||{};
+1783:  if(d.eeRecoveryBridge!==true)return;
+1784:  if(d.ready){ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}
+1785:  const item=pending[d.requestId];if(!item)return;
+1786:  delete pending[d.requestId];clearTimeout(item.timeout);
+1787:  d.error?item.reject(Error(d.error)):item.resolve(d.payload);
+1788: });
+1789: function rpc(action,payload){return new Promise((resolve,reject)=>{
+1790:  if(!ready){reject(Error('لم يتم الاتصال بالخادم. تأكد من الإنترنت وأعد فتح التطبيق.'));return;}
+1791:  const requestId='ee'+Date.now()+'_'+(++seq);
+1792:  const timeout=setTimeout(()=>{delete pending[requestId];reject(Error('انتهت مهلة الاتصال بالخادم'))},45000);
+1793:  pending[requestId]={resolve,reject,timeout};
+1794:  frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');
+1795: })}
+1796: function error(e){setStatus('⚠️ '+String(e&&e.message||e))}
+1797: window.eeCloudEnroll=async function(){
+1798:  try{
+1799:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
+1800:  if(thisSession())throw Error('هذا الطالب مسجّل بالفعل. رمز الاسترجاع ظاهر أعلاه.');
+1801:  const q1=document.getElementById('ee-q1').value.trim(),q2=document.getElementById('ee-q2').value.trim();
+1802:  if(q1.length<5||q2.length<5||q1.toLowerCase()===q2.toLowerCase())throw Error('أدخل إجابتين مختلفتين لا تقل كل واحدة عن خمسة أحرف.');
+1803:  setStatus('جار تسجيل الطالب وحفظ تقدمه...');
+1804:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
+1805:  if(!r||!r.ok)throw Error('تعذّر التسجيل');
+1806:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
+1807:  document.getElementById('ee-q1').value='';document.getElementById('ee-q2').value='';
+1808:  show();setStatus('✅ حُفظ تقدم الطالب على الخادم. احتفظ برمز الاسترجاع: '+r.recoveryId);
+1809:  }catch(e){error(e)}
+1810: };
+1811: window.eeCloudChallenge=async function(){
+1812:  try{
+1813:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
+1814:  setStatus('جار تجهيز سؤال التحقق...');
+1815:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};

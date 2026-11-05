@@ -36,14 +36,16 @@ if marker not in s:
   const d=event.data||{};
   if(d.eeRecoveryBridge!==true||d.bridgeNonce!==bridgeNonce)return;
   if(d.ready){bridgeOrigin=event.origin;ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}"""
-  listener=(r"window\\.addEventListener\\('message',function\\(event\\)\\{"
-            r"[\\s\\S]{0,750}?"
-            r"if\\(d\\.eeRecoveryBridge!==true\\)return;\\s*"
-            r"if\\(d\\.ready\\)\\{ready=true;setStatus\\('✅ متصل بخادم STAGING — للاختبارات فقط'\\);show\\(\\);return;\\}")
-  s,n=re.subn(listener,lambda _:new,s,count=1)
-  if n!=1:
-    ix=s.find("if(d.eeRecoveryBridge!==true)")
-    raise RuntimeError("Cannot identify expected bridge listener: "+repr(s[max(0,ix-90):ix+580]))
+  # Isolate this exact callback by its unique recovery event.
+  bridge_marker="if(d.eeRecoveryBridge!==true)return;"
+  if s.count(bridge_marker)!=1:raise RuntimeError("Unique recovery marker not found")
+  marker_pos=s.index(bridge_marker)
+  begin=s.rfind("window.addEventListener('message',function(event){",0,marker_pos)
+  ready_marker="if(d.ready){ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}"
+  finish=s.find(ready_marker,marker_pos)
+  if begin<0 or finish<0 or marker_pos-begin>1200:raise RuntimeError("Cannot locate recovery callback boundaries")
+  finish+=len(ready_marker)
+  s=s[:begin]+new+s[finish:]
   old="frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');"
   new="""const nested=frame.contentWindow&&frame.contentWindow.frames[0];
   if(!nested||!bridgeOrigin){clearTimeout(timeout);delete pending[requestId];reject(Error('تعذر تأمين اتصال STAGING'));return;}

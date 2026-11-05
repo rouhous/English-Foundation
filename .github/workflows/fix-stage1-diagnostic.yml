@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - scripts/fix_stage1_diagnostic.py
+      - scripts/fix_stage1_followup.py
       - .github/workflows/fix-stage1-diagnostic.yml
   workflow_dispatch:
 permissions:
@@ -15,13 +16,15 @@ jobs:
         with:
           persist-credentials: true
       - name: Audit and fix stage 1
-        run: python3 scripts/fix_stage1_diagnostic.py
+        run: |
+          python3 scripts/fix_stage1_diagnostic.py
+          python3 scripts/fix_stage1_followup.py
       - name: Commit verified application patch
         run: |
-          if ! git diff --quiet -- index.html; then
+          if ! git diff --quiet -- index.html diagnostics/stage1-qa.json; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add index.html
-            git commit -m "Fix diagnostic foundation placement and stage sublevel sequence"
+            git add index.html diagnostics/stage1-qa.json
+            git commit -m "Validate diagnostic question coverage and enforce placement unlocking"
             git push
           fi

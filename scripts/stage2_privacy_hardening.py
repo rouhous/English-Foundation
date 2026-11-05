@@ -20,7 +20,7 @@ if marker not in s:
  "profiles:Object.fromEntries(Object.entries(db.profiles).map(([id,profile])=>[id,{...profile,teacherCode:''}])),active:db.active",
  'Strip teacher code from exported backup')
  # Preserve the app's own local stored teacher code; exports are portable data, not login credentials.
- s=s.replace("function exportProgress(){let blob=", "// MEJ_STAGE2_PRIVACY_HARDENING_V2\\nfunction exportProgress(){let blob=",1)
+ s=s.replace("function exportProgress(){let blob=", "// MEJ_STAGE2_PRIVACY_HARDENING_V2\nfunction exportProgress(){let blob=",1)
  assert s.count(marker)==1
  assert 'profiles:db.profiles,active:db.active' not in s
  scripts=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)

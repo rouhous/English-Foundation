@@ -53,7 +53,8 @@ if marker not in s:
   if s.count(old)!=1:raise RuntimeError("Cannot identify client RPC")
   s=s.replace(old,new,1)
 assert s.count(marker)==1
-assert 'studentRecovery=1" src=' not in s
+assert 'data-staging-url="https://script.google.com/' in s
+assert 'src="about:blank"' in s
 assert "nested.postMessage({eeRecoveryRequest:true,bridgeNonce" in s
 with tempfile.TemporaryDirectory() as tmp:
  for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):

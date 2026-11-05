@@ -1,0 +1,27 @@
+name: Fix diagnostic placement and two-part progression
+on:
+  push:
+    paths:
+      - scripts/fix_stage1_diagnostic.py
+      - .github/workflows/fix-stage1-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Audit and fix stage 1
+        run: python3 scripts/fix_stage1_diagnostic.py
+      - name: Commit verified application patch
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Fix diagnostic foundation placement and stage sublevel sequence"
+            git push
+          fi

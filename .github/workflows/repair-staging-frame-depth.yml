@@ -1,0 +1,32 @@
+name: Repair STAGING Nested Google Frame Depth
+on:
+  push:
+    paths:
+      - scripts/fix_staging_deep_frame.py
+      - .github/workflows/repair-staging-frame-depth.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply guarded app fix
+        run: python3 scripts/fix_staging_deep_frame.py
+      - name: Validate image banks and app shell
+        run: python3 scripts/check_prelaunch_assets.py
+      - name: Commit verified app change
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Use deepest Google iframe for authenticated STAGING recovery requests"
+            git push
+          fi

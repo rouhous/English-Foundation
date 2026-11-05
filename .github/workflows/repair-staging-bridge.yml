@@ -1,0 +1,32 @@
+name: Repair existing STAGING Google recovery bridge
+on:
+  push:
+    paths:
+      - scripts/fix_staging_nested_bridge.py
+      - .github/workflows/repair-staging-bridge.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch existing app without changing local learning
+        run: python3 scripts/fix_staging_nested_bridge.py
+      - name: Ensure canonical assets remain present
+        run: python3 scripts/check_prelaunch_assets.py
+      - name: Save verified STAGING transport adjustment
+        run: |
+          if ! git diff --quiet -- index.html diagnostics/prelaunch-asset-validation.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html diagnostics/prelaunch-asset-validation.json
+            git commit -m "Fix nested Apps Script STAGING recovery handshake on GitHub Pages"
+            git push
+          fi

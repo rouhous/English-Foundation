@@ -1,0 +1,43 @@
+{
+  "status": "STAGE1_STATIC_CHECKS_PASSED",
+  "question_count": 2600,
+  "questions_by_stage": {
+    "0": 200,
+    "1": 200,
+    "2": 200,
+    "3": 200,
+    "4": 200,
+    "5": 200,
+    "6": 200,
+    "7": 200,
+    "8": 200,
+    "9": 200,
+    "10": 200,
+    "11": 200,
+    "12": 200
+  },
+  "diagnostic_eligible_by_stage": {
+    "0": 80,
+    "1": 164,
+    "2": 142,
+    "3": 130,
+    "4": 129,
+    "5": 129,
+    "6": 120,
+    "7": 120,
+    "8": 120,
+    "9": 120,
+    "10": 120,
+    "11": 120,
+    "12": 120
+  },
+  "placement_ceiling_checked": [
+    1,
+    12
+  ],
+  "placement_question_count": 24,
+  "two_parts_present": true,
+  "part_two_gated_by_first_part_mastery": true,
+  "foundation_zero_placement": true,
+  "note": "Static checks only; browser and end-to-end user acceptance still required."
+}

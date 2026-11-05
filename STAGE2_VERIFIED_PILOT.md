@@ -28,7 +28,7 @@ The school must approve student data collection, retention and access before any
 1. Prepare a **separate TEST Google Spreadsheet and Apps Script project** owned by the school. Do not overwrite or redeploy the existing live /exec project as a first test.
 2. Copy the repository's `Code.gs` to the test Apps Script project. In its script properties set `TEACHER_REGISTRATION_CODE` to a *test-only* secret; set `MEJ_V2_ENABLED=false` initially. Use a test-only `SPREADSHEET_ID` or attach the test Sheet.
 3. From the editor, run `mejV2InstallQuestionKeys_()` once. It imports 2,600 question IDs and answers to a protected `MEJ_V2_QuestionKeys` tab using the public bank source. **Do not publish that tab.** This function refuses to overwrite already-installed keys.
-4. In the *test project only*, set `MEJ_V2_ENABLED=true`. From the editor, call `mejV2IssueInvite_(1,'1A')` to obtain a one-time synthetic invite. Never publish invite codes or tokens in GitHub or screenshots.
+4. In the *test project only*, set `MEJ_V2_ENABLED=true`. From the editor, call `mejV2IssueInvite_(1,'1A','SCHOOL_A_CLASS_1A')` to obtain a one-time synthetic invite. Never publish invite codes or tokens in GitHub or screenshots.
 5. Test `mejV2Handle_({schema:'mej-verified-v2',action:'enroll',teacherCode:'<test-only-code>',studentName:'TEST STUDENT',grade:1,className:'1A',inviteCode:'<invite>'})` locally using synthetic information. Store the returned secret securely. Run `answer` twice with distinct event IDs and `summary`, then repeat an event ID; confirm the star count cannot rise on replay. Confirm an invalid token, another student's token, a locked second sublevel, and a grade-above-limit question are rejected.
 6. Before any external HTTP test, separately evaluate Apps Script CORS, authenticated response transport, rate limits, deployment restrictions, answer-key management, conflict recovery, device reauthentication, and data minimization. Do not make the service public until these checks pass.
 
@@ -44,3 +44,15 @@ The school must approve student data collection, retention and access before any
 - A separate audit before allowing any class-level rankings, which should be based on **server-calculated** totals only.
 
 **Release gate:** `MEJ_V2_ENABLED` must remain unset or `false` on the existing production deployment.
+
+## Stage 3 — Class-only rankings (code implemented, inactive)
+
+The verified pilot now offers an opt-in `leaderboard` action. Rankings count **server-verified stars** only. Students are grouped by an administrator-assigned `Cohort` identifier in addition to school grade and class; the same class name in different schools must always have distinct cohort identifiers. Issue a new single-use invitation using `mejV2IssueInvite_(grade, className, cohortId)`. Example: `mejV2IssueInvite_(9,'9A','BOYS_SCHOOL_A_G9A_EN')`.
+
+The requester must authenticate using their own student ID and device token. There is **no public leaderboard**. Responses contain only the rank, display name, stars, and an `isMe` marker for same-cohort students — no other student's ID, school level, answered questions, login token, or learning stage. Equal stars share a rank. A class larger than 100 students is rejected for pilot review.
+
+**Default OFF:** the `MEJ_V2_RANKING_ENABLED` script property is absent/false unless the school explicitly turns it on, and the verified-progress pilot must also be enabled. The legacy browser is not connected to this endpoint. The classroom ranking is therefore **not live or available to real learners**, even though the synthetic backend and display tests pass.
+
+**Preview only:** `reviews/stage3-ranking-preview.html` shows fictional students and their stars. It is not connected to any student record.
+
+Before activating either pilot flag, require school authorization for sharing students' display names within the class and confirm per-student authentication, a school-specific cohort ID, correct grade/class membership, server endpoint deployment, restricted transport, and end-to-end phone testing. Do not migrate or reuse old `Student_Progress` totals as verified ranking scores.

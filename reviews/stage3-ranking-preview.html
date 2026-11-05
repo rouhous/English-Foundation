@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My English Journey — Class Ranking Preview</title>
+<link rel="stylesheet" href="../../assets/class-ranking-v1.css">
+<style>
+body{margin:0;min-height:100vh;background:linear-gradient(160deg,#edf6ec,#f9f7e6);padding:24px 12px;font-family:system-ui,sans-serif}
+.preview-header{text-align:center;color:#174c36;margin:25px auto 12px;max-width:750px}
+.preview-header h1{font-size:clamp(21px,5vw,30px);margin:0 0 8px}
+.preview-header p{color:#65766a;line-height:1.8}
+.flag{display:inline-block;background:#fff1bc;padding:6px 12px;border-radius:20px;font-weight:800;font-size:13px;color:#73561a}
+.preview-controls{max-width:720px;margin:auto;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.preview-controls button{border:1px solid #c4d6c7;background:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;color:#1e543b}
+.preview-controls button:focus-visible{outline:3px solid #5c9967;outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="preview-header">
+<h1>🏝️ My English Journey — ترتيب طلاب صفي</h1>
+<p><span class="flag">عرض تجريبي بأسماء ونجوم وهمية</span></p>
+<p>هذا النموذج يوضح شكل ترتيب الطلاب في الفصل نفسه. الحسابات الحقيقية غير متصلة بهذه الصفحة.</p>
+</header>
+<div class="preview-controls">
+<button type="button" onclick="showPreview(0)">الطالب الأول</button>
+<button type="button" onclick="showPreview(1)">طالب آخر</button>
+<button type="button" onclick="MEJClassRanking.unavailable(document.getElementById('ranking'))">قبل تفعيل الحسابات</button>
+</div>
+<main id="ranking" aria-live="polite"></main>
+<script src="../../assets/class-ranking-v1.js"></script>
+<script>
+const students=[
+ {rank:1,name:'طالب تجريبي ١',stars:145},
+ {rank:2,name:'طالب تجريبي ٢',stars:120},
+ {rank:2,name:'طالب تجريبي ٣',stars:120},
+ {rank:4,name:'طالب تجريبي ٤',stars:86},
+ {rank:5,name:'طالب تجريبي ٥',stars:72}
+];
+function showPreview(me){
+ const entries=students.map((s,i)=>({...s,isMe:i===me}));
+ MEJClassRanking.render(document.getElementById('ranking'),{
+  ok:true,scope:'OWN_VERIFIED_CLASS',scoreVerification:'SERVER_CHECKED_PILOT',
+  className:'9A • نموذج وهمي',count:entries.length,entries
+ });
+}
+showPreview(0);
+</script>
+</body>
+</html>

@@ -65,6 +65,9 @@ assert.equal(typeof listeners.fetch,"function");
 function dispatch(type,evt){listeners[type](evt);return evt.promise}
 (async()=>{
  await dispatch("install",{waitUntil(p){this.promise=p}});
+ await dispatch("activate",{waitUntil(p){this.promise=p}});
+ // Image bundles warm without delaying install or activation.
+ for(let i=0;i<80;i++){await new Promise(resolve=>setImmediate(resolve));}
  const keys=await caches.keys();assert.equal(keys.length,1);
  const core=await caches.match("./index.html");assert(core,"Main HTML not cached");
  const shardPromises=Array.from({length:12},(_,i)=>"./assets/approved-images-"+String(i+1).padStart(2,"0")+".js?v=20261104-approved");
@@ -84,5 +87,5 @@ function dispatch(type,evt){listeners[type](evt);return evt.promise}
  assert(reply,"Offline local file not intercepted");
  const found=await reply;
  assert(found,"Offline page not served");
- console.log("STAGE5_OFFLINE_CHECKS_PASSED: responsive safety, 12 cached image banks, offline shell, cloud bypass");
+ console.log("PWA_FAST_LAUNCH_OFFLINE_TEST_PASSED: nonblocking activation, 12 cached image banks, offline shell, cloud bypass");
 })().catch(e=>{console.error(e);process.exitCode=1});

@@ -2,13 +2,13 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='english-explorer-fast-launch-20261105-v1';
+const CACHE='english-explorer-fast-launch-20261105-v2';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js'];
 const IMAGE_SHARDS=Array.from({length:12},(_,i)=>
- './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261104-approved');
+ './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261105-stage0-69');
 let warmStarted=false;
 async function warmPictures(){
  if(warmStarted)return;

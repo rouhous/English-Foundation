@@ -1,0 +1,47 @@
+name: Stage 6 final learner acceptance and release gate
+on:
+  push:
+    paths:
+      - scripts/run_stage6_learner_acceptance.py
+      - scripts/release_gate_stage6.py
+      - .github/workflows/stage6-release-gate.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated-browser test dependency
+        run: pip install playwright==1.58.0
+      - name: Validate app and verified scoring without student data
+        run: |
+          python3 scripts/check_prelaunch_assets.py
+          python3 scripts/test_stage2.py
+          node scripts/test_verified_pilot.js
+          node scripts/test_stage3_ranking_view.js
+          node scripts/test_stage4_offline_outbox.js
+          node scripts/test_stage5_offline.js
+          python3 scripts/run_stage6_learner_acceptance.py
+      - name: Produce honest GO/NO-GO report
+        if: always()
+        run: python3 scripts/release_gate_stage6.py
+      - name: Save acceptance diagnostics and decision
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/stage6-learner-browser.json diagnostics/stage6-release-gate.json diagnostics/prelaunch-asset-validation.json diagnostics/stage2-security-audit.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Stage 6 student acceptance and release blockers"
+            git push
+          fi

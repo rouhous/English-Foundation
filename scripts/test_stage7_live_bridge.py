@@ -68,10 +68,22 @@ try:
      result["google_inner_bridge_loaded"].append(inner.evaluate("""() => ({
        title:document.title,
        nonceBasedScript:document.documentElement.innerHTML.includes('bridgeNonce'),
+       nonceLength:(document.documentElement.innerHTML.match(/var nonce="([a-f0-9]*)";/)||[])[1]?.length||0,
+       googleScriptRunPresent:!!(window.google&&google.script&&google.script.run),
        isNested:window.parent!==window.top
      })"""))
     except Exception: pass
   result["staging_ready_message"]="متصل بخادم STAGING" in status_text
+  # Read-only synthetic message probe: verifies nested frame can post to the
+  # GitHub app top-level window. No credential or recovery data is included.
+  for inner in page.frames[1:]:
+   if "googleusercontent.com" in inner.url and inner.url.endswith(""):
+    try:
+     if inner.title()=="Recovery bridge":
+      inner.evaluate("""() => top.postMessage({eeRecoveryBridge:true,probeOnly:true},'https://rouhous.github.io')""")
+    except Exception: pass
+  page.wait_for_timeout(300)
+  result["observed_bridge_messages_after_probe"]=page.evaluate("window.__mejBridgeObservations||[]")[:5]
   result["script_errors"]=console_errors[:6]
   result["request_failures"]=request_failures[:8]
   result["google_responses"]=bridge_http[:12]

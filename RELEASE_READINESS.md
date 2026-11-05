@@ -31,3 +31,15 @@
 8. Re-run static asset validation; verify all 12 image shards load on published GitHub Pages.
 
 Current conclusion: **reviewed images integrated; app not yet certified for public student launch**.
+
+## Stage 2 — student scores (2026-11-05)
+
+The stage-2 GitHub workflow passed static tests (see `diagnostics/stage2-security-audit.json`). Browser `persist()` now derives the local star display from unique mastered question IDs; this prevents accidental local totals drifting from recorded mastery, **not intentional manipulation**.
+
+The repository's Google Apps Script `Code.gs` now validates progress-counter bounds and the correct-attempt relationship, ignores offline stale updates that would reduce previously saved stars, and labels all client reports `CLIENT_REPORTED_UNVERIFIED`.
+
+**Not live by default:** Updating `Code.gs` on GitHub does not update an existing Google Apps Script /exec deployment. Deploy the new script version only after copying the file into the correct school-owned Apps Script project, checking existing Sheet headers and running controlled test records. Do not change or clear student records during this step.
+
+**Not release-ready:** The teacher registration code is shared and is not per-student authentication. The browser exposes the quiz answer key; client activity and correct-response counts cannot be treated as trusted proof of learning. Do not enable a public student leaderboard or claim cheating prevention until a private server-side event ledger, unique student credentials, backend answer checks and privacy authorization are implemented and tested. Do not mix client-reported scores with future server-verified scores.
+
+Required acceptance: replay duplicate receipts, stale offline sync, malformed/fabricated stats, student impersonation attempts, multiple-device conflicts, and restored account permissions. No live student data tests without an approved school data-handling process.

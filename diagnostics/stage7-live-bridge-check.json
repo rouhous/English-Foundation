@@ -10,5 +10,46 @@
   "status_element_found": true,
   "status_text": "⏳ الاتصال بخادم STAGING...",
   "staging_ready_message": false,
-  "script_errors": []
+  "script_errors": [],
+  "request_failures": [],
+  "google_responses": [
+    {
+      "host": "script.google.com",
+      "status": 200
+    },
+    {
+      "host": "script.google.com",
+      "status": 200
+    },
+    {
+      "host": "script.google.com",
+      "status": 200
+    },
+    {
+      "host": "n-pcfywicmdk2dcmemys5q3uvdw5mdiqiv4wheija-0lu-script.googleusercontent.com",
+      "status": 200
+    },
+    {
+      "host": "n-pcfywicmdk2dcmemys5q3uvdw5mdiqiv4wheija-0lu-script.googleusercontent.com",
+      "status": 200
+    },
+    {
+      "host": "n-pcfywicmdk2dcmemys5q3uvdw5mdiqiv4wheija-0lu-script.googleusercontent.com",
+      "status": 200
+    },
+    {
+      "host": "script.google.com",
+      "status": 200
+    }
+  ],
+  "iframe_hosts": [
+    "script.google.com",
+    "n-pcfywicmdk2dcmemys5q3uvdw5mdiqiv4wheija-0lu-script.googleusercontent.com",
+    "n-pcfywicmdk2dcmemys5q3uvdw5mdiqiv4wheija-0lu-script.googleusercontent.com"
+  ],
+  "iframe_titles": [
+    "My English Journey STAGING Recovery",
+    "",
+    "Recovery bridge"
+  ]
 }

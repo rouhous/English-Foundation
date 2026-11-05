@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My English Journey — معاينة الحفظ والاسترجاع</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#153e36;background:#eef5ed}
+body{margin:0;padding:22px 12px}
+main{max-width:850px;margin:auto}h1{font-size:clamp(23px,5vw,34px);margin:6px 0 8px}
+.note{background:#fff0c6;border:1px solid #d9c37a;padding:11px;border-radius:13px;line-height:1.8}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:20px 0}
+.card{background:white;border:1px solid #d5e5d7;border-radius:20px;padding:18px;box-shadow:0 6px 25px #1c503019}
+h2{font-size:20px;margin:0 0 8px}.stars{font-size:30px;font-weight:850}
+button{border:0;background:#19745c;color:white;border-radius:12px;padding:11px 13px;font-weight:750;cursor:pointer;margin:4px}
+button:disabled{background:#a9b5ad;cursor:not-allowed}
+small{color:#52655a}.status{background:#f1f9f4;border-radius:12px;padding:10px;line-height:1.8}
+a{color:#166950}
+</style></head>
+<body><main>
+<h1>💾 حفظ التقدم واسترجاعه</h1>
+<p class="note"><strong>معاينة توضيحية فقط:</strong> تستخدم نجومًا وحسابًا وهميين في هذه الصفحة. لا تتصل بقاعدة بيانات الطلاب ولا تحفظ بيانات حقيقية، ولا تمثل اختبارًا للخادم المنشور.</p>
+<div class="row">
+<section class="card"><h2>📱 الجهاز الأول</h2>
+<p class="stars"><span id="first-stars">2</span> ⭐</p><p id="first-note">الحساب التجريبي موجود على هذا الهاتف.</p>
+<button id="answer" type="button">إجابة صحيحة جديدة</button>
+<button id="network" type="button">قطع الاتصال</button>
+<button id="sync" type="button">مزامنة الإجابات</button>
+<p class="status" id="pending">إجابات معلقة: 0</p></section>
+<section class="card"><h2>📲 الجهاز الثاني</h2>
+<p class="stars"><span id="second-stars">0</span> ⭐</p>
+<p id="second-note">لم يسترجع حسابه بعد.</p>
+<button id="recover" type="button">استرجاع الحساب التجريبي</button>
+<p class="status" id="token">رمز الجهاز الأول: صالح</p></section>
+</div>
+<p class="status" id="info">تم تحميل محاكاة ببيانات وهمية. جرّب قطع الإنترنت ثم حل سؤالًا ثم استعد الاتصال والمزامنة، وبعدها استرجع الحساب على الهاتف الثاني.</p>
+<p><a href="../">العودة إلى التطبيق</a></p>
+</main><script>
+let serverStars=2,pending=0,online=true,firstValid=true,secondValid=false;
+const el=id=>document.getElementById(id);
+function paint(){
+ el('first-stars').textContent=String(serverStars+(firstValid?pending:0));
+ el('second-stars').textContent=String(secondValid?serverStars:0);
+ el('pending').textContent='إجابات معلقة: '+pending;
+ el('network').textContent=online?'قطع الاتصال':'إعادة الاتصال';
+ el('token').textContent='رمز الجهاز الأول: '+(firstValid?'صالح':'ملغى بعد الاسترجاع');
+ el('answer').disabled=!firstValid;
+ el('sync').disabled=!firstValid;
+ el('recover').disabled=secondValid;
+ el('first-note').textContent=firstValid?'يمكنه الدراسة وإرسال النتائج.':'انتهت صلاحية هذا الجهاز بعد الاسترجاع.';
+ el('second-note').textContent=secondValid?'تم استرجاع حساب الطالب نفسه.':'لم يسترجع حسابه بعد.';
+}
+el('answer').addEventListener('click',()=>{if(firstValid){pending++;el('info').textContent='إجابة معلقة محفوظة في المحاكاة. النجوم المحلية غير معتمدة حتى تأكيد الخادم.';paint()}});
+el('network').addEventListener('click',()=>{online=!online;el('info').textContent=online?'عاد الاتصال. يمكن إرسال الإجابات المعلقة.':'لا يوجد اتصال. تظل الإجابات معلقة.';paint()});
+el('sync').addEventListener('click',()=>{if(!online){el('info').textContent='تعذرت المزامنة دون اتصال. لم تُحذف الإجابات المعلقة.';return}serverStars+=pending;pending=0;el('info').textContent='محاكاة تأكيد حفظ الإجابات على الخادم، مع منع إعادة احتسابها.';paint()});
+el('recover').addEventListener('click',()=>{secondValid=true;firstValid=false;pending=0;el('info').textContent='تم نقل صلاحية الحساب تجريبيًا إلى الجهاز الثاني مع الاحتفاظ بالنجوم الموثقة. أي إجابات لم تتم مزامنتها على الجهاز الأول لا تنتقل تلقائيًا.';paint()});
+paint();
+</script></body></html>

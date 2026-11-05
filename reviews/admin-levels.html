@@ -113,5 +113,6 @@ fetch('./admin-levels-catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 
  addOptions($('grade'),data.levels.map(l=>[String(l.grade),l.grade===0?'مرحلة التأسيس':'الصف '+l.grade+' — '+l.title]));
  addOptions($('type'),[...new Set(all().map(x=>x.type).filter(Boolean))].sort().map(t=>[t,t]));
  filter();
+ $('loadPics').click();
 }).catch(()=>{$('status').textContent='تعذر تحميل المحتوى. تأكد من اتصالك بالإنترنت.'});
 </script></body></html>

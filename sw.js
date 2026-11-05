@@ -2,11 +2,13 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='english-explorer-fast-launch-20261105-v3-admin-review';
+const CACHE='english-explorer-fast-launch-20261105-v4-review-routing';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
- './assets/class-ranking-route-v1.js'];
+ './assets/class-ranking-route-v1.js',
+ './reviews/owner-review.html','./reviews/admin-levels.html',
+ './reviews/learning.html','./reviews/admin-levels-catalog.json'];
 const IMAGE_SHARDS=Array.from({length:12},(_,i)=>
  './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261105-stage0-69');
 let warmStarted=false;
@@ -60,13 +62,18 @@ self.addEventListener('fetch',event=>{
  if(url.origin!==self.location.origin)return;
  if(request.mode==='navigate'){
   event.respondWith((async()=>{
-   const cached=await caches.match('./index.html');
+   // Use a separate cache key for each page. Never serve the main app as an
+   // admin/review page, and never cache query parameters as authorization.
+   const appRoot=new URL('./',self.location.href);
+   const pathname=url.pathname;
+   const mainPath=appRoot.pathname;
+   const isMain=pathname===mainPath||pathname===mainPath+'index.html';
+   const cacheKey=isMain?'./index.html':pathname.startsWith(mainPath)?'.'+pathname.slice(mainPath.length-1):null;
+   const cached=cacheKey?await caches.match(cacheKey):null;
    if(cached){
-    // Deliver cached shell first: network outages and slow connections must not
-    // leave the installed Android app on its platform splash screen.
     event.waitUntil(fetch(request).then(async response=>{
-     if(response.ok){
-      try{await(await caches.open(CACHE)).put('./index.html',response.clone())}
+     if(response.ok && cacheKey){
+      try{await(await caches.open(CACHE)).put(cacheKey,response.clone())}
       catch(_){}
      }
     }).catch(()=>{}));
@@ -74,8 +81,8 @@ self.addEventListener('fetch',event=>{
    }
    try{
     const response=await fetch(request);
-    if(response.ok){
-     try{await(await caches.open(CACHE)).put('./index.html',response.clone())}
+    if(response.ok && cacheKey){
+     try{await(await caches.open(CACHE)).put(cacheKey,response.clone())}
      catch(_){}
     }
     return response;

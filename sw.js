@@ -1,5 +1,5 @@
 // English Explorer PWA – core offline cache, no caching of Google reporting requests.
-const CACHE='english-explorer-approved-vocabulary-20261105-stage2-v1';
+const CACHE='english-explorer-test-reset-20261105-v1';
 const CORE=['./','./mobile-home-fix.css','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));

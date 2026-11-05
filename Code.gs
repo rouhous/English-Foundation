@@ -494,7 +494,7 @@ function mejV2Handle_(d){
   mejV2RequireEnabled_();
   if(!d||d.schema!==MEJ_V2_SCHEMA)throw new Error('INVALID_V2_REQUEST');
   const action=String(d.action||'');
-  if(!['enroll','answer','summary','leaderboard','recover','rotateRecovery'].includes(action))throw new Error('INVALID_V2_ACTION');
+  if(!['enroll','answer','summary','progress','leaderboard','recover','rotateRecovery'].includes(action))throw new Error('INVALID_V2_ACTION');
   const lock=LockService.getScriptLock();lock.waitLock(20000);
   try {
     const t=mejV2Tables_();
@@ -547,6 +547,9 @@ function mejV2Handle_(d){
     if(action==='leaderboard'){
       mejV2RequireRankingEnabled_();
       return mejV2Leaderboard_(t,user);
+    }
+    if(action==='progress'){
+      return mejV2Snapshot_(t,studentId);
     }
     if(action==='summary'){
       return {ok:true,studentId,stars:mejV2Stars_(t.mastery,studentId),
@@ -654,4 +657,28 @@ function mejV2Leaderboard_(tables,requestingStudent){
     throw new Error('STUDENT_NOT_IN_COHORT');
   return {ok:true,pilot:true,scope:'OWN_VERIFIED_CLASS',className,
     count:entries.length,entries,scoreVerification:'SERVER_CHECKED_PILOT'};
+}
+
+
+/**
+ * STAGE 4 — authenticated device restoration snapshot.
+ * Returns mastery COUNTS for the requesting student only. No answers, token,
+ * names of classmates, or client-submitted totals. Diagnostic placement and
+ * draft writing are not yet stored in this pilot and cannot be restored here.
+ */
+function mejV2Snapshot_(tables,studentId){
+  const mastered=mejV2Rows_(tables.mastery).filter(function(row){
+    return String(row[0])===String(studentId)&&
+      /^L(?:[0-9]|1[0-2])-[0-9]{3}$/.test(String(row[1]));
+  }).map(function(row){
+    return {questionId:String(row[1]),
+      correctCount:Math.min(2,Math.max(0,Number(row[2])||0))};
+  });
+  if(mastered.length>2600)throw new Error('PROGRESS_SNAPSHOT_OVERSIZE');
+  return {
+    ok:true,pilot:true,studentId:String(studentId),
+    stars:mastered.filter(function(r){return r.correctCount>=2}).length,
+    mastered,scoreVerification:'SERVER_CHECKED_PILOT',
+    scope:'OWN_STUDENT_PROGRESS'
+  };
 }

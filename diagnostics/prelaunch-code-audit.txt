@@ -1,43 +1,43 @@
 ## question_store
-1033: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
-1050: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1100:   let text=q.audio||q.word||'';
-1263: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-1284:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
-1335: function learnLevel(g,part=null){if(!checkAccess(g))return;let items=(part?mejStageQuestions(g,part):byGrade[g]).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
-1336: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
-1341: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
+1047: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
+1064: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
+1121:   let text=q.audio||q.word||'';
+1284: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
+1305:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+1356: function learnLevel(g,part=null){if(!checkAccess(g))return;let items=(part?mejStageQuestions(g,part):byGrade[g]).filter(q=>q.word&&q.type==='Vocabulary');let seen=new Set;items=items.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true}).slice(0,40);
+1357: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
+1362: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
 MATCHED_LINES: 8
 ## learning_render
-1045: function active(){return db.profiles[db.active]};
-1162: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+1059: function active(){return db.profiles[db.active]};
+1183: function home(){const p=active();document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
 MATCHED_LINES: 2
 ## data_security
 761:  .journey-v23 .j26-status .j26-stars{grid-column:2;grid-row:1}
 781: .journey-v23 .j26-count,.journey-v23 .j26-stars{font-weight:800;font-size:13px;white-space:nowrap}
-1029: const ENDPOINT='[GOOGLE_SCRIPT_ENDPOINT]/exec';
-1034: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
-1036:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
-1042:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
-1048: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
-1210:  modal.id='journeySettingsModal';modal.className='journey-modal';
-1232:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
-1535:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1579:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
-1595:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
-1601:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
-1718: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
-1724: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
-1728: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
-1752:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
-1757:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
-1759:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
-1766:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
-1768:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
-1779:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
-1783:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
-1784:  localStorage.setItem(DBKEY,JSON.stringify(db));
-1793:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
+1043: const ENDPOINT='[GOOGLE_SCRIPT_ENDPOINT]/exec';
+1048: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
+1050:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
+1056:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
+1062: function scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeout(()=>sendReport(),2100)}
+1231:  modal.id='journeySettingsModal';modal.className='journey-modal';
+1253:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
+1556:  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1600:   try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
+1616:  for(const k of ['name','grade','school','className','teacherCode','diagnosticDate']){
+1622:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+1739: <iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="[GOOGLE_SCRIPT_ENDPOINT]/exec?studentRecovery=1"></iframe>
+1745: let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
+1749: function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
+1773:  const p=active();if(!p||!p.name||!p.teacherCode)throw Error('سجّل اسم الطالب ورمز المعلم أولًا.');
+1778:  const r=await rpc('enroll',{teacherCode:p.teacherCode,profile:p,questions:[{id:'q1',answer:q1},{id:'q2',answer:q2}]});
+1780:  storeSession(p.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:p.teacherCode});
+1787:  const teacherCode=document.getElementById('ee-restore-teacher').value.trim(),recoveryId=document.getElementById('ee-restore-id').value.trim();
+1789:  const r=await rpc('challenge',{teacherCode,recoveryId});activeChallenge={...r,teacherCode,recoveryId};
+1800:  const r=await rpc('restore',{teacherCode:activeChallenge.teacherCode,recoveryId:activeChallenge.recoveryId,challengeId:activeChallenge.challengeId,answer});
+1804:  storeSession(r.profile.id,{recoveryId:r.recoveryId,deviceToken:r.deviceToken,revision:r.revision,teacherCode:activeChallenge.teacherCode});
+1805:  localStorage.setItem(DBKEY,JSON.stringify(db));
+1814:  const r=await rpc('save',{teacherCode:session.teacherCode,recoveryId:session.recoveryId,deviceToken:session.deviceToken,revision:session.revision,profile:p});
 MATCHED_LINES: 25
 ## viewport
 586: /* Right-to-left order for all viewport sizes: home, levels, skills, diagnosis, preview; launch at far left. */
@@ -59,15 +59,16 @@ MATCHED_LINES: 25
 990:  #app .mobile-ocean-v31>.m31-art{
 1000:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
 1008:  #app .mobile-ocean-v31>.m31-art>img.m31-boat-restored{
-1163: <section class="mobile-ocean-v31" aria-label="My English Journey home">
-1165:  <div class="m31-head">
-1173:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
-MATCHED_LINES: 22
+1028: <link rel="stylesheet" href="./mobile-home-fix.css?v=20261104-release">
+1184: <section class="mobile-ocean-v31" aria-label="My English Journey home">
+1186:  <div class="m31-head">
+1194:  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
+MATCHED_LINES: 23
 
 ## summary
-index_bytes: 4089244
+index_bytes: 4090649
 questions_occurrences: 12
-has_mobile_css_link: False
+has_mobile_css_link: True
 has_mej_home_mobile_patch: False
 
 ## key_functions_full
@@ -98,7 +99,7 @@ function currentIsland(p=active()){if(Number.isInteger(Number(p.journeyIsland))&
 function islandBadges(g,p=active()){let m=countMaster(g,p);return JOURNEY_BADGES.map(([em,name],i)=>({em,name,earned:m>=(i+1)*20,target:(i+1)*20}))}
 function voyageArt(){return `<div class="voyage-scene" id="voyageScene" role="img" aria-label="طفل عماني يقود سفينة خشبية بعلم عمان باتجاه جزر تعليم الإنجليزية"><img src="data:image/webp;base64,UklGRvZKAQBXRUJQVlA4IOpKAQBQ1wSdASqtA8wBPm0ukkYkIqGpLfN9SSANiWpse4gUyWANkcBlD1TWLI8QOmjj/zt/D/z37lf5H92PlP4569/bP3n/L/8L/GfuT9yn8vrM97/5fly+t/zv/f/0f5QfML/hf/X/Zf7P4c/0r/P/+v/R/vh9Bv65/9b/I/6H/3f6b6Qf+j9vffJ/hf/J6mf65/s//n/t/+Z8Ov/a/cn3s/3X/oftf/t/kM/sP+Y/8v5//HZ///dr/0//n///uN/1z/o//f17P3a/5Xy8/2P/t/un/x/kj/aD/3/6f9//kA///t28y/Cp8l/of+d+Yvnb+RfX/7P+//57/u/5H3YP+j/R+ZHsf/2f771M/m35k/o/5D/S+6b/C/9f+y8vfy/+a/8f+l9hf8s/p3+8/wH5KfFj+d4nu7f9f0Kfe/8P+1Pku/+PrL+tf8T/0etD/B/+D2w/7Hlr/1fUT/xnon/7X/1/5H5z/GT8u/4P/2/23wO/zj/Af9wbayKP9tNz6vIAJ10TsRdHgkvaKQWRnGU4+0MWJDdXEWFOO6XWVbA93vaIGyWQhTVUxLbkhwKlAzS64YqROigY89JVr0JXn7qdm5JEFxt/3vYajU5dfR/309pr+bVoWt0fC7D26c56pttMjXQOiJ7OUnItf/FHKgt7DnzH37k60ug0B0wtcr9OzuSQLG22O7WF7Ah0VBJe9c6NJAi5H7wID8ljzFXMUy2O30eX6i/QPP6LBYCE/3AUXTp5xIABSeoiwvru/ephALxiHbtufHedGpTWnBWgv2dANijXAYGu5ntOlQ+e/SXB6mvUfgAERx/T+7eET+/Me9jFk3wXEWe5YRInIImA9kNvC/aKeJWs9pWCBMVrmQQQciBVKVA+2vFROjvvJ2l+k3RZDTWim+/mQbP5W+cJQSp9TnEavZr2apUQk1UfCpBC/fO1TRdEDzvnjcFeI680qY55UBz4zg962ivqQ+hMhGCKUasTQDWkKe8VMy25IeNuCrLGlO+22rCWhE7KtM9j+Ae9i4TOi0zv/xtX6GHj/L3f/1qY5bKg05HpE3q7YjOMLrFcCKXcsT9GmhWh3Rau3zsAEfYNszB7auz9+e8vjxzDIdYnnMiYce24M6xGUgam56/atDCCJfheiRoBkfSnB3Y5yfWI/PHwFeK72ev7bVURadjzHwnSBab6J/S5/G5qLKLpLeZGMyI/49JQz5O0ytMqHGwuUiZGKfEJC9FV5oEGdJ8mD30HtZvmA8belrrKqMBU
 START function imageHtml(
-function imageHtml(word,size='standard'){let src=realPhoto(word);return src?`<img src="${src}" alt="${esc(word)}" loading="lazy">`:''}
+function imageHtml(word,size='standard'){let src=mejApprovedPhoto(word);return src?`<img src="${src}" alt="${esc(word)}" loading="lazy">`:''}
 function speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}
 
 // Give beginner learners bilingual procedural guidance without revealing an answer.
@@ -124,4 +125,54 @@ function beginnerGuide(q){
   return `<div class="bi-guide" role="note"><div class="guide-en" lang="en">🇬🇧 ${esc(guide[0])}</div><div class="guide-ar" lang="ar">🇴🇲 ${esc(guide[1])}</div></div>`;
 }
 // Only questions that actually test listening or sound blending may speak before the answer.
-// This avoids revealing the solution in spelling, grammar, translation, pictur
+// This avoids revealing the solution in spelling, grammar, translation,
+
+## stage1_diagnostic_functions
+FUNCTION function permitted( @ 1068
+function permitted(g){return Number(g)===0 || (active().diagnosed&&Number(g)<=maxAllowed())}
+FUNCTION function checkAccess( @ 1283
+function checkAccess(g){if(!permitted(g)){toast('المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
+FUNCTION function beginStagePart( @ 1286
+function beginStagePart(g,part){if(!checkAccess(g))return;const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
+FUNCTION function levels( @ 1287
+function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" onclick="beginStagePart(${g},${part})">▶ لعب</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
+// The school grade limits both placement questions and the suggested placement level.
+// "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
+// An unselected grade must be saved before a placement attempt.
+FUNCTION function diagnosticLanding( @ 1311
+function diagnosticLanding(){
+  const p=active(),cap=placementCeiling(p);
+  const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
+  const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
+  document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('home')">🏠 العودة إلى الرئيسية</button></div></section>`;
+}
+FUNCTION function startDiagnostic( @ 1317
+function startDiagnostic(){
+  const p=active();
+  if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
+  const cap=placementCeiling(p);
+  if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
+  const ids=placementPlan(cap,24);
+  activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
+  displayQuestion();
+}
+FUNCTION function beginLevel( @ 1326
+function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let pool=byGrade[g].filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
+FUNCTION function choose( @ 1335
+function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
+FUNCTION function submitTyped( @ 1336
+function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
+FUNCTION function skipQuestion( @ 1342
+function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
+FUNCTION function endSession( @ 1345
+function endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);
+if(s.kind==='diagnostic'){
+  // approximate placement, never claims standardized grade or CEFR test.
+  const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
+  let grade=1;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
+  // Cap the placement recommendation to the registered grade used at test start.
+  const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
+  grade=Math.min(ceiling,grade);
+  p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
+}else persist();activeSession=null;
+document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستويات من 1 إلى ${s.placed} متاحة. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ رحلة جديدة بعد إتقان 200 عنصر في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('levels')">خريطة المستويات</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade})">جولة جديدة</button>`:''}</div></div>`}

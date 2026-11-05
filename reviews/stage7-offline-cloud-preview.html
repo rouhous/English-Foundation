@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My English Journey — تجربة المزامنة في المرحلة السابعة</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;background:#f4f8f1;color:#193d30}
+*{box-sizing:border-box}body{margin:0;padding:18px}
+main{max-width:720px;margin:auto}h1{font-size:clamp(23px,5vw,32px)}
+.note{background:#fff4d9;padding:14px;border-radius:14px;border:1px solid #ead39a;line-height:1.8}
+section{background:white;border:1px solid #dceade;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 8px 30px #153e2812}
+.btn{border:0;border-radius:12px;background:#146b4e;color:white;font-weight:700;padding:12px 14px;cursor:pointer;margin:4px;min-height:44px}
+.btn.alt{background:#e8f2eb;color:#195037}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{border-radius:40px;background:#ecf5ee;padding:8px 14px;font-weight:700}
+.flex{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.big{font-weight:900;font-size:28px}small{color:#587064}#log{line-height:1.8;min-height:75px}a{color:#126548}
+</style></head><body><main>
+<h1>☁️ المزامنة دون تعطيل التعلم</h1>
+<p class="note"><strong>تجربة توضيحية فقط:</strong> حساب ونجوم وهمية. لا يتم الاتصال بحسابات الطلاب، ولا توجد رموز دخول حقيقية في الصفحة. المزامنة الموثقة على الخادم لم تُفعّل في التطبيق العام بعد.</p>
+<section class="flex"><div><small>حالة الإنترنت التجريبية</small><div class="big" id="connection">متصل</div></div>
+<button class="btn alt" id="network">قطع الاتصال</button></section>
+<section><div class="flex"><div><small>نجوم أكدها الخادم التجريبي</small><div class="big"><span id="stars">3</span> ⭐</div></div><div><small>إجابات تنتظر المزامنة</small><div class="big" id="pending">0</div></div></div>
+<div class="pills"><span class="pill" id="state">المزامنة مكتملة</span></div>
+<p><button class="btn" id="answer">إجابة صحيحة جديدة</button><button class="btn alt" id="sync">مزامنة الآن</button></p></section>
+<section><strong>سجل التجربة</strong><p id="log" aria-live="polite">يمكنك حل أسئلة أثناء قطع الاتصال؛ ستبقى معلقة حتى عودة الشبكة.</p></section>
+<p><a href="../">العودة إلى التطبيق</a></p>
+</main><script>
+let online=true,stars=3,pending=0;
+const $=id=>document.getElementById(id);
+function render(){
+ $('connection').textContent=online?'متصل':'غير متصل';
+ $('network').textContent=online?'قطع الاتصال':'إعادة الاتصال';
+ $('stars').textContent=stars;
+ $('pending').textContent=pending;
+ $('state').textContent=!online?'📴 محفوظ محليًا':pending?'⏳ بانتظار المزامنة':'✅ تمت المزامنة';
+}
+function sync(){
+ if(!online){$('log').textContent='لا يوجد اتصال. الإجابات المعلقة محفوظة في هذه المحاكاة.';return}
+ if(!pending){$('log').textContent='لا توجد إجابات معلقة.';return}
+ stars+=pending;
+ const saved=pending;pending=0;
+ $('log').textContent='تم في المحاكاة تأكيد '+saved+' إجابة من الخادم وإضافتها إلى النجوم مرة واحدة فقط.';
+ render();
+}
+$('answer').addEventListener('click',()=>{
+ pending++;$('log').textContent='سُجلت إجابة محلية جديدة. لن تُعتمد نجمتها حتى يصل تأكيد الخادم.';render();
+ if(online)sync();
+});
+$('network').addEventListener('click',()=>{
+ online=!online;
+ $('log').textContent=online?'عاد الاتصال: تبدأ الآن محاكاة مزامنة الإجابات المعلقة.':'انقطع الاتصال: يستمر الطالب في التعلم.';
+ render();if(online)sync();
+});
+$('sync').addEventListener('click',sync);render();
+</script></body></html>

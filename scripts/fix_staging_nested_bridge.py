@@ -36,10 +36,10 @@ if marker not in s:
   const d=event.data||{};
   if(d.eeRecoveryBridge!==true||d.bridgeNonce!==bridgeNonce)return;
   if(d.ready){bridgeOrigin=event.origin;ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}"""
-  listener=(r"window\.addEventListener\('message',function\(event\)\{\s*"
-            r"if\(event\.source!==frame\.contentWindow\)return;"
-            r"[\s\S]{0,480}?"
-            r"if\(d\.ready\)\{ready=true;setStatus\('✅ متصل بخادم STAGING — للاختبارات فقط'\);show\(\);return;\}")
+  listener=(r"window\\.addEventListener\\('message',function\\(event\\)\\{"
+            r"[\\s\\S]{0,750}?"
+            r"if\\(d\\.eeRecoveryBridge!==true\\)return;\\s*"
+            r"if\\(d\\.ready\\)\\{ready=true;setStatus\\('✅ متصل بخادم STAGING — للاختبارات فقط'\\);show\\(\\);return;\\}")
   s,n=re.subn(listener,lambda _:new,s,count=1)
   if n!=1:
     ix=s.find("if(d.eeRecoveryBridge!==true)")

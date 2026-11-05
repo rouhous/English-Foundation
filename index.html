@@ -1788,6 +1788,17 @@ const frame=document.getElementById('ee-recovery-frame');
  // HTML Service runs in a nested googleusercontent iframe, not the outer
  // script.google.com wrapper. Bind replies to this page with a random nonce.
  const bridgeNonce=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');
+ // MEJ_STAGING_BRIDGE_DEEP_FRAME_V2
+ // Google HTML Service may nest script.googleusercontent inside another
+ // sandboxed iframe. All WindowProxy accesses are cross-origin-safe.
+ function actualBridgeWindow(){
+   let win=frame.contentWindow;
+   for(let depth=0;depth<4;depth++){
+     try{if(!win||win.frames.length===0)break;win=win.frames[0];}
+     catch(_){break}
+   }
+   return win;
+ }
  let bridgeOrigin='';
  const trustedBridgeOrigin=origin=>/^https:\/\/[a-z0-9-]+-script\.googleusercontent\.com$/.test(origin);
  frame.src=frame.dataset.stagingUrl+'&bridgeNonce='+bridgeNonce;
@@ -1802,7 +1813,7 @@ function show(){
  document.getElementById('ee-cloud-current').textContent=info?'رمز استرجاع الطالب الحالي: '+info.recoveryId+' — الحفظ السحابي مفعّل':'الطالب الحالي غير مسجّل للحفظ السحابي.';
 }
 window.addEventListener('message',function(event){
-  const nested=frame.contentWindow&&frame.contentWindow.frames[0];
+  const nested=actualBridgeWindow();
   if(!nested||event.source!==nested||!trustedBridgeOrigin(event.origin))return;
   const d=event.data||{};
   if(d.eeRecoveryBridge!==true||d.bridgeNonce!==bridgeNonce)return;
@@ -1816,7 +1827,7 @@ function rpc(action,payload){return new Promise((resolve,reject)=>{
  const requestId='ee'+Date.now()+'_'+(++seq);
  const timeout=setTimeout(()=>{delete pending[requestId];reject(Error('انتهت مهلة الاتصال بالخادم'))},45000);
  pending[requestId]={resolve,reject,timeout};
- const nested=frame.contentWindow&&frame.contentWindow.frames[0];
+ const nested=actualBridgeWindow();
   if(!nested||!bridgeOrigin){clearTimeout(timeout);delete pending[requestId];reject(Error('تعذر تأمين اتصال STAGING'));return;}
   nested.postMessage({eeRecoveryRequest:true,bridgeNonce,requestId,action,payload},bridgeOrigin);
 })}

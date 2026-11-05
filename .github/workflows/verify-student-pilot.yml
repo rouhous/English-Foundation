@@ -5,6 +5,8 @@ on:
       - Code.gs
       - scripts/test_verified_pilot.js
       - scripts/test_stage3_ranking_view.js
+      - scripts/test_stage4_offline_outbox.js
+      - assets/verified-offline-outbox-v1.js
       - assets/class-ranking-v1.js
       - assets/class-ranking-v1.css
       - reviews/stage3-ranking-preview.html
@@ -30,3 +32,7 @@ jobs:
         run: |
           node --check assets/class-ranking-v1.js
           node scripts/test_stage3_ranking_view.js
+      - name: Test offline pending-answer queue (synthetic only)
+        run: |
+          node --check assets/verified-offline-outbox-v1.js
+          node scripts/test_stage4_offline_outbox.js

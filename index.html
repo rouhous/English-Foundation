@@ -1779,11 +1779,18 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost'
 #ee-recovery-dialog .ee-cloud-grid button{width:100%;background:#0b6a96;color:white}
 @media(max-width:580px){#ee-recovery-dialog .ee-cloud-grid{grid-template-columns:1fr}}
 </style>
-<iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" src="https://script.google.com/macros/s/AKfycbwx9rTHXR5bRiP7qAQ7wVyEfZs3Ell7MODDKiMIr0fEAwqZsqbOsh1VFTRi3aQWb9TpXg/exec?studentRecovery=1"></iframe>
+<iframe title="STAGING recovery connection" id="ee-recovery-frame" hidden referrerpolicy="no-referrer" data-staging-url="https://script.google.com/macros/s/AKfycbwx9rTHXR5bRiP7qAQ7wVyEfZs3Ell7MODDKiMIr0fEAwqZsqbOsh1VFTRi3aQWb9TpXg/exec?studentRecovery=1" src="about:blank"></iframe>
 <script>
 (function(){
 const frame=document.getElementById('ee-recovery-frame');
-const status=document.getElementById('ee-cloud-status');
+ const status=document.getElementById('ee-cloud-status');
+ // MEJ_STAGING_NESTED_BRIDGE_NONCE_V1
+ // HTML Service runs in a nested googleusercontent iframe, not the outer
+ // script.google.com wrapper. Bind replies to this page with a random nonce.
+ const bridgeNonce=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');
+ let bridgeOrigin='';
+ const trustedBridgeOrigin=origin=>/^https:\/\/[a-z0-9-]+-script\.googleusercontent\.com$/.test(origin);
+ frame.src=frame.dataset.stagingUrl+'&bridgeNonce='+bridgeNonce;
 const KEY='EE_V38_RECOVERY_SESSIONS';
 let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_){}
 let ready=false;let pending={};let seq=0;let activeChallenge=null;let saving=false;let timer;
@@ -1795,10 +1802,11 @@ function show(){
  document.getElementById('ee-cloud-current').textContent=info?'رمز استرجاع الطالب الحالي: '+info.recoveryId+' — الحفظ السحابي مفعّل':'الطالب الحالي غير مسجّل للحفظ السحابي.';
 }
 window.addEventListener('message',function(event){
- if(event.source!==frame.contentWindow || !['https://script.google.com','https://script.googleusercontent.com'].includes(event.origin))return;
- const d=event.data||{};
- if(d.eeRecoveryBridge!==true)return;
- if(d.ready){ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}
+  const nested=frame.contentWindow&&frame.contentWindow.frames[0];
+  if(!nested||event.source!==nested||!trustedBridgeOrigin(event.origin))return;
+  const d=event.data||{};
+  if(d.eeRecoveryBridge!==true||d.bridgeNonce!==bridgeNonce)return;
+  if(d.ready){bridgeOrigin=event.origin;ready=true;setStatus('✅ متصل بخادم STAGING — للاختبارات فقط');show();return;}
  const item=pending[d.requestId];if(!item)return;
  delete pending[d.requestId];clearTimeout(item.timeout);
  d.error?item.reject(Error(d.error)):item.resolve(d.payload);
@@ -1808,7 +1816,9 @@ function rpc(action,payload){return new Promise((resolve,reject)=>{
  const requestId='ee'+Date.now()+'_'+(++seq);
  const timeout=setTimeout(()=>{delete pending[requestId];reject(Error('انتهت مهلة الاتصال بالخادم'))},45000);
  pending[requestId]={resolve,reject,timeout};
- frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');
+ const nested=frame.contentWindow&&frame.contentWindow.frames[0];
+  if(!nested||!bridgeOrigin){clearTimeout(timeout);delete pending[requestId];reject(Error('تعذر تأمين اتصال STAGING'));return;}
+  nested.postMessage({eeRecoveryRequest:true,bridgeNonce,requestId,action,payload},bridgeOrigin);
 })}
 function error(e){setStatus('⚠️ '+String(e&&e.message||e))}
 window.eeCloudEnroll=async function(){

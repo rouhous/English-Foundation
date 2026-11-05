@@ -1,0 +1,35 @@
+name: Stage 5 real offline Chromium check
+on:
+  push:
+    paths:
+      - scripts/run_stage5_offline_browser.py
+      - .github/workflows/stage5-real-offline.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser driver (using preinstalled system Chrome)
+        run: pip install playwright==1.58.0
+      - name: Run offline browser test
+        run: python scripts/run_stage5_offline_browser.py
+      - name: Commit offline test diagnostics
+        if: always()
+        run: |
+          if [ -f diagnostics/stage5-offline-browser.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add diagnostics/stage5-offline-browser.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Record offline browser test after caching curated image banks"
+              git push
+            fi
+          fi

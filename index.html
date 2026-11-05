@@ -1575,7 +1575,7 @@ async function checkSheetConnection(){
  p.syncStatus='⏳ نفحص إصدار خدمة استقبال التقارير...';if(el)el.textContent=p.syncStatus;
  const status=await testReceiverHealth();
  if(!status){p.syncStatus='❌ لم يستجب رابط الخدمة لفحص الاتصال. تأكد من نشر Web App بصلاحية Anyone وإمكانية الوصول إليه من المتصفح.';}
- else if(status.version!==RECEIVER_EXPECTED_VERSION){p.syncStatus='⚠️ الخدمة تعمل لكنها بإصدار قديم أو غير مطابق ('+(status.version||'غير معروف')+'). افتح Deploy ← Manage deployments ← Edit ← New version ← Deploy.';}
+ else if(![RECEIVER_EXPECTED_VERSION,'2026-11-05-unverified-scores-v3'].includes(status.version)){p.syncStatus='⚠️ الخدمة تعمل لكنها بإصدار قديم أو غير مطابق ('+(status.version||'غير معروف')+'). افتح Deploy ← Manage deployments ← Edit ← New version ← Deploy.';}
  else if(!status.configured){p.syncStatus='❌ تم الوصول إلى الخدمة، لكن جدول البيانات غير مربوط. تحقق من SPREADSHEET_ID وصلاحيات السكربت.';}
  else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). '+(status.scoreVerification==='SERVER_VERIFIED'?'الخادم يعلن تحقق النتائج؛ يلزم اختبار مستقل قبل اعتمادها.':'⚠️ النتائج غير موثقة على الخادم، ولا تُستخدم لترتيب الطلاب.');}
  if(el)el.textContent=p.syncStatus;

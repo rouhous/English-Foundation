@@ -1,3 +1,11 @@
+## Verified existing STAGING bridge connectivity — 2026-11-05
+
+**LIVE READ-ONLY BROWSER CHECK PASSED.** The existing `English-Explorer-Backend` STAGING project deployed the corrected Google HTML Service recovery bridge. The original GitHub Pages app now binds a fresh 128-bit nonce to its nested Google frame, validates reply origins and source, and sends replies through the deepest HTML-service frame.
+
+The isolated Chromium browser reported **`STAGE7_LIVE_BRIDGE_RPC_PASSED`** in [diagnostics/stage7-live-bridge-check.json](diagnostics/stage7-live-bridge-check.json). It confirmed both a server-originated ready message and a *read-only* client request that the server rejected as `INVALID_ACTION`, without reading or writing a student record.
+
+**Not tested:** authorized enrollment with the real staging teacher code, a write to the staging recovery spreadsheet, revision-based save and second-device restore. Nor has the newer separate verified v2 score ledger been merged into the staging recovery service. The public PWA must continue its existing local-first behavior; the new authenticated scoring/ranking flow remains closed.
+
 # My English Journey — Stage 7: verified cloud sync integration (staging)
 
 **Status: Verified transport adapter and offline-first tests passed. Not activated in the public learner app.**

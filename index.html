@@ -1577,7 +1577,7 @@ async function checkSheetConnection(){
  if(!status){p.syncStatus='❌ لم يستجب رابط الخدمة لفحص الاتصال. تأكد من نشر Web App بصلاحية Anyone وإمكانية الوصول إليه من المتصفح.';}
  else if(status.version!==RECEIVER_EXPECTED_VERSION){p.syncStatus='⚠️ الخدمة تعمل لكنها بإصدار قديم أو غير مطابق ('+(status.version||'غير معروف')+'). افتح Deploy ← Manage deployments ← Edit ← New version ← Deploy.';}
  else if(!status.configured){p.syncStatus='❌ تم الوصول إلى الخدمة، لكن جدول البيانات غير مربوط. تحقق من SPREADSHEET_ID وصلاحيات السكربت.';}
- else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). أرسل تقريرًا فعليًا للتحقق من تسجيله.';}
+ else{p.syncStatus='✅ الوصول إلى خدمة الاستقبال ناجح ('+status.version+'). '+(status.scoreVerification==='SERVER_VERIFIED'?'الخادم يعلن تحقق النتائج؛ يلزم اختبار مستقل قبل اعتمادها.':'⚠️ النتائج غير موثقة على الخادم، ولا تُستخدم لترتيب الطلاب.');}
  if(el)el.textContent=p.syncStatus;
  try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}
  return status;
@@ -1591,6 +1591,7 @@ async function verifyReportReceipt(reportId){
  }
  return status;
 }
+// MEJ_STAGE2_CLOUD_TRUST_LABEL_V1
 const REPORT_ERROR_AR={EMPTY_OR_TOO_LARGE:'الطلب فارغ أو أكبر من الحد المسموح.',SCHEMA_MISMATCH:'تنسيق التقرير لا يطابق سكربت الاستقبال.',MISSING_STUDENT:'اسم الطالب أو معرّفه غير موجود في التقرير.',INVALID_RECEIPT:'معرّف الإرسال غير صالح.',SPREADSHEET_NOT_CONFIGURED:'سكربت الاستقبال غير مرتبط بجدول البيانات الصحيح.',WRONG_TAB_HEADERS:'عناوين الأعمدة في Google Sheets غير متطابقة مع النسخة الجديدة.',GOOGLE_PERMISSION:'لا توجد صلاحيات كافية للكتابة في Google Sheets.',RECEIVER_ERROR:'حدث خطأ أثناء معالجة التقرير في السكربت.',INVALID_TEACHER_CODE:'رمز المعلم غير صحيح. راجع المعلم وتأكد من كتابته كما هو.',TEACHER_CODE_NOT_CONFIGURED:'لم يتم تهيئة رمز المعلم في Google Apps Script.'};
 async function sendReport(manual=false){
  if(reportBusy){reportDirty=true;if(manual)toast('هناك تقرير جارٍ إرساله؛ سنحاول مجددًا.');return;}
@@ -1604,7 +1605,7 @@ async function sendReport(manual=false){
   await fetch(ENDPOINT,{method:'POST',mode:'no-cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(p,manual?'manual-sync':'progress',receipt))});
   const result=await verifyReportReceipt(receipt);
   if(result&&(result.received||result.state==='stored')){
-   p.syncStatus='✅ تم التأكد من حفظ تقدم '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+').';
+   p.syncStatus='✅ تم استلام تقرير '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+'). النتائج المرسلة من الجهاز غير موثقة بعد، ولا تُستخدم للترتيب.';
    p.lastConfirmedReport=receipt;
    if(manual)toast('✅ تم تأكيد وصول التقرير إلى الجدول.');
   }else if(result&&['rejected','receiver-error'].includes(result.state)){

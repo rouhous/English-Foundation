@@ -6,6 +6,7 @@
   "server_score_label": "CLIENT_REPORTED_UNVERIFIED",
   "recovery_bridge_origin_check": true,
   "teacher_code_excluded_from_exports": true,
+  "cloud_reports_labeled_unverified": true,
   "fully_authenticated_students": false,
   "server_verified_answers": false,
   "server_deployment_verified": false,

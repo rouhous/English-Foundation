@@ -34,4 +34,34 @@
       'تعذر التحقق من ترتيب الصف. لن تُعرض نتائج غير موثقة.');
   });
  };
+  // Settings entry: content inspection only, without elevating student permissions.
+  // Do not treat a public GitHub Pages view as authenticated administrator access.
+  const originalOpenSettings=window.openJourneySettings;
+  if(typeof originalOpenSettings==='function'){
+    window.openJourneySettings=function(){
+      const result=originalOpenSettings.apply(this,arguments);
+      const modal=document.getElementById('journeySettingsModal');
+      const inner=modal?.querySelector('.journey-modal-inner');
+      if(inner&&!inner.querySelector('#mej-admin-review-link')){
+        const section=document.createElement('section');
+        section.className='card';
+        section.style.cssText='margin:12px 0;padding:14px;text-align:right';
+        const heading=document.createElement('h3');
+        heading.textContent='🛡️ Admin — مراجعة المستويات';
+        const note=document.createElement('p');
+        note.className='caption';
+        note.textContent='مراجعة جميع المستويات دون قيود التعلم أو تغيير بيانات الطلاب. الدخول الإداري الموثق يتطلب تسجيل هوية وصلاحيات خادمية.';
+        const link=document.createElement('a');
+        link.id='mej-admin-review-link';
+        link.className='btn mint';
+        link.href='./reviews/admin-levels.html';
+        link.textContent='🛡️ Admin — فتح مراجعة جميع المستويات';
+        section.append(heading,note,link);
+        const technical=Array.from(inner.querySelectorAll('h3')).find(h=>h.textContent.includes('معلومات تقنية'));
+        if(technical?.parentElement)inner.insertBefore(section,technical.parentElement);
+        else inner.appendChild(section);
+      }
+      return result;
+    };
+  }
 })();

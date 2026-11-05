@@ -41,7 +41,9 @@ if marker not in s:
             r"[\s\S]{0,480}?"
             r"if\(d\.ready\)\{ready=true;setStatus\('✅ متصل بخادم STAGING — للاختبارات فقط'\);show\(\);return;\}")
   s,n=re.subn(listener,lambda _:new,s,count=1)
-  if n!=1:raise RuntimeError("Cannot identify expected bridge listener")
+  if n!=1:
+    ix=s.find("if(event.source!==frame.contentWindow)")
+    raise RuntimeError("Cannot identify expected bridge listener: "+repr(s[max(0,ix-90):ix+580]))
   old="frame.contentWindow.postMessage({eeRecoveryRequest:true,requestId,action,payload},'*');"
   new="""const nested=frame.contentWindow&&frame.contentWindow.frames[0];
   if(!nested||!bridgeOrigin){clearTimeout(timeout);delete pending[requestId];reject(Error('تعذر تأمين اتصال STAGING'));return;}

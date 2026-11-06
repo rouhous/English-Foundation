@@ -1274,17 +1274,20 @@ function openJourneySettings(){
  <div class="card" style="margin:12px 0;padding:14px"><h3>👤 بيانات الطالب</h3><p><b>${esc(p.name||'غير مسجّل')}</b> · الصف ${esc(p.grade||'—')}</p>
  <button class="btn light" onclick="closeJourneySettings();openProfile(false)">✎ تعديل بيانات الطالب ورمز المعلم</button></div>
  <div class="card" style="margin:12px 0;padding:14px"><h3>📡 الاتصال وتقارير المعلم</h3>
- <div class="notice blue" id="journeySettingsStatus" style="overflow-wrap:anywhere;white-space:pre-wrap">${esc(p.syncStatus||'لم يُجرَ فحص بعد')}</div>
- <p style="font-size:12px;overflow-wrap:anywhere"><b>آخر رقم تقرير:</b> <span id="journeyLastReportId" dir="ltr">${esc(p.lastReportId||'—')}</span></p>
- <p style="font-size:12px;overflow-wrap:anywhere"><b>آخر تقرير مؤكد:</b> <span id="journeyConfirmedReportId" dir="ltr">${esc(p.lastConfirmedReport||'—')}</span></p>
- <div class="actions"><button class="btn light" onclick="settingsCheckConnection()">🔎 فحص الاتصال</button></div></div>
- <div class="card" style="margin:12px 0;padding:14px"><h3>🧩 معلومات تقنية</h3>
- <p style="font-size:12px"><b>التطبيق:</b> رحلتي مع الإنجليزية — الإصدار الرسمي<br><b>إصدار الاستقبال المتوقع:</b> <span dir="ltr">${esc(RECEIVER_EXPECTED_VERSION)}</span><br><b>نوع الاتصال:</b> ${navigator.onLine?'متصل بالشبكة':'غير متصل'}<br><b>رمز المعلم:</b> ${p.teacherCode?'محفوظ (مخفي)':'غير مُسجّل'}</p>
- <p style="font-size:11px;color:#41658b">تفاصيل التشخيص لا تتضمن اسم الطالب أو رمز المعلم. لا تشارك لقطة الشاشة إذا تضمنت بيانات شخصية.</p></div></div>`;
+ <div class="notice blue" id="journeySettingsStatus">${esc(mejSimpleConnectionStatus(p.syncStatus))}</div>
+ <div class="actions"><button class="btn light" onclick="settingsCheckConnection()">🔎 فحص الاتصال</button></div></div></div>`;
  modal.addEventListener('click',e=>{if(e.target===modal)closeJourneySettings()});document.body.appendChild(modal);
 }
 function closeJourneySettings(){document.getElementById('journeySettingsModal')?.remove()}
-function refreshJourneySettingsStatus(){const p=active();const el=document.getElementById('journeySettingsStatus');if(el)el.textContent=p.syncStatus||'لا توجد تفاصيل';const last=document.getElementById('journeyLastReportId');if(last)last.textContent=p.lastReportId||'—';const ok=document.getElementById('journeyConfirmedReportId');if(ok)ok.textContent=p.lastConfirmedReport||'—';}
+// MEJ_PUBLIC_SETTINGS_MINIMAL_V1
+function mejSimpleConnectionStatus(raw){
+ const status=String(raw||'');
+ if(/غير متصل|تعذر|فشل|خطأ|unavailable|offline|error/i.test(status))return '⚠️ تعذر الاتصال بالخدمة';
+ if(/الاتصال بالخدمة|الوصول إلى خدمة الاستقبال ناجح|تم الاتصال|نجاح|successful/i.test(status))
+  return '✅ الاتصال بالخدمة متاح';
+ return navigator.onLine?'الاتصال بالإنترنت متاح':'غير متصل بالإنترنت';
+}
+function refreshJourneySettingsStatus(){const p=active();const el=document.getElementById('journeySettingsStatus');if(el)el.textContent=mejSimpleConnectionStatus(p.syncStatus);}
 async function settingsCheckConnection(){await checkSheetConnection();refreshJourneySettingsStatus()}
 async function settingsSendReport(){await sendReport(true);refreshJourneySettingsStatus()}
 function copyJourneyDiagnostics(){const p=active();const info=[

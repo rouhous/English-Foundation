@@ -6,21 +6,19 @@ marker="MEJ_SETTINGS_GEAR_BESIDE_START_20261106"
 if marker in s:
     raise SystemExit("Already installed")
 gear='<button type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button>'
-if s.count(gear)!=1:
-    import re
-    buttons=re.findall(r'<button[^>]*onclick="openJourneySettings\(\)"[^>]*>.*?</button>',s,re.S)
-    print("GEAR MATCHES",s.count(gear),"BUTTONS",len(buttons))
-    print([b[:260] for b in buttons[:5]])
-    raise RuntimeError("Expected exactly one settings gear")
-s=s.replace(gear,"",1)
-anchor='<div class="m31-lower"><button class="m31-start"'
-if s.count(anchor)!=1:
-    raise RuntimeError("Start container not uniquely located")
-# append to end of lower, which has no other controls after removing home nav.
-lower=re.compile(r'(<div class="m31-lower"><button class="m31-start".*?</button>)(\s*</div>)',re.S)
-if len(lower.findall(s))!=1:
-    raise RuntimeError("Expected unique home start area")
-s=lower.sub(lambda m:m.group(1)+ '<button class="m31-settings-near-start" type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button>'+m.group(2),s,count=1)
+home_start=s.find('<div class="m31-profile" dir="rtl">')
+if home_start<0:raise RuntimeError("Cannot locate home profile")
+home_end=s.find('</section>',home_start)
+if home_end<0:raise RuntimeError("Cannot locate home section end")
+home=s[home_start:home_end]
+if home.count(gear)!=1:
+    raise RuntimeError(f"Expected one settings gear in active home, found {home.count(gear)}")
+home=home.replace(gear,"",1)
+lower=re.compile(r'(<div class="m31-lower"><button class="m31-start".*?</button>)(\\s*</div>)',re.S)
+if len(lower.findall(home))!=1:
+    raise RuntimeError("Expected exactly one start area in active home")
+home=lower.sub(lambda m:m.group(1)+'<button class="m31-settings-near-start" type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button>'+m.group(2),home,count=1)
+s=s[:home_start]+home+s[home_end:]
 style=r"""
 <style id="mej-settings-near-start">
 /* MEJ_SETTINGS_GEAR_BESIDE_START_20261106 */
@@ -68,7 +66,7 @@ style=r"""
 if s.count("</head>")!=1:raise RuntimeError("Unexpected head section")
 s=s.replace("</head>",style+"</head>",1)
 assert s.count(marker)==1
-assert s.count("onclick=\"openJourneySettings()\"")==1
+assert s.count("onclick=\"openJourneySettings()\"")>=2
 assert s.count("class=\"m31-settings-near-start\"")==1
 assert 'onclick="letsGo()"' in s
 p.write_text(s,encoding="utf8")

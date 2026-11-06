@@ -30,6 +30,14 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
 <p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد التحقق من سجلهم الوزاري.</p>
 <div id="ownerSchoolStatus"></div>
+<div style="margin-top:14px;padding:12px;border:1px solid #c5e2da;border-radius:12px;background:white">
+<strong>ربط نموذج Google Forms الأصلي</strong>
+<p class="notice">يمكن للمالك إنشاء رمز سري لربط السجل القديم بترخيص المدرسة. يُدخل الرمز في خصائص Google Apps Script، ولا يُنشر على GitHub أو يُشارك مع الطلاب.</p>
+<button type="button" id="issueBridgeSecret" style="padding:12px;background:#0c747f;color:white;border:none;border-radius:11px;font:inherit">إنشاء رمز ربط النموذج</button>
+<p id="bridgeSecretStatus" class="notice"></p>
+<input id="bridgeSecretValue" dir="ltr" readonly style="width:100%;padding:10px;border:1px solid #aed6dc;border-radius:9px;display:none;font-family:monospace" aria-label="رمز ربط سجل المعلمين">
+<button type="button" id="bridgeCopy" style="display:none;padding:10px;border:0;background:#e7f5f4;border-radius:8px;font:inherit">نسخ رمز الربط</button>
+</div>
 <a class="link" href="./owner-login.html">لوحة ترخيص المالك</a>
 </section>
 <section id="pendingPanel" class="panel" hidden>
@@ -48,6 +56,7 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
 const status=document.getElementById('status');
+let verifiedOwnerCredential=null;
 function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
@@ -64,6 +73,7 @@ async function onCredential(response){
    status.textContent='لم يُعثر على اعتماد مدرسي مكتمل لهذا الحساب.';return;
   }
   if(data.role==='owner'){
+   verifiedOwnerCredential=response.credential;
    document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك.';
    const owner=await call('school_overview',response.credential);
    if(owner.r.ok&&owner.data.ok){
@@ -81,6 +91,24 @@ async function onCredential(response){
   status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
+document.getElementById('issueBridgeSecret').addEventListener('click',async()=>{
+const status=document.getElementById('bridgeSecretStatus'),field=document.getElementById('bridgeSecretValue');
+if(!verifiedOwnerCredential){status.textContent='يجب تسجيل دخول المالك بحساب Google أولاً.';return}
+status.textContent='جار إصدار الرمز الخاص...';field.style.display='none';document.getElementById('bridgeCopy').style.display='none';
+try{
+ const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
+  headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedOwnerCredential},
+  body:JSON.stringify({action:'owner_issue_registry_secret'}),signal:AbortSignal.timeout(12000)});
+ const d=await r.json();if(!r.ok||!d.ok||!d.integrationSecret)throw Error('NOT_ALLOWED');
+ field.value=d.integrationSecret;field.style.display='block';
+ document.getElementById('bridgeCopy').style.display='inline-flex';
+ status.textContent='احفظ هذا الرمز في Script Properties باسم MEJ_REGISTRY_BRIDGE_SECRET. تجديده يعطّل الرمز السابق.';
+}catch(_){status.textContent='تعذر إصدار رمز الربط. تحقق من هوية المالك والاتصال.'}
+});
+document.getElementById('bridgeCopy').addEventListener('click',()=>{
+const value=document.getElementById('bridgeSecretValue').value;
+if(value)navigator.clipboard?.writeText(value);
+});
 let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{

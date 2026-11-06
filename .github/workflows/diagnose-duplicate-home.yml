@@ -1,0 +1,14 @@
+name: Diagnose repeated home image source
+on:
+  push:
+    paths:
+      - scripts/diagnose_duplicate_home.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/diagnose_duplicate_home.py

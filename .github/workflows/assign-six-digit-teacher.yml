@@ -1,0 +1,46 @@
+name: Assign verified six digit teacher code to student profile
+on:
+  push:
+    paths:
+      - scripts/assign_six_digit_teacher_to_student.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 scripts/assign_six_digit_teacher_to_student.py
+      - name: Verify teacher routing and valid application script
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess,re
+          s=Path('index.html').read_text()
+          assert s.count('MEJ_SIX_DIGIT_TEACHER_PROFILE_LINK_20261106')==1
+          assert "MEJ_ASSIGNED_TEACHER_CODE_V1" in s
+          assert "if(window.__MEJ_ACCESS_ROLE==='student')" in s
+          assert "p.teacherCode=teacherCode" in s
+          assert "action:'enroll_profile'" in s
+          i=0
+          for script in re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I):
+            if not script.strip():continue
+            tmp=Path('/tmp')/('mej-student-code-'+str(i)+'.js')
+            tmp.write_text(script)
+            if len(script)<2000000:subprocess.run(['node','--check',str(tmp)],check=True)
+            i+=1
+          print('SIX_DIGIT_PROFILE_ROUTE_VALID')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Automatically associate licensed student progress with six digit teacher code"
+            git push
+          fi

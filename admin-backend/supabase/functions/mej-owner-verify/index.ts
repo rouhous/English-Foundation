@@ -41,9 +41,11 @@ Deno.serve(async (request: Request) => {
   if (request.method !== 'GET') {
     return response(405, { ok: false, error: 'METHOD_NOT_ALLOWED' }, origin);
   }
+  // The Google-signed verified gmail address is the initial allowlist.
+  // An optional owner-sub setting adds identity pinning if configured later.
   const expectedSub = Deno.env.get('MEJ_OWNER_GOOGLE_SUB')?.trim();
-  if (!expectedSub || !/^\d{10,30}$/.test(expectedSub)) {
-    return response(503, { ok: false, error: 'NOT_CONFIGURED' }, origin);
+  if (expectedSub && !/^\d{10,30}$/.test(expectedSub)) {
+    return response(503, { ok: false, error: 'OWNER_CONFIG_INVALID' }, origin);
   }
   try {
     const authorization = request.headers.get('authorization') || '';
@@ -57,7 +59,8 @@ Deno.serve(async (request: Request) => {
       clockTolerance: '30 seconds',
     });
     const identity = verified.payload;
-    if (identity.sub !== expectedSub ||
+    if ((expectedSub && identity.sub !== expectedSub) ||
+        !/^\d{10,30}$/.test(String(identity.sub || '')) ||
         identity.email !== OWNER_EMAIL ||
         identity.email_verified !== true) {
       throw Error('NOT_OWNER');

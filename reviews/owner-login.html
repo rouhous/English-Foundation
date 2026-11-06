@@ -38,9 +38,9 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
  <p>تم التحقق من هوية المالك.</p>
  <a id="openOwnerApp" href="../" style="margin:4px">فتح التطبيق</a><div id="mej-license-admin-panel" style="margin:16px 0;padding:12px;background:#fff;border:1px solid #d4e4da;border-radius:12px">
  <strong>تراخيص رحلتي مع الإنجليزية</strong>
- <p style="font-size:13px">حساب المالك مفعل تلقائيًا دون حدود للطلاب. أنشئ رمزًا خاصًا لطلابك أو لمدرسة وادي الحواسنة.</p>
- <button type="button" id="mejIssueOwner" style="padding:10px">إصدار/تجديد رمز طلاب المالك</button>
- <button type="button" id="mejIssueWadi" style="padding:10px;margin-top:6px">إصدار/تجديد رمز وادي الحواسنة (2429)</button>
+ <p style="font-size:13px">حساب المالك مفعل تلقائيًا دون حدود للطلاب. أنشئ رمزًا من 6 أرقام خاصًا بطلابك. ورمز المعلمين الخاص بالمدرسة يصدر من بوابة المعلمين.</p>
+ <button type="button" id="mejIssueOwner" style="padding:10px">إصدار رمز طلاب المالك (6 أرقام)</button>
+ 
  <p id="mejLicenseMsg" role="status" aria-live="polite"></p>
  <input id="mejIssuedKey" readonly dir="ltr" style="display:none;width:100%;padding:10px;font-size:13px" aria-label="رمز التفعيل"/>
  <button type="button" id="mejCopyKey" style="display:none;padding:10px">نسخ الرمز</button>
@@ -76,15 +76,15 @@ async function mejIssue(kind){
  status.textContent='جار إصدار رمز التفعيل...';field.style.display='none';copy.style.display='none';
  if(!ownerCredential){status.textContent='سجل الدخول بحساب المالك أولاً.';return}
  try{
-  const r=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+ownerCredential,'Content-Type':'application/json'},body:JSON.stringify({action:'owner_issue',kind}),signal:AbortSignal.timeout(12000)});
+  const r=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+ownerCredential,'Content-Type':'application/json'},body:JSON.stringify({action:'owner_issue_short_student'}),signal:AbortSignal.timeout(12000)});
   const d=await r.json();
-  if(!r.ok||!d.ok||!d.key)throw Error('LICENSE_ERROR');
-  field.value=d.key;field.style.display='block';copy.style.display='inline-flex';
-  status.textContent=kind==='owner_unlimited'?'رمز طلاب المالك (غير محدود) جاهز.':'ترخيص وادي الحواسنة جاهز (10 معلمين، 500 طالب).';
+  if(!r.ok||!d.ok||!d.code)throw Error('LICENSE_ERROR');
+  field.value=d.code;field.style.display='block';copy.style.display='inline-flex';
+  status.textContent='رمز طلاب المالك المكوّن من 6 أرقام جاهز (بدون حد للطلاب).';
  }catch(_){status.textContent='تعذر إصدار الرمز. تحقق من تسجيل دخول المالك واتصال الإنترنت.'}
 }
 document.getElementById('mejIssueOwner').addEventListener('click',()=>mejIssue('owner_unlimited'));
-document.getElementById('mejIssueWadi').addEventListener('click',()=>mejIssue('wadi_2429'));
+
 document.getElementById('mejCopyKey').addEventListener('click',()=>navigator.clipboard?.writeText(document.getElementById('mejIssuedKey').value));
 
 function say(s){status.textContent=s}

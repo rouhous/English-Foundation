@@ -2,10 +2,10 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-home-start-only-extended-sea-20261106-v1';
+const CACHE='mej-user-upload-20261106-v1';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
- './assets/home-voyage-original.webp','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
+ './assets/mej-user-voyage.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];

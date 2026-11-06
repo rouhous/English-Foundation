@@ -1422,7 +1422,7 @@ function home(){const p=active();mejReconcileLocalStars(p);document.getElementBy
   
   <div class="m31-profile" dir="rtl"><div class="m31-profile-copy"><span aria-hidden="true">👨🏻‍🎓</span><div>المستخدم الحالي<small>${esc(p.name||'طالب جديد')} · ${p.grade?'الصف '+esc(p.grade):'اختر الصف'} · ⭐ ${fmt(p.stars||0)}</small></div></div><select aria-label="اختيار الطالب" onchange="switchUser(this.value)">${Object.values(db.profiles).map(item=>`<option value="${esc(item.id)}" ${item.id===db.active?'selected':''}>${esc(item.name||'مستخدم جديد')}</option>`).join('')}</select><button type="button" onclick="openProfile(true)">＋ مستخدم جديد</button><button type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button></div>
  </div>
- <div class="m31-art" aria-hidden="true"><img class="m31-sea" src="./assets/home-voyage-original.webp" alt="" loading="eager" decoding="async" /></div>
+ <div class="m31-art" aria-hidden="true"><img class="m31-sea" src="./assets/mej-user-voyage.png" alt="" loading="eager" decoding="async" /></div>
  <div class="m31-lower"><button class="m31-start" type="button" onclick="letsGo()"><span class="m31-compass">🧭</span><span>Let's Go<small>لنبدأ الرحلة</small></span><span>❯</span></button>
   
  </div>

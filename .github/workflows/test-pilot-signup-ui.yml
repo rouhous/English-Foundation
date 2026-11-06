@@ -1,0 +1,21 @@
+name: Verify pilot signup interface and owner teacher approval
+on:
+  push:
+    paths:
+      - reviews/owner-login.html
+      - reviews/pilot-full.html
+      - scripts/test_pilot_signup_ui.py
+      - .github/workflows/test-pilot-signup-ui.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate login script and hidden management controls
+        run: python3 scripts/test_pilot_signup_ui.py

@@ -37,7 +37,7 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
  <a id="reviewLink" href="owner-review.html" hidden>مراجعة المحتوى</a>
 </section>
 <section id="teacherPanel" hidden>
- <label for="teacherEmail">اعتماد بريد معلم للمرحلة التجريبية</label>
+ <label for="teacherEmail">اعتماد حساب معلم</label>
  <input type="email" id="teacherEmail" autocomplete="email" placeholder="teacher@example.com" maxlength="150">
  <button id="approveTeacher" type="button">اعتماد المعلم</button>
  <p id="teacherStatus" role="status" aria-live="polite"></p><div id="teacherInviteResult" hidden style="overflow-wrap:anywhere;padding:10px;background:#e5f4ea;border-radius:9px"><strong>رمز انضمام طلاب المعلم:</strong> <code id="teacherInviteCode"></code><p>شارك الرمز مع طلاب هذا المعلم فقط. اعتماد المعلم مجددًا ينشئ رمزًا جديدًا.</p><button type="button" id="copyTeacherInvite">نسخ الرمز</button></div>
@@ -104,7 +104,7 @@ document.getElementById('approveTeacher').addEventListener('click',async()=>{
    body:JSON.stringify({teacherEmail:email}),signal:AbortSignal.timeout(12000)
   });
   const data=await resp.json();
-  if(resp.status===409)teacherStatus.textContent='اكتمل التسجيل في المرحلة التجريبية.';
+  if(resp.status===409)teacherStatus.textContent='اكتملت الأماكن المتاحة للتسجيل.';
   else if(resp.ok&&data.ok===true&&/^[a-f0-9]{48}$/.test(data.teacherInvite||'')){
     teacherStatus.textContent=data.existing?'تم تجديد رمز انضمام المعلم.':'تم اعتماد المعلم بنجاح.';
     document.getElementById('teacherInviteCode').textContent=data.teacherInvite;

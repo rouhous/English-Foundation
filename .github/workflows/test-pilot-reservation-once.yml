@@ -1,0 +1,15 @@
+name: Test pilot seat allocation once
+on:
+  push:
+    paths:
+      - scripts/test_pilot_reservation_once.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify first seat reservation then repeat
+        run: python3 scripts/test_pilot_reservation_once.py

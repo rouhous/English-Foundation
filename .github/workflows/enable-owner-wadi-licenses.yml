@@ -1,0 +1,46 @@
+name: Enable owner and Wadi license activation
+on:
+  push:
+    paths:
+      - scripts/enable_owner_wadi_licenses.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: python3 scripts/enable_owner_wadi_licenses.py
+      - name: Validate frontend authorization and JS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          s=Path('index.html').read_text()
+          assert 'MEJ_WADI_OWNER_LICENSE_ROLLOUT_20261106' in s
+          assert "function mejPilotMayCreateStudent()" in s
+          assert "action:'enroll_profile'" in s
+          assert "mejTeacherInviteInput" in s
+          login=Path('reviews/owner-login.html').read_text()
+          assert 'mejIssueOwner' in login and 'mejIssueWadi' in login
+          activate=Path('reviews/activate.html').read_text()
+          assert "action:'activate'" in activate
+          for file in [Path('index.html'),Path('reviews/activate.html'),Path('reviews/owner-login.html')]:
+            for i,js in enumerate(re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>',file.read_text(),re.S)):
+              if js.strip():
+                f=Path('/tmp')/('license-'+file.stem+'-'+str(i)+'.js')
+                f.write_text(js)
+                subprocess.run(['node','--check',str(f)],check=True)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html' sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Enable owner unlimited and Wadi school student activation"
+            git push
+          fi

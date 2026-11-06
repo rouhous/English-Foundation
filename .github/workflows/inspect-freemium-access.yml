@@ -1,0 +1,22 @@
+name: Inspect freemium stage access and signup
+on:
+  push:
+    paths: [.github/workflows/inspect-freemium-access.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Display current access controls
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text()
+          for term in ['function permitted(','function checkAccess(','function journey(','function stage(','function route(','function openProfile(','function saveStudent(','function letsGo(','MEJ_OWNER_ACCESS_V1','mej-owner-only-gate','MEJ_STUDENT_ACCESS_V1']:
+            i=s.find(term)
+            print('TERM',term,'COUNT',s.count(term))
+            if i>=0:print(s[max(0,i-500):i+2200])
+          PY

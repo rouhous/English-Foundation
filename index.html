@@ -1890,40 +1890,59 @@ window.eeScheduleCloudSave=function(){clearTimeout(timer);timer=setTimeout(()=>{
 
 <script id="mej-safe-admin-settings-entry">
 // MEJ_SAFE_ADMIN_SETTINGS_ENTRY_V1
-(function () {
+// MEJ_HIDDEN_GEAR_ADMIN_ENTRY_V2
+(function(){
  'use strict';
- const link = './reviews/owner-login.html';
- const label = 'Admin · دخول المالك';
- function add() {
-   const roots = Array.from(document.querySelectorAll('h1,h2,h3,.section-title,[role="heading"]'));
+ const link='./reviews/owner-login.html';
+ const label='Admin · دخول المالك';
+ function enhance(){
+   const roots=document.querySelectorAll('h1,h2,h3,.section-title,[role="heading"]');
    for(const heading of roots){
-     const title = (heading.textContent||'').trim();
-     if(!(/الإعدادات|إعدادات التطبيق|Settings/i.test(title))) continue;
-     const parent = heading.closest('section,.card,main,[role="dialog"]') || heading.parentElement;
-     if(!parent || parent.querySelector('[data-mej-admin-review]')) continue;
-     const a = document.createElement('a');
+     const headingText=(heading.textContent||'').replace(/[⚙️🔧]/g,'').trim();
+     if(!/^(?:الإعدادات|إعدادات التطبيق|Settings)$/i.test(headingText))continue;
+     if(heading.querySelector('[data-mej-admin-gear]'))continue;
+     const btn=document.createElement('button');
+     btn.type='button';
+     btn.dataset.mejAdminGear='true';
+     btn.textContent='⚙️';
+     btn.title='خيارات الإعدادات';
+     btn.setAttribute('aria-label','خيارات الإعدادات');
+     btn.setAttribute('aria-expanded','false');
+     btn.style.cssText='display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-inline-start:9px;padding:4px;border:0;background:transparent;font:inherit;cursor:pointer;min-width:36px;min-height:36px;border-radius:9px';
+     const panel=document.createElement('div');
+     panel.dataset.mejAdminPanel='true';
+     panel.hidden=true;
+     panel.style.cssText='margin:10px 0;padding:10px;background:#f4faf7;border:1px solid #d4e6da;border-radius:12px;font-size:14px';
+     const a=document.createElement('a');
      a.dataset.mejAdminReview='true';
      a.href=link;
      a.textContent='🔐 '+label;
-     a.setAttribute('aria-label','Admin — مراجعة المستويات دون صلاحيات بيانات');
-     a.style.cssText='display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:12px;background:#155d48;color:white;text-decoration:none;font-weight:700;margin:10px 0;max-width:100%;';
+     a.style.cssText='display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:12px;background:#155d48;color:white;text-decoration:none;font-weight:700;max-width:100%';
      const note=document.createElement('small');
-     note.dataset.mejAdminReview='note';
-     note.textContent='تسجيل Google للتحقق من هوية المالك؛ الإدارة الكاملة لا تتاح قبل تفعيل الخدمة الآمنة.';
-     note.style.cssText='display:block;line-height:1.6;color:#48695c;margin-bottom:6px';
-     heading.insertAdjacentElement('afterend',a);
-     a.insertAdjacentElement('afterend',note);
+     note.textContent='دخول Google للمالك فقط. ظهور الرابط لا يمنح صلاحيات إدارة أو تعديل بيانات.';
+     note.style.cssText='display:block;margin-top:8px;line-height:1.6;color:#48695c';
+     panel.append(a,note);
+     btn.addEventListener('click',()=>{
+       panel.hidden=!panel.hidden;
+       btn.setAttribute('aria-expanded',String(!panel.hidden));
+     });
+     heading.append(btn);
+     heading.insertAdjacentElement('afterend',panel);
    }
  }
  let queued=false;
- const observer=new MutationObserver(function(){
+ const observer=new MutationObserver(()=>{
    if(queued)return;
    queued=true;
-   queueMicrotask(function(){queued=false;add()});
+   queueMicrotask(()=>{queued=false;enhance()});
  });
+ const start=()=>{
+   enhance();
+   observer.observe(document.body,{childList:true,subtree:true});
+ };
  if(document.readyState==='loading'){
-   document.addEventListener('DOMContentLoaded',function(){add();observer.observe(document.body,{childList:true,subtree:true})},{once:true});
- }else{add();observer.observe(document.body,{childList:true,subtree:true})}
+   document.addEventListener('DOMContentLoaded',start,{once:true});
+ }else start();
 })();
 </script>
 <style id="mej-copyright-notice-style">

@@ -1,0 +1,31 @@
+name: Apply verified school name to student profile
+on:
+  push:
+    paths: [scripts/verified_school_profile.py]
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/verified_school_profile.py
+      - name: Verify patch
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text()
+          assert 'MEJ_VERIFIED_SCHOOL_PROFILE_20261106' in s
+          assert "p.school=school||'';" in s
+          assert "schoolInput.readOnly=true" in s
+          assert "p.school=school||'Wadi Al Hawasna School'" not in s
+          PY
+      - name: Save website
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Set student school from verified teacher and allow owner school changes'
+            git push
+          fi

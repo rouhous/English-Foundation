@@ -1,0 +1,42 @@
+name: Hide Admin entry behind Settings gear
+on:
+  push:
+    paths:
+      - scripts/install_hidden_admin_gear.py
+      - .github/workflows/install-hidden-admin-gear.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch existing application
+        run: python3 scripts/install_hidden_admin_gear.py
+      - name: Validate hidden entry structure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text()
+          x=re.search(r'<script id="mej-safe-admin-settings-entry">(.*?)</script>',s,re.S)
+          assert x and s.count('MEJ_HIDDEN_GEAR_ADMIN_ENTRY_V2')==1
+          assert "panel.hidden=true" in x.group(1)
+          assert "btn.addEventListener('click'" in x.group(1)
+          assert "owner-login.html" in x.group(1)
+          Path('/tmp/mej-gear.js').write_text(x.group(1))
+          PY
+          node --check /tmp/mej-gear.js
+      - name: Commit updated application
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Hide Admin login behind Settings title gear"
+            git push
+          fi

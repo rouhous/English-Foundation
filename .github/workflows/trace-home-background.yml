@@ -1,0 +1,13 @@
+name: Trace home background rules
+on:
+  push:
+    paths:
+      - scripts/trace_home_background_rules.py
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/trace_home_background_rules.py

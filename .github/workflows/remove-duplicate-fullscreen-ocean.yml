@@ -1,0 +1,39 @@
+name: Remove duplicated background at source
+on:
+  push:
+    paths:
+      - scripts/remove_duplicate_fullscreen_ocean.py
+      - .github/workflows/remove-duplicate-fullscreen-ocean.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Fix original CSS and fit illustration
+        run: python3 scripts/remove_duplicate_fullscreen_ocean.py
+      - name: Verify image and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          assert 'MEJ_NO_DOUBLE_OCEAN_BACKGROUND_20261106' in s
+          assert 'background:linear-gradient(90deg,rgba(1,69,146,.22),rgba(5,92,176,.03)),url(data:image/webp;base64,' not in s
+          assert s.count('class="m31-sea"')==1
+          for i,code in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
+            if code.strip():Path('/tmp/scene-'+str(i)+'.js').write_text(code,encoding='utf8')
+          PY
+          for file in /tmp/scene-*.js; do node --check "$file"; done
+      - name: Commit
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Eliminate duplicated full-screen ocean picture from home CSS"
+            git push
+          fi

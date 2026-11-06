@@ -1,0 +1,57 @@
+name: Verify teacher portal and school registry integration
+on:
+  push:
+    paths:
+      - .github/workflows/verify-teacher-portal.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Inspect teacher portal, student app, and bridge
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          p=Path('reviews/teacher-portal.html')
+          s=p.read_text(encoding='utf8')
+          assert 'mej-teacher-portal' in s
+          assert 'teacher_status' in s
+          assert 'school_overview' in s
+          assert 'issueBridgeSecret' in s
+          assert 'MEJ_REGISTRY_BRIDGE_SECRET' in s
+          assert '1FAIpQLSd6PCdyT-qfvC4rrjZkym7AIOgU9gk1TrZC17Y8K5bRq48n0g' in s
+          assert 'google.accounts.id.initialize' in s
+          for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S)):
+            if not js.strip():continue
+            f=Path('/tmp')/('teacher-portal-'+str(i)+'.js')
+            f.write_text(js,encoding='utf8')
+            subprocess.run(['node','--check',str(f)],check=True)
+          bridge=Path('integrations/verified-teacher-registry-bridge.gs').read_text(encoding='utf8')
+          assert 'APPROVED_2429' in bridge
+          assert "status!=='active'" in bridge
+          assert 'eeRegistry_()' in bridge
+          assert 'MEJ_REGISTRY_BRIDGE_SECRET' in bridge
+          f=Path('/tmp/mej-verified-registry-bridge.js')
+          f.write_text(bridge,encoding='utf8')
+          subprocess.run(['node','--check',str(f)],check=True)
+          home=Path('index.html').read_text(encoding='utf8')
+          assert 'MEJ_WADI_OWNER_LICENSE_ROLLOUT_20261106' in home
+          assert 'mejPilotReserveStudent' in home
+          print('TEACHER_PORTAL_AND_LEGACY_INTEGRATION_SYNTAX_OK')
+          PY
+      - name: Ensure direct access without authentication is blocked
+        run: |
+          set -eu
+          endpoint="https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal"
+          for action in teacher_status school_overview verified_registry_push; do
+            http=$(curl -sS --max-time 20 -o /tmp/teacher-check.json -w '%{http_code}' -X POST "$endpoint" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' --data "{\"action\":\"$action\"}")
+            echo "$action: HTTP $http"
+            test "$http" = 403
+          done
+          echo "UNAUTHENTICATED_TEACHER_REGISTRY_ACCESS_BLOCKED"

@@ -1,0 +1,41 @@
+name: Clean home banner and bilingual copyright
+on:
+  push:
+    paths:
+      - scripts/clean_home_rights.py
+      - .github/workflows/clean-home-rights.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply approved screenshot changes
+        run: python3 scripts/clean_home_rights.py
+      - name: Verify markup and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('MEJ_HOME_RIGHTS_SIMPLIFIED_20261106')==1
+          assert 'Designed by Teacher Houssem Rouatbi' not in s
+          assert s.count('id="mej-owner-rights-notice"')==1
+          for i,block in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
+            if block.strip():Path('/tmp/mej-home-js-'+str(i)+'.js').write_text(block,encoding='utf8')
+          PY
+          for file in /tmp/mej-home-js-*.js; do node --check "$file"; done
+      - name: Commit
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Remove school and developer header and simplify bilingual copyright"
+            git push
+          fi

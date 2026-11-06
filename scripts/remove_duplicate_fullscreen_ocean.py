@@ -10,11 +10,14 @@ if marker in s:raise SystemExit('Already applied')
 # Root cause: an earlier .mobile-ocean-v31 rule embeds the same picture as
 # a huge full-screen CSS background. A separate img.m31-sea repeats it.
 prefix='background:linear-gradient(90deg,rgba(1,69,146,.22),rgba(5,92,176,.03)),url(data:image/webp;base64,'
-matches=list(re.finditer(re.escape(prefix)+r'[A-Za-z0-9+/=]+\)[^;}]*;',s))
-if len(matches)!=1:
- raise RuntimeError(f'Expected one fullscreen embedded ocean background, got {len(matches)}')
-m=matches[0]
-s=s[:m.start()]+'background:linear-gradient(180deg,#1687da 0%,#0064b9 65%,#034799 100%)!important;'+s[m.end():]
+start=s.find(prefix)
+if start<0 or s.find(prefix,start+1)>=0:
+ raise RuntimeError('Expected exactly one fullscreen ocean background declaration')
+end=s.find(';',start+len(prefix))
+if end<0 or end-start<200:
+ raise RuntimeError('Could not safely find end of embedded background declaration')
+# The first semicolon after the base64 prefix ends the CSS declaration.
+s=s[:start]+'background:linear-gradient(180deg,#1687da 0%,#0064b9 65%,#034799 100%)!important;'+s[end+1:]
 
 # The standalone art is the ONLY visual: no background overlay or crop.
 css=r'''

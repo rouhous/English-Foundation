@@ -19,7 +19,7 @@ html.write_text(s)
 sw=Path('sw.js');w=sw.read_text()
 old="'./assets/home-voyage-original.webp'"
 if w.count(old)!=1:raise RuntimeError('Offline asset path not uniquely present')
-w=w.replace(old,"'./assets/mej-user-voyage.jpg'",1)
+w=w.replace(old,"'./assets/mej-user-voyage.png'",1)
 w=re.sub(r"const CACHE='[^']+';","const CACHE='mej-user-upload-20261106-v1';",w,count=1)
 sw.write_text(w)
 print('Artwork installed',len(data))

@@ -44,3 +44,10 @@ public repository.
 
 Report vulnerabilities privately to the repository owner, not in public issues
 containing sensitive information.
+
+## Implementation update (2026-11-06)
+- Main app copyright notice is now installed in `index.html`.
+- `admin-backend/server.mjs` contains a Google-signed ID-token verification gate, with strict audience, issuer, expiry, owner subject and verified email checks. It refuses requests unless server-side environment variables are configured.
+- `admin-backend/test-owner-auth.mjs` tests rejection of unconfigured, forged and cross-origin requests through GitHub Actions.
+- This identity service is **not deployed or connected** to the student application. Only `content_review` can be returned by its initial API. Do not describe it as full admin.
+- Production launch requires Google Cloud OAuth web client configuration, stable owner Google `sub`, deployed HTTPS service, login UI and database permission rules for each administrative operation.

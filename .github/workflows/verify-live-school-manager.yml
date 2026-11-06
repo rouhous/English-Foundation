@@ -1,0 +1,22 @@
+name: Verify published school manager registration
+on:
+  push:
+    paths:
+      - .github/workflows/verify-live-school-manager.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert live school manager registration appears
+        run: |
+          set -eu
+          url='https://rouhous.github.io/English-Foundation/reviews/teacher-portal.html'
+          http=$(curl -L -sS -o /tmp/teacherportal.html -w '%{http_code}' --max-time 25 "$url")
+          echo "HTTP $http"
+          test "$http" = 200
+          for needle in schoolRegistrationPanel approveManagerForm school_manager_claim owner_approve_school_manager schoolManagerPanel managerIssueCode; do
+            grep -q "$needle" /tmp/teacherportal.html && echo "LIVE OK $needle"
+          done

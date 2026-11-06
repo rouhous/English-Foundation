@@ -1,0 +1,16 @@
+name: Verify live pilot enrollment protections
+on:
+  push:
+    paths:
+      - scripts/test_pilot_live.py
+      - .github/workflows/test-pilot-live.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify endpoints without creating any account
+        run: python3 scripts/test_pilot_live.py

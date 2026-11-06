@@ -19,8 +19,13 @@ async function activate(){
    if(response.status===409){status.textContent='اكتمل العدد المرخّص أو هذا الطالب مرتبط بمعلم آخر.';return}
    if(!response.ok||result.ok!==true||!result.accessToken){status.textContent='رمز التفعيل غير صحيح أو غير نشط.';return}
    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',result.accessToken);
-   localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',code);
-   if(result.teacherName)localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',result.teacherName);
+   if(result.licenseType==='wadi_2429'){
+     localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',code);
+     if(result.teacherName)localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',result.teacherName);
+   }else{
+     localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');
+     localStorage.removeItem('MEJ_ASSIGNED_TEACHER_NAME_V1');
+   }
    location.replace('../');
   }catch(_){status.textContent='تعذر التحقق من الترخيص. تأكد من الاتصال بالإنترنت.'}
   finally{btn.disabled=false}

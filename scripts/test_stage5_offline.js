@@ -70,7 +70,9 @@ function dispatch(type,evt){listeners[type](evt);return evt.promise}
  for(let i=0;i<80;i++){await new Promise(resolve=>setImmediate(resolve));}
  const keys=await caches.keys();assert.equal(keys.length,1);
  const core=await caches.match("./index.html");assert(core,"Main HTML not cached");
- const shardPromises=Array.from({length:12},(_,i)=>"./assets/approved-images-"+String(i+1).padStart(2,"0")+".js?v=20261104-approved");
+ const shardVersion=js.match(/\\.js\\?v=([^']+)/)?.[1];
+ assert(shardVersion,"Service worker image bundle version missing");
+ const shardPromises=Array.from({length:12},(_,i)=>"./assets/approved-images-"+String(i+1).padStart(2,"0")+".js?v="+shardVersion);
  for(const shard of shardPromises){assert(await caches.match(shard),"Missing image shard "+shard)}
  let posted=null;
  await dispatch("message",{data:{type:"MEJ_OFFLINE_STATUS"},source:{postMessage(x){posted=x}},waitUntil(p){this.promise=p}});

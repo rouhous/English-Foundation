@@ -25,6 +25,9 @@ for(const [width,height] of [[390,844],[360,740],[412,915]]){
    head:box('.mobile-ocean-v31>.m31-head'),
    start:box('.mobile-ocean-v31 .m31-start'),
    nav:box('.mobile-ocean-v31 .m31-nav'),
+   userSelect:box('.mobile-ocean-v31 .m31-profile>select'),
+   newUser:box('.mobile-ocean-v31 .m31-profile>button[onclick="openProfile(true)"]'),
+   studentAvatar:document.querySelectorAll('.mobile-ocean-v31 .m31-profile-copy').length,
    rights:box('#mej-owner-rights-notice'),
    imageCount:document.querySelectorAll('.mobile-ocean-v31 .m31-sea').length,
    backgroundImage:getComputedStyle(document.querySelector('.mobile-ocean-v31')).backgroundImage,
@@ -44,6 +47,10 @@ for(const r of rows){
  if(r.imageCount!==1)throw Error('Scene must have exactly one image');
  if(!r.image||r.image.height<400)throw Error('Scene not full-height');
  if(r.nav)throw Error('Home navigation should be absent');
+ if(r.studentAvatar)throw Error('Student avatar still present');
+ if(!r.userSelect||!r.newUser)throw Error('Compact user controls missing');
+ if(r.userSelect.bottom>r.height||r.newUser.bottom>r.height)throw Error('Compact user controls off screen');
+ if(r.start.bottom>=r.rights.y)throw Error('Start overlaps copyright');
  if(!r.rights||r.rights.bottom>r.height+5)throw Error('Copyright below viewport');
  if(!r.start||r.start.y<r.head.bottom)throw Error('Start overlapping header');
  if(r.start.bottom>r.height-20)throw Error('Start too low for footer');

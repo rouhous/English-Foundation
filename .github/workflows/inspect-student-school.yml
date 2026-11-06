@@ -1,0 +1,22 @@
+name: Inspect student school profile bindings
+on:
+  push:
+    paths: [.github/workflows/inspect-student-school.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate student form and profile save fields
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text()
+          for term in ('Wadi Al Hawasna School','schoolName','id="school"','id="teacherCode"','document.getElementById(\'school\')','studentSchool','openProfile','function saveStudent','MEJ_ASSIGNED_TEACHER_CODE_V1','teacherCode=(document','function openProfile','p.school','school:'):
+            print('\nTERM',repr(term),'COUNT',s.count(term))
+            m=re.search(re.escape(term),s,re.I)
+            if m:print(s[max(0,m.start()-900):min(len(s),m.end()+1600)])
+          PY

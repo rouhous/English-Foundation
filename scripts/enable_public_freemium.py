@@ -103,3 +103,5 @@ sw=Path('sw.js');w=sw.read_text(encoding='utf-8')
 w,n=re.subn(r"const CACHE='[^']+';","const CACHE='mej-freemium-public-20261107-v1';",w,count=1)
 assert n==1;sw.write_text(w,encoding='utf-8')
 print('FREEMIUM_PUBLIC_FIRST_THREE_STAGES_AND_SIX_DIGIT_SIGNUP_PATCHED')
+
+# Activate approved freemium rollout.

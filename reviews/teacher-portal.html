@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<title>بوابة المعلمين والمدرسة | رحلتي مع الإنجليزية</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#f3f9fc,#d5edf0 53%,#fdf8ec);font-family:system-ui,'Segoe UI',Tahoma,sans-serif;color:#114757;padding:17px;display:grid;place-items:center}
+main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;box-shadow:0 16px 46px #004f7230;border-radius:24px;padding:clamp(18px,4vw,30px);text-align:center}h1{margin:7px 0 6px;font-size:clamp(22px,5.5vw,29px)}.sub{color:#54707b;margin:0 0 20px}.brand{font-size:14px;font-weight:800;color:#b78227}.pill{border-radius:12px;background:#e8f5f4;border:1px solid #c4e3de;padding:13px;margin:12px 0;line-height:1.8;text-align:right}.small{font-size:13px}#googleSignIn{display:flex;justify-content:center;min-height:48px;margin:13px 0}#status{min-height:34px;color:#4d6874;font-size:14px;line-height:1.8}a.link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#087b83;color:white;border-radius:12px;padding:12px 15px;margin:7px 3px;min-height:46px}.link.alt{background:white;color:#08717a;border:1px solid #9ad1cf}.panel{text-align:right;border-radius:16px;padding:15px;background:#f4fcfa;border:1px solid #d2e6e0;margin:15px 0}.panel[hidden]{display:none!important}.panel h2{font-size:17px;margin:0 0 12px}.row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d4eae4;padding:9px 0;gap:7px}.row span:first-child{color:#57717a}.row strong{text-align:left;overflow-wrap:anywhere}.notice{font-size:13px;color:#566c76;line-height:1.8}.footer{margin-top:15px;font-size:12px;color:#526c77}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<main>
+<div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div>
+<h1>بوابة المعلم والمدرسة</h1>
+<p class="sub">تسجيل الدخول بحساب Google المعتمد</p>
+<div class="pill small">إذا سبق لك التسجيل من نموذج المعلمين الأصلي، استخدم <strong>نفس حساب Google</strong>. لا نطلب إنشاء تسجيل جديد ما دام اعتمادك قائمًا.</div>
+<div id="googleSignIn"></div>
+<p id="status" role="status" aria-live="polite">جار تجهيز تسجيل Google...</p>
+<section id="teacherPanel" class="panel" hidden>
+<h2>حساب المعلم المعتمد</h2>
+<div class="row"><span>المعلم</span><strong id="teacherName"></strong></div>
+<div class="row"><span>المدرسة</span><strong id="schoolName"></strong></div>
+<div class="row"><span>الأقسام</span><strong id="teacherClasses"></strong></div>
+<div id="reportsAnchor"></div>
+<p class="notice">تظهر التقارير المملوكة لحسابك بعد التحقق من صلاحية Google Drive. لا يتم منح وصول عام إلى بيانات الطلاب.</p>
+</section>
+<section id="ownerPanel" class="panel" hidden>
+<h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
+<p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد التحقق من سجلهم الوزاري.</p>
+<div id="ownerSchoolStatus"></div>
+<a class="link" href="./owner-login.html">لوحة ترخيص المالك</a>
+</section>
+<section id="pendingPanel" class="panel" hidden>
+<h2>التحقق المدرسي لم يكتمل</h2>
+<p class="notice">حساب Google سليم، لكنه لم يُربط بعد بسجل معلم مُعتمد في المدرسة. لن يتم تسجيلك أو منحك الوصول دون تحقق.</p>
+</section>
+<div>
+<a class="link alt" href="https://docs.google.com/forms/d/e/1FAIpQLSd6PCdyT-qfvC4rrjZkym7AIOgU9gk1TrZC17Y8K5bRq48n0g/viewform" target="_blank" rel="noopener noreferrer">نموذج تسجيل المعلمين الأصلي</a>
+<a class="link alt" href="../">تطبيق الطلاب</a>
+</div>
+<p class="footer">الوصول إلى تقارير المعلمين محمي بالتحقق من Google وسجلات اعتماد Supabase. لا تُدخل أي بيانات طلاب أو رموز تفعيل في نموذج تسجيل الدخول.</p>
+</main>
+<script>
+'use strict';
+(function(){
+const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
+const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
+const status=document.getElementById('status');
+function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel'])document.getElementById(id).hidden=true}
+function value(id,v){document.getElementById(id).textContent=String(v||'—')}
+async function call(action,credential){
+ const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},body:JSON.stringify({action}),signal:AbortSignal.timeout(12000)});
+ const data=await r.json();return {r,data}
+}
+async function onCredential(response){
+ hide();status.textContent='جار التحقق من حسابك وسجل المعلمين...';
+ try{
+  if(typeof response?.credential!=='string')throw Error('NO_GOOGLE_IDENTITY');
+  const {r,data}=await call('teacher_status',response.credential);
+  if(!r.ok||!data.ok){
+   document.getElementById('pendingPanel').hidden=false;
+   status.textContent='لم يُعثر على اعتماد مدرسي مكتمل لهذا الحساب.';return;
+  }
+  if(data.role==='owner'){
+   document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك.';
+   const owner=await call('school_overview',response.credential);
+   if(owner.r.ok&&owner.data.ok){
+     value('ownerSchoolStatus',`الترخيص: ${owner.data.school?.teacher_limit||'—'} معلمين، ${owner.data.school?.student_limit||'—'} طالب. المعلمون المعتمدون: ${owner.data.verifiedTeachers||0}`);
+   }
+   return;
+  }
+  if(data.role!=='teacher')throw Error('ROLE_DENIED');
+  value('teacherName',data.teacherName);value('schoolName',data.school);value('teacherClasses',data.classes);
+  const reports=document.getElementById('reportsAnchor');reports.replaceChildren();
+  if(typeof data.reportSheetUrl==='string'&&/^https:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+\/edit$/.test(data.reportSheetUrl)){
+   const link=document.createElement('a');link.className='link';link.href=data.reportSheetUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='فتح ملف تقارير المعلم في Google Sheets';reports.append(link);
+  }
+  document.getElementById('teacherPanel').hidden=false;
+  status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
+ }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
+}
+let attempts=0;const timer=setInterval(()=>{
+ if(window.google?.accounts?.id){
+  clearInterval(timer);try{
+   google.accounts.id.initialize({client_id:CLIENT_ID,callback:onCredential,auto_select:false,cancel_on_tap_outside:true});
+   google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
+   status.textContent='سجّل باستخدام حساب Google الذي سجلت به في النموذج الأصلي.';
+  }catch(_){status.textContent='تعذر تحميل تسجيل Google.'}
+ }else if(++attempts>70){clearInterval(timer);status.textContent='تعذر تحميل تسجيل Google؛ تحقق من الاتصال.'}
+},200);
+})();
+</script>
+</body></html>

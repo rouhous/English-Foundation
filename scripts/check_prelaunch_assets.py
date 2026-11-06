@@ -9,7 +9,7 @@ items=[]
 for i in range(1,13):
  path=root/f'assets/approved-images-{i:02d}.js'
  js=path.read_text(encoding='utf8')
- m=re.search(r'Object\.entries\((\{.*\})\)\)\{',js,re.S)
+ m=re.search(r'Object\.entries\((\{.*?\})\)\)\{',js,re.S)
  if not m:raise RuntimeError(f'Unable to parse shard {i}')
  batch=json.loads(m.group(1))
  for word,choices in batch.items():

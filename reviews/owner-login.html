@@ -87,7 +87,7 @@ async function onCredential(response){
 document.getElementById('approveTeacher').addEventListener('click',async()=>{
  if(!ownerCredential)return;
  const email=document.getElementById('teacherEmail').value.trim();
- if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){
+ if(!/^[^ @]+@[^ @]+[.][^ @]+$/.test(email)){
   teacherStatus.textContent='أدخل بريد المعلم بصورة صحيحة.';return;
  }
  const btn=document.getElementById('approveTeacher');

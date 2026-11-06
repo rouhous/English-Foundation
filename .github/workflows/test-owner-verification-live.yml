@@ -1,0 +1,25 @@
+name: Live owner verification smoke test
+on:
+  push:
+    paths:
+      - scripts/test_owner_verification_live.py
+      - .github/workflows/test-owner-verification-live.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test deployed Supabase edge function
+        run: python3 scripts/test_owner_verification_live.py
+      - name: Store test result
+        run: |
+          git add diagnostics/owner-verification-live.md
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Confirm live owner auth denies unauthorized requests"
+            git push
+          fi

@@ -1,0 +1,39 @@
+name: Simplify public Settings page
+on:
+  push:
+    paths:
+      - scripts/simplify_public_settings.py
+      - .github/workflows/simplify-public-settings.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Remove extra diagnostics from Settings
+        run: python3 scripts/simplify_public_settings.py
+      - name: Validate all embedded JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          doc=Path('index.html').read_text(encoding='utf8')
+          assert doc.count('MEJ_PUBLIC_SETTINGS_MINIMAL_V1')==1
+          for i,block in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',doc,re.S|re.I)):
+            if block.strip():Path('/tmp/settings-script-'+str(i)+'.js').write_text(block,encoding='utf8')
+          PY
+          for file in /tmp/settings-script-*.js; do node --check "$file"; done
+      - name: Commit UI changes
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Hide technical diagnostics and report IDs from public Settings"
+            git push
+          fi

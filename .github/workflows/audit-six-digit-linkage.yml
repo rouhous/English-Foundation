@@ -1,0 +1,37 @@
+name: Audit six digit teacher and student linkage
+on:
+  push:
+    paths:
+      - .github/workflows/audit-six-digit-linkage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect active profile and teaching code routes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf8')
+          import re
+          for needle in ('mejTeacherInviteInput','teacherCode','teacherInvite','mejPilotReserveStudent','function createProfile','function saveProfile','function openProfile','teacher_code','MEJ_STUDENT_ACCESS_V1'):
+            found=list(re.finditer(re.escape(needle),s))
+            print('\n====',needle,'COUNT',len(found))
+            for m in found[-8:]:
+              print(repr(s[max(0,m.start()-230):min(len(s),m.end()+320)]))
+          for p in ['reviews/teacher-portal.html','reviews/activate.html','reviews/owner-login.html']:
+            content=Path(p).read_text(encoding='utf8')
+            import subprocess
+            for i,code in enumerate(re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>',content,re.S)):
+              if code.strip():
+                f=Path('/tmp')/('mej6-'+str(i)+'.js')
+                f.write_text(code,encoding='utf8')
+                subprocess.run(['node','--check',str(f)],check=True)
+            print('VALID',p)
+          PY

@@ -1,0 +1,55 @@
+name: Test six digit access live
+on:
+  push:
+    paths:
+      - .github/workflows/test-six-digit-live.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Validate six digit student and teacher interfaces
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          checks=[
+            ('reviews/activate.html',['activate_short',"maxlength=\"6\"","MEJ_ASSIGNED_TEACHER_CODE_V1"]),
+            ('reviews/teacher-portal.html',['claim_school_teacher_6','owner_issue_six_digit_school_code','maxlength="6"','joinSchoolNo']),
+            ('reviews/owner-login.html',['owner_issue_short_student','mejIssueOwner']),
+            ('index.html',['MEJ_SIX_DIGIT_TEACHER_PROFILE_LINK_20261106','MEJ_STUDENT_ACCESS_V1'])]
+          for path,terms in checks:
+            s=Path(path).read_text(encoding='utf8')
+            for term in terms:assert term in s,(path,term)
+            if path!='index.html':
+              for i,script in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S)):
+                if script.strip():
+                  p=Path('/tmp')/f'check-six-{i}.js'
+                  p.write_text(script)
+                  subprocess.run(['node','--check',str(p)],check=True)
+          print('SIX_DIGIT_UI_AND_PROFILE_VALID')
+          PY
+      - name: Confirm live Pages and deny anonymous issuance
+        run: |
+          set -eu
+          base=https://rouhous.github.io/English-Foundation
+          for page in reviews/activate.html reviews/teacher-portal.html reviews/owner-login.html; do
+            status=$(curl -L -sS --max-time 25 -o /tmp/site.html -w '%{http_code}' "$base/$page")
+            echo "$page HTTP $status"
+            test "$status" = "200"
+          done
+          endpoint=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal
+          for action in owner_issue_six_digit_school_code claim_school_teacher_6; do
+            status=$(curl -sS --max-time 25 -o /tmp/deny.json -w '%{http_code}' -X POST "$endpoint" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' --data "{\"action\":\"$action\",\"schoolName\":\"وادي الحواسنة\",\"schoolNumber\":\"2429\",\"joinCode\":\"000000\"}")
+            echo "$action denied HTTP $status"
+            test "$status" = "403"
+          done
+          endpoint=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license
+          status=$(curl -sS --max-time 25 -o /tmp/deny.json -w '%{http_code}' -X POST "$endpoint" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' --data '{"action":"owner_issue_short_student"}')
+          echo "owner student code issue anonymous HTTP $status"
+          test "$status" = "403"

@@ -2,10 +2,10 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-voyage-restored-bottom-nav-20261106-v1';
+const CACHE='mej-voyage-restored-bottom-nav-20261106-v2';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
- './assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
+ './assets/home-voyage-original.webp','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];
@@ -38,7 +38,7 @@ self.addEventListener('activate',event=>{
   await self.clients.claim();
   // Leave older caches until the new shell is present. Preserve all user data.
   const keys=await caches.keys();
-  await Promise.all(keys.filter(k=>k.startsWith('english-explorer-')&&k!==CACHE)
+  await Promise.all(keys.filter(k=>k!==CACHE && /^(?:english-explorer-|my-english-journey-|mej-)/.test(k))
    .map(k=>caches.delete(k)));
  })());
  // After activation, fill 12 image banks without blocking navigation.
@@ -77,7 +77,7 @@ self.addEventListener('fetch',event=>{
      status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
     })}
    }
-   const cached=cacheKey?await caches.match(cacheKey):null;
+   const cached=cacheKey?await(await caches.open(CACHE)).match(cacheKey):null;
    if(cached){
     event.waitUntil(fetch(request).then(async response=>{
      if(response.ok && cacheKey){

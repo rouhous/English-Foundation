@@ -19,3 +19,5 @@ sw=Path('sw.js');v=sw.read_text(encoding='utf-8')
 v,n=re.subn(r"const CACHE='[^']+';","const CACHE='mej-school-affiliation-refresh-20261106-v1';",v,count=1)
 assert n==1;sw.write_text(v,encoding='utf-8')
 print('SERVER_SCHOOL_CONTEXT_REFRESH_INSTALLED')
+
+# Apply verified backend school on student gate refresh.

@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-voyage-fullbleed-functional-overlay-20261106-v1';
+const CACHE='mej-approved-poster-20261106-v1';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/home-voyage-original.webp','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',

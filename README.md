@@ -1,17 +1,17 @@
 # ⛵ My English Journey | رحلتي مع الإنجليزية
 
-The official application is published from `index.html` through GitHub Pages.
+**الإصدار الرسمي — 2026–2027**
+
+The official application is published through GitHub Pages.
 
 **Application:** https://rouhous.github.io/English-Foundation/
 
-> This repository retains its former technical name `English-Foundation` for the moment. The current application's public-facing name is **My English Journey | رحلتي مع الإنجليزية**.
+**School:** Wadi Al Hawasna School — English Department.
 
-**Current status:** STAGING / public URL for testing only. Student recovery and remote sync must pass end-to-end security verification before real use. Do not enroll real students until production validation is complete.
+The application is **free for registered students and teachers**. Enrollment is limited by the server's registration policy and teacher allocation. Students register using an individual account profile and an invitation issued to their approved teacher. When enrollment reaches capacity, new applicants are directed to contact the owner through WhatsApp.
 
-School: Wadi Al Hawasna School | English Department | 2026–2027.
+The application retains offline-first learning for existing devices. Live enrollment and verified cloud operations require internet access.
 
-## Free pilot and enrollment
+**Important technical implementation note:** GitHub Pages is a public static host. Source files, learning questions, and direct public URLs cannot be hidden by a login UI. Authentication for sensitive student data, cross-device identity, and teacher account access must be verified on a trusted backend before claiming full end-to-end protection. Do not interpret public release branding as a security certification.
 
-The initiative is offered **free of charge to students and teachers during its pilot phase**. New student enrollment uses a dedicated Supabase capacity service; once student places are full, a friendly message directs new applicants to the project owner on WhatsApp. Existing learner profiles are not removed when registration closes. Teacher seats are reserved by a Google-verified owner approval workflow; teacher sign-in integration remains a separate release requirement.
-
-Capacity rules are operational controls, **not copyright license restrictions**, and are deliberately omitted from `LICENSE`. The published HTML remains public and cannot be technically hidden by a signup screen; private student data and privileged operations require authenticated server-side protection. Existing staging privacy and real-student release warnings remain until end-to-end registration, identity, and recovery checks pass.
+© 2026 Houssem Lotfi Rouatbi. All rights reserved. See [LICENSE](LICENSE).

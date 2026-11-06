@@ -29,7 +29,7 @@ jobs:
               continue
             assert s.count('MEJ_OWNER_ONLY_ACCESS_GATE_20261106')==1, str(p)
             assert 'location.replace(LOGIN)' in s
-            if p.name=='index.html':
+            if p.as_posix()=='index.html':
               assert 'onclick="letsGo()"' in s
               assert 'mej-user-voyage.png' in s
             for i,code in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):

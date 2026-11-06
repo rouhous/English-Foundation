@@ -33,7 +33,7 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <div class="panel" style="background:white">
 <strong>رمز انضمام معلمي المدرسة</strong>
 <p class="notice">يصدره المالك الآن لمدرسة وادي الحواسنة (2429)، ثم توزعه المدرسة على معلميها. هذا الرمز يختلف عن رمز تفعيل الطلاب وعن رمز المعلم الخاص بتقاريره.</p>
-<button type="button" id="issueTeacherJoin" style="padding:12px;border:0;border-radius:11px;background:#0c747f;color:white;font:inherit">إنشاء رمز انضمام المدرسة للمعلمين</button>
+<button type="button" id="issueTeacherJoin" style="padding:12px;border:0;border-radius:11px;background:#0c747f;color:white;font:inherit">إنشاء رمز المدرسة للمعلمين (6 أرقام)</button>
 <p id="joinIssueStatus" class="notice"></p>
 <input id="joinIssueValue" dir="ltr" readonly style="display:none;width:100%;padding:10px" aria-label="رمز انضمام المعلمين">
 <button type="button" id="copyJoinIssue" style="display:none;padding:10px">نسخ رمز المعلمين</button>
@@ -50,11 +50,11 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 </section>
 <section id="pendingPanel" class="panel" hidden>
 <h2>تفعيل المعلم بترخيص المدرسة</h2>
-<p class="notice">أكمل التحقق من بريدك الوزاري عبر النموذج الأصلي أولًا، ثم أدخل بيانات المدرسة ورمز الانضمام الذي زودتك به الإدارة.</p>
+<p class="notice">أكمل التحقق من بريدك الوزاري عبر النموذج الأصلي أولًا، ثم أدخل بيانات المدرسة والرمز المكوّن من 6 أرقام الذي زودتك به الإدارة.</p>
 <form id="teacherJoinForm" autocomplete="off">
 <label for="joinSchoolName">اسم المدرسة</label><input id="joinSchoolName" required placeholder="مدرسة وادي الحواسنة" style="width:100%;padding:10px;margin:5px 0 10px">
 <label for="joinSchoolNo">رقم المدرسة (4 أرقام)</label><input id="joinSchoolNo" inputmode="numeric" maxlength="4" required placeholder="2429" style="width:100%;padding:10px;margin:5px 0 10px">
-<label for="joinSchoolCode">رمز الانضمام الخاص بالمدرسة</label><input id="joinSchoolCode" dir="ltr" required maxlength="55" placeholder="MEJ-WADI-..." style="width:100%;padding:10px;margin:5px 0 10px">
+<label for="joinSchoolCode">رمز المدرسة (6 أرقام)</label><input id="joinSchoolCode" dir="ltr" required maxlength="6" placeholder="مثال: 482731" inputmode="numeric" pattern="[0-9٠-٩]{6}" style="width:100%;padding:10px;margin:5px 0 10px">
 <button type="submit" style="padding:12px;border:0;border-radius:10px;background:#087b83;color:white;font:inherit;width:100%">التحقق وتفعيل حساب المعلم</button>
 </form>
 <p id="teacherJoinStatus" role="status"></p>
@@ -114,7 +114,7 @@ document.getElementById('teacherJoinForm').addEventListener('submit',async event
  event.preventDefault();
  const out=document.getElementById('teacherJoinStatus');
  if(!verifiedTeacherCredential){out.textContent='سجل الدخول بحساب Google أولًا.';return}
- const body={action:'claim_school_teacher',schoolName:document.getElementById('joinSchoolName').value.trim(),
+ const body={action:'claim_school_teacher_6',schoolName:document.getElementById('joinSchoolName').value.trim(),
  schoolNumber:document.getElementById('joinSchoolNo').value.trim(),joinCode:document.getElementById('joinSchoolCode').value.trim()};
  out.textContent='جار التحقق من المدرسة والبريد الوزاري...';
  try{
@@ -145,9 +145,9 @@ document.getElementById('issueTeacherJoin').addEventListener('click',async()=>{
  try{
   const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
   headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedOwnerCredential},
-  body:JSON.stringify({action:'owner_issue_school_join_code'}),signal:AbortSignal.timeout(12000)});
-  const d=await r.json();if(!r.ok||!d.ok||!d.teacherJoinCode)throw Error('NOT_ALLOWED');
-  field.value=d.teacherJoinCode;field.style.display='block';
+  body:JSON.stringify({action:'owner_issue_six_digit_school_code'}),signal:AbortSignal.timeout(12000)});
+  const d=await r.json();if(!r.ok||!d.ok||!d.code)throw Error('NOT_ALLOWED');
+  field.value=d.code;field.style.display='block';
   document.getElementById('copyJoinIssue').style.display='inline-flex';
   out.textContent='تم إصدار رمز انضمام معلمي وادي الحواسنة. إنشاء رمز جديد يلغي صلاحية القديم للانضمامات الجديدة فقط.';
  }catch(_){out.textContent='تعذر إصدار الرمز. تأكد من حساب المالك والاتصال.'}

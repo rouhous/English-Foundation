@@ -43,9 +43,10 @@ for(const r of rows){
   scene:r.image,nav:r.nav,rights:r.rights,scroll:r.documentHeight}));
  if(r.imageCount!==1)throw Error('Scene must have exactly one image');
  if(!r.image||r.image.height<400)throw Error('Scene not full-height');
- if(!r.nav||r.nav.bottom>r.height+5)throw Error('Navigation below viewport');
+ if(r.nav)throw Error('Home navigation should be absent');
  if(!r.rights||r.rights.bottom>r.height+5)throw Error('Copyright below viewport');
  if(!r.start||r.start.y<r.head.bottom)throw Error('Start overlapping header');
+ if(r.start.bottom>r.height-20)throw Error('Start too low for footer');
  if(r.backgroundImage!=='none'&&!r.backgroundImage.startsWith('linear-gradient'))throw Error('Unexpected duplicate background');
 }
-console.log('HOME_VIEWPORT_QA_PASSED');
+console.log('HOME_START_ONLY_VIEWPORT_QA_PASSED');

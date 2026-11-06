@@ -23,7 +23,7 @@ jobs:
           s=Path('index.html').read_text()
           assert s.count('MEJ_SETTINGS_GEAR_BESIDE_START_20261106')==1
           assert s.count('class="m31-settings-near-start"')==1
-          assert s.count('onclick="openJourneySettings()"')==1
+          assert s.count('onclick="openJourneySettings()"')>=2
           assert 'onclick="letsGo()"' in s
           for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
             if js.strip():Path('/tmp/mej-gear-'+str(i)+'.js').write_text(js)

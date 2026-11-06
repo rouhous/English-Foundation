@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 "use strict";
-/** Offline-first PWA invariants; no live server or student data. */
+/** Official release offline-first invariants; no live server or student data. */
 const assert=require("node:assert/strict"),fs=require("node:fs"),vm=require("node:vm");
 const js=fs.readFileSync("sw.js","utf8");
 const css=fs.readFileSync("assets/stage5-responsive.css","utf8");

@@ -12,17 +12,16 @@
  *    log in as the verified owner and choose "إنشاء رمز ربط النموذج".
  * 2. Paste that 64-character secret in Apps Script Project Settings ->
  *    Script Properties as MEJ_REGISTRY_BRIDGE_SECRET.
- * 3. In the private Teachers registry add an O-column heading
- *    "School Approval 2429". After independently checking that the
- *    verified @moe.om teacher belongs to Wadi Al Hawasna, put
- *    APPROVED_2429 in column O. Never fill it based only on a typed
- *    school name or possession of a generic school license.
- * 4. Run mejBridgeVerifiedTeacherRegistry once.
- * 5. Run installMejBridgeTrigger to sync new approved teachers every
- *    15 minutes. Does not replace any pre-existing triggers.
+ * 3. Run mejBridgeVerifiedTeacherRegistry once, then installMejBridgeTrigger.
+ *    The private registry only stages teachers whose original @moe.om
+ *    verification is Active. No teacher access is granted by this step.
+ * 4. The school issues a separate private teacher-join code and distributes
+ *    it to its teachers. Each teacher signs in with Google and enters
+ *    school name, 4-digit number and the private join code.
  *
- * The bridge is fail-closed: no secret, no approval, or an unverified
- * ministry address means NO teacher will be activated in Supabase.
+ * The bridge fails closed: no secret or unverified ministry address means
+ * NO teacher record is staged in Supabase. Actual activation additionally
+ * requires the teacher's verified Google account and the school join code.
  */
 const MEJ_BRIDGE_API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
 function mejBridgeVerifiedTeacherRegistry(){
@@ -32,8 +31,6 @@ function mejBridgeVerifiedTeacherRegistry(){
   const sh=eeRegistry_();
   const last=sh.getLastRow();
   if(last<=1){console.log('No teacher registrations to sync.');return {approved:0,processed:0}}
-  if(sh.getRange(1,15).getDisplayValue()!=='School Approval 2429')
-    throw new Error('Add header "School Approval 2429" in column O of the private Teachers registry first.');
   if(!sh.getRange(1,16).getValue())sh.getRange(1,16).setValue('MEJ License Sync Status');
   if(!sh.getRange(1,17).getValue())sh.getRange(1,17).setValue('MEJ License Sync Time');
   const data=sh.getRange(2,1,last-1,17).getDisplayValues();
@@ -48,8 +45,7 @@ function mejBridgeVerifiedTeacherRegistry(){
     const classes=String(row[6]||'').trim();
     const status=String(row[7]||'').trim().toLowerCase();
     const ministry=String(row[9]||'').trim().toLowerCase();
-    const schoolApproval=String(row[14]||'').trim().toUpperCase();
-    if(status!=='active'||schoolApproval!=='APPROVED_2429')continue;
+    if(status!=='active')continue;
     approved++;
     if(!/^[^@ ]+@[^@ ]+\.[^@ ]+$/.test(google) ||
        !/^[a-z0-9._%+\-]+@moe\.om$/.test(ministry) ||
@@ -59,8 +55,8 @@ function mejBridgeVerifiedTeacherRegistry(){
       sh.getRange(i+2,16).setValue('INCOMPLETE_VERIFIED_RECORD');
       failed++;continue;
     }
-    // School is a supplemental consistency check; column O is the actual
-    // independent admin approval. The form's school text is not proof.
+    // School name is not identity proof. This step only stages a verified
+    // ministry account; teacher must enter a private school join code.
     if(!/(الحواسنة|hawasn|hawasna)/i.test(school)){
       sh.getRange(i+2,16).setValue('SCHOOL_NAME_MISMATCH');
       failed++;continue;
@@ -78,7 +74,7 @@ function mejBridgeVerifiedTeacherRegistry(){
       const raw=response.getContentText();
       let result={};try{result=JSON.parse(raw)}catch(_){}
       if(codeStatus===200 && result.ok===true && result.verificationRecorded===true){
-        sh.getRange(i+2,16).setValue('SYNCED');
+        sh.getRange(i+2,16).setValue('VERIFIED_AWAITING_SCHOOL_CODE');
         sh.getRange(i+2,17).setValue(new Date());
         processed++;
       }else{
@@ -91,7 +87,7 @@ function mejBridgeVerifiedTeacherRegistry(){
     }
   }
   SpreadsheetApp.flush();
-  console.log('Registry bridge: approved='+approved+', synced='+processed+', failed='+failed);
+  console.log('Verified registry bridge: eligible='+approved+', staged='+processed+', failed='+failed);
   return {approved,processed,failed};
 }
 function installMejBridgeTrigger(){

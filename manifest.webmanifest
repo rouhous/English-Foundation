@@ -23,20 +23,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "مراجعة المحتوى",
-      "short_name": "المراجعة",
-      "description": "مراجعة المستويات وصفحات التعلّم دون تغيير تقدم الطلاب",
-      "url": "./reviews/owner-review.html",
-      "icons": [
-        {
-          "src": "./icon-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    }
   ]
 }

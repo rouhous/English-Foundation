@@ -29,7 +29,14 @@ async function verify(){
     try{
       const r=await fetch(API,{method:'POST',cache:'no-store',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_student',accessToken:student}),signal:AbortSignal.timeout(8500)});
       const d=await r.json();
-      if(r.ok&&d.ok===true&&d.role==='student'){granted('student');return}
+      if(r.ok&&d.ok===true&&d.role==='student'){
+  /* MEJ_REFRESH_VERIFIED_SCHOOL_CONTEXT_20261106 */
+  if(typeof d.schoolName==='string'&&d.schoolName.trim()){
+    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',d.schoolName.trim());
+    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');
+  }
+  granted('student');return
+ }
     }catch(_){}
     localStorage.removeItem('MEJ_STUDENT_ACCESS_V1');
   }

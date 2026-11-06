@@ -11,7 +11,13 @@ p=Path("index.html")
 s=p.read_text(encoding="utf-8")
 marker="MEJ_HOME_IMAGE_FREE_PREVIEW_20261106"
 if marker in s:
-    print("Already applied")
+    # Follow-up correction for the already-published CSS override.
+    if "width:100%!important;" in s:
+        s=s.replace("width:100%!;","width:100%!important;",1)
+        p.write_text(s,encoding="utf-8")
+        print("Corrected existing home width declaration")
+    else:
+        print("Already applied")
     raise SystemExit(0)
 
 # Permanently remove the scene artwork element from home(), rather than

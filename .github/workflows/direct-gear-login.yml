@@ -1,0 +1,42 @@
+name: Bind original Settings gear to login
+on:
+  push:
+    paths:
+      - scripts/install_direct_gear_login.py
+      - .github/workflows/direct-gear-login.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Replace visible admin entry with existing gear handler
+        run: python3 scripts/install_direct_gear_login.py
+      - name: Verify generated JavaScript syntax and hidden UI
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          match=re.search(r'<script id="mej-safe-admin-settings-entry">(.*?)</script>',s,re.S)
+          assert match and s.count('MEJ_SETTINGS_EXISTING_GEAR_DIRECT_LOGIN_V3')==1
+          assert 'const target="./reviews/owner-login.html"' in match.group(1)
+          assert 'Admin · دخول المالك' not in match.group(1)
+          assert 'document.createElement("span")' in match.group(1)
+          Path('/tmp/mej-existing-gear.js').write_text(match.group(1),encoding='utf8')
+          PY
+          node --check /tmp/mej-existing-gear.js
+      - name: Commit application patch
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Make settings gear only visible owner login entry"
+            git push
+          fi

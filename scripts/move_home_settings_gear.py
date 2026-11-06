@@ -7,6 +7,10 @@ if marker in s:
     raise SystemExit("Already installed")
 gear='<button type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button>'
 if s.count(gear)!=1:
+    import re
+    buttons=re.findall(r'<button[^>]*onclick="openJourneySettings\(\)"[^>]*>.*?</button>',s,re.S)
+    print("GEAR MATCHES",s.count(gear),"BUTTONS",len(buttons))
+    print([b[:260] for b in buttons[:5]])
     raise RuntimeError("Expected exactly one settings gear")
 s=s.replace(gear,"",1)
 anchor='<div class="m31-lower"><button class="m31-start"'

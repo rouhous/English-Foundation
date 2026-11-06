@@ -28,6 +28,9 @@ for(const [width,height] of [[390,844],[360,740],[412,915]]){
    userSelect:box('.mobile-ocean-v31 .m31-profile>select'),
    newUser:box('.mobile-ocean-v31 .m31-profile>button[onclick="openProfile(true)"]'),
    studentAvatar:document.querySelectorAll('.mobile-ocean-v31 .m31-profile-copy').length,
+   profile:box('.mobile-ocean-v31 .m31-profile'),
+   department:box('.mobile-ocean-v31 .m31-dept'),
+   gear:box('.mobile-ocean-v31 .m31-settings-near-start'),
    rights:box('#mej-owner-rights-notice'),
    imageCount:document.querySelectorAll('.mobile-ocean-v31 .m31-sea').length,
    backgroundImage:getComputedStyle(document.querySelector('.mobile-ocean-v31')).backgroundImage,
@@ -43,13 +46,15 @@ fs.mkdirSync('diagnostics',{recursive:true});
 fs.writeFileSync('diagnostics/approved-home-viewport-test.json',JSON.stringify(rows,null,2)+'\n');
 for(const r of rows){
  console.log(JSON.stringify({viewport:r.width+'x'+r.height,
-  scene:r.image,nav:r.nav,rights:r.rights,scroll:r.documentHeight}));
+  scene:r.image,nav:r.nav,profile:r.profile,select:r.userSelect,newUser:r.newUser,department:r.department,gear:r.gear,rights:r.rights,scroll:r.documentHeight}));
  if(r.imageCount!==1)throw Error('Scene must have exactly one image');
  if(!r.image||r.image.height<400)throw Error('Scene not full-height');
  if(r.nav)throw Error('Home navigation should be absent');
  if(r.studentAvatar)throw Error('Student avatar still present');
  if(!r.userSelect||!r.newUser)throw Error('Compact user controls missing');
  if(r.userSelect.bottom>r.height||r.newUser.bottom>r.height)throw Error('Compact user controls off screen');
+ if(Math.abs(r.userSelect.y-r.newUser.y)>12)throw Error('User controls are not aligned in one row');
+ if(r.department && (r.userSelect.y<r.department.bottom-2 || r.newUser.y<r.department.bottom-2))throw Error('Profile overlaps department or logos');
  if(r.start.bottom>=r.rights.y)throw Error('Start overlaps copyright');
  if(!r.rights||r.rights.bottom>r.height+5)throw Error('Copyright below viewport');
  if(!r.start||r.start.y<r.head.bottom)throw Error('Start overlapping header');

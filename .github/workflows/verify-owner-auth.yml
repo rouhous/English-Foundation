@@ -1,0 +1,21 @@
+name: Verify owner authentication fail-closed
+on:
+  push:
+    paths:
+      - admin-backend/**
+      - .github/workflows/verify-owner-auth.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check admin-backend/server.mjs
+      - name: Verify no unconfigured or forged admin access
+        run: node admin-backend/test-owner-auth.mjs

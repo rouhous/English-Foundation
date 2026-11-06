@@ -15,9 +15,39 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div>
 <h1>بوابة المعلم والمدرسة</h1>
 <p class="sub">تسجيل الدخول بحساب Google المعتمد</p>
+<div id="roleChoice" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0">
+<button type="button" id="chooseSchool" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:white;color:#08717a">تسجيل / تفعيل مدرسة</button>
+<button type="button" id="chooseTeacher" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:#087b83;color:white">دخول معلم</button>
+</div>
 <div class="pill small">إذا سبق لك التسجيل من نموذج المعلمين الأصلي، استخدم <strong>نفس حساب Google</strong>. لا نطلب إنشاء تسجيل جديد ما دام اعتمادك قائمًا.</div>
 <div id="googleSignIn"></div>
 <p id="status" role="status" aria-live="polite">جار تجهيز تسجيل Google...</p>
+<section id="schoolRegistrationPanel" class="panel" hidden>
+<h2>تسجيل مسؤول المدرسة</h2>
+<p class="notice">بعد تسجيل الدخول بحساب Google الذي اعتمده مالك التطبيق، أدخل اسم المدرسة ورقمها. الحساب المعتمد هو وحده الذي يحصل على صلاحيات مسؤول المدرسة.</p>
+<form id="schoolRegistrationForm">
+<label for="schoolRegName">اسم المدرسة</label>
+<input id="schoolRegName" required value="مدرسة وادي الحواسنة" style="width:100%;padding:11px;margin:7px 0">
+<label for="schoolRegNo">رقم المدرسة (4 أرقام)</label>
+<input id="schoolRegNo" required maxlength="4" inputmode="numeric" pattern="[0-9٠-٩]{4}" value="2429" style="width:100%;padding:11px;margin:7px 0">
+<button type="submit" style="padding:12px;background:#087b83;color:white;border:0;border-radius:11px;font:inherit;width:100%">التحقق وتفعيل حساب المدرسة</button>
+</form>
+<p id="schoolRegStatus" class="notice" role="status"></p>
+</section>
+<section id="schoolManagerPanel" class="panel" hidden>
+<h2>لوحة إدارة المدرسة</h2>
+<div id="schoolManagerOverview" class="notice"></div>
+<div class="panel" style="background:white">
+<strong>رمز انضمام المعلمين — 6 أرقام</strong>
+<p class="notice">يمكنك إصدار رمز خاص بالمدرسة وتوزيعه على المعلمين المتحقق من بريدهم الوزاري. إصدار رمز جديد يلغي القديم للمعلمين الجدد فقط.</p>
+<button type="button" id="managerIssueCode" style="padding:11px;background:#087b83;color:white;border:0;border-radius:10px;font:inherit">إنشاء رمز المعلمين</button>
+<p id="managerCodeStatus" class="notice" role="status"></p>
+<input id="managerCodeValue" readonly dir="ltr" style="width:100%;padding:11px;display:none;letter-spacing:3px" aria-label="رمز المعلمين">
+<button type="button" id="managerCopyCode" style="display:none;padding:10px;border:1px solid #95c7c7;border-radius:8px;background:white;font:inherit">نسخ الرمز</button>
+</div>
+<div id="schoolTeachersList"></div>
+<p class="notice">روابط Google Sheets لا تمنح حق الوصول وحدها؛ مشاركة تقارير المعلمين مع حساب المدرسة تحتاج إعداد صلاحيات Drive بصورة مستقلة.</p>
+</section>
 <section id="teacherPanel" class="panel" hidden>
 <h2>حساب المعلم المعتمد</h2>
 <div class="row"><span>المعلم</span><strong id="teacherName"></strong></div>
@@ -30,6 +60,16 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
 <p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد التحقق من سجلهم الوزاري.</p>
 <div id="ownerSchoolStatus"></div>
+<div class="panel" style="background:white">
+<strong>اعتماد مسؤول مدرسة وادي الحواسنة</strong>
+<p class="notice">يحدد المالك بريد Google الذي يحق له تسجيل المدرسة. لا يمنح اسم المدرسة أو رقم 2429 صلاحيات الإدارة وحدهما.</p>
+<form id="approveManagerForm">
+<label for="managerEmail">بريد Google الخاص بمسؤول المدرسة</label>
+<input id="managerEmail" type="email" autocomplete="email" required placeholder="manager@example.com" style="width:100%;padding:11px;margin:9px 0;direction:ltr">
+<button type="submit" style="padding:11px;background:#087b83;color:#fff;border:0;border-radius:10px;font:inherit">اعتماد المسؤول</button>
+</form>
+<p id="approveManagerStatus" class="notice" role="status"></p>
+</div>
 <div class="panel" style="background:white">
 <strong>رمز انضمام معلمي المدرسة</strong>
 <p class="notice">يصدره المالك الآن لمدرسة وادي الحواسنة (2429)، ثم توزعه المدرسة على معلميها. هذا الرمز يختلف عن رمز تفعيل الطلاب وعن رمز المعلم الخاص بتقاريره.</p>
@@ -75,7 +115,8 @@ const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-por
 const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
 let verifiedTeacherCredential=null;
-function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel'])document.getElementById(id).hidden=true}
+let registrationMode='teacher';
+function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel','schoolRegistrationPanel','schoolManagerPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},body:JSON.stringify({action}),signal:AbortSignal.timeout(12000)});
@@ -88,8 +129,8 @@ async function onCredential(response){
   verifiedTeacherCredential=response.credential;
   const {r,data}=await call('teacher_status',response.credential);
   if(!r.ok||!data.ok){
-   document.getElementById('pendingPanel').hidden=false;
-   status.textContent='لم يُعثر على اعتماد مدرسي مكتمل لهذا الحساب.';return;
+   document.getElementById(registrationMode==='school'?'schoolRegistrationPanel':'pendingPanel').hidden=false;
+   status.textContent=registrationMode==='school'?'أدخل بيانات المدرسة بعد اعتماد بريدك من المالك.':'لم يُعثر على اعتماد مدرسي مكتمل لهذا الحساب.';return;
   }
   if(data.role==='owner'){
    verifiedOwnerCredential=response.credential;
@@ -98,6 +139,13 @@ async function onCredential(response){
    if(owner.r.ok&&owner.data.ok){
      value('ownerSchoolStatus',`الترخيص: ${owner.data.school?.teacher_limit||'—'} معلمين، ${owner.data.school?.student_limit||'—'} طالب. المعلمون المعتمدون: ${owner.data.verifiedTeachers||0}`);
    }
+   return;
+  }
+  if(data.role==='school_manager'){
+   const panel=document.getElementById('schoolManagerPanel');
+   panel.hidden=false;
+   status.textContent='تم التحقق من مسؤول المدرسة.';
+   await refreshManager(response.credential);
    return;
   }
   if(data.role!=='teacher')throw Error('ROLE_DENIED');
@@ -110,6 +158,86 @@ async function onCredential(response){
   status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
+
+function selectRole(mode){
+ registrationMode=mode;
+ const t=document.getElementById('chooseTeacher'),sc=document.getElementById('chooseSchool');
+ t.style.background=mode==='teacher'?'#087b83':'white';t.style.color=mode==='teacher'?'white':'#08717a';
+ sc.style.background=mode==='school'?'#087b83':'white';sc.style.color=mode==='school'?'white':'#08717a';
+ if(verifiedTeacherCredential){
+  const p=document.getElementById('pendingPanel'),s=document.getElementById('schoolRegistrationPanel');
+  if(!p.hidden||!s.hidden){p.hidden=mode!=='teacher';s.hidden=mode!=='school'}
+ }
+}
+document.getElementById('chooseTeacher').addEventListener('click',()=>selectRole('teacher'));
+document.getElementById('chooseSchool').addEventListener('click',()=>selectRole('school'));
+document.getElementById('schoolRegistrationForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const out=document.getElementById('schoolRegStatus');
+ if(!verifiedTeacherCredential){out.textContent='سجل دخول Google أولاً.';return}
+ out.textContent='جار التحقق من موافقة مالك التطبيق...';
+ try{
+  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+verifiedTeacherCredential,'Content-Type':'application/json'},
+   body:JSON.stringify({action:'school_manager_claim',schoolName:document.getElementById('schoolRegName').value.trim(),schoolNumber:document.getElementById('schoolRegNo').value.trim()}),signal:AbortSignal.timeout(12000)});
+  const d=await r.json();
+  if(!r.ok||!d.ok){
+   const messages={OWNER_APPROVAL_REQUIRED:'يجب اعتماد بريد Google الخاص بك من حساب مالك التطبيق أولاً.',SCHOOL_ALREADY_REGISTERED:'سبق تسجيل المدرسة بحساب مسؤول آخر.',SCHOOL_DETAILS_INVALID:'اسم المدرسة أو رقمها غير صحيح.'};
+   out.textContent=messages[d.error]||'تعذر تفعيل المدرسة، تأكد من الترخيص أو تواصل مع المالك.';return;
+  }
+  out.textContent='تم تفعيل حساب مسؤول المدرسة.';
+  await onCredential({credential:verifiedTeacherCredential});
+ }catch(_){out.textContent='تعذر الاتصال بخدمة تسجيل المدرسة.'}
+});
+document.getElementById('approveManagerForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const out=document.getElementById('approveManagerStatus');
+ if(!verifiedOwnerCredential){out.textContent='تأكد من تسجيل الدخول بحساب المالك أولاً.';return}
+ out.textContent='جار اعتماد حساب مسؤول المدرسة...';
+ try{
+  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+verifiedOwnerCredential,'Content-Type':'application/json'},
+   body:JSON.stringify({action:'owner_approve_school_manager',managerEmail:document.getElementById('managerEmail').value.trim()}),signal:AbortSignal.timeout(12000)});
+  const d=await r.json();
+  if(!r.ok||!d.ok){out.textContent=d.error==='SCHOOL_ALREADY_REGISTERED'?'المدرسة مرتبطة بالفعل بمسؤول آخر.':'تعذّر اعتماد البريد.';return}
+  out.textContent='تم اعتماد '+d.managerEmail+'، يمكن لمسؤول المدرسة الدخول بحساب Google وإكمال التسجيل.';
+ }catch(_){out.textContent='حدث خطأ في الاتصال.'}
+});
+async function refreshManager(credential){
+ const {r,data}=await call('school_overview',credential);
+ if(!r.ok||!data.ok)return;
+ const school=data.school||{};
+ const overview=document.getElementById('schoolManagerOverview');
+ overview.textContent='المدرسة: '+(school.school_name||'—')+' · الرمز: '+(school.school_number||'—')+
+  ' · المعلمون: '+(data.verifiedTeachers??0)+' / '+(school.teacher_limit??'—')+
+  ' · الطلاب المسموحون: '+(school.student_limit??'—');
+ const container=document.getElementById('schoolTeachersList');container.replaceChildren();
+ const heading=document.createElement('h3');heading.textContent='المعلمون المعتمدون';container.append(heading);
+ if(!Array.isArray(data.teachers)||data.teachers.length===0){
+  const p=document.createElement('p');p.className='notice';p.textContent='لم يُربط أي معلم معتمد بالمدرسة بعد.';container.append(p);return
+ }
+ for(const teacher of data.teachers){
+  const item=document.createElement('div');item.className='row';
+  const name=document.createElement('strong');name.textContent=teacher.name||'معلم';
+  const cl=document.createElement('span');cl.textContent=teacher.classes||'—';
+  item.append(name,cl);container.append(item);
+ }
+}
+document.getElementById('managerIssueCode').addEventListener('click',async()=>{
+ const output=document.getElementById('managerCodeStatus'),field=document.getElementById('managerCodeValue');
+ if(!verifiedTeacherCredential){output.textContent='سجل دخول Google أولاً.';return}
+ output.textContent='جار إصدار رمز المعلمين...';
+ try{
+  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+verifiedTeacherCredential,'Content-Type':'application/json'},
+   body:JSON.stringify({action:'owner_issue_six_digit_school_code'}),signal:AbortSignal.timeout(12000)});
+  const d=await r.json();if(!r.ok||!d.ok||!/^[0-9]{6}$/.test(d.code))throw Error('NOT_AUTHORIZED');
+  field.value=d.code;field.style.display='block';
+  document.getElementById('managerCopyCode').style.display='inline-block';
+  output.textContent='رمز المعلمين جاهز للتوزيع على معلمي المدرسة بعد التحقق الوزاري.';
+ }catch(_){output.textContent='تعذّر إصدار الرمز. تأكد من اعتماد حساب مسؤول المدرسة.'}
+});
+document.getElementById('managerCopyCode').addEventListener('click',()=>{
+ const code=document.getElementById('managerCodeValue').value;
+ if(code&&navigator.clipboard)navigator.clipboard.writeText(code);
+});
 document.getElementById('teacherJoinForm').addEventListener('submit',async event=>{
  event.preventDefault();
  const out=document.getElementById('teacherJoinStatus');

@@ -1,0 +1,58 @@
+name: Verify school attribution and report sharing safety
+on:
+  push:
+    paths:
+      - .github/workflows/verify-school-affiliation-sharing.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Verify student profile server school binding
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          main=Path('index.html').read_text()
+          assert 'MEJ_VERIFIED_SCHOOL_PROFILE_20261106' in main
+          assert 'MEJ_REFRESH_VERIFIED_SCHOOL_CONTEXT_20261106' in main
+          assert "p.school=school||'';" in main
+          assert 'schoolInput.readOnly=true' in main
+          act=Path('reviews/activate.html').read_text()
+          assert "localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1'" in act
+          assert "result.teacherLinked===true" in act
+          owner=Path('reviews/owner-login.html').read_text()
+          for tag in ['ownerSchoolName','mejIssueOutside','secondary']:
+            assert tag in owner,tag
+          portal=Path('reviews/teacher-portal.html').read_text()
+          assert 'عرض تقرير المعلم' in portal
+          script=Path('integrations/teacher-report-school-sharing.gs').read_text()
+          for tag in ['verified_registry_get_manager','addViewer(manager)','OWNER_CONSENT_NEEDED']:
+            assert tag in script,tag
+          for filename in ['reviews/activate.html','reviews/owner-login.html','reviews/teacher-portal.html']:
+            text=Path(filename).read_text()
+            for idx,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',text,re.S)):
+              if js.strip():
+                p=Path('/tmp')/('mej-'+str(idx)+'.js')
+                p.write_text(js)
+                subprocess.run(['node','--check',str(p)],check=True)
+          p=Path('/tmp/mej-school-share.js');p.write_text(script)
+          subprocess.run(['node','--check',str(p)],check=True)
+          print('AFFILIATION_UI_SCRIPTS_PASS')
+          PY
+      - name: Refuse anonymous access to sharing recipient
+        run: |
+          set -eu
+          api=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal
+          status=$(curl -sS -o /tmp/share-reply -w '%{http_code}' --max-time 20 -X POST "$api" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' -d '{"action":"verified_registry_get_manager"}')
+          echo "Get manager without integration secret: $status"
+          test "$status" = '403'
+          api=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license
+          status=$(curl -sS -o /tmp/code-reply -w '%{http_code}' --max-time 20 -X POST "$api" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' -d '{"action":"owner_issue_short_student","secondary":true}')
+          echo "Issue second owner code anonymously: $status"
+          test "$status" = '403'

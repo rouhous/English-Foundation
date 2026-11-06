@@ -218,7 +218,13 @@ async function refreshManager(credential){
   const item=document.createElement('div');item.className='row';
   const name=document.createElement('strong');name.textContent=teacher.name||'معلم';
   const cl=document.createElement('span');cl.textContent=teacher.classes||'—';
-  item.append(name,cl);container.append(item);
+  item.append(name,cl);
+  if(typeof teacher.reportSheetUrl==='string'&&/^https:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+\/edit$/.test(teacher.reportSheetUrl)){
+    const link=document.createElement('a');link.href=teacher.reportSheetUrl;link.target='_blank';
+    link.rel='noopener noreferrer';link.textContent='عرض تقرير المعلم';link.className='link alt';
+    link.style.fontSize='12px';item.append(link);
+  }
+  container.append(item);
  }
 }
 document.getElementById('managerIssueCode').addEventListener('click',async()=>{

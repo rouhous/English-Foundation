@@ -1,0 +1,72 @@
+{
+  "register": {
+    "count": 6,
+    "nearby_functions": [
+      "placementPlan",
+      "diagnosticLanding",
+      "startDiagnostic",
+      "endSession",
+      "enforceEnglishTextDirection",
+      "unknown"
+    ]
+  },
+  "registration": {
+    "count": 0,
+    "nearby_functions": []
+  },
+  "createProfile": {
+    "count": 0,
+    "nearby_functions": []
+  },
+  "addProfile": {
+    "count": 0,
+    "nearby_functions": []
+  },
+  "saveProfile": {
+    "count": 2,
+    "nearby_functions": [
+      "unknown",
+      "closeProfile"
+    ]
+  },
+  "teacher": {
+    "count": 108,
+    "nearby_functions": [
+      "unknown"
+    ]
+  },
+  "profiles.push": {
+    "count": 0,
+    "nearby_functions": []
+  },
+  "profiles[": {
+    "count": 11,
+    "nearby_functions": [
+      "unknown",
+      "active",
+      "saveProfileModal",
+      "addUser",
+      "switchUser",
+      "importProgress"
+    ]
+  },
+  "db.profiles": {
+    "count": 17,
+    "nearby_functions": [
+      "unknown",
+      "active",
+      "saveProfileModal",
+      "addUser",
+      "switchUser",
+      "exportProgress",
+      "importProgress"
+    ]
+  },
+  "enroll": {
+    "count": 3,
+    "nearby_functions": [
+      "unknown",
+      "error"
+    ]
+  }
+}

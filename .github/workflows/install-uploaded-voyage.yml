@@ -17,7 +17,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html sw.js assets/mej-user-voyage.jpg
+          git add index.html sw.js assets/mej-user-voyage.png
           if ! git diff --cached --quiet; then
             git commit -m "Replace home background with supplied voyage artwork"
             git push

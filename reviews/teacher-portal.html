@@ -30,6 +30,14 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
 <p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد التحقق من سجلهم الوزاري.</p>
 <div id="ownerSchoolStatus"></div>
+<div class="panel" style="background:white">
+<strong>رمز انضمام معلمي المدرسة</strong>
+<p class="notice">يصدره المالك الآن لمدرسة وادي الحواسنة (2429)، ثم توزعه المدرسة على معلميها. هذا الرمز يختلف عن رمز تفعيل الطلاب وعن رمز المعلم الخاص بتقاريره.</p>
+<button type="button" id="issueTeacherJoin" style="padding:12px;border:0;border-radius:11px;background:#0c747f;color:white;font:inherit">إنشاء رمز انضمام المدرسة للمعلمين</button>
+<p id="joinIssueStatus" class="notice"></p>
+<input id="joinIssueValue" dir="ltr" readonly style="display:none;width:100%;padding:10px" aria-label="رمز انضمام المعلمين">
+<button type="button" id="copyJoinIssue" style="display:none;padding:10px">نسخ رمز المعلمين</button>
+</div>
 <div style="margin-top:14px;padding:12px;border:1px solid #c5e2da;border-radius:12px;background:white">
 <strong>ربط نموذج Google Forms الأصلي</strong>
 <p class="notice">يمكن للمالك إنشاء رمز سري لربط السجل القديم بترخيص المدرسة. يُدخل الرمز في خصائص Google Apps Script، ولا يُنشر على GitHub أو يُشارك مع الطلاب.</p>
@@ -41,6 +49,15 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <a class="link" href="./owner-login.html">لوحة ترخيص المالك</a>
 </section>
 <section id="pendingPanel" class="panel" hidden>
+<h2>تفعيل المعلم بترخيص المدرسة</h2>
+<p class="notice">أكمل التحقق من بريدك الوزاري عبر النموذج الأصلي أولًا، ثم أدخل بيانات المدرسة ورمز الانضمام الذي زودتك به الإدارة.</p>
+<form id="teacherJoinForm" autocomplete="off">
+<label for="joinSchoolName">اسم المدرسة</label><input id="joinSchoolName" required placeholder="مدرسة وادي الحواسنة" style="width:100%;padding:10px;margin:5px 0 10px">
+<label for="joinSchoolNo">رقم المدرسة (4 أرقام)</label><input id="joinSchoolNo" inputmode="numeric" maxlength="4" required placeholder="2429" style="width:100%;padding:10px;margin:5px 0 10px">
+<label for="joinSchoolCode">رمز الانضمام الخاص بالمدرسة</label><input id="joinSchoolCode" dir="ltr" required maxlength="55" placeholder="MEJ-WADI-..." style="width:100%;padding:10px;margin:5px 0 10px">
+<button type="submit" style="padding:12px;border:0;border-radius:10px;background:#087b83;color:white;font:inherit;width:100%">التحقق وتفعيل حساب المعلم</button>
+</form>
+<p id="teacherJoinStatus" role="status"></p>
 <h2>التحقق المدرسي لم يكتمل</h2>
 <p class="notice">حساب Google سليم، لكنه لم يُربط بعد بسجل معلم مُعتمد في المدرسة. لن يتم تسجيلك أو منحك الوصول دون تحقق.</p>
 </section>
@@ -57,6 +74,7 @@ const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleuserco
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
 const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
+let verifiedTeacherCredential=null;
 function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
@@ -67,6 +85,7 @@ async function onCredential(response){
  hide();status.textContent='جار التحقق من حسابك وسجل المعلمين...';
  try{
   if(typeof response?.credential!=='string')throw Error('NO_GOOGLE_IDENTITY');
+  verifiedTeacherCredential=response.credential;
   const {r,data}=await call('teacher_status',response.credential);
   if(!r.ok||!data.ok){
    document.getElementById('pendingPanel').hidden=false;
@@ -91,6 +110,51 @@ async function onCredential(response){
   status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
+document.getElementById('teacherJoinForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ const out=document.getElementById('teacherJoinStatus');
+ if(!verifiedTeacherCredential){out.textContent='سجل الدخول بحساب Google أولًا.';return}
+ const body={action:'claim_school_teacher',schoolName:document.getElementById('joinSchoolName').value.trim(),
+ schoolNumber:document.getElementById('joinSchoolNo').value.trim(),joinCode:document.getElementById('joinSchoolCode').value.trim()};
+ out.textContent='جار التحقق من المدرسة والبريد الوزاري...';
+ try{
+  const response=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
+   headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedTeacherCredential},
+   body:JSON.stringify(body),signal:AbortSignal.timeout(12000)});
+  const data=await response.json();
+  if(!response.ok||!data.ok){
+   const errors={MINISTRY_VERIFICATION_REQUIRED:'لم يكتمل ربط التحقق الوزاري بالنظام. افتح رابط التحقق الوزاري وأكمل التسجيل ثم حاول مرة أخرى.',
+    TEACHER_LIMIT_REACHED:'اكتمل الحد المسموح للمعلمين في المدرسة.',
+    SCHOOL_LICENSE_INVALID:'رمز انضمام المدرسة غير صحيح أو غير نشط.',
+    SCHOOL_DETAILS_INVALID:'تحقق من اسم المدرسة ورقمها ورمز الانضمام.'};
+   out.textContent=errors[data.error]||'تعذر اعتماد الترخيص. راجع مسؤول المدرسة.';return;
+  }
+  out.textContent='تم تفعيل حساب المعلم بنجاح.';
+  const checked=await call('teacher_status',verifiedTeacherCredential);
+  if(checked.r.ok&&checked.data.ok){
+   document.getElementById('pendingPanel').hidden=true;
+   await onCredential({credential:verifiedTeacherCredential});
+  }
+ }catch(_){out.textContent='تعذر الاتصال بخدمة التراخيص.'}
+});
+document.getElementById('issueTeacherJoin').addEventListener('click',async()=>{
+ const out=document.getElementById('joinIssueStatus'),field=document.getElementById('joinIssueValue');
+ if(!verifiedOwnerCredential){out.textContent='سجل الدخول بحساب المالك.';return}
+ out.textContent='جار إصدار رمز المعلمين...';field.style.display='none';
+ document.getElementById('copyJoinIssue').style.display='none';
+ try{
+  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
+  headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedOwnerCredential},
+  body:JSON.stringify({action:'owner_issue_school_join_code'}),signal:AbortSignal.timeout(12000)});
+  const d=await r.json();if(!r.ok||!d.ok||!d.teacherJoinCode)throw Error('NOT_ALLOWED');
+  field.value=d.teacherJoinCode;field.style.display='block';
+  document.getElementById('copyJoinIssue').style.display='inline-flex';
+  out.textContent='تم إصدار رمز انضمام معلمي وادي الحواسنة. إنشاء رمز جديد يلغي صلاحية القديم للانضمامات الجديدة فقط.';
+ }catch(_){out.textContent='تعذر إصدار الرمز. تأكد من حساب المالك والاتصال.'}
+});
+document.getElementById('copyJoinIssue').addEventListener('click',()=>{
+ const v=document.getElementById('joinIssueValue').value;if(v)navigator.clipboard?.writeText(v);
+});
 document.getElementById('issueBridgeSecret').addEventListener('click',async()=>{
 const status=document.getElementById('bridgeSecretStatus'),field=document.getElementById('bridgeSecretValue');
 if(!verifiedOwnerCredential){status.textContent='يجب تسجيل دخول المالك بحساب Google أولاً.';return}

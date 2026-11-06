@@ -1,0 +1,40 @@
+name: Make full voyage image uncropped background
+on:
+  push:
+    paths:
+      - scripts/make_uncropped_voyage_background.py
+      - .github/workflows/make-uncropped-voyage-background.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: python3 scripts/make_uncropped_voyage_background.py
+      - name: Validate markup and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('MEJ_SINGLE_UNCROPPED_BACKGROUND_OVERLAY_V2')==1
+          assert s.count('class="m31-sea"')==1
+          assert 'object-fit:contain!important' in s
+          assert 'onclick="letsGo()"' in s
+          assert 'onclick="route(\'levels\')"' in s
+          for i,x in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.I|re.S)):
+            if x.strip():Path('/tmp/mej-uncrop-'+str(i)+'.js').write_text(x,encoding='utf8')
+          PY
+          for f in /tmp/mej-uncrop-*.js; do node --check "$f"; done
+      - name: Commit changes
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Place full original voyage behind controls without cropping"
+            git push
+          fi

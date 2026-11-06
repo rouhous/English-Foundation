@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='my-english-journey-official-20261106-v2-clean-settings';
+const CACHE='my-english-journey-official-20261106-v3-bilingual-rights';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/class-ranking-v1.css','./assets/class-ranking-v1.js',

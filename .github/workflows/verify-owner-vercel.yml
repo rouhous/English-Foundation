@@ -1,0 +1,21 @@
+name: Validate Standalone Owner Verification
+on:
+  push:
+    paths:
+      - admin-backend/**
+      - .github/workflows/verify-owner-vercel.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: node --check admin-backend/api/admin/me.mjs
+      - name: Deny unauthorized access
+        run: cd admin-backend && npm test

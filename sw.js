@@ -2,12 +2,12 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='english-explorer-fast-launch-20261106-v5-owner-login';
+const CACHE='english-explorer-fast-launch-20261106-v6-owner-login-minimal';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
- './reviews/owner-review.html','./reviews/owner-login.html','./reviews/admin-levels.html',
+ './reviews/owner-review.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];
 const IMAGE_SHARDS=Array.from({length:12},(_,i)=>
  './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261105-stage0-69');
@@ -69,6 +69,14 @@ self.addEventListener('fetch',event=>{
    const mainPath=appRoot.pathname;
    const isMain=pathname===mainPath||pathname===mainPath+'index.html';
    const cacheKey=isMain?'./index.html':pathname.startsWith(mainPath)?'.'+pathname.slice(mainPath.length-1):null;
+   // Authentication pages must not be served stale from the offline cache.
+   // Require a fresh page; ordinary learning stays offline-first.
+   if(pathname===mainPath+'reviews/owner-login.html'){
+    try {return await fetch(request,{cache:'no-store'})}
+    catch(_){return new Response('Login requires an internet connection.',{
+     status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
+    })}
+   }
    const cached=cacheKey?await caches.match(cacheKey):null;
    if(cached){
     event.waitUntil(fetch(request).then(async response=>{

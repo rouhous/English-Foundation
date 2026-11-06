@@ -1,0 +1,43 @@
+name: Install full-bleed voyage with interactive controls
+on:
+  push:
+    paths:
+      - scripts/install_fullbleed_voyage_overlay.py
+      - .github/workflows/install-fullbleed-voyage-overlay.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Convert scene card to one full-screen background
+        run: python3 scripts/install_fullbleed_voyage_overlay.py
+      - name: Validate scene and functional buttons
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          x=Path('index.html').read_text(encoding='utf8')
+          assert x.count('MEJ_FULLBLEED_VOYAGE_FUNCTIONAL_OVERLAY_20261106')==1
+          assert x.count('class="m31-sea"')==1
+          assert x.count('class="m31-art"')==1
+          assert 'mej-home-voyage-bottom-nav-v1' not in x
+          assert 'onclick="letsGo()"' in x
+          assert 'onclick="openJourneySettings()"' in x
+          assert "onclick=\"route('levels')\"" in x
+          for n,v in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',x,re.S|re.I)):
+            if v.strip():Path('/tmp/mej-ov'+str(n)+'.js').write_text(v)
+          PY
+          for f in /tmp/mej-ov*.js; do node --check "$f"; done
+      - name: Commit app and refresh offline cache
+        run: |
+          if ! git diff --quiet -- index.html sw.js; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html sw.js
+            git commit -m "Lay home controls over one full-height voyage background"
+            git push
+          fi

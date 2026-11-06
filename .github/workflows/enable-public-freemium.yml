@@ -1,0 +1,45 @@
+name: Enable freemium app for public students
+on:
+  push:
+    paths:
+      - scripts/enable_public_freemium.py
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Apply freemium stage limits and student activation
+        run: python3 scripts/enable_public_freemium.py
+      - name: Validate free and licensed access
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          s=Path('index.html').read_text()
+          assert 'MEJ_FREEMIUM_PUBLIC_THREE_STAGES_20261107' in s
+          assert "window.__MEJ_ACCESS_ROLE='public'" in s
+          assert "?12:3;" in s
+          assert "action:'activate_short'" in s
+          assert "if(window.__MEJ_ACCESS_ROLE==='public')return true" in s
+          assert "p.school=school||'';" in s
+          scripts=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S)
+          for i,js in enumerate(scripts):
+            if not js.strip():continue
+            f=Path('/tmp')/f'check-public-{i}.js'
+            f.write_text(js)
+            subprocess.run(['node','--check',str(f)],check=True)
+          print('PUBLIC_FREEMIUM_AND_STUDENT_ACTIVATION_JS_OK')
+          PY
+      - name: Commit and publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Open public diagnostic and three stages; activate full stages with teacher code'
+            git push
+          fi

@@ -1314,6 +1314,44 @@ document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-
 <section class="j23-panel j23-history"><h2>📒 جواز سفر الجزر</h2><div class="journey-history">${Array.from({length:13},(_,i)=>i).filter(i=>permitted(i)).map(i=>{let n=islandBadges(i,p).filter(x=>x.earned).length;return `<div>🏝️ ${esc(LV[i][0])}<br>🏅 ${n}/10 · ${countMaster(i,p)}/200 <button class="btn light small" onclick="chooseIsland(${i})">زيارة</button></div>`}).join('')}</div></section>
 </div>`}
 function chooseIsland(g){if(!checkAccess(g))return;active().journeyIsland=g;persist(false);route('journey')}
+// MEJ_PER_TEACHER_100_SEATS_V2
+// An input is attached only to student-registration views; never to existing
+// profiles or the teacher code that routes student reports.
+function mejAttachTeacherInvitation(){
+ const name=document.getElementById('studentName');
+ if(!name||document.getElementById('mejTeacherInviteInput'))return;
+ const wrapper=document.createElement('div');
+ wrapper.className='field mej-teacher-invite';
+ wrapper.style.cssText='margin:10px 0';
+ const title=document.createElement('label');
+ title.htmlFor='mejTeacherInviteInput';
+ title.textContent='رمز الانضمام الذي استلمته من معلمك';
+ const input=document.createElement('input');
+ input.id='mejTeacherInviteInput';
+ input.maxLength=48;
+ input.placeholder='رمز الانضمام';
+ input.autocomplete='off';
+ input.autocapitalize='off';
+ input.spellcheck=false;
+ input.style.cssText='width:100%;max-width:100%;direction:ltr;text-align:left';
+ wrapper.append(title,input);
+ name.closest('.field')?.insertAdjacentElement('afterend',wrapper);
+}
+let mejInviteQueued=false;
+function mejScheduleTeacherInvite(){
+ if(mejInviteQueued)return;
+ mejInviteQueued=true;
+ queueMicrotask(()=>{mejInviteQueued=false;mejAttachTeacherInvitation()});
+}
+if(document.readyState==='loading')
+ document.addEventListener('DOMContentLoaded',()=>{
+  mejAttachTeacherInvitation();
+  new MutationObserver(mejScheduleTeacherInvite).observe(document.body,{childList:true,subtree:true});
+ },{once:true});
+else {
+ mejAttachTeacherInvitation();
+ new MutationObserver(mejScheduleTeacherInvite).observe(document.body,{childList:true,subtree:true});
+}
 // MEJ_PILOT_CAPACITY_STUDENT_GATE_V1
 const MEJ_PILOT_STATUS_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-status';
 const MEJ_PILOT_REGISTER_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register';
@@ -1335,7 +1373,7 @@ async function mejPilotMayCreateStudent(){
   return true;
  }catch(_){toast('تعذر التحقق من توفر التسجيل. تحقق من اتصال الإنترنت وحاول مجددًا.');return false}
 }
-async function mejPilotReserveStudent(profileId){
+async function mejPilotReserveStudent(profileId,teacherInvite){
  try{
   if(!window.crypto?.subtle)throw Error('CRYPTO_REQUIRED');
   const buf=new TextEncoder().encode(String(profileId));
@@ -1344,7 +1382,7 @@ async function mejPilotReserveStudent(profileId){
   const response=await fetch(MEJ_PILOT_REGISTER_URL,{
    method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
    headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({role:'student',accountRef}),
+   body:JSON.stringify({role:'student',accountRef,teacherInvite}),
    signal:AbortSignal.timeout(10000)
   });
   if(response.status===409){mejPilotFull();return false}
@@ -1355,7 +1393,17 @@ async function mejPilotReserveStudent(profileId){
  }catch(_){toast('تعذر إتمام تسجيل الطالب. تأكد من اتصال الإنترنت ثم أعد المحاولة.');return false}
 }
 
-async function saveStudent(){let p=active();let name=document.getElementById('studentName').value.trim(),grade=document.getElementById('studentGrade').value,school=document.getElementById('studentSchool').value.trim(),section=(document.getElementById('studentSection')?.value||'').trim(),className=grade+(section?'_'+section:''),teacherCode=(document.getElementById('teacherCode')?.value||'').trim();if(!name){toast('اكتب اسم الطالب أولاً');return}if(section&&!/^[1-9][0-9]{0,2}$/.test(section)){toast('القسم يجب أن يكون رقمًا من 1 إلى 999 أو يُترك فارغًا');return}if(teacherCode && !/^(?:[1-9]|1[0-2])$/.test(grade)){toast('اختر صفًا من 1 إلى 12 لإرسال التقارير');return}if(!p.name){if(mejPilotSaving)return false;mejPilotSaving=true;try{if(!await mejPilotReserveStudent(p.id))return false;}finally{mejPilotSaving=false;}}p.name=name;p.grade=grade;p.school=school||'Wadi Al Hawasna School';p.className=className;p.teacherCode=teacherCode;p.syncStatus=teacherCode?'رمز المعلم مسجّل. سيتم التحقق منه عند إرسال التقرير.':'وضع التعلم العام: لا تُرسل بيانات هذا الطالب إلى المعلم.';persist(!!teacherCode);toast('تم حفظ ملف الطالب ✅');home();return true}
+async function saveStudent(){let p=active();let name=document.getElementById('studentName').value.trim(),grade=document.getElementById('studentGrade').value,school=document.getElementById('studentSchool').value.trim(),section=(document.getElementById('studentSection')?.value||'').trim(),className=grade+(section?'_'+section:''),teacherCode=(document.getElementById('teacherCode')?.value||'').trim();if(!name){toast('اكتب اسم الطالب أولاً');return}if(section&&!/^[1-9][0-9]{0,2}$/.test(section)){toast('القسم يجب أن يكون رقمًا من 1 إلى 999 أو يُترك فارغًا');return}if(teacherCode && !/^(?:[1-9]|1[0-2])$/.test(grade)){toast('اختر صفًا من 1 إلى 12 لإرسال التقارير');return}if(!p.name){
+ if(mejPilotSaving)return false;
+ const inviteInput=document.getElementById('mejTeacherInviteInput');
+ const teacherInvite=(inviteInput?.value||'').trim().toLowerCase();
+ if(!/^[a-f0-9]{48}$/.test(teacherInvite)){
+  toast('أدخل رمز الانضمام الصحيح الذي حصلت عليه من معلمك.');return false;
+ }
+ mejPilotSaving=true;
+ try{if(!await mejPilotReserveStudent(p.id,teacherInvite))return false;}
+ finally{mejPilotSaving=false;}
+}p.name=name;p.grade=grade;p.school=school||'Wadi Al Hawasna School';p.className=className;p.teacherCode=teacherCode;p.syncStatus=teacherCode?'رمز المعلم مسجّل. سيتم التحقق منه عند إرسال التقرير.':'وضع التعلم العام: لا تُرسل بيانات هذا الطالب إلى المعلم.';persist(!!teacherCode);toast('تم حفظ ملف الطالب ✅');home();return true}
 function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
 async function addUser(){if(!await mejPilotMayCreateStudent())return;let p=newProfile();db.profiles[p.id]=p;db.active=p.id;activeSession=null;persist(false);home();document.getElementById('studentName')?.focus();toast('أضف اسم الطالب الجديد واحفظ بياناته')}
 function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}db.active=id;activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}

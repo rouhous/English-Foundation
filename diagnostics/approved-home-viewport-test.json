@@ -41,23 +41,15 @@
       "position": "relative"
     },
     "start": {
-      "x": 48,
-      "y": 650,
-      "width": 294,
-      "height": 59,
-      "bottom": 709,
+      "x": 56,
+      "y": 731,
+      "width": 279,
+      "height": 56,
+      "bottom": 787,
       "display": "flex",
       "position": "relative"
     },
-    "nav": {
-      "x": 9,
-      "y": 718,
-      "width": 372,
-      "height": 75,
-      "bottom": 793,
-      "display": "grid",
-      "position": "relative"
-    },
+    "nav": null,
     "rights": {
       "x": 0,
       "y": 801,
@@ -80,8 +72,8 @@
       "x": 0,
       "y": 0,
       "width": 360,
-      "height": 697,
-      "bottom": 697,
+      "height": 698,
+      "bottom": 698,
       "display": "flex",
       "position": "relative"
     },
@@ -89,8 +81,8 @@
       "x": 0,
       "y": 0,
       "width": 360,
-      "height": 697,
-      "bottom": 697,
+      "height": 698,
+      "bottom": 698,
       "display": "block",
       "position": "absolute"
     },
@@ -98,8 +90,8 @@
       "x": 0,
       "y": 0,
       "width": 360,
-      "height": 697,
-      "bottom": 697,
+      "height": 698,
+      "bottom": 698,
       "display": "block",
       "position": "absolute"
     },
@@ -113,28 +105,20 @@
       "position": "relative"
     },
     "start": {
-      "x": 45,
-      "y": 552,
-      "width": 270,
-      "height": 57,
-      "bottom": 610,
+      "x": 57,
+      "y": 635,
+      "width": 246,
+      "height": 51,
+      "bottom": 686,
       "display": "flex",
       "position": "relative"
     },
-    "nav": {
-      "x": 9,
-      "y": 617,
-      "width": 342,
-      "height": 74,
-      "bottom": 691,
-      "display": "grid",
-      "position": "relative"
-    },
+    "nav": null,
     "rights": {
       "x": 0,
-      "y": 697,
+      "y": 698,
       "width": 360,
-      "height": 43,
+      "height": 42,
       "bottom": 740,
       "display": "block",
       "position": "relative"
@@ -185,23 +169,15 @@
       "position": "relative"
     },
     "start": {
-      "x": 50,
-      "y": 714,
-      "width": 311,
-      "height": 61,
-      "bottom": 776,
+      "x": 58,
+      "y": 797,
+      "width": 295,
+      "height": 58,
+      "bottom": 855,
       "display": "flex",
       "position": "relative"
     },
-    "nav": {
-      "x": 9,
-      "y": 785,
-      "width": 394,
-      "height": 77,
-      "bottom": 861,
-      "display": "grid",
-      "position": "relative"
-    },
+    "nav": null,
     "rights": {
       "x": 0,
       "y": 870,

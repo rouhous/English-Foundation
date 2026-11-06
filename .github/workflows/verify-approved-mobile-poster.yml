@@ -1,0 +1,37 @@
+name: Verify official mobile poster in Chromium
+on:
+  push:
+    paths:
+      - scripts/verify_approved_mobile_poster.mjs
+      - .github/workflows/verify-approved-mobile-poster.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install headless browser for real layout measurement
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install chromium
+      - name: Start app locally
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-server.log 2>&1 &
+          sleep 2
+      - name: Measure viewport fit and scene rendering
+        run: node scripts/verify_approved_mobile_poster.mjs
+      - name: Save non-personal layout evidence
+        if: always()
+        run: |
+          if [ -f diagnostics/approved-home-viewport-test.json ]; then
+            git add diagnostics/approved-home-viewport-test.json
+            if ! git diff --cached --quiet; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Record measured mobile home layout bounds"
+              git push
+            fi
+          fi

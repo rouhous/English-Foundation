@@ -1,0 +1,15 @@
+name: Verify live teacher approval authorization
+on:
+  push:
+    paths:
+      - scripts/test_pilot_teacher_live.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject unauthorized teacher seat reservations
+        run: python3 scripts/test_pilot_teacher_live.py

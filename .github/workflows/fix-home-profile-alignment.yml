@@ -1,0 +1,38 @@
+name: Align home profile selection and add button
+on:
+  push:
+    paths:
+      - scripts/fix_home_profile_alignment.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: python3 scripts/fix_home_profile_alignment.py
+      - name: Verify markup and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text()
+          assert s.count('MEJ_PROFILE_BUTTON_STATIC_ALIGN_V2_20261106')==1
+          assert s.count('class="m31-sea"')==1
+          assert 'onclick="openProfile(true)"' in s and 'onclick="letsGo()"' in s
+          for i,v in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
+            if v.strip():Path('/tmp/align-'+str(i)+'.js').write_text(v)
+          PY
+          for f in /tmp/align-*.js; do node --check "$f"; done
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Keep compact user selector and add button together below title"
+            git push
+          fi

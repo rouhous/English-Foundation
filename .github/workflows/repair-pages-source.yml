@@ -1,0 +1,45 @@
+name: Repair GitHub Pages source selection
+on:
+  push:
+    paths:
+      - .github/workflows/repair-pages-source.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Switch existing site from legacy branch deployment to Actions publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          echo "Existing Pages configuration:"
+          gh api "repos/$GITHUB_REPOSITORY/pages" --jq '{build_type,status,source,html_url}'
+          echo "Requesting GitHub Actions publishing for the already-existing site:"
+          code=$(curl -sS --max-time 20 -o /tmp/pages-change.json -w '%{http_code}' \
+            -X PUT \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" \
+            -d '{"build_type":"workflow"}')
+          echo "Update returned status: $code"
+          if [ "$code" = 204 ]; then
+            echo "Updated Pages source to Actions."
+            gh api "repos/$GITHUB_REPOSITORY/pages" --jq '{build_type,status,source,html_url}'
+          else
+            echo "Could not update Pages source with Actions token. Response:"
+            python3 - <<'PY'
+          import json
+          try:
+            data=json.load(open('/tmp/pages-change.json'))
+            print({k:data.get(k) for k in ('message','documentation_url','status')})
+          except: print("No API error data")
+          PY
+            echo "GitHub may require repository admin settings access to change build_type."
+          fi

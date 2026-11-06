@@ -1,0 +1,42 @@
+name: Replace homepage navigation with bottom start button
+on:
+  push:
+    paths:
+      - scripts/home_start_only_sea.py
+      - .github/workflows/home-start-only-sea.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Remove home nav and lower smaller start button
+        run: python3 scripts/home_start_only_sea.py
+      - name: Verify home only changes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          x=Path('index.html').read_text(encoding='utf8')
+          assert x.count('MEJ_HOME_START_REPLACES_NAV_SEA_EXTENSION_20261106')==1
+          assert x.count('class="m31-sea"')==1
+          assert 'class="m31-nav"' not in x
+          assert 'onclick="letsGo()"' in x
+          assert "function route(" in x
+          for i,code in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',x,re.S|re.I)):
+            if code.strip():Path('/tmp/mej-start-'+str(i)+'.js').write_text(code,encoding='utf8')
+          PY
+          for file in /tmp/mej-start-*.js; do node --check "$file"; done
+      - name: Commit home appearance only
+        run: |
+          if ! git diff --quiet -- index.html sw.js; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html sw.js
+            git commit -m "Remove home nav and place smaller Let's Go over lower sea"
+            git push
+          fi

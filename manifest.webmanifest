@@ -1,7 +1,7 @@
 {
-  "name": "English Explorer | رحلتي مع الإنجليزية",
-  "short_name": "English Explorer",
-  "description": "Wadi Al Hawasna School — interactive English language practice Levels 0–12",
+  "name": "My English Journey | رحلتي مع الإنجليزية",
+  "short_name": "رحلتي مع الإنجليزية",
+  "description": "Official free English learning application for registered students and teachers, Grades 1–12.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

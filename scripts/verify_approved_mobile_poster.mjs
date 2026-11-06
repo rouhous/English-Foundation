@@ -61,4 +61,4 @@ for(const r of rows){
  if(r.start.bottom>r.height-20)throw Error('Start too low for footer');
  if(r.backgroundImage!=='none'&&!r.backgroundImage.startsWith('linear-gradient'))throw Error('Unexpected duplicate background');
 }
-console.log('HOME_START_ONLY_VIEWPORT_QA_PASSED');
+console.log('HOME_COMPACT_PROFILE_ALIGNMENT_QA_PASSED');

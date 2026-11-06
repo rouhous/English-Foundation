@@ -1,0 +1,14 @@
+name: Inspect learner settings visibility
+on:
+  push:
+    paths:
+      - scripts/inspect_settings_visibility.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/inspect_settings_visibility.py

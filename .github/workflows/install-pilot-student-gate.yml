@@ -1,0 +1,43 @@
+name: Install pilot learner registration capacity gate
+on:
+  push:
+    paths:
+      - scripts/install_pilot_student_gate.py
+      - .github/workflows/install-pilot-student-gate.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Guard creation of new student accounts
+        run: python3 scripts/install_pilot_student_gate.py
+      - name: Check updated JavaScript syntax and reservation guards
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('MEJ_PILOT_CAPACITY_STUDENT_GATE_V1')==1
+          assert 'async function addUser()' in s
+          assert 'async function saveProfileModal(isNew)' in s
+          assert 'await mejPilotReserveStudent(p.id)' in s
+          blocks=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)
+          for i,block in enumerate(blocks):
+            if block.strip():Path('/tmp/mej-script-'+str(i)+'.js').write_text(block)
+          PY
+          for file in /tmp/mej-script-*.js; do node --check "$file"; done
+      - name: Commit updated application
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Check student seats online before issuing new local profiles"
+            git push
+          fi

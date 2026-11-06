@@ -1,0 +1,41 @@
+name: Clean Settings UI and reuse existing gear
+on:
+  push:
+    paths:
+      - scripts/clean_settings_single_gear.py
+      - .github/workflows/clean-settings-single-gear.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update existing app
+        run: python3 scripts/clean_settings_single_gear.py
+      - name: Validate inline JS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          doc=Path('index.html').read_text(encoding='utf-8')
+          content=re.search(r'<script id="mej-safe-admin-settings-entry">(.*?)</script>',doc,re.S)
+          assert content and doc.count('MEJ_SINGLE_EXISTING_SETTINGS_GEAR_V4')==1
+          assert 'document.createElement(\'button\')' not in content.group(1)
+          assert "owner-login.html" in content.group(1)
+          Path('/tmp/settings-single-gear.js').write_text(content.group(1),encoding='utf-8')
+          PY
+          node --check /tmp/settings-single-gear.js
+      - name: Commit Settings UI repair
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Remove duplicate settings gear and unnecessary debug cards"
+            git push
+          fi

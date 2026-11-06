@@ -1,0 +1,29 @@
+name: Diagnose GitHub Pages delivery state
+on:
+  push:
+    paths:
+      - .github/workflows/diagnose-pages-delivery.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: read
+  deployments: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read site configuration and output
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo 'SITE CONFIG:'
+          gh api "repos/$GITHUB_REPOSITORY/pages" --jq '{status,build_type,source,html_url,https_enforced,public,cname}' || true
+          echo 'RECENT DEPLOYMENT STATUSES:'
+          gh api "repos/$GITHUB_REPOSITORY/deployments?environment=github-pages&per_page=6" --jq '[.[] | {id,sha,environment,created_at,updated_at,task,description}]' || true
+          echo 'SERVING RESPONSES:'
+          for path in / /reviews/owner-login.html /reviews/teacher-portal.html /reviews/activate.html; do
+            curl -sS -L --max-time 20 -o /dev/null -w "STATUS %{http_code} - %{url_effective}\n" "https://rouhous.github.io/English-Foundation$path" || true
+          done
+          echo 'CANDIDATE FILES IN MAIN:'
+          for f in index.html reviews/owner-login.html reviews/teacher-portal.html reviews/activate.html; do test -s "$f" && echo "PRESENT $f"; done

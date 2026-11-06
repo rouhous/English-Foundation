@@ -1,0 +1,40 @@
+name: Verify public freemium and school teacher forms live
+on:
+  push:
+    paths: [.github/workflows/verify-live-public-freemium.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production pages and roles
+        run: |
+          set -eu
+          base=https://rouhous.github.io/English-Foundation
+          for p in / /reviews/teacher-portal.html /reviews/activate.html; do
+            code=$(curl -L -sS --max-time 25 -o /tmp/page.html -w '%{http_code}' "$base$p")
+            echo "$p HTTP $code"
+            test "$code" = '200'
+            if [ "$p" = / ]; then
+              grep -q 'MEJ_FREEMIUM_PUBLIC_THREE_STAGES_20261107' /tmp/page.html
+              grep -q "window.__MEJ_ACCESS_ROLE='public'" /tmp/page.html
+              grep -q 'activate_short' /tmp/page.html
+              grep -q '?12:3' /tmp/page.html
+              echo 'PUBLIC THREE STAGES AND SIX DIGIT STUDENT REGISTRATION AVAILABLE'
+            fi
+            if [ "$p" = /reviews/teacher-portal.html ]; then
+              grep -q 'schoolManagerName' /tmp/page.html
+              grep -q 'schoolManagerEmail' /tmp/page.html
+              grep -q 'teacherJoinForm' /tmp/page.html
+              grep -q "panel.hidden=false" /tmp/page.html
+              echo 'SCHOOL AND TEACHER FORMS AVAILABLE'
+            fi
+          done
+      - name: Verify owner backend requires signed identity
+        run: |
+          set -eu
+          endpoint=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license
+          code=$(curl -sS -o /tmp/res -w '%{http_code}' --max-time 20 -X POST "$endpoint" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' -d '{"action":"owner_issue_short_student","secondary":true}')
+          echo "Unauthorized owner issue = $code"
+          test "$code" = 403

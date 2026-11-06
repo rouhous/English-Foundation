@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""One synthetic account only; its record must be cleaned by project administration."""
+"""Enrolment must reject a valid-looking account without a teacher invite."""
 import json,urllib.request,urllib.error
-base='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register'
-ref='deadc0de'*8
-for number in (1,2):
- req=urllib.request.Request(base,data=json.dumps({'role':'student','accountRef':ref}).encode(),
-   method='POST',headers={'Origin':'https://rouhous.github.io','Content-Type':'application/json'})
- try:
-  with urllib.request.urlopen(req,timeout=20) as r:
-   payload=json.loads(r.read())
-   assert r.status==200 and payload.get('ok') is True,payload
-   assert payload.get('existing') is (number==2),payload
-   print('PASS request',number,'reserved' if number==1 else 'idempotent existing')
- except urllib.error.HTTPError as e:
-  raise RuntimeError(f"HTTP {e.code}: {e.read().decode()[:300]}")
+url='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register'
+request=urllib.request.Request(url,data=json.dumps({
+ 'role':'student','accountRef':'deadc0de'*8
+}).encode(),method='POST',headers={
+ 'Origin':'https://rouhous.github.io','Content-Type':'application/json'
+})
+try:
+ with urllib.request.urlopen(request,timeout=20) as response:
+  raise AssertionError('Uninvited enrolment was accepted: '+str(response.status))
+except urllib.error.HTTPError as error:
+ assert error.code==400,(error.code,error.read().decode()[:300])
+ print('PASS: valid-shaped student account denied without approved teacher invitation')

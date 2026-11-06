@@ -1,0 +1,40 @@
+name: Fit single home scenery on mobile
+on:
+  push:
+    paths:
+      - scripts/fit_single_home_scene.py
+      - .github/workflows/fit-single-home-scene.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Remove duplicate image and fit navigation
+        run: python3 scripts/fit_single_home_scene.py
+      - name: Verify script syntax and scene markup
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('MEJ_SINGLE_SCENE_FIT_VIEWPORT_20261106')==1
+          assert 'class="m31-boat-restored"' not in s
+          assert 'class="m31-sea"' in s
+          for i,script in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
+            if script.strip(): Path('/tmp/home'+str(i)+'.js').write_text(script)
+          PY
+          for file in /tmp/home*.js; do node --check "$file"; done
+      - name: Commit
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Remove duplicated scene and fit complete illustration above home navigation"
+            git push
+          fi

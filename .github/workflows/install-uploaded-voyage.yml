@@ -1,0 +1,24 @@
+name: Install attached background photograph
+on:
+  push:
+    paths:
+      - scripts/install_uploaded_voyage.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import user-approved image and link it
+        run: python3 scripts/install_uploaded_voyage.py
+      - name: Commit replacement
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js assets/mej-user-voyage.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace home background with supplied voyage artwork"
+            git push
+          fi

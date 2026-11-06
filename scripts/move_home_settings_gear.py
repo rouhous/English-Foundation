@@ -14,7 +14,7 @@ home=s[home_start:home_end]
 if home.count(gear)!=1:
     raise RuntimeError(f"Expected one settings gear in active home, found {home.count(gear)}")
 home=home.replace(gear,"",1)
-lower=re.compile(r'(<div class="m31-lower"><button class="m31-start".*?</button>)(\\s*</div>)',re.S)
+lower=re.compile(r'(<div class="m31-lower"><button class="m31-start".*?</button>)(\s*</div>)',re.S)
 if len(lower.findall(home))!=1:
     raise RuntimeError("Expected exactly one start area in active home")
 home=lower.sub(lambda m:m.group(1)+'<button class="m31-settings-near-start" type="button" onclick="openJourneySettings()" aria-label="الإعدادات ومعلومات المزامنة" title="الإعدادات">⚙️</button>'+m.group(2),home,count=1)

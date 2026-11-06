@@ -20,6 +20,9 @@ jobs:
           from pathlib import Path
           s=Path('index.html').read_text(encoding='utf8')
           import re
+          for key in ('async function saveStudent()', 'function saveStudent()', 'function openProfile(isNew=false)', 'const teacherCode=', "document.getElementById('teacherCode')", "id=\"teacherCode\"", 'p.teacherCode=teacherCode'):
+            pos=s.find(key)
+            print('TARGET',key,'POSITION',pos,'TEXT',repr(s[max(0,pos-500):pos+1900]))
           for needle in ('mejTeacherInviteInput','teacherCode','teacherInvite','mejPilotReserveStudent','function createProfile','function saveProfile','function openProfile','teacher_code','MEJ_STUDENT_ACCESS_V1'):
             found=list(re.finditer(re.escape(needle),s))
             print('\n====',needle,'COUNT',len(found))

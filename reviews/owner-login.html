@@ -37,7 +37,7 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
 const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 // The backend must be deployed over HTTPS and bound to a verified owner sub
 // before this page can show any private controls. Do not trust decoded JWTs.
-const BACKEND_ORIGIN='';
+const BACKEND_ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
 const status=document.getElementById('status');
 const privateArea=document.getElementById('privateArea');
 const reviewLink=document.getElementById('reviewLink');
@@ -46,9 +46,9 @@ function deny(){privateArea.hidden=true;reviewLink.hidden=true}
 async function onCredential(response){
  deny();
  if(!response||typeof response.credential!=='string'){say('تعذر تسجيل الدخول.');return}
- if(!BACKEND_ORIGIN){say('تعذر التحقق من الحساب حاليًا.');return}
+ if(!BACKEND_ENDPOINT){say('تعذر التحقق من الحساب حاليًا.');return}
  try{
-  const endpoint=new URL('/api/admin/me',BACKEND_ORIGIN);
+  const endpoint=new URL(BACKEND_ENDPOINT);
   if(endpoint.protocol!=='https:')throw Error('HTTPS_REQUIRED');
   const result=await fetch(endpoint.href,{
    method:'GET',mode:'cors',cache:'no-store',credentials:'omit',

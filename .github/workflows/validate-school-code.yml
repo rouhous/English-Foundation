@@ -1,0 +1,48 @@
+name: Validate school teacher code registration
+on:
+  push:
+    paths:
+      - .github/workflows/validate-school-code.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify teacher-join form, Google login and bridge JS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess,re
+          html=Path('reviews/teacher-portal.html').read_text()
+          for phrase in ['joinSchoolName','joinSchoolNo','joinSchoolCode','claim_school_teacher','owner_issue_school_join_code','google.accounts.id.initialize','teacher_status','issueBridgeSecret']:
+            assert phrase in html,phrase
+          code=re.findall(r'<script[^>]*>(.*?)</script>',html,re.S)
+          for n,x in enumerate(code):
+            if x.strip():
+              p=Path('/tmp')/f'mej-teacher-{n}.js'
+              p.write_text(x)
+              subprocess.run(['node','--check',str(p)],check=True)
+          bridge=Path('integrations/verified-teacher-registry-bridge.gs').read_text()
+          for phrase in ['MEJ_REGISTRY_BRIDGE_SECRET','verified_registry_push','status!==\'active\'','mejBridgeVerifiedTeacherRegistry']:
+            assert phrase in bridge,phrase
+          p=Path('/tmp/mej-bridge.js')
+          p.write_text(bridge)
+          subprocess.run(['node','--check',str(p)],check=True)
+          print('TEACHER_SCHOOL_JOIN_FORM_AND_SCRIPT_VALID')
+          PY
+      - name: API must refuse unauthorized provisioning and joining
+        run: |
+          set -e
+          endpoint=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal
+          for a in claim_school_teacher owner_issue_school_join_code verified_registry_push; do
+            status=$(curl -sS -o /tmp/reply.json -w "%{http_code}" --max-time 20 -X POST "$endpoint" -H 'Origin: https://rouhous.github.io' -H 'Content-Type: application/json' --data "{\"action\":\"$a\",\"schoolName\":\"وادي الحواسنة\",\"schoolNumber\":\"2429\"}")
+            echo "$a: $status"
+            test "$status" = 403
+          done
+          echo "UNAUTHENTICATED_JOIN_ISSUE_AND_STAGING_BLOCKED"

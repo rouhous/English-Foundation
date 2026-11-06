@@ -8,3 +8,5 @@ for m in re.finditer('background-image:',s):
 # other background URL styles: count and selectors near last occurrences
 for m in list(re.finditer(r'background\s*:\s*[^;]{0,250}url\(',s,re.I))[:15]:
  print('BG',m.start(),repr(s[m.start()-280:m.start()+90]))
+
+print('END TRACE')

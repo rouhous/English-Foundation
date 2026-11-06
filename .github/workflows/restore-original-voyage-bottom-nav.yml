@@ -1,0 +1,43 @@
+name: Restore original voyage with bottom-aligned navigation
+on:
+  push:
+    paths:
+      - scripts/restore_original_voyage_bottom_nav.py
+      - .github/workflows/restore-original-voyage-bottom-nav.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Restore image from approved previous commit and fit layout
+        run: python3 scripts/restore_original_voyage_bottom_nav.py
+      - name: Validate single scene image and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          doc=Path('index.html').read_text(encoding='utf8')
+          assert doc.count('MEJ_ORIGINAL_VOYAGE_FITTED_BOTTOM_NAV_20261106')==1
+          assert doc.count('class="m31-sea"')==1
+          assert 'MEJ_HOME_IMAGE_FREE_PREVIEW_20261106' not in doc
+          assert Path('assets/home-voyage-original.webp').stat().st_size > 4000
+          assert 'object-fit:contain!important' in doc
+          for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',doc,re.S|re.I)):
+            if js.strip():Path('/tmp/mej-voyage-'+str(i)+'.js').write_text(js,encoding='utf8')
+          PY
+          for f in /tmp/mej-voyage-*.js; do node --check "$f"; done
+      - name: Commit original art and home layout
+        run: |
+          if ! git diff --quiet -- index.html || [ -n "$(git ls-files --others --exclude-standard assets/home-voyage-original.webp)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html assets/home-voyage-original.webp
+            git commit -m "Restore original full voyage scene with footer-anchored navigation"
+            git push
+          fi

@@ -11,7 +11,8 @@ assert 'mej-pilot-teacher-approve' in owner
 assert "if(!ownerCredential)return" in owner
 assert 'https://wa.me/96898262956' in full
 assert 'MEJ_PILOT_CAPACITY_STUDENT_GATE_V1' in app
-assert "mejPilotReserveStudent(p.id)" in app
+assert "mejPilotReserveStudent(p.id,teacherInvite)" in app
+assert "MEJ_PER_TEACHER_100_SEATS_V2" in app
 assert "await mejPilotMayCreateStudent()" in app
 assert "MEJ_PILOT_REGISTER_URL" in app
 assert "100 طالب" not in Path('LICENSE').read_text()

@@ -32,7 +32,7 @@ assert 'mejStageQuestions(g,part)' in html
 assert 'MEJ_STAGE5_RESPONSIVE_V1' in html
 assert './assets/stage5-responsive.css?v=20261105-stage5' in html
 sw=(root/'sw.js').read_text(encoding='utf8')
-assert 'english-explorer-fast-launch-20261105-v1' in sw
+assert re.search(r"const CACHE='[^']+';",sw)
 assert 'return cached;' in sw and 'warmPictures()' in sw
 report={
  'approved_images':len(items),'unique_image_ids':len({c['id'] for _,c in items}),

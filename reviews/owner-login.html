@@ -17,6 +17,13 @@ h1{font-size:clamp(22px,5vw,27px);margin:0 0 22px}
 #privateArea{margin-top:20px;padding:15px;background:#eff8f2;border-radius:12px;text-align:right}
 #privateArea a{display:inline-flex;padding:10px 14px;border-radius:10px;background:#17664d;color:white;text-decoration:none}
 a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
+#teacherPanel[hidden]{display:none!important}
+#teacherPanel{margin-top:16px;padding:14px;background:#f7faf8;border:1px solid #d1e2d6;border-radius:12px;text-align:right}
+#teacherPanel label{display:block;font-weight:650;margin-bottom:8px}
+#teacherEmail{display:block;width:100%;min-height:45px;border-radius:9px;border:1px solid #b9cfc2;padding:10px;font:inherit;direction:ltr;text-align:left}
+#approveTeacher{min-height:44px;margin-top:10px;padding:10px 14px;border:0;border-radius:9px;color:white;background:#17664d;font:inherit;font-weight:650;cursor:pointer}
+#approveTeacher:disabled{opacity:.5;cursor:wait}
+#teacherStatus{min-height:25px;font-size:13px;line-height:1.7;color:#466257}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -28,6 +35,12 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
 <section id="privateArea" hidden>
  <p>تم التحقق من هوية المالك.</p>
  <a id="reviewLink" href="owner-review.html" hidden>مراجعة المحتوى</a>
+</section>
+<section id="teacherPanel" hidden>
+ <label for="teacherEmail">اعتماد بريد معلم للمرحلة التجريبية</label>
+ <input type="email" id="teacherEmail" autocomplete="email" placeholder="teacher@example.com" maxlength="150">
+ <button id="approveTeacher" type="button">اعتماد المعلم</button>
+ <p id="teacherStatus" role="status" aria-live="polite"></p>
 </section>
 <a class="back" href="../">العودة</a>
 </main>
@@ -41,8 +54,11 @@ const BACKEND_ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/me
 const status=document.getElementById('status');
 const privateArea=document.getElementById('privateArea');
 const reviewLink=document.getElementById('reviewLink');
+const teacherPanel=document.getElementById('teacherPanel');
+const teacherStatus=document.getElementById('teacherStatus');
+let ownerCredential=null;
 function say(s){status.textContent=s}
-function deny(){privateArea.hidden=true;reviewLink.hidden=true}
+function deny(){privateArea.hidden=true;reviewLink.hidden=true;teacherPanel.hidden=true;ownerCredential=null}
 async function onCredential(response){
  deny();
  if(!response||typeof response.credential!=='string'){say('تعذر تسجيل الدخول.');return}
@@ -59,13 +75,37 @@ async function onCredential(response){
   if(data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){
    say('هذا الحساب غير مخول بالدخول.');return
   }
+  ownerCredential=response.credential;
   privateArea.hidden=false;
+  teacherPanel.hidden=false;
   if(Array.isArray(data.capabilities)&&data.capabilities.includes('content_review')){
    reviewLink.hidden=false;
   }
   say('');
  }catch(_){deny();say('تعذر التحقق من الحساب حاليًا.')}
 }
+document.getElementById('approveTeacher').addEventListener('click',async()=>{
+ if(!ownerCredential)return;
+ const email=document.getElementById('teacherEmail').value.trim();
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){
+  teacherStatus.textContent='أدخل بريد المعلم بصورة صحيحة.';return;
+ }
+ const btn=document.getElementById('approveTeacher');
+ btn.disabled=true;teacherStatus.textContent='جار التحقق من الاعتماد...';
+ try{
+  const resp=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-teacher-approve',{
+   method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+   headers:{'Authorization':'Bearer '+ownerCredential,'Content-Type':'application/json'},
+   body:JSON.stringify({teacherEmail:email}),signal:AbortSignal.timeout(12000)
+  });
+  const data=await resp.json();
+  if(resp.status===409)teacherStatus.textContent='اكتمل التسجيل في المرحلة التجريبية.';
+  else if(resp.ok&&data.ok===true)teacherStatus.textContent=data.existing?'هذا المعلم معتمد سابقًا.':'تم حجز مقعد للمعلم بنجاح.';
+  else teacherStatus.textContent='تعذر اعتماد المعلم. أعد تسجيل الدخول ثم حاول مجددًا.';
+ }catch(_){teacherStatus.textContent='تعذر الاتصال بخدمة الاعتماد.'}
+ finally{btn.disabled=false}
+});
+
 let attempts=0;
 const timer=setInterval(()=>{
  if(window.google?.accounts?.id){

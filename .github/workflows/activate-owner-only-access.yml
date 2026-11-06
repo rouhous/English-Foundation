@@ -1,0 +1,50 @@
+name: Activate owner-only access
+on:
+  push:
+    paths:
+      - scripts/activate_owner_only_access.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Lock all public app pages to verified owner
+        run: python3 scripts/activate_owner_only_access.py
+      - name: Verify lock, login and Javascript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          files=list(Path('.').rglob('*.html'))
+          for p in files:
+            s=p.read_text(encoding='utf8')
+            if p.as_posix()=='reviews/owner-login.html':
+              assert 'MEJ_OWNER_LOGIN_PAUSE_ENROLMENT_V1' in s
+              assert "sessionStorage.setItem('MEJ_OWNER_ACCESS_V1'" in s
+              continue
+            assert s.count('MEJ_OWNER_ONLY_ACCESS_GATE_20261106')==1, str(p)
+            assert 'location.replace(LOGIN)' in s
+            if p.name=='index.html':
+              assert 'onclick="letsGo()"' in s
+              assert 'mej-user-voyage.png' in s
+            for i,code in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)):
+              if code.strip() and len(code)<2000000:
+                q=Path('/tmp')/('mej-gate-'+str(i)+'.js')
+                q.write_text(code,encoding='utf8')
+                import subprocess
+                subprocess.run(['node','--check',str(q)],check=True,capture_output=True)
+          PY
+      - name: Commit immediate owner-only pause
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html' sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Restrict app UI to server-verified owner and pause enrollment access"
+            git push
+          fi

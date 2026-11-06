@@ -51,8 +51,12 @@ for p in files:
   s=p.read_text(encoding='utf8')
   if marker in s:continue
   m=re.search(r'<head(?:\s[^>]*)?>',s,re.I)
-  if not m:raise RuntimeError('Missing head tag in '+str(p))
-  s=s[:m.end()]+gate+s[m.end():]
+  if m:
+    s=s[:m.end()]+gate+s[m.end():]
+  else:
+    # A few standalone review exports are fragments without a <head>.
+    # Prepend the same gate so direct links remain locked too.
+    s=gate+s
   p.write_text(s,encoding='utf8')
   count+=1
 

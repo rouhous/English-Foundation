@@ -1,0 +1,41 @@
+name: Validate independent school manager activation
+on:
+  push:
+    paths:
+      - .github/workflows/validate-school-manager.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Validate school registration UI and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess
+          f=Path('reviews/teacher-portal.html')
+          s=f.read_text()
+          for phrase in ['schoolRegistrationPanel','schoolRegistrationForm','owner_approve_school_manager','school_manager_claim','schoolManagerPanel','school_overview','managerIssueCode','claim_school_teacher_6']:
+            assert phrase in s,phrase
+          for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S)):
+            if not js.strip():continue
+            f=Path('/tmp')/('verify-manager-'+str(i)+'.js')
+            f.write_text(js)
+            subprocess.run(['node','--check',str(f)],check=True)
+          print('INDEPENDENT_MANAGER_UI_AND_JS_VALID')
+          PY
+      - name: Test live backend refuses unapproved users
+        run: |
+          set -eu
+          backend=https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal
+          for action in owner_approve_school_manager school_manager_claim school_overview owner_issue_six_digit_school_code; do
+            status=$(curl -sS --max-time 20 -w '%{http_code}' -o /tmp/result -X POST "$backend" -H 'Content-Type: application/json' -H 'Origin: https://rouhous.github.io' -d "{\"action\":\"$action\",\"schoolName\":\"مدرسة وادي الحواسنة\",\"schoolNumber\":\"2429\",\"managerEmail\":\"example@example.com\"}")
+            echo "$action -> $status"
+            test "$status" = "403"
+          done
+          echo 'UNAUTHENTICATED_SCHOOL_MANAGER_REQUESTS_BLOCKED'

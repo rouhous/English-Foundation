@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import the user's approved portrait image from the connected Canva media CDN."""
+"""Import the exact uploaded portrait image from its temporary one-file download URL."""
 from pathlib import Path
 import hashlib
 from urllib.request import Request,urlopen

@@ -1,0 +1,25 @@
+name: Capture settings markup for layout repair
+on:
+  push:
+    paths:
+      - scripts/inspect_settings_markup.py
+      - .github/workflows/inspect-settings-markup.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect settings only
+        run: python3 scripts/inspect_settings_markup.py
+      - name: Publish bounded markup diagnostic
+        run: |
+          git add diagnostics/settings-dom-snippets.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Inspect settings markup to repair gear layout"
+            git push
+          fi

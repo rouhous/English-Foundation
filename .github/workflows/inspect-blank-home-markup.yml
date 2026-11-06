@@ -1,0 +1,12 @@
+name: Inspect current home structure for clean blank release
+on:
+  push:
+    paths: [scripts/inspect_blank_home_markup.py]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/inspect_blank_home_markup.py

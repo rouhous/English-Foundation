@@ -1,35 +1,40 @@
 <!doctype html><html lang="ar" dir="rtl"><head>
 <style id="mej-owner-gate-style">html{visibility:hidden!important}</style>
 <script id="mej-owner-only-gate">
-/* MEJ_OWNER_ONLY_ACCESS_GATE_20261106 */
+/* MEJ_WADI_OWNER_LICENSE_ROLLOUT_20261106 */
 (function(){
-  "use strict";
-  const LOGIN='/English-Foundation/reviews/owner-login.html';
-  const TOKEN_KEY='MEJ_OWNER_ACCESS_V1';
-  const ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
-  const timeout=new AbortController();
-  const timer=setTimeout(()=>timeout.abort(),6500);
-  const token=sessionStorage.getItem(TOKEN_KEY);
-  if(!token){
-    clearTimeout(timer);
-    location.replace(LOGIN);
-    return;
+"use strict";
+const LOGIN='/English-Foundation/reviews/owner-login.html';
+const ACTIVATE='/English-Foundation/reviews/activate.html';
+const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license';
+const OWNER='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
+const owner=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');
+const student=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
+function granted(role){
+  window.__MEJ_ACCESS_ROLE=role;
+  if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;
+  document.getElementById('mej-owner-gate-style')?.remove();
+}
+async function verify(){
+  if(owner){
+    try{
+      const r=await fetch(OWNER,{method:'GET',cache:'no-store',mode:'cors',headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});
+      const d=await r.json();
+      if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){granted('owner');return}
+    }catch(_){}
+    sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');
   }
-  fetch(ENDPOINT,{
-    method:'GET',mode:'cors',credentials:'omit',cache:'no-store',
-    headers:{Authorization:'Bearer '+token},
-    signal:timeout.signal
-  }).then(async response=>{
-    if(!response.ok)throw Error('OWNER_NOT_AUTHENTICATED');
-    const data=await response.json();
-    if(data.ok!==true || data.role!=='owner' || data.email!=='rouhous@gmail.com')
-      throw Error('OWNER_NOT_AUTHENTICATED');
-    window.__MEJ_OWNER_VERIFIED_SESSION=true;
-    document.getElementById('mej-owner-gate-style')?.remove();
-  }).catch(()=>{
-    sessionStorage.removeItem(TOKEN_KEY);
-    location.replace(LOGIN);
-  }).finally(()=>clearTimeout(timer));
+  if(student){
+    try{
+      const r=await fetch(API,{method:'POST',cache:'no-store',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_student',accessToken:student}),signal:AbortSignal.timeout(8500)});
+      const d=await r.json();
+      if(r.ok&&d.ok===true&&d.role==='student'){granted('student');return}
+    }catch(_){}
+    localStorage.removeItem('MEJ_STUDENT_ACCESS_V1');
+  }
+  location.replace(ACTIVATE);
+}
+verify();
 })();
 </script>
 <meta charset="utf-8">

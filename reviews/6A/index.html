@@ -1,35 +1,40 @@
 
 <style id="mej-owner-gate-style">html{visibility:hidden!important}</style>
 <script id="mej-owner-only-gate">
-/* MEJ_OWNER_ONLY_ACCESS_GATE_20261106 */
+/* MEJ_WADI_OWNER_LICENSE_ROLLOUT_20261106 */
 (function(){
-  "use strict";
-  const LOGIN='/English-Foundation/reviews/owner-login.html';
-  const TOKEN_KEY='MEJ_OWNER_ACCESS_V1';
-  const ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
-  const timeout=new AbortController();
-  const timer=setTimeout(()=>timeout.abort(),6500);
-  const token=sessionStorage.getItem(TOKEN_KEY);
-  if(!token){
-    clearTimeout(timer);
-    location.replace(LOGIN);
-    return;
+"use strict";
+const LOGIN='/English-Foundation/reviews/owner-login.html';
+const ACTIVATE='/English-Foundation/reviews/activate.html';
+const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license';
+const OWNER='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
+const owner=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');
+const student=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
+function granted(role){
+  window.__MEJ_ACCESS_ROLE=role;
+  if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;
+  document.getElementById('mej-owner-gate-style')?.remove();
+}
+async function verify(){
+  if(owner){
+    try{
+      const r=await fetch(OWNER,{method:'GET',cache:'no-store',mode:'cors',headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});
+      const d=await r.json();
+      if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){granted('owner');return}
+    }catch(_){}
+    sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');
   }
-  fetch(ENDPOINT,{
-    method:'GET',mode:'cors',credentials:'omit',cache:'no-store',
-    headers:{Authorization:'Bearer '+token},
-    signal:timeout.signal
-  }).then(async response=>{
-    if(!response.ok)throw Error('OWNER_NOT_AUTHENTICATED');
-    const data=await response.json();
-    if(data.ok!==true || data.role!=='owner' || data.email!=='rouhous@gmail.com')
-      throw Error('OWNER_NOT_AUTHENTICATED');
-    window.__MEJ_OWNER_VERIFIED_SESSION=true;
-    document.getElementById('mej-owner-gate-style')?.remove();
-  }).catch(()=>{
-    sessionStorage.removeItem(TOKEN_KEY);
-    location.replace(LOGIN);
-  }).finally(()=>clearTimeout(timer));
+  if(student){
+    try{
+      const r=await fetch(API,{method:'POST',cache:'no-store',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_student',accessToken:student}),signal:AbortSignal.timeout(8500)});
+      const d=await r.json();
+      if(r.ok&&d.ok===true&&d.role==='student'){granted('student');return}
+    }catch(_){}
+    localStorage.removeItem('MEJ_STUDENT_ACCESS_V1');
+  }
+  location.replace(ACTIVATE);
+}
+verify();
 })();
 </script>
 <!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>المرحلة 6A - قائمة التحقق</title><style>body{font:16px system-ui;background:#f6f8f6;color:#15362a;margin:16px}main{max-width:950px;margin:auto}header{background:#176447;color:white;padding:20px;border-radius:14px}input{width:95%;padding:12px;border:1px solid #bbb;border-radius:10px;margin:15px 0}table{width:100%;border-collapse:collapse;background:white}td,th{padding:10px;border-bottom:1px solid #ddd;text-align:right}th{background:#e6eee8}button{padding:12px;border:0;background:#176447;color:white;border-radius:9px}small{color:#666}</style><main><header><h2>رحلتي مع الإنجليزية — المرحلة 6A</h2><p>94 مفردة أصلية؛ الصور الجديدة لم تُربط قبل التحقق من المصدر والمطابقة.</p></header><input id="q" placeholder="ابحث عن كلمة أو وحدة" oninput="filter()"><button onclick="window.print()">طباعة القائمة</button><p><small>هذه قائمة تتبع، وليست صفحة اعتماد صور. لا توجد صور مختارة اعتباطيًا.</small></p><table><thead><tr><th>رقم</th><th>المفردة</th><th>الوحدة</th><th>الحالة</th></tr></thead><tbody id="body"><tr><td>1</td><td dir="ltr">energetic</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>2</td><td dir="ltr">fun</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>3</td><td dir="ltr">pretty</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>4</td><td dir="ltr">kind</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>5</td><td dir="ltr">brave</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>6</td><td dir="ltr">clever</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>7</td><td dir="ltr">medium height</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>8</td><td dir="ltr">chatty</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>9</td><td dir="ltr">friendly</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>10</td><td dir="ltr">handsome</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>11</td><td dir="ltr">creative</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>12</td><td dir="ltr">tall</td><td>The WOW! Team</td><td>بانتظار التحقق</td></tr><tr><td>13</td><td dir="ltr">go skiing</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>14</td><td dir="ltr">go swimming</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>15</td><td dir="ltr">go ice skating</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>16</td><td dir="ltr">go cycling</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>17</td><td dir="ltr">go scooting</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>18</td><td dir="ltr">play volleyball</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>19</td><td dir="ltr">play table tennis</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>20</td><td dir="ltr">play hockey</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>21</td><td dir="ltr">play badminton</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>22</td><td dir="ltr">do karate</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>23</td><td dir="ltr">do gymnastics</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>24</td><td dir="ltr">do athletics</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>25</td><td dir="ltr">do photography</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>26</td><td dir="ltr">do puzzles</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>27</td><td dir="ltr">do the gardening</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>28</td><td dir="ltr">play board games</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>29</td><td dir="ltr">put on shows</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>30</td><td dir="ltr">play video games</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>31</td><td dir="ltr">play musical instruments</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>32</td><td dir="ltr">make models</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>33</td><td dir="ltr">make videos</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>34</td><td dir="ltr">collect cards</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>35</td><td dir="ltr">watch cartoons</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>36</td><td dir="ltr">write a diary</td><td>Free-time fun</td><td>بانتظار التحقق</td></tr><tr><td>37</td><td dir="ltr">password</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>38</td><td dir="ltr">app</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>39</td><td dir="ltr">laptop</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>40</td><td dir="ltr">digital camera</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>41</td><td dir="ltr">headphones</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>42</td><td dir="ltr">speaker</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>43</td><td dir="ltr">smartphone</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>44</td><td dir="ltr">website</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>45</td><td dir="ltr">e-reader</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>46</td><td dir="ltr">screen</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>47</td><td dir="ltr">printer</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>48</td><td dir="ltr">devices</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>49</td><td dir="ltr">go online</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>50</td><td dir="ltr">turn on the computer</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>51</td><td dir="ltr">type a password</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>52</td><td dir="ltr">upload a photo</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>53</td><td dir="ltr">download an app</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>54</td><td dir="ltr">search the internet</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>55</td><td dir="ltr">watch a video</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>56</td><td dir="ltr">press a button</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>57</td><td dir="ltr">turn off the TV</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>58</td><td dir="ltr">click on an icon</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>59</td><td dir="ltr">send a message</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>60</td><td dir="ltr">take a selfie</td><td>Technology</td><td>بانتظار التحقق</td></tr><tr><td>61</td><td dir="ltr">castle</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>62</td><td dir="ltr">harbour</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>63</td><td dir="ltr">stadium</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>64</td><td dir="ltr">tower</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>65</td><td dir="ltr">skyscraper</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>66</td><td dir="ltr">factory</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>67</td><td dir="ltr">hospital</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>68</td><td dir="ltr">palace</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>69</td><td dir="ltr">swimming pool</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>70</td><td dir="ltr">sports centre</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>71</td><td dir="ltr">office building</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>72</td><td dir="ltr">apartment building</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>73</td><td dir="ltr">ceiling</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>74</td><td dir="ltr">floor</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>75</td><td dir="ltr">wall</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>76</td><td dir="ltr">roof</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>77</td><td dir="ltr">corner</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>78</td><td dir="ltr">corridor</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>79</td><td dir="ltr">stairs</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>80</td><td dir="ltr">steps</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>81</td><td dir="ltr">lift</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>82</td><td dir="ltr">escalator</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>83</td><td dir="ltr">entrance</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>84</td><td dir="ltr">exit</td><td>Places</td><td>بانتظار التحقق</td></tr><tr><td>85</td><td dir="ltr">college</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>86</td><td dir="ltr">airport</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>87</td><td dir="ltr">bridge</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>88</td><td dir="ltr">fire station</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>89</td><td dir="ltr">theatre</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>90</td><td dir="ltr">office</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>91</td><td dir="ltr">square</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>92</td><td dir="ltr">steam train</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>93</td><td dir="ltr">vacuum cleaner</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr><tr><td>94</td><td dir="ltr">Virtual Reality</td><td>WOW! Learning Club 1</td><td>بانتظار التحقق</td></tr></tbody></table></main><script>function filter(){let q=document.getElementById('q').value.toLowerCase();for(let tr of document.querySelectorAll('#body tr'))tr.style.display=tr.textContent.toLowerCase().includes(q)?'':'none'}</script></html>

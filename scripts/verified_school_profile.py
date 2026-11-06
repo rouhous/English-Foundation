@@ -24,3 +24,5 @@ sw=Path('sw.js');c=sw.read_text(encoding='utf-8')
 c,n=re.subn(r"const CACHE='[^']+';","const CACHE='mej-verified-school-profile-20261106-v1';",c,count=1)
 assert n==1;sw.write_text(c,encoding='utf-8')
 print('VERIFIED_SCHOOL_PROFILE_PATCHED')
+
+# Deployment trigger: apply the previously prepared profile patch.

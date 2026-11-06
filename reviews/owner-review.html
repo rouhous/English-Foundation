@@ -1,4 +1,38 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>مركز مراجعة المالك — رحلتي مع الإنجليزية</title><style>
+<!doctype html><html lang="ar" dir="rtl"><head>
+<style id="mej-owner-gate-style">html{visibility:hidden!important}</style>
+<script id="mej-owner-only-gate">
+/* MEJ_OWNER_ONLY_ACCESS_GATE_20261106 */
+(function(){
+  "use strict";
+  const LOGIN='/English-Foundation/reviews/owner-login.html';
+  const TOKEN_KEY='MEJ_OWNER_ACCESS_V1';
+  const ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';
+  const timeout=new AbortController();
+  const timer=setTimeout(()=>timeout.abort(),6500);
+  const token=sessionStorage.getItem(TOKEN_KEY);
+  if(!token){
+    clearTimeout(timer);
+    location.replace(LOGIN);
+    return;
+  }
+  fetch(ENDPOINT,{
+    method:'GET',mode:'cors',credentials:'omit',cache:'no-store',
+    headers:{Authorization:'Bearer '+token},
+    signal:timeout.signal
+  }).then(async response=>{
+    if(!response.ok)throw Error('OWNER_NOT_AUTHENTICATED');
+    const data=await response.json();
+    if(data.ok!==true || data.role!=='owner' || data.email!=='rouhous@gmail.com')
+      throw Error('OWNER_NOT_AUTHENTICATED');
+    window.__MEJ_OWNER_VERIFIED_SESSION=true;
+    document.getElementById('mej-owner-gate-style')?.remove();
+  }).catch(()=>{
+    sessionStorage.removeItem(TOKEN_KEY);
+    location.replace(LOGIN);
+  }).finally(()=>clearTimeout(timer));
+})();
+</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>مركز مراجعة المالك — رحلتي مع الإنجليزية</title><style>
 :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;font-family:system-ui,'Segoe UI',sans-serif;background:#eaf3ed;color:#143b2c}header,main,footer{max-width:1100px;margin:auto;padding:20px}header{background:#12664b;color:white;max-width:none}header .wrap{max-width:1060px;margin:auto}h1{font-size:clamp(23px,5vw,34px);margin:0 0 8px}p{line-height:1.7}.notice{background:#fff8e7;border:1px solid #e5c979;border-radius:12px;padding:14px;margin:15px 0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}a{color:#086e51}.button{display:inline-block;background:#0e6e53;color:white;text-decoration:none;border-radius:10px;padding:12px 15px;font-weight:700}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.stage{background:white;padding:16px;border-radius:14px;border:1px solid #cfdfd4}.stage h2{font-size:19px;margin:0 0 12px}.level{display:grid;gap:7px;background:#f4faf5;border-radius:10px;padding:10px;margin:9px 0}.level b{font-size:15px}.level a{display:inline-block;padding:6px 0}.muted{font-size:13px;color:#50665d}footer{font-size:13px}</style></head><body>
 <header><div class="wrap"><h1>مركز مراجعة جميع المستويات</h1><p>رحلتي مع الإنجليزية — الصفوف 1–12 ومرحلة التأسيس، مستويان لكل مرحلة.</p></div></header>
 <main><div class="notice"><strong>تنبيه أمني:</strong> هذا مركز لمراجعة المحتوى المنشور فقط، وليس دخول Admin موثقًا. لا يسمح بتغيير بيانات الطلاب أو النجوم أو الصلاحيات. لا تستخدم هذه الصفحة لإدخال كلمات مرور أو رموز خاصة.</div>

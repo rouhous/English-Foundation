@@ -24,6 +24,8 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
 #approveTeacher{min-height:44px;margin-top:10px;padding:10px 14px;border:0;border-radius:9px;color:white;background:#17664d;font:inherit;font-weight:650;cursor:pointer}
 #approveTeacher:disabled{opacity:.5;cursor:wait}
 #teacherStatus{min-height:25px;font-size:13px;line-height:1.7;color:#466257}
+/* MEJ_OWNER_LOGIN_PAUSE_ENROLMENT_V1 */
+#teacherPanel{display:none!important}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -34,9 +36,10 @@ a.back{display:inline-block;color:#315d4b;text-decoration:none;margin-top:16px}
 <p id="status" role="status" aria-live="polite">جار تحميل تسجيل الدخول...</p>
 <section id="privateArea" hidden>
  <p>تم التحقق من هوية المالك.</p>
+ <a id="openOwnerApp" href="../" style="margin:4px">فتح التطبيق</a>
  <a id="reviewLink" href="owner-review.html" hidden>مراجعة المحتوى</a>
 </section>
-<section id="teacherPanel" hidden>
+<section id="teacherPanel" hidden aria-hidden="true">
  <label for="teacherEmail">اعتماد حساب معلم</label>
  <input type="email" id="teacherEmail" autocomplete="email" placeholder="teacher@example.com" maxlength="150">
  <button id="approveTeacher" type="button">اعتماد المعلم</button>
@@ -77,8 +80,9 @@ async function onCredential(response){
    say('هذا الحساب غير مخول بالدخول.');return
   }
   ownerCredential=response.credential;
+  sessionStorage.setItem('MEJ_OWNER_ACCESS_V1',response.credential);
   privateArea.hidden=false;
-  teacherPanel.hidden=false;
+  teacherPanel.hidden=true;
   if(Array.isArray(data.capabilities)&&data.capabilities.includes('content_review')){
    reviewLink.hidden=false;
   }

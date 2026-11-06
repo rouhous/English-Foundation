@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-user-profile-static-align-v2-20261106';
+const CACHE='mej-owner-only-closed-20261106-v1';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',

@@ -75,7 +75,7 @@ if 'MEJ_OWNER_LOGIN_PAUSE_ENROLMENT_V1' not in owner:
   owner=owner.replace('<section id="teacherPanel" hidden>',
                       '<section id="teacherPanel" hidden aria-hidden="true">',1)
   login.write_text(owner,encoding='utf8')
-print('OWNER_ONLY_UI_GATE_INSTALLED',count,'HTML pages; owner login preserved.')
+print('OWNER_ONLY_UI_GATE_INSTALLED',count,'HTML pages; owner login preserved, registration closed.')
 assert count>=8
 # Offline shell revision. Existing cached installations can only update when online.
 worker=Path('sw.js')

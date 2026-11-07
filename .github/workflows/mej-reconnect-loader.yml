@@ -1,0 +1,36 @@
+name: Verify MEJ Offline Reconnect Loader
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/install_mej_reconnect_loader.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch reconnect loader
+        run: python scripts/install_mej_reconnect_loader.py
+      - name: Verify JavaScript
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          m=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)
+          assert m
+          Path('/tmp/mej-check-reconnect.js').write_text(m[-1],encoding='utf8')
+          PY
+          node --check /tmp/mej-check-reconnect.js
+          node scripts/test_mej_native_cloud.js
+      - name: Save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Retry student cloud script after offline PWA reconnect"
+            git push
+          fi

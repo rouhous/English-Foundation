@@ -24,3 +24,5 @@ const needingReview=rows.filter(x=>x.validLocalImages===0);
 const result={uniqueWords:120,stagePlacements:installed.assignments.length,imagesAvailable:120-needingReview.length,imagesNotVerified:needingReview.length,requiresReview:needingReview.map(x=>x.word)};
 fs.writeFileSync('reviews/quality-audit/master-ready-120-image-check.json',JSON.stringify(result,null,2));
 console.log(JSON.stringify(result));
+
+// Trigger first post-restoration image coverage report.

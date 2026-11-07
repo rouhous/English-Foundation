@@ -20,3 +20,14 @@ assert(explicitJs.includes("part.count+' '+(part.count===1?'طالب':'طلاب'
 assert(explicitHtml.includes('.levelClassHeader'),'per-class header styles');
 assert(explicitHtml.includes('.levelCount'),'visible count styles');
 assert(!explicitHtml.includes('الثيم الأزرق البحري'),'no theme label');
+
+const rankSource=fs.readFileSync('assets/teacher-dashboard-v2.js','utf8');
+const rankHtml=fs.readFileSync('reviews/teacher-dashboard.html','utf8');
+const sw=fs.readFileSync('sw.js','utf8');
+assert(rankHtml.includes('id="sortStudents"'),'ranking selector');
+assert(rankSource.includes("function sortedStudents(students)"),'ranking comparator');
+assert(rankSource.includes("integer(b[primary])-integer(a[primary])"),'descending order');
+assert(rankSource.includes("$('sortStudents').addEventListener('change'"),'ranking interaction');
+assert(rankHtml.includes('20261107-3'),'dashboard cache-bust');
+assert(sw.includes('isStaffPage||isStaffScript'),'staff network-first');
+assert(sw.includes("cache:'no-store'"),'force fresh staff pages');

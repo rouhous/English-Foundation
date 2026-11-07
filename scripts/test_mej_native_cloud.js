@@ -31,3 +31,5 @@ const sample={studentName:'Sample Student',className:'9_1',grade:9,stars:42,atte
 })().catch(err=>{console.error(err);process.exit(1)});
 
 // Trigger CI verification of the private sync adapter.
+
+// Recheck migrated trial roster dashboard JavaScript.

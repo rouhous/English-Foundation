@@ -5,7 +5,7 @@ const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-progress';
 const GOOGLE_CLIENT='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 const SESSION='MEJ_STAFF_LOGIN_V2',TTL=45*60*1000;
 const $=id=>document.getElementById(id);
-const app={token:null,students:[],groups:[],scope:null,selected:null,ready:false};
+const app={token:null,students:[],groups:[],scope:null,selected:null,ready:false,owner:false,ownerScopes:[],ownerScope:'private'};
 const colors=['#074B8E','#D97706','#7C3AED','#0891B2','#BE185D','#15803D','#C2410C','#4338CA','#0F766E','#A21CAF','#A16207','#0369A1','#B91C1C'];
 const safe=v=>v==null||v===''?'—':String(v);
 const integer=v=>Number.isFinite(Number(v))?Math.max(0,Math.trunc(Number(v))):0;
@@ -19,17 +19,17 @@ function key(v){return cName(v).replace(/[\u200e\u200f]/g,'')}
 function credential(token){
  if(typeof token!=='string'||token.length<100)return false;
  app.token=token;
- sessionStorage.setItem(SESSION,JSON.stringify({token,at:Date.now()}));
+ sessionStorage.setItem(SESSION,JSON.stringify({token,at:Date.now(),role:app.owner?'owner':'teacher'}));
  return true;
 }
 function loadCached(){
- try{const s=JSON.parse(sessionStorage.getItem(SESSION)||'null');if(s&&typeof s.token==='string'&&Date.now()-s.at<TTL){app.token=s.token;return true}}catch(_){}
+ try{const s=JSON.parse(sessionStorage.getItem(SESSION)||'null');if(s&&typeof s.token==='string'&&Date.now()-s.at<TTL){app.token=s.token;app.owner=s.role==='owner';return true}}catch(_){}
  sessionStorage.removeItem(SESSION);return false
 }
 async function post(token){
  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
  headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
- body:JSON.stringify({action:'teacher_roster'}),signal:AbortSignal.timeout(16000)});
+ body:JSON.stringify({action:app.owner?'owner_rosters':'teacher_roster'}),signal:AbortSignal.timeout(16000)});
  const d=await r.json();if(!r.ok||!d.ok)throw Error(d.error||'NO_DATA');return d
 }
 function auth(messageText){
@@ -133,8 +133,38 @@ function chartStars(){
  }
  return panel
 }
+function renderOwnerScope(){
+ const scope=app.ownerScopes.find(x=>x.key===app.ownerScope);
+ if(!scope)return;
+ app.students=normalize({students:scope.students||[],importedTrialStudents:[]});
+ app.groups=groupClasses(app.students);
+ app.scope=scope;app.ready=true;
+ $('ownerPrivate').setAttribute('aria-pressed',String(app.ownerScope==='private'));
+ $('ownerSchool').setAttribute('aria-pressed',String(app.ownerScope==='school'));
+ $('ownerLinkedStatus').textContent='الطلاب المرتبطون: '+Number(scope.linkedCount||0)+' · بيانات التقدم المتزامنة: '+app.students.length;
+ $('dataScope').textContent='تقدم الطلاب — '+scope.label;
+ status('متابعة طلابي · '+scope.label);
+ metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))]]);
+ $('classCount').textContent=app.groups.length+' صفوف';
+ clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
+ if(!app.groups.length)$('classes').append(node('p','notice',
+  Number(scope.linkedCount||0)>0?'يوجد طلاب مرتبطون بهذا الرمز، لكن لم تصل بيانات تقدم قابلة للعرض حتى الآن.':'لم يُسجل طلاب مرتبطون بهذه الجهة في القاعدة الجديدة بعد.'));
+ clear($('charts'));if(app.groups.length)$('charts').append(chartLevels(),chartStars());
+ $('detail').hidden=true;$('overview').hidden=false;
+}
 function overall(data){
  $('authNotice').hidden=true;$('loading').hidden=true;$('detail').hidden=true;$('overview').hidden=false;
+ if(app.owner){
+   app.ownerScopes=Array.isArray(data.scopes)?data.scopes:[];
+   const selected=app.ownerScopes.some(x=>x.key===app.ownerScope)?app.ownerScope:'private';
+   app.ownerScope=selected;
+   $('ownerScopes').hidden=false;
+   $('issueCode').disabled=true;
+   $('issueCode').title='رموز المالك الخاصة والمدرسة محفوظة بالفعل، ولن تُعاد تهيئتها من هذه الصفحة.';
+   renderOwnerScope();
+   return;
+ }
+ $('ownerScopes').hidden=true;
  app.students=normalize(data);app.groups=groupClasses(app.students);app.ready=true;app.scope=data;
  status('المعلم: '+safe(data.teacherName)+' · المدرسة: '+safe(data.schoolName));
  if(data.profileNotice==='OWNER_TEACHER_PROFILE_NOT_LINKED'){
@@ -263,6 +293,8 @@ $('copyCode').addEventListener('click',async()=>{
  try{await navigator.clipboard.writeText(code);$('codeStatus').textContent='تم نسخ الرمز.'}
  catch(_){$('codeStatus').textContent='تعذّر النسخ التلقائي. يمكنك تحديد الرمز الظاهر ونسخه.'}
 });
+$('ownerPrivate').addEventListener('click',()=>{app.ownerScope='private';renderOwnerScope()});
+$('ownerSchool').addEventListener('click',()=>{app.ownerScope='school';renderOwnerScope()});
 $('refresh').addEventListener('click',refresh);
 $('print').addEventListener('click',()=>window.print());
 $('logout').addEventListener('click',()=>{sessionStorage.removeItem(SESSION);app.token=null;location.replace('./teacher-portal.html')});

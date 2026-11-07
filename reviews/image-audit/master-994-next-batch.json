@@ -1,0 +1,106 @@
+{
+  "project": "My English Journey",
+  "batch": "next-001",
+  "status": "awaiting image generation and visual approval",
+  "count": 16,
+  "dimensions": "1:1, >=384x384 native preferred",
+  "style": "3D educational cartoon, clean white background, Oman cultural cues where relevant; no text except when essential to depict language, flags or symbols",
+  "terms": [
+    {
+      "position": 1,
+      "word": "3D cinema",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 2,
+      "word": "Arabian camel",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 3,
+      "word": "Arabian leopard",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 4,
+      "word": "Arabian tahr",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 5,
+      "word": "Argentina",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 6,
+      "word": "Britain",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 7,
+      "word": "English",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 8,
+      "word": "ICT",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 9,
+      "word": "Italy",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 10,
+      "word": "Morocco",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 11,
+      "word": "New Year",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 12,
+      "word": "Olympic Games",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 13,
+      "word": "P.E.",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 14,
+      "word": "SMS",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 15,
+      "word": "Science Fair",
+      "approved": false,
+      "linkedToApp": false
+    },
+    {
+      "position": 16,
+      "word": "Social Studies",
+      "approved": false,
+      "linkedToApp": false
+    }
+  ]
+}

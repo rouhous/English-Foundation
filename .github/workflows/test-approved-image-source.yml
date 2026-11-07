@@ -1,0 +1,23 @@
+name: Test Original Approved Image Download
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/test-approved-image-source.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Canva source image resolution
+        run: |
+          echo 'thumbnail'
+          curl -L -sS -f --max-time 25 -o /tmp/thumbnail.png -w 'status:%{http_code} bytes:%{size_download}\n' 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F67cf1a24-fce9-4cdc-bc91-ae6f7bbb7a03/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAPV6U547nHspuTZcMK3jK87zP_0IMiVZ13KwU8md4ASp&exp=1794078124&osig=AAAAAAAAAAAAAAAAAAAAAFnccp9Ejf6YH6gsWVzlQOYroEV6SwH4D-1_RHDCGVHG&signer=media-rpc&token=AAIAAU0AJDY3Y2YxYTI0LWZjZTktNGNkYy1iYzkxLWFlNmY3YmJiN2EwMwAAAAABobdjp-AV9yOXenCpQsSzxgTjJ1XC4BZpeePmNfTWiQV8SicYDw&x-canva-quality=thumbnail' || true
+          file /tmp/thumbnail.png || true
+          echo 'resize_384'
+          curl -L -sS -f --max-time 25 -o /tmp/resize_384.png -w 'status:%{http_code} bytes:%{size_download}\n' 'https://media.canva.com/v2/image-resize/format:PNG/height:384/quality:100/uri:ifs%3A%2F%2FM%2F67cf1a24-fce9-4cdc-bc91-ae6f7bbb7a03/watermark:F/width:384?csig=AAAAAAAAAAAAAAAAAAAAAPV6U547nHspuTZcMK3jK87zP_0IMiVZ13KwU8md4ASp&exp=1794078124&osig=AAAAAAAAAAAAAAAAAAAAAFnccp9Ejf6YH6gsWVzlQOYroEV6SwH4D-1_RHDCGVHG&signer=media-rpc&token=AAIAAU0AJDY3Y2YxYTI0LWZjZTktNGNkYy1iYzkxLWFlNmY3YmJiN2EwMwAAAAABobdjp-AV9yOXenCpQsSzxgTjJ1XC4BZpeePmNfTWiQV8SicYDw&x-canva-quality=thumbnail' || true
+          file /tmp/resize_384.png || true
+          echo 'no_resize'
+          curl -L -sS -f --max-time 25 -o /tmp/no_resize.png -w 'status:%{http_code} bytes:%{size_download}\n' 'https://media.canva.com/v2/image-resize/format:PNG/quality:100/uri:ifs%3A%2F%2FM%2F67cf1a24-fce9-4cdc-bc91-ae6f7bbb7a03/watermark:F?csig=AAAAAAAAAAAAAAAAAAAAAPV6U547nHspuTZcMK3jK87zP_0IMiVZ13KwU8md4ASp&exp=1794078124&osig=AAAAAAAAAAAAAAAAAAAAAFnccp9Ejf6YH6gsWVzlQOYroEV6SwH4D-1_RHDCGVHG&signer=media-rpc&token=AAIAAU0AJDY3Y2YxYTI0LWZjZTktNGNkYy1iYzkxLWFlNmY3YmJiN2EwMwAAAAABobdjp-AV9yOXenCpQsSzxgTjJ1XC4BZpeePmNfTWiQV8SicYDw&x-canva-quality=thumbnail' || true
+          file /tmp/no_resize.png || true

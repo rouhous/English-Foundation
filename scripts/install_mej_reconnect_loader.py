@@ -27,3 +27,5 @@ new="""if(!window.MEJStudentCloudProgress&&navigator.onLine){
 s=s.replace(old,new,1)
 p.write_text(s,encoding='utf8')
 print('RECONNECT_LOADER_ADDED')
+
+# Trigger verified reconnect deployment.

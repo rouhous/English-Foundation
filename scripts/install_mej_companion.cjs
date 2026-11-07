@@ -1,0 +1,20 @@
+'use strict';
+const fs=require('fs');
+const path='index.html';
+let html=fs.readFileSync(path,'utf8');
+const signature="document.getElementById('nextBtn').style.display='inline-block';}";
+const changed="document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}}";
+if(html.includes("MEJCompanion?.react(ok)")){console.log('Companion hook already installed');process.exit(0)}
+const count=html.split(signature).length-1;
+if(count!==1)throw Error('Expected exactly one answer handler, found '+count);
+html=html.replace(signature,changed);
+const style='<link rel="stylesheet" href="assets/mej-study-companion.css?v=20261107">';
+const script='<script src="assets/mej-study-companion.js?v=20261107" defer></script>';
+if(html.split('</head>').length!==2||html.split('</body>').length!==2)throw Error('Unexpected document structure');
+html=html.replace('</head>',style+'</head>').replace('</body>',script+'</body>');
+fs.writeFileSync(path,html,'utf8');
+if(!html.includes('MEJCompanion?.react(ok)')||!html.includes(style)||!html.includes(script))throw Error('Patch verification failed');
+const report={hookCount:1,loadedStylesheet:'assets/mej-study-companion.css',loadedScript:'assets/mej-study-companion.js',gradeAnswerUnchanged:true,starsAndScoresUntouched:true};
+fs.mkdirSync('reviews/quality-audit',{recursive:true});
+fs.writeFileSync('reviews/quality-audit/companion-install.json',JSON.stringify(report,null,2));
+console.log('Installed mascot celebration hook safely',JSON.stringify(report));

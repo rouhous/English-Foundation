@@ -23,3 +23,5 @@ for(const path of paths){
  fs.writeFileSync(path,src);
  console.log(path,'updated',count,'answers with balanced positions');
 }
+
+// Run approved question balance revision.

@@ -77,3 +77,5 @@ fs.writeFileSync(path.join(reportDir,'README.md'),
  Object.entries(summary).map(([k,v])=>'- **'+k+'**: '+(typeof v==='object'?JSON.stringify(v):v)).join('\n')+
  '\n\n[Missing or unverified words](missing-or-unverified-images.csv) · [All words](all-vocabulary-image-status.csv)\n');
 console.log('FULL_IMAGE_AUDIT_REPORT '+JSON.stringify(summary));
+
+// Refresh full audit after image-bank imports on 2026-11-07.

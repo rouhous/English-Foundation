@@ -3,7 +3,6 @@ on:
   push:
     paths:
       - 'assets/import/MEJ_5_Batches_49-128_80_Images_384.zip'
-      - 'scripts/install_mej_batches_04_08.py'
   workflow_dispatch:
 permissions:
   contents: write

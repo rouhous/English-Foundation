@@ -18,3 +18,5 @@ assert(results.find(x=>x.grade===1&&x.part===1).sample.includes('family'),'First
 assert(results.find(x=>x.grade===2&&x.part===1).sample.includes('house'),'Second grade house restored');
 console.log('VOCABULARY_REVIEW_ALL_26_LEVELS_PASS');
 console.log(JSON.stringify(results));
+
+// Trigger live curriculum extraction verification.

@@ -30,3 +30,5 @@ old=SHARD.read_text(encoding="utf-8")
 if MARKER in old:old=old.split("\n"+MARKER)[0].rstrip()
 SHARD.write_text(old+addon,encoding="utf-8")
 print("Verified and linked",len(mapping),"approved vocabulary images")
+
+# GitHub Actions import trigger for previously uploaded batch archive.

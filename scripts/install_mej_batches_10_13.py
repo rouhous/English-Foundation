@@ -35,3 +35,5 @@ existing=BANK.read_text(encoding='utf-8')
 if MARKER in existing: existing=existing.split('\n'+MARKER)[0].rstrip()
 BANK.write_text(existing+addon,encoding='utf-8')
 print('Installed and mapped',len(mapping),'images for words 145-208')
+
+# Trigger installation for archive uploaded before the workflow existed.

@@ -23,3 +23,5 @@
 @media(max-width:600px){#mej-study-companion{width:85px;right:4px;bottom:max(60px,env(safe-area-inset-bottom,0px) + 50px)}#mej-study-companion .mej-mascot-stage{height:114px}#mej-study-companion .mej-mascot{width:82px;height:108px}#mej-study-companion .mej-companion-bubble{bottom:116px;right:0;font-size:13px;min-width:85px;padding:7px 8px}#mej-study-companion .mej-mascot-tools{top:-10px}#mej-study-companion .mej-mascot-tools button{width:23px;height:23px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){#mej-study-companion .mej-mascot,#mej-study-companion .mej-mascot-arm-right{animation:none!important}#mej-study-companion .mej-confetti{display:none!important}#mej-study-companion .mej-companion-bubble{transition:none!important}}
 @media print{#mej-study-companion{display:none!important}}
+
+/* GitHub Actions: verify installed companion behavior and syntax. */

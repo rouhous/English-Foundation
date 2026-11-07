@@ -154,6 +154,13 @@ async function onCredential(response){
    const panel=document.getElementById('schoolManagerPanel');
    panel.hidden=false;
    status.textContent='تم التحقق من مسؤول المدرسة.';
+   if(new URLSearchParams(location.search).get('manage')==='1'){
+     document.getElementById('schoolManagerPanel').hidden=false;
+     status.textContent='إعدادات واعتمادات المدرسة';
+     await refreshManager(response.credential);
+     loadStaffApplications(response.credential,'managerApplications');
+     return;
+   }
    sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:response.credential,at:Date.now()}));
    location.replace('./school-dashboard.html');
    return;

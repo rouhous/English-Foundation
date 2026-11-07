@@ -1,0 +1,19 @@
+name: Verify School Dashboard Class Analytics
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/verify_school_dashboard.cjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check school dashboard routes, selectors, drilldown, charts and syntax
+        run: node scripts/verify_school_dashboard.cjs
+      - name: Check existing teacher and student dashboard contracts
+        run: |
+          node scripts/verify_teacher_dashboard_v2.cjs
+          node scripts/test_mej_native_cloud.js

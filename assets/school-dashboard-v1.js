@@ -83,30 +83,40 @@ function makeClassButton(g){
 }
 function section(title){const div=node('section','chart');div.append(node('h3','',title));return div}
 function chartLevels(){
- const panel=section('توزيع الطلاب حسب المستوى داخل كل صف');
- panel.classList.add('levelsPanel');
+ const panel=section('عدد الطلاب في كل مستوى');
+ panel.classList.add('stackedLevelPanel');
  for(const g of app.groups){
-  const group=node('div','levelClass');
-  const header=node('div','levelClassHeader');
-  header.append(node('strong','', 'الصف '+g.name),node('span','', g.students.length+' طالب'));
-  group.append(header);
+  const row=node('div','classCompareRow');
+  const className=node('strong','compareClassName',g.name);
+  className.title='الصف '+g.name;
+  const chartWrap=node('div','compareChartScroll');
+  const chart=node('div','compareChart');
   const counts=Array.from({length:13},()=>0);
   for(const student of g.students)counts[Math.min(12,integer(student.level))]++;
-  const occupied=counts.map((n,i)=>({level:i,count:n})).filter(x=>x.count>0);
-  const pills=node('div','levelChips');
-  if(!occupied.length){pills.append(node('p','notice','لا توجد بيانات مستويات لهذا الصف بعد.'))}
-  for(const part of occupied){
-   const item=node('div','levelChip');
-   const number=node('span','levelNumber','المستوى '+part.level);
-   const count=node('strong','levelCount',part.count+' '+(part.count===1?'طالب':'طلاب'));
-   const color=node('i','levelAccent');
-   color.style.background=colors[part.level];
-   item.append(color,number,count);
-   item.title='الصف '+g.name+'، المستوى '+part.level+'، عدد الطلاب '+part.count;
-   pills.append(item)
+  const occupied=counts.map((count,level)=>({count,level})).filter(x=>x.count>0);
+  if(!occupied.length){
+   chartWrap.append(node('span','notice','لا توجد بيانات مستويات بعد'));
+  }else{
+   // One aligned column per represented level. Only occupied levels appear;
+   // the chart scrolls horizontally on narrow screens without clipping a label.
+   const total=occupied.reduce((sum,p)=>sum+p.count,0);
+   chart.style.minWidth=Math.max(0,occupied.length*46)+'px';
+   for(const part of occupied){
+    const column=node('div','compareSegmentColumn');
+    column.style.flexGrow=String(part.count);
+    column.style.flexBasis='0';
+    const count=node('strong','compareSegmentCount',part.count);
+    count.style.background=colors[part.level];
+    count.title=part.count+' '+(part.count===1?'طالب':'طلاب')+' في L'+part.level;
+    count.setAttribute('aria-label',part.count+' طلاب في المستوى '+part.level);
+    const level=node('span','compareSegmentLabel','L'+part.level);
+    column.append(count,level);chart.append(column);
+   }
+   chartWrap.append(chart);
+   chartWrap.setAttribute('aria-label','الصف '+g.name+'، إجمالي '+total+' طلاب');
   }
-  group.append(pills);
-  panel.append(group)
+  row.append(className,chartWrap);
+  panel.append(row);
  }
  return panel
 }

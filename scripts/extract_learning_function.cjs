@@ -1,1 +1,2 @@
 const fs=require('fs');const s=fs.readFileSync('index.html','utf8');const i=s.indexOf('Listen to the example words');const begin=s.lastIndexOf('function ',i);const j=s.indexOf('let blendTarget=',i);const excerpt=s.slice(Math.max(i-4500,begin),j);fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/learning-function.txt',excerpt);console.log('extracted',excerpt.length)
+// Run learning screen extraction.

@@ -1,0 +1,916 @@
+{
+  "summary": {
+    "totalQuestions": 2600,
+    "grades": 13,
+    "issues": 93,
+    "byType": {
+      "exact_repeated_question": 93
+    },
+    "byGrade": {
+      "0": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "1": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "2": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "3": {
+        "count": 200,
+        "issues": 18,
+        "exactRepeats": 18
+      },
+      "4": {
+        "count": 200,
+        "issues": 55,
+        "exactRepeats": 55
+      },
+      "5": {
+        "count": 200,
+        "issues": 20,
+        "exactRepeats": 20
+      },
+      "6": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "7": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "8": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "9": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "10": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "11": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      },
+      "12": {
+        "count": 200,
+        "issues": 0,
+        "exactRepeats": 0
+      }
+    }
+  },
+  "issues": [
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-182",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-134",
+      "prompt": "اختر معنى الكلمة الإنجليزية: football"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-183",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-135",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: يسبح"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-184",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-136",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-185",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-137",
+      "prompt": "اختر معنى الكلمة الإنجليزية: doctor"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-186",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-138",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: ممرضة"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-187",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-139",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-188",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-140",
+      "prompt": "اختر معنى الكلمة الإنجليزية: car"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-189",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-141",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: قطار"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-190",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-142",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-191",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-143",
+      "prompt": "اختر معنى الكلمة الإنجليزية: January"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-192",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-144",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: دائماً"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-193",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-145",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-194",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-146",
+      "prompt": "اختر معنى الكلمة الإنجليزية: never"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-195",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-147",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: فصل"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-196",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-148",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-197",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-149",
+      "prompt": "اختر معنى الكلمة الإنجليزية: pilot"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-198",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-150",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: كرة قدم"
+    },
+    {
+      "grade": 3,
+      "part": 2,
+      "id": "L3-199",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L3-151",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-145",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-130",
+      "prompt": "اختر معنى الكلمة الإنجليزية: Maths"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-146",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-131",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: علوم"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-147",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-132",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-148",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-133",
+      "prompt": "اختر معنى الكلمة الإنجليزية: desert"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-149",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-134",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: نهر"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-150",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-135",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-151",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-136",
+      "prompt": "اختر معنى الكلمة الإنجليزية: sandwich"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-152",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-137",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: سلطة"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-153",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-138",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-154",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-139",
+      "prompt": "اختر معنى الكلمة الإنجليزية: visited"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-155",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-140",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: أعلى"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-156",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-141",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-157",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-142",
+      "prompt": "اختر معنى الكلمة الإنجليزية: cooking"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-158",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-143",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: إعادة تدوير"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-159",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-144",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-160",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-130",
+      "prompt": "اختر معنى الكلمة الإنجليزية: Maths"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-161",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-131",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: علوم"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-162",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-132",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-163",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-133",
+      "prompt": "اختر معنى الكلمة الإنجليزية: desert"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-164",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-134",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: نهر"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-165",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-135",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-166",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-136",
+      "prompt": "اختر معنى الكلمة الإنجليزية: sandwich"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-167",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-137",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: سلطة"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-168",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-138",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-169",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-139",
+      "prompt": "اختر معنى الكلمة الإنجليزية: visited"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-170",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-140",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: أعلى"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-171",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-141",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-172",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-142",
+      "prompt": "اختر معنى الكلمة الإنجليزية: cooking"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-173",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-143",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: إعادة تدوير"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-174",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-144",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-175",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-130",
+      "prompt": "اختر معنى الكلمة الإنجليزية: Maths"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-176",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-131",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: علوم"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-177",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-132",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-178",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-133",
+      "prompt": "اختر معنى الكلمة الإنجليزية: desert"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-179",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-134",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: نهر"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-180",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-135",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-181",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-136",
+      "prompt": "اختر معنى الكلمة الإنجليزية: sandwich"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-182",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-137",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: سلطة"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-183",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-138",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-184",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-139",
+      "prompt": "اختر معنى الكلمة الإنجليزية: visited"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-185",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-140",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: أعلى"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-186",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-141",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-187",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-142",
+      "prompt": "اختر معنى الكلمة الإنجليزية: cooking"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-188",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-143",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: إعادة تدوير"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-189",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-144",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-190",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-130",
+      "prompt": "اختر معنى الكلمة الإنجليزية: Maths"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-191",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-131",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: علوم"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-192",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-132",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-193",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-133",
+      "prompt": "اختر معنى الكلمة الإنجليزية: desert"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-194",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-134",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: نهر"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-195",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-135",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-196",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-136",
+      "prompt": "اختر معنى الكلمة الإنجليزية: sandwich"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-197",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-137",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: سلطة"
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-198",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-138",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 4,
+      "part": 2,
+      "id": "L4-199",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L4-139",
+      "prompt": "اختر معنى الكلمة الإنجليزية: visited"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-180",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-132",
+      "prompt": "اختر معنى الكلمة الإنجليزية: computer"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-181",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-133",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: جهاز لوحي"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-182",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-134",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-183",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-135",
+      "prompt": "اختر معنى الكلمة الإنجليزية: planet"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-184",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-136",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: صاروخ"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-185",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-137",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-186",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-138",
+      "prompt": "اختر معنى الكلمة الإنجليزية: will"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-187",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-139",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: ينبغي"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-188",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-140",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-189",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-141",
+      "prompt": "اختر معنى الكلمة الإنجليزية: shop"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-190",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-142",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: مشروع"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-191",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-143",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-192",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-144",
+      "prompt": "اختر معنى الكلمة الإنجليزية: carefully"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-193",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-145",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: بسرعة"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-194",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-146",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-195",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-147",
+      "prompt": "اختر معنى الكلمة الإنجليزية: taller"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-196",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-148",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: حاسوب"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-197",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-149",
+      "prompt": "Listen carefully and select the word."
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-198",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-150",
+      "prompt": "اختر معنى الكلمة الإنجليزية: email"
+    },
+    {
+      "grade": 5,
+      "part": 2,
+      "id": "L5-199",
+      "severity": "medium",
+      "type": "exact_repeated_question",
+      "duplicateOf": "L5-151",
+      "prompt": "اكتب الكلمة الإنجليزية بمعنى: كوكب"
+    }
+  ]
+}

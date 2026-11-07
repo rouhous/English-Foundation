@@ -9,6 +9,7 @@
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#e8f7ff,#cbe9f9 53%,#edf8ff);font-family:system-ui,'Segoe UI',Tahoma,sans-serif;color:#063764;padding:17px;display:grid;place-items:center}
 #roleChoice[hidden]{display:none!important}main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c6e4f3;box-shadow:0 16px 46px #074b8e26;border-radius:24px;padding:clamp(18px,4vw,30px);text-align:center}h1{margin:7px 0 6px;font-size:clamp(22px,5.5vw,29px)}.sub{color:#507b9a;margin:0 0 20px}.brand{font-size:14px;font-weight:800;color:#d6a54d}.pill{border-radius:12px;background:#e7f5ff;border:1px solid #c6e5f6;padding:13px;margin:12px 0;line-height:1.8;text-align:right}.small{font-size:13px}#googleSignIn{display:flex;justify-content:center;min-height:48px;margin:13px 0}#status{min-height:34px;color:#4e7088;font-size:14px;line-height:1.8}a.link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#086fb9;color:white;border-radius:12px;padding:12px 15px;margin:7px 3px;min-height:46px}.link.alt{background:white;color:#075b9d;border:1px solid #9ad1cf}.panel{text-align:right;border-radius:16px;padding:15px;background:#f3faff;border:1px solid #d0e6f4;margin:15px 0}.panel[hidden]{display:none!important}.panel h2{font-size:17px;margin:0 0 12px}.row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #daeaf6;padding:9px 0;gap:7px}.row span:first-child{color:#54758d}.row strong{text-align:left;overflow-wrap:anywhere}.notice{font-size:13px;color:#50708a;line-height:1.8}.footer{margin-top:15px;font-size:12px;color:#52738e}
 .loginHint{font-size:16px;color:#194e74;font-weight:650;margin:5px 0 12px}.installHint{font-size:13px;line-height:1.8;color:#4e7390;margin:20px 4px 2px;text-align:center}#identityPanel{padding:10px!important;margin:8px 0!important;background:transparent!important;border:0!important}#status:empty{display:none}#status{margin:4px 0;min-height:0}
+.ownerActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.ownerActions button{font:700 18px system-ui,Tahoma,Arial,sans-serif;min-height:105px;border:1px solid #b4d8ec;border-radius:17px;background:linear-gradient(145deg,#086bb5,#09447d);color:#fff;cursor:pointer;box-shadow:0 8px 18px #074d8b22}.ownerActions button:last-child{background:linear-gradient(145deg,#f4faff,#dceffd);color:#063d70}.ownerReturn{font:inherit;background:#e7f4ff;color:#094679;border:1px solid #b2d8ec;border-radius:10px;padding:9px 13px;margin-bottom:10px;cursor:pointer}@media(max-width:400px){.ownerActions button{font-size:15px;padding:9px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/teacher-progress-v1.js" defer></script>
@@ -75,7 +76,15 @@
 </div><div id="reportsAnchor"></div>
 <p class="notice">بعد تسجيل Google ستُفتح لوحة المعلم المستقلة، وتعرض الصفوف والتقدم والنجوم والرسوم البيانية.</p>
 </section>
+<section id="ownerChoice" class="panel" hidden aria-label="اختيار بوابة المالك">
+<h2>اختر وجهتك</h2>
+<div class="ownerActions">
+<button type="button" id="ownerTeacherGo">متابعة طلابي</button>
+<button type="button" id="ownerAdminGo">إدارة التطبيق</button>
+</div>
+</section>
 <section id="ownerPanel" class="panel" hidden>
+<button type="button" id="ownerBack" class="ownerReturn">← العودة للاختيار</button>
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
 <p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد اعتماد مسؤول المدرسة لتسجيلهم.</p>
 <div id="ownerSchoolStatus"></div><div id="ownerApplications" class="panel" style="background:white"></div>
@@ -124,7 +133,7 @@ const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
 let verifiedTeacherCredential=null;
 let registrationMode='login';
-function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel','schoolRegistrationPanel','schoolManagerPanel'])document.getElementById(id).hidden=true}
+function hide(){for(const id of ['teacherPanel','ownerPanel','ownerChoice','pendingPanel','schoolRegistrationPanel','schoolManagerPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
  const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},body:JSON.stringify({action}),signal:AbortSignal.timeout(12000)});
@@ -142,12 +151,10 @@ async function onCredential(response){
   }
   if(data.role==='owner'){
    verifiedOwnerCredential=response.credential;
-   document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك. يمكن إدارة طلبات المعلمين أدناه.';
-   const owner=await call('school_overview',response.credential);
-   loadStaffApplications(response.credential,'ownerApplications');
-   if(owner.r.ok&&owner.data.ok){
-     value('ownerSchoolStatus',`الترخيص: ${owner.data.school?.teacher_limit||'—'} معلمين، ${owner.data.school?.student_limit||'—'} طالب. المعلمون المعتمدون: ${owner.data.verifiedTeachers||0}`);
-   }
+   sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:response.credential,at:Date.now()}));
+   document.getElementById('roleChoice').hidden=true;
+   document.getElementById('ownerChoice').hidden=false;
+   status.textContent='';
    return;
   }
   if(data.role==='school_manager'){
@@ -180,6 +187,27 @@ async function onCredential(response){
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
 
+async function openOwnerManagement(){
+ if(!verifiedOwnerCredential){status.textContent='يرجى تسجيل الدخول بحساب المالك.';return}
+ hide();document.getElementById('ownerPanel').hidden=false;
+ status.textContent='جار تحميل إعدادات الإدارة...';
+ try{
+  const result=await call('school_overview',verifiedOwnerCredential);
+  if(!result.r.ok||!result.data.ok)throw Error('ADMIN_UNAVAILABLE');
+  value('ownerSchoolStatus',`الترخيص: ${result.data.school?.teacher_limit??'—'} معلمين، ${result.data.school?.student_limit??'—'} طالب. المعلمون المعتمدون: ${result.data.verifiedTeachers??0}`);
+  loadStaffApplications(verifiedOwnerCredential,'ownerApplications');
+  status.textContent='';
+ }catch(_){status.textContent='تعذر تحميل إعدادات الإدارة، أعد المحاولة.'}
+}
+document.getElementById('ownerTeacherGo').addEventListener('click',()=>{
+ if(!verifiedOwnerCredential)return;
+ sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:verifiedOwnerCredential,at:Date.now()}));
+ location.assign('./teacher-dashboard.html');
+});
+document.getElementById('ownerAdminGo').addEventListener('click',openOwnerManagement);
+document.getElementById('ownerBack').addEventListener('click',()=>{
+ hide();document.getElementById('ownerChoice').hidden=false;status.textContent='';
+});
 function loadStaffApplications(credential,id){if(window.MEJNativeStaff?.applications)window.MEJNativeStaff.applications(credential,document.getElementById(id))}
 function rootProgress(role,credential){if(window.MEJTeacherProgress?.load)window.MEJTeacherProgress.load(credential,role)}
 function selectRole(mode){

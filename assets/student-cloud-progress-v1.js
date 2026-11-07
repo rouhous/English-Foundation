@@ -27,7 +27,18 @@ function safePayload(value){
   diagnosticDone:value.diagnosticDone===true,diagnosticLevel:Number.isInteger(value.diagnosticLevel)?value.diagnosticLevel:null,
   highestLevel:Number.isInteger(value.highestLevel)?value.highestLevel:null,
   levelStats:value.levelStats.slice(0,13).map(v=>({level:asInt(v.level,12),mastered:asInt(v.mastered,200),total:200,
-    masteryPercent:asInt(v.masteryPercent,100)}))};
+    masteryPercent:asInt(v.masteryPercent,100)})),
+  privateState:(()=>{
+   const p=value.privateState||{},out={};
+   if(!p||typeof p!=='object'||Array.isArray(p))return {};
+   for(const key of ['correct','wrong','writing'])if(p[key]&&typeof p[key]==='object'&&!Array.isArray(p[key]))out[key]=p[key];
+   if(Array.isArray(p.activity))out.activity=p.activity.slice(-1500);
+   out.diagnosticScore=p.diagnosticScore??null;
+   out.diagnosticDate=String(p.diagnosticDate||'').slice(0,40);
+   out.journeyIsland=Number.isInteger(Number(p.journeyIsland))?Number(p.journeyIsland):null;
+   if(JSON.stringify(out).length>150000)return {};
+   return out;
+  })()};
 }
 async function post(action,token,data){
  const r=await fetch(ENDPOINT,{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',

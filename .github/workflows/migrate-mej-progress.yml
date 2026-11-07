@@ -1,0 +1,41 @@
+name: Migrate learner cloud reporting to Supabase
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/migrate_progress_to_supabase.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-student-supabase-migration
+  cancel-in-progress: false
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch only existing report hooks
+        run: python scripts/migrate_progress_to_supabase.py
+      - name: Check JavaScript syntax
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          sections=re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>',s,flags=re.I)
+          assert sections
+          Path('/tmp/mej-inline-check.js').write_text(sections[-1],encoding='utf8')
+          print('Inline scripts:',len(sections))
+          PY
+          node --check /tmp/mej-inline-check.js
+          node --check assets/student-cloud-progress-v1.js
+      - name: Commit migration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Use private Supabase student progress sync instead of Sheets"
+            git push
+          fi

@@ -19,3 +19,5 @@ assert(portal.includes("get('manage')==='1'"),'Admin tools retained');
 assert(html.includes('teacher-portal.html?manage=1'),'Manager approval path');
 assert(html.includes('teacherSelect'),'Teacher chooser');
 console.log('SCHOOL_DASHBOARD_NAUTICAL_DRILLDOWN_AND_COMPARISON_OK');
+
+// Trigger CI validation of the school dashboard.

@@ -11,6 +11,8 @@ assert(js.includes("action:'school_summary'"),'School API action');
 assert(js.includes("teacherId:x.teacher_id||''"),'Teacher ownership relation');
 assert(js.includes("app.allStudents.filter(s=>s.teacherId===app.teacherId)"),'Teacher filter');
 assert(js.includes("app.chartScope==='compare'"),'Chart comparison mode');
+assert(js.includes("teacher.classes||''"),'Display assigned teacher classes even when empty');
+assert(js.includes("g.students.length?Math.round"),'Handle empty classes without division by zero');
 assert(js.includes("const count=Array.from({length:13}"),'Thirteen levels');
 assert(!html.includes('src="../assets/teacher-dashboard-v2.js'),'wrong dashboard');
 const portal=fs.readFileSync('reviews/teacher-portal.html','utf8');

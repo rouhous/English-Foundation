@@ -23,3 +23,12 @@ assert(html.includes('teacherSelect'),'Teacher chooser');
 console.log('SCHOOL_DASHBOARD_NAUTICAL_DRILLDOWN_AND_COMPARISON_OK');
 
 // Trigger CI validation of the school dashboard.
+
+const explicitJs=fs.readFileSync('assets/school-dashboard-v1.js','utf8');
+const explicitHtml=fs.readFileSync('reviews/school-dashboard.html','utf8');
+assert(explicitJs.includes("function chartLevels()"),'level visualization exists');
+assert(explicitJs.includes("const occupied=counts.map"),'only nonempty levels shown');
+assert(explicitJs.includes("part.count+' '+(part.count===1?'طالب':'طلاب')"),'explicit student counts');
+assert(explicitHtml.includes('.levelClassHeader'),'per-class header styles');
+assert(explicitHtml.includes('.levelCount'),'visible count styles');
+assert(!explicitHtml.includes('الثيم الأزرق البحري'),'no theme label');

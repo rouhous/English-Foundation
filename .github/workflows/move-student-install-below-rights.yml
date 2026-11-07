@@ -1,0 +1,38 @@
+name: Move Student Install Help Below Copyright
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/move_student_install_below_rights.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-student-install-layout
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move help to scrollable section below copyright
+        run: python scripts/move_student_install_below_rights.py
+      - name: Validate markup and flow
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('id="mej-student-install-hint"')==1
+          assert s.index('id="mej-owner-rights-notice"')<s.index('id="mej-student-install-hint"')
+          assert 'MEJ_STUDENT_INSTALL_BELOW_RIGHTS_20261107' in s
+          assert 'overflow-y:auto!important' in s
+          print('RIGHTS_ABOVE_SCROLL_HELP_OK')
+          PY
+      - name: Save only student landing HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Place install hint beneath copyright in scrollable layout"
+            git push
+          fi

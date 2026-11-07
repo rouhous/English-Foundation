@@ -8,6 +8,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#e8f7ff,#cbe9f9 53%,#edf8ff);font-family:system-ui,'Segoe UI',Tahoma,sans-serif;color:#063764;padding:17px;display:grid;place-items:center}
 #roleChoice[hidden]{display:none!important}main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c6e4f3;box-shadow:0 16px 46px #074b8e26;border-radius:24px;padding:clamp(18px,4vw,30px);text-align:center}h1{margin:7px 0 6px;font-size:clamp(22px,5.5vw,29px)}.sub{color:#507b9a;margin:0 0 20px}.brand{font-size:14px;font-weight:800;color:#d6a54d}.pill{border-radius:12px;background:#e7f5ff;border:1px solid #c6e5f6;padding:13px;margin:12px 0;line-height:1.8;text-align:right}.small{font-size:13px}#googleSignIn{display:flex;justify-content:center;min-height:48px;margin:13px 0}#status{min-height:34px;color:#4e7088;font-size:14px;line-height:1.8}a.link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#086fb9;color:white;border-radius:12px;padding:12px 15px;margin:7px 3px;min-height:46px}.link.alt{background:white;color:#075b9d;border:1px solid #9ad1cf}.panel{text-align:right;border-radius:16px;padding:15px;background:#f3faff;border:1px solid #d0e6f4;margin:15px 0}.panel[hidden]{display:none!important}.panel h2{font-size:17px;margin:0 0 12px}.row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #daeaf6;padding:9px 0;gap:7px}.row span:first-child{color:#54758d}.row strong{text-align:left;overflow-wrap:anywhere}.notice{font-size:13px;color:#50708a;line-height:1.8}.footer{margin-top:15px;font-size:12px;color:#52738e}
+.loginHint{font-size:16px;color:#194e74;font-weight:650;margin:5px 0 12px}.installHint{font-size:13px;line-height:1.8;color:#4e7390;margin:20px 4px 2px;text-align:center}#identityPanel{padding:10px!important;margin:8px 0!important;background:transparent!important;border:0!important}#status:empty{display:none}#status{margin:4px 0;min-height:0}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/teacher-progress-v1.js" defer></script>
@@ -17,16 +18,16 @@
 <main>
 <div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div>
 <h1>بوابة المعلم والمدرسة</h1>
-<p class="sub">اختر التسجيل لأول مرة، أو ادخل مباشرة بحساب Google إذا كان حسابك معتمدًا</p>
+
 <div id="roleChoice" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0">
 <button type="button" id="chooseSchool" style="font:inherit;padding:12px;border:1px solid #9ccbe9;border-radius:12px;background:white;color:#075b9d">تسجيل مدرسة</button>
 <button type="button" id="chooseTeacher" style="font:inherit;padding:12px;border:1px solid #9ccbe9;border-radius:12px;background:#086fb9;color:white">تسجيل معلم</button>
 </div>
 <div id="identityPanel" style="margin:16px 0;padding:14px;background:#edf8ff;border:1px solid #c9e3f2;border-radius:14px;text-align:center">
-<strong id="identityTitle">تسجيل الدخول بحساب Google</strong>
-<p class="notice" id="identityHelp">للمعلم أو مسؤول المدرسة المسجل سابقًا: اضغط زر Google أدناه للدخول مباشرة. للمستخدم الجديد: اختر زر التسجيل أعلاه أولًا.</p>
+
+<p class="loginHint" id="identityHelp">إذا كنت مسجلًا، قم بالدخول بحساب Google</p>
 <div id="googleSignIn"></div>
-<p id="status" role="status" aria-live="polite">جار تجهيز تسجيل Google...</p>
+<p id="status" role="status" aria-live="polite"></p>
 </div>
 <section id="schoolRegistrationPanel" class="panel" hidden>
 <p class="notice">أدخل بيانات المدرسة ومسؤولها. ترخيص وادي الحواسنة (2429) استثنائي مجاني؛ تفعيله يتطلب موافقة المالك على بريد المسؤول، ثم التحقق بحساب Google.</p>
@@ -112,8 +113,7 @@
 <p id="teacherJoinStatus" class="notice" role="status" aria-live="polite"></p>
 </section>
 
-<div class="pill small" id="installHelp" style="text-align:center">يمكن تثبيت هذه البوابة من قائمة المتصفح ← «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق». لا تحتاج إلى فتح تطبيق الطالب.</div>
-<p class="footer">بوابة موحدة للمعلم ومسؤول المدرسة، منفصلة عن تطبيق الطلاب. تسجيل Google يتحقق من الدور والصلاحيات في الخادم.</p>
+<p class="installHint" id="installHelp">للتثبيت: افتح قائمة المتصفح (⋮) واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</p>
 </main>
 <script>
 'use strict';
@@ -192,8 +192,7 @@ function selectRole(mode){
  const panel=document.getElementById(mode==='school'?'schoolRegistrationPanel':'pendingPanel');
  panel.hidden=false;
  document.getElementById('identityPanel').hidden=false;
- document.getElementById('identityTitle').textContent='تسجيل الدخول بحساب Google';
- document.getElementById('identityHelp').textContent=mode==='school'?'استكمل بيانات المدرسة أولًا، ثم تحقق بنفس حساب Google الذي اعتمده مالك التطبيق.':'سجّل بحساب Google المعتمد، وأرسل طلب الانضمام إلى مسؤول المدرسة من النموذج أدناه.';
+ document.getElementById('identityHelp').textContent='إذا كنت مسجلًا، قم بالدخول بحساب Google';
  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 document.getElementById('chooseTeacher').addEventListener('click',()=>selectRole('teacher'));

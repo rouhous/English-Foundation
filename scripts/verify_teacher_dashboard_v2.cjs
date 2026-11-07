@@ -11,3 +11,12 @@ assert(html.includes('teacher-dashboard-v2.js?v='));
 console.log('STAFF_DASHBOARD_STRUCTURE_AND_JAVASCRIPT_OK');
 
 // Run final class navigation and nautical dashboard validation.
+
+const explicitJs=fs.readFileSync('assets/teacher-dashboard-v2.js','utf8');
+const explicitHtml=fs.readFileSync('reviews/teacher-dashboard.html','utf8');
+assert(explicitJs.includes("function chartLevels()"),'level visualization exists');
+assert(explicitJs.includes("const occupied=counts.map"),'only nonempty levels shown');
+assert(explicitJs.includes("part.count+' '+(part.count===1?'طالب':'طلاب')"),'explicit student counts');
+assert(explicitHtml.includes('.levelClassHeader'),'per-class header styles');
+assert(explicitHtml.includes('.levelCount'),'visible count styles');
+assert(!explicitHtml.includes('الثيم الأزرق البحري'),'no theme label');

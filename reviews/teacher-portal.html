@@ -10,6 +10,7 @@
 #roleChoice[hidden]{display:none!important}main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;box-shadow:0 16px 46px #004f7230;border-radius:24px;padding:clamp(18px,4vw,30px);text-align:center}h1{margin:7px 0 6px;font-size:clamp(22px,5.5vw,29px)}.sub{color:#54707b;margin:0 0 20px}.brand{font-size:14px;font-weight:800;color:#b78227}.pill{border-radius:12px;background:#e8f5f4;border:1px solid #c4e3de;padding:13px;margin:12px 0;line-height:1.8;text-align:right}.small{font-size:13px}#googleSignIn{display:flex;justify-content:center;min-height:48px;margin:13px 0}#status{min-height:34px;color:#4d6874;font-size:14px;line-height:1.8}a.link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#087b83;color:white;border-radius:12px;padding:12px 15px;margin:7px 3px;min-height:46px}.link.alt{background:white;color:#08717a;border:1px solid #9ad1cf}.panel{text-align:right;border-radius:16px;padding:15px;background:#f4fcfa;border:1px solid #d2e6e0;margin:15px 0}.panel[hidden]{display:none!important}.panel h2{font-size:17px;margin:0 0 12px}.row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d4eae4;padding:9px 0;gap:7px}.row span:first-child{color:#57717a}.row strong{text-align:left;overflow-wrap:anywhere}.notice{font-size:13px;color:#566c76;line-height:1.8}.footer{margin-top:15px;font-size:12px;color:#526c77}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="../assets/teacher-progress-v1.js" defer></script>
 </head>
 <body>
 <main>
@@ -56,7 +57,7 @@
 <button type="button" id="managerCopyCode" style="display:none;padding:10px;border:1px solid #95c7c7;border-radius:8px;background:white;font:inherit">نسخ الرمز</button>
 </div>
 <div id="schoolTeachersList"></div>
-<p class="notice">روابط Google Sheets لا تمنح حق الوصول وحدها؛ مشاركة تقارير المعلمين مع حساب المدرسة تحتاج إعداد صلاحيات Drive بصورة مستقلة.</p>
+<p class="notice">يظهر ملخص بيانات المدرسة أدناه مباشرة من القاعدة السحابية، دون الاعتماد على ملفات Google Sheets.</p>
 </section>
 <section id="teacherPanel" class="panel" hidden>
 <h2>حساب المعلم المعتمد</h2>
@@ -64,7 +65,7 @@
 <div class="row"><span>المدرسة</span><strong id="schoolName"></strong></div>
 <div class="row"><span>الأقسام</span><strong id="teacherClasses"></strong></div>
 <div id="reportsAnchor"></div>
-<p class="notice">تظهر التقارير المملوكة لحسابك بعد التحقق من صلاحية Google Drive. لا يتم منح وصول عام إلى بيانات الطلاب.</p>
+<p class="notice">تظهر نتائج طلابك داخل هذه الصفحة من Supabase بعد مزامنتها؛ لم تعد بحاجة إلى فتح Google Sheets لعرض التقارير.</p>
 </section>
 <section id="ownerPanel" class="panel" hidden>
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
@@ -157,19 +158,19 @@ async function onCredential(response){
    panel.hidden=false;
    status.textContent='تم التحقق من مسؤول المدرسة.';
    await refreshManager(response.credential);
+   rootProgress('school_manager',response.credential);
    return;
   }
   if(data.role!=='teacher')throw Error('ROLE_DENIED');
   value('teacherName',data.teacherName);value('schoolName',data.school);value('teacherClasses',data.classes);
   const reports=document.getElementById('reportsAnchor');reports.replaceChildren();
-  if(typeof data.reportSheetUrl==='string'&&/^https:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+\/edit$/.test(data.reportSheetUrl)){
-   const link=document.createElement('a');link.className='link';link.href=data.reportSheetUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='فتح ملف تقارير المعلم في Google Sheets';reports.append(link);
-  }
   document.getElementById('teacherPanel').hidden=false;
   status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
+  rootProgress('teacher',response.credential);
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
 
+function rootProgress(role,credential){if(window.MEJTeacherProgress?.load)window.MEJTeacherProgress.load(credential,role)}
 function selectRole(mode){
  registrationMode=mode;
  const t=document.getElementById('chooseTeacher'),sc=document.getElementById('chooseSchool');
@@ -234,11 +235,6 @@ async function refreshManager(credential){
   const name=document.createElement('strong');name.textContent=teacher.name||'معلم';
   const cl=document.createElement('span');cl.textContent=teacher.classes||'—';
   item.append(name,cl);
-  if(typeof teacher.reportSheetUrl==='string'&&/^https:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+\/edit$/.test(teacher.reportSheetUrl)){
-    const link=document.createElement('a');link.href=teacher.reportSheetUrl;link.target='_blank';
-    link.rel='noopener noreferrer';link.textContent='عرض تقرير المعلم';link.className='link alt';
-    link.style.fontSize='12px';item.append(link);
-  }
   container.append(item);
  }
 }

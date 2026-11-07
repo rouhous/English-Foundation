@@ -32,9 +32,24 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 .levelChip .levelNumber{color:#123f63;font-size:13px}
 .levelChip .levelCount{margin-inline-start:auto;font-size:14px;color:#063764;white-space:nowrap}
 @media(max-width:600px){.levelChips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.levelChip{min-width:0;padding:9px 7px;gap:5px}.levelChip .levelNumber{font-size:12px}.levelChip .levelCount{font-size:12px}.levelChip .levelAccent{flex-basis:5px}}
-.sortControls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 14px}.sortControls label{font-weight:700;font-size:14px;color:#174d78}.sortControls select{flex:1;min-width:170px;border:1px solid #bdd9ec;background:#f5fbff;padding:11px;border-radius:12px;color:#0c4273;font:inherit}@media(max-width:520px){.sortControls select{width:100%}}</style>
+.sortControls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 14px}.sortControls label{font-weight:700;font-size:14px;color:#174d78}.sortControls select{flex:1;min-width:170px;border:1px solid #bdd9ec;background:#f5fbff;padding:11px;border-radius:12px;color:#0c4273;font:inherit}@media(max-width:520px){.sortControls select{width:100%}}
+.stackedLevelPanel{display:flex;flex-direction:column;gap:0}
+.classCompareRow{display:grid;grid-template-columns:68px minmax(0,1fr);align-items:start;gap:9px;padding:14px 0;border-bottom:1px solid #dcebf5}
+.classCompareRow:last-child{border-bottom:0}
+.compareClassName{display:flex;align-items:center;justify-content:center;min-height:43px;border-radius:11px;background:#e9f3fe;color:#083960;font-size:15px;direction:ltr}
+.compareChartScroll{min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.compareChart{display:flex;direction:rtl;width:100%;min-width:0;gap:0;align-items:stretch;padding:0 1px}
+.compareSegmentColumn{min-width:46px;display:flex;flex-direction:column;align-items:stretch;text-align:center;direction:ltr}
+.compareSegmentCount{height:35px;min-width:0;display:flex;justify-content:center;align-items:center;color:#fff;font-size:17px;font-weight:800;text-shadow:0 1px 2px #0004;white-space:nowrap}
+.compareSegmentColumn:first-child .compareSegmentCount{border-radius:0 10px 10px 0}
+.compareSegmentColumn:last-child .compareSegmentCount{border-radius:10px 0 0 10px}
+.compareSegmentColumn:only-child .compareSegmentCount{border-radius:10px}
+.compareSegmentLabel{font:700 12px system-ui,Tahoma,sans-serif;color:#0b3b67;padding:5px 0 2px;direction:ltr}
+@media(max-width:490px){.classCompareRow{grid-template-columns:52px minmax(0,1fr);gap:6px;padding:12px 0}.compareClassName{font-size:13px;min-height:35px}.compareSegmentCount{height:33px;font-size:15px}.compareSegmentLabel{font-size:11px}}
+
+</style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/teacher-dashboard-v2.js?v=20261107-3" defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261107-4" defer></script>
 </head><body>
 <header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <main>

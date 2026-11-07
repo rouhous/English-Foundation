@@ -13,7 +13,7 @@ assert(js.includes("app.allStudents.filter(s=>s.teacherId===app.teacherId)"),'Te
 assert(js.includes("app.chartScope==='compare'"),'Chart comparison mode');
 assert(js.includes("teacher.classes||''"),'Display assigned teacher classes even when empty');
 assert(js.includes("g.students.length?Math.round"),'Handle empty classes without division by zero');
-assert(js.includes("const count=Array.from({length:13}"),'Thirteen levels');
+assert(js.includes("const counts=Array.from({length:13}"),'Thirteen levels');
 assert(!html.includes('src="../assets/teacher-dashboard-v2.js'),'wrong dashboard');
 const portal=fs.readFileSync('reviews/teacher-portal.html','utf8');
 assert(portal.includes("location.replace('./school-dashboard.html')"),'School redirect');

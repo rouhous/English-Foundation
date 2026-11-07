@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
-<link id="portalManifest" rel="manifest" href="./teacher-manifest.webmanifest"><meta name="theme-color" content="#087b83"><link rel="apple-touch-icon" href="../icon-192.png">
+<link id="portalManifest" rel="manifest" href="./portal-manifest.webmanifest"><meta name="theme-color" content="#087b83"><link rel="apple-touch-icon" href="../icon-192.png">
 <title>بوابة المعلمين والمدرسة | رحلتي مع الإنجليزية</title>
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#f3f9fc,#d5edf0 53%,#fdf8ec);font-family:system-ui,'Segoe UI',Tahoma,sans-serif;color:#114757;padding:17px;display:grid;place-items:center}
@@ -15,14 +15,14 @@
 <main>
 <div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div>
 <h1>بوابة المعلم والمدرسة</h1>
-<p class="sub">اختر الخدمة لفتح نموذجها الخاص</p>
+<p class="sub">اختر التسجيل لأول مرة، أو ادخل مباشرة بحساب Google إذا كان حسابك معتمدًا</p>
 <div id="roleChoice" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0">
-<button type="button" id="chooseSchool" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:white;color:#08717a">تسجيل / تفعيل مدرسة</button>
-<button type="button" id="chooseTeacher" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:#087b83;color:white">دخول معلم</button>
+<button type="button" id="chooseSchool" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:white;color:#08717a">تسجيل مدرسة</button>
+<button type="button" id="chooseTeacher" style="font:inherit;padding:12px;border:1px solid #95c7c7;border-radius:12px;background:#087b83;color:white">تسجيل معلم</button>
 </div>
-<div id="identityPanel" hidden style="margin:16px 0;padding:14px;background:#eff8f6;border:1px solid #bbdcd9;border-radius:14px;text-align:center">
-<strong id="identityTitle">التحقق من الهوية</strong>
-<p class="notice" id="identityHelp">بعد تعبئة النموذج اختر حساب Google المعتمد لإكمال التحقق.</p>
+<div id="identityPanel" style="margin:16px 0;padding:14px;background:#eff8f6;border:1px solid #bbdcd9;border-radius:14px;text-align:center">
+<strong id="identityTitle">تسجيل الدخول بحساب Google</strong>
+<p class="notice" id="identityHelp">للمعلم أو مسؤول المدرسة المسجل سابقًا: اضغط زر Google أدناه للدخول مباشرة. للمستخدم الجديد: اختر زر التسجيل أعلاه أولًا.</p>
 <div id="googleSignIn"></div>
 <p id="status" role="status" aria-live="polite">جار تجهيز تسجيل Google...</p>
 </div>
@@ -116,26 +116,17 @@
 </section>
 
 <div class="pill small" id="installHelp" style="text-align:center">يمكن تثبيت هذه البوابة من قائمة المتصفح ← «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق». لا تحتاج إلى فتح تطبيق الطالب.</div>
-<p class="footer">هذه بوابة المدرسة والمعلم فقط، وليست تطبيق الطلاب. التحقق من Google خطوة داخل التسجيل وليس اختيارًا مستقلًا.</p>
+<p class="footer">بوابة موحدة للمعلم ومسؤول المدرسة، منفصلة عن تطبيق الطلاب. تسجيل Google يتحقق من الدور والصلاحيات في الخادم.</p>
 </main>
 <script>
 'use strict';
 (function(){
 const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
-const params=new URLSearchParams(location.search);
-const directRole=params.get('role')==='school'?'school':params.get('role')==='teacher'?'teacher':null;
-document.getElementById('portalManifest').href=directRole==='school'?'./school-manifest.webmanifest':'./teacher-manifest.webmanifest';
-if(directRole){
- document.title=(directRole==='school'?'بوابة مسؤول المدرسة':'بوابة المعلم')+' | رحلتي مع الإنجليزية';
- document.querySelector('h1').textContent=directRole==='school'?'بوابة مسؤول المدرسة':'بوابة المعلم';
- document.querySelector('.sub').textContent='سجّل بحساب Google المعتمد للمتابعة';
- document.getElementById('roleChoice').hidden=true;
-}
 const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
 let verifiedTeacherCredential=null;
-let registrationMode='teacher';
+let registrationMode='login';
 function hide(){for(const id of ['teacherPanel','ownerPanel','pendingPanel','schoolRegistrationPanel','schoolManagerPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
@@ -149,8 +140,8 @@ async function onCredential(response){
   verifiedTeacherCredential=response.credential;
   const {r,data}=await call('teacher_status',response.credential);
   if(!r.ok||!data.ok){
-   document.getElementById(registrationMode==='school'?'schoolRegistrationPanel':'pendingPanel').hidden=false;
-   status.textContent=registrationMode==='school'?'أدخل بيانات المدرسة بعد اعتماد بريدك من المالك.':'لم يُعثر على اعتماد مدرسي مكتمل لهذا الحساب.';return;
+   if(registrationMode!=='login') document.getElementById(registrationMode==='school'?'schoolRegistrationPanel':'pendingPanel').hidden=false;
+   status.textContent=registrationMode==='school'?'أدخل بيانات المدرسة بعد اعتماد بريدك من المالك.':registrationMode==='teacher'?'أكمل تسجيل المعلم والتحقق أولاً.':'هذا الحساب غير مسجّل بعد. اختر تسجيل مدرسة أو تسجيل معلم أعلاه.';return;
   }
   if(data.role==='owner'){
    verifiedOwnerCredential=response.credential;
@@ -189,9 +180,9 @@ function selectRole(mode){
  const panel=document.getElementById(mode==='school'?'schoolRegistrationPanel':'pendingPanel');
  panel.hidden=false;
  document.getElementById('identityPanel').hidden=false;
- document.getElementById('identityTitle').textContent=mode==='school'?'التحقق من حساب مسؤول المدرسة':'التحقق من حساب المعلم';
+ document.getElementById('identityTitle').textContent='تسجيل الدخول بحساب Google';
  document.getElementById('identityHelp').textContent=mode==='school'?'استكمل بيانات المدرسة أولًا، ثم تحقق بنفس حساب Google الذي اعتمده مالك التطبيق.':'أكمل التسجيل الوزاري وربط رمز المدرسة، ثم تحقق بحساب Google المستخدم في النموذج الأصلي.';
- panel.scrollIntoView({behavior:'smooth',block:'start'});
+ panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 document.getElementById('chooseTeacher').addEventListener('click',()=>selectRole('teacher'));
 document.getElementById('chooseSchool').addEventListener('click',()=>selectRole('school'));
@@ -331,14 +322,14 @@ document.getElementById('bridgeCopy').addEventListener('click',()=>{
 const value=document.getElementById('bridgeSecretValue').value;
 if(value)navigator.clipboard?.writeText(value);
 });
-if(directRole)selectRole(directRole);
+// Unified login: the Google sign-in button remains visible regardless of registration choice.
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./portal-sw.js',{scope:'./'}).catch(()=>{});}
 let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{
    google.accounts.id.initialize({client_id:CLIENT_ID,callback:onCredential,auto_select:false,cancel_on_tap_outside:true});
    google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
-   status.textContent='استخدم حساب Google المعتمد لإكمال التسجيل بعد فتح النموذج المناسب.';
+   status.textContent='يمكن للمعلم ومسؤول المدرسة المسجلين الدخول مباشرة من هنا.';
   }catch(_){status.textContent='تعذر تحميل تسجيل Google.'}
  }else if(++attempts>70){clearInterval(timer);status.textContent='تعذر تحميل تسجيل Google؛ تحقق من الاتصال.'}
 },200);

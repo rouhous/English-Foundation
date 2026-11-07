@@ -1,11 +1,10 @@
 {
-  "generatedAt": "2026-11-07T17:26:13.533Z",
+  "generatedAt": "2026-11-07T17:52:00.715Z",
   "scope": "All learning vocabulary across all catalog levels",
   "uniqueWords": 449,
   "byStatus": {
-    "linked_local_or_embedded": 371,
-    "no_approved_image": 78
+    "linked_local_or_embedded": 449
   },
-  "notVerifiedCount": 78,
-  "verifiedImageCount": 371
+  "notVerifiedCount": 0,
+  "verifiedImageCount": 449
 }

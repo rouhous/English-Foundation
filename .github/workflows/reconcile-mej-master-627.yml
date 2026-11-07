@@ -1,0 +1,42 @@
+name: Reconcile and restore 627 legacy master vocabulary words
+on:
+  push:
+    paths:
+      - 'scripts/reconcile_mej_master_627.cjs'
+      - 'scripts/master-627-stage-manifest.b64'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Reconcile original master to current 12 approved image banks
+        run: node --max-old-space-size=3072 scripts/reconcile_mej_master_627.cjs
+      - name: Confirm scope, source integrity and report
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('reviews/quality-audit/master-627-reconciliation.json','utf8'));
+          if(r.sourceWords!==627||r.words.length!==627)throw Error('Lost original source entries');
+          if(r.availableInCurrentImageBank+r.missingImagesFromCurrentBank!==627)throw Error('Invalid coverage counts');
+          if(r.insertedStagePlacements!==r.insertions.length)throw Error('Invalid insertion count');
+          const app=fs.readFileSync('index.html','utf8');
+          if(!app.includes('MEJ_RESTORED_LEGACY_627')||!app.includes('items.push(...legacyWords)'))throw Error('Learning preview integration missing');
+          console.log('PASS:',r.insertedStagePlacements,'new stage placements');
+          NODE
+      - name: Commit learning cards and audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/master-627-reconciliation.json reviews/quality-audit/master-627-reconciliation.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Restore verified legacy vocabulary cards and publish 627-word comparison"
+            git push
+          fi

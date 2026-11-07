@@ -20,7 +20,7 @@ assert(explicitJs.includes("node('strong','compareSegmentCount',part.count)"),'n
 assert(explicitJs.includes("'L'+part.level"),'compact L label under each segment');
 assert(explicitJs.includes("chart.style.minWidth=Math.max(0,occupied.length*46)"),'small screen overflow');
 assert(explicitHtml.includes('.compareChartScroll'),'scroll layout');
-assert(explicitHtml.includes('20261107-4'),'new script cache version');
+assert(explicitHtml.includes('20261107-5'),'new script cache version');
 assert(explicitHtml.includes('id="sortStudents"'),'ranking selector remains present');
 
 // Latest overview/class indicators and teacher code safety regression.

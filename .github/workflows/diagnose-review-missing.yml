@@ -1,0 +1,23 @@
+name: Diagnose missing images on learning review
+on:
+  push:
+    paths: ['scripts/diagnose_review_missing.cjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: node scripts/diagnose_review_missing.cjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/image-audit/review-page-spot-check.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Report missing review word image paths"
+            git push
+          fi

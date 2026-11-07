@@ -34,3 +34,46 @@ for(const e of noImage)console.log(e.word+' | '+e.levels.join(','));
 console.log('MISSING_IMAGES_LIST_END');
 
 // Run complete image coverage audit.
+
+
+const path=require('node:path');
+const reportDir='reviews/image-audit';
+fs.mkdirSync(reportDir,{recursive:true});
+const csvCell=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
+const lookup=word=>{
+ const key=norm(word);
+ const value=bank[key]||bank[key.replace(/-/g,' ')]||bank[key.replace(/ /g,'-')]||[];
+ return (Array.isArray(value)?value:[value]).filter(x=>x&&typeof x.src==='string'&&x.rejected!==true&&x.status!=='rejected');
+};
+const examine=src=>{
+ if(src.startsWith('data:'))return {ok:true,type:'embedded',path:''};
+ if(/^https?:\/\//i.test(src))return {ok:null,type:'external-unverified',path:src};
+ let local=src.split('?')[0].split('#')[0];
+ try{local=decodeURIComponent(local)}catch(_){}
+ local=local.replace(/^\/+/, '').replace(/^English-Foundation\//,'');
+ if(local.includes('..'))return {ok:false,type:'unsafe-path',path:local};
+ const present=fs.existsSync(local)&&fs.statSync(local).isFile()&&fs.statSync(local).size>0;
+ return {ok:present,type:present?'local-present':'local-missing',path:local};
+};
+const report=[];
+for(const e of all.values()){
+ const pictures=lookup(e.word);
+ const statuses=pictures.map(p=>({src:p.src,...examine(p.src)}));
+ const valid=statuses.filter(s=>s.ok===true);
+ const unverified=statuses.filter(s=>s.ok===null);
+ const status=valid.length?'linked_local_or_embedded':unverified.length?'external_unverified':pictures.length?'broken_image_path':'no_approved_image';
+ report.push({word:e.word,levels:e.levels.join('; '),status,imageCount:pictures.length,workingCount:valid.length,unverifiedCount:unverified.length,imageSources:statuses.map(s=>s.src).join(' | ')});
+}
+report.sort((a,b)=>a.word.localeCompare(b.word,'en'));
+const missingReport=report.filter(r=>r.status!=='linked_local_or_embedded');
+const reportCSV=rows=>['word,levels,status,image_count,verified_count,unverified_count,image_sources',...rows.map(r=>[r.word,r.levels,r.status,r.imageCount,r.workingCount,r.unverifiedCount,r.imageSources].map(csvCell).join(','))].join('\n')+'\n';
+fs.writeFileSync(path.join(reportDir,'all-vocabulary-image-status.csv'),reportCSV(report));
+fs.writeFileSync(path.join(reportDir,'missing-or-unverified-images.csv'),reportCSV(missingReport));
+const byStatus={};for(const r of report)byStatus[r.status]=(byStatus[r.status]||0)+1;
+const summary={generatedAt:new Date().toISOString(),scope:'All learning vocabulary across all catalog levels',uniqueWords:report.length,byStatus,notVerifiedCount:missingReport.length,verifiedImageCount:report.length-missingReport.length};
+fs.writeFileSync(path.join(reportDir,'summary.json'),JSON.stringify(summary,null,2)+'\n');
+fs.writeFileSync(path.join(reportDir,'README.md'),
+ '# Vocabulary image audit\n\nThis checks **each learning-page vocabulary word** against all 12 approved image banks and whether a local picture exists in the repository. External URLs are not independently verified. A local file check does **not** guarantee the picture is visually correct or that a browser loaded it.\n\n'+
+ Object.entries(summary).map(([k,v])=>'- **'+k+'**: '+(typeof v==='object'?JSON.stringify(v):v)).join('\n')+
+ '\n\n[Missing or unverified words](missing-or-unverified-images.csv) · [All words](all-vocabulary-image-status.csv)\n');
+console.log('FULL_IMAGE_AUDIT_REPORT '+JSON.stringify(summary));

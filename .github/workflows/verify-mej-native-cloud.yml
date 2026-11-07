@@ -1,0 +1,35 @@
+name: Verify MEJ Native Cloud and Staff Portal
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/test_mej_native_cloud.js']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test offline-first cloud queue
+        run: node scripts/test_mej_native_cloud.js
+      - name: Validate dashboard JavaScript
+        run: |
+          node --check assets/student-cloud-progress-v1.js
+          node --check assets/teacher-progress-v1.js
+          node --check assets/staff-native-portal-v1.js
+      - name: Check one unified portal and its inline JavaScript
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('reviews/teacher-portal.html').read_text(encoding='utf8')
+          for x in ['id="chooseSchool"','id="chooseTeacher"','id="googleSignIn"','id="teacherJoinForm"','id="managerApplications"','id="teacherStudentCodeButton"']:
+              assert x in s,x
+          assert 'docs.google.com/forms' not in s
+          matches=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)
+          assert matches
+          Path('/tmp/mej-portal.js').write_text(matches[-1],encoding='utf8')
+          print('Unified staff portal markup validated')
+          PY
+          node --check /tmp/mej-portal.js

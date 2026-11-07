@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087b83"><title>روابط بوابات المعلمين والمدارس | رحلتي مع الإنجليزية</title>
+<style>*{box-sizing:border-box}body{margin:0;padding:22px;font-family:system-ui,Tahoma,sans-serif;color:#114757;background:linear-gradient(135deg,#e5f4f3,#fff8eb);min-height:100vh}main{max-width:880px;margin:auto}h1{text-align:center;font-size:clamp(24px,5vw,34px)}p{text-align:center;line-height:1.8}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}.card{background:white;border:1px solid #bfdedb;border-radius:22px;padding:24px;text-align:center;box-shadow:0 8px 25px #12555c1a}.card h2{margin-top:0}.qr{width:220px;height:220px;margin:15px auto;display:grid;place-items:center;background:white;border:1px solid #eee}.qr img,.qr canvas{max-width:100%;height:auto}a.open{display:inline-block;border-radius:12px;background:#087b83;color:#fff;text-decoration:none;padding:13px 18px;font-weight:700}.url{font-size:12px;overflow-wrap:anywhere;direction:ltr;padding:10px;background:#edf6f5;border-radius:9px;margin:14px 0}button{padding:10px;border:1px solid #087b83;border-radius:10px;background:white;color:#087b83;font:inherit;cursor:pointer}.small{font-size:13px;color:#62757c}</style></head><body>
+<main><h1>بوابات رحلتي مع الإنجليزية</h1><p>امسح الرمز لفتح بوابتك مباشرة دون المرور بتطبيق الطالب. بعد تسجيل الدخول يمكن تثبيتها من قائمة المتصفح.</p>
+<div class="cards">
+<section class="card"><h2>بوابة المعلم</h2><div class="qr" id="teacherQR" aria-label="رمز دخول المعلم"></div><a class="open" id="teacherLink">فتح بوابة المعلم</a><div class="url" id="teacherURL"></div><button type="button" data-copy="teacher">نسخ رابط المعلم</button></section>
+<section class="card"><h2>بوابة مسؤول المدرسة</h2><div class="qr" id="schoolQR" aria-label="رمز دخول مسؤول المدرسة"></div><a class="open" id="schoolLink">فتح بوابة المدرسة</a><div class="url" id="schoolURL"></div><button type="button" data-copy="school">نسخ رابط المدرسة</button></section>
+</div>
+<p class="small" id="info" role="status">رموز QR تحتوي على روابط عامة فقط، ولا تتضمن بيانات حسابات أو رموز سرية. الوصول للبيانات محمي بالتحقق من Google وصلاحيات الخادم.</p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+const base=new URL('./teacher-portal.html',location.href);
+const links={teacher:new URL('?role=teacher',base).href,school:new URL('?role=school',base).href};
+for(const role of ['teacher','school']){
+ document.getElementById(role+'Link').href=links[role];
+ document.getElementById(role+'URL').textContent=links[role];
+ if(typeof QRCode==='function'){new QRCode(document.getElementById(role+'QR'),{text:links[role],width:210,height:210,correctLevel:QRCode.CorrectLevel.M});}
+ else {const img=document.createElement('img');img.alt='رمز QR';img.width=210;img.height=210;img.src='https://api.qrserver.com/v1/create-qr-code/?size=210x210&data='+encodeURIComponent(links[role]);document.getElementById(role+'QR').append(img);}
+}
+document.querySelectorAll('button[data-copy]').forEach(btn=>btn.onclick=async()=>{
+ try{await navigator.clipboard.writeText(links[btn.dataset.copy]);document.getElementById('info').textContent='تم نسخ الرابط.'}
+ catch(_){document.getElementById('info').textContent='يمكن نسخ الرابط الظاهر أسفل الرمز.'}
+});
+})();
+</script></body></html>

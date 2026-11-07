@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-freemium-public-20261107-v1';
+const CACHE='mej-freemium-public-20261107-v2';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -60,6 +60,17 @@ self.addEventListener('fetch',event=>{
  if(request.method!=='GET')return;
  const url=new URL(request.url);
  if(url.origin!==self.location.origin)return;
+ // Staff portals and their JavaScript must always use the current network build.
+ // Never serve stale reports, registration pages, or dashboard scripts from the PWA cache.
+ const path=url.pathname;
+ const isStaffPage=/\/reviews\/(?:teacher-portal|teacher-dashboard|school-dashboard|owner-login)\.html$/.test(path);
+ const isStaffScript=/\/assets\/(?:teacher-dashboard-v2|school-dashboard-v1|teacher-progress-v1|staff-native-portal-v1)\.js$/.test(path);
+ if(isStaffPage||isStaffScript){
+   event.respondWith(fetch(request,{cache:'no-store'}).catch(()=>new Response('تحتاج بوابة المعلم والمدرسة إلى اتصال بالإنترنت لتحميل أحدث إصدار.',{
+      status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
+   })));
+   return;
+ }
  if(request.mode==='navigate'){
   event.respondWith((async()=>{
    // Use a separate cache key for each page. Never serve the main app as an

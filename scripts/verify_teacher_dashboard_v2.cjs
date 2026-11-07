@@ -9,3 +9,5 @@ assert(portal.includes("location.replace('./teacher-dashboard.html')"));
 assert(portal.includes("sessionStorage.setItem('MEJ_STAFF_LOGIN_V2'"));
 assert(html.includes('teacher-dashboard-v2.js?v='));
 console.log('STAFF_DASHBOARD_STRUCTURE_AND_JAVASCRIPT_OK');
+
+// Run final class navigation and nautical dashboard validation.

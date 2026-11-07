@@ -21,3 +21,5 @@ for(const word of words){
 }
 console.log('PASS: review page JS, SW syntax and eight representative image links');
 // Verify currently deployed review image bank refresh.
+
+// QA run: updated service-worker image cache handling.

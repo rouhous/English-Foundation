@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-freemium-public-20261107-v7';
+const CACHE='mej-freemium-public-20261107-v8-learning-images';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -10,7 +10,7 @@ const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-respons
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];
 const IMAGE_SHARDS=Array.from({length:12},(_,i)=>
- './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261105-stage0-69');
+ './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261107-approved-all');
 let warmStarted=false;
 async function warmPictures(){
  if(warmStarted)return;
@@ -65,6 +65,38 @@ self.addEventListener('fetch',event=>{
  const path=url.pathname;
  const isStaffPage=/\/reviews\/(?:teacher-portal|teacher-dashboard|school-dashboard|owner-login)\.html$/.test(path);
  const isStaffScript=/\/assets\/(?:teacher-dashboard-v2|school-dashboard-v1|teacher-progress-v1|staff-native-portal-v1)\.js$/.test(path);
+ // Approved vocabulary image banks must always refresh online, while retaining
+ // an offline copy of the latest successfully downloaded version.
+ const isApprovedImageBank=/\/assets\/approved-images-\d{2}\.js$/.test(path);
+ if(isApprovedImageBank){
+   event.respondWith((async()=>{
+     const cache=await caches.open(CACHE);
+     try{
+       const fresh=await fetch(request,{cache:'no-store'});
+       if(fresh.ok)await cache.put(request,fresh.clone());
+       return fresh;
+     }catch(error){
+       return (await cache.match(request,{ignoreSearch:true}))||Response.error();
+     }
+   })());
+   return;
+ }
+ // The teacher's learning-image review must show the newest published images,
+ // not an old cache-first HTML page. Still allow previously saved offline access.
+ if(path.endsWith('/reviews/learning.html')){
+   event.respondWith((async()=>{
+     const cache=await caches.open(CACHE);
+     const cacheKey='./reviews/learning.html';
+     try{
+       const response=await fetch(request,{cache:'no-store'});
+       if(response.ok)await cache.put(cacheKey,response.clone());
+       return response;
+     }catch(error){
+       return (await cache.match(cacheKey))||Response.error();
+     }
+   })());
+   return;
+ }
  if(isStaffPage||isStaffScript){
    event.respondWith(fetch(request,{cache:'no-store'}).catch(()=>new Response('تحتاج بوابة المعلم والمدرسة إلى اتصال بالإنترنت لتحميل أحدث إصدار.',{
       status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}

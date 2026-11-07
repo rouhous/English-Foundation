@@ -2,7 +2,7 @@
 #mej-study-companion{position:fixed;right:clamp(7px,1.5vw,22px);bottom:max(64px,env(safe-area-inset-bottom,0px) + 54px);z-index:1300;width:108px;pointer-events:none;isolation:isolate;direction:ltr;font-family:system-ui,sans-serif;user-select:none}
 #mej-study-companion .mej-mascot-tools{position:absolute;top:5px;right:2px;display:flex;gap:3px;z-index:3;pointer-events:auto}
 #mej-study-companion .mej-mascot-tools button{border:1px solid #c5d9e1;background:#fffdf6;box-shadow:0 1px 6px #223c5633;border-radius:100%;width:27px;height:27px;padding:0;line-height:1;display:grid;place-items:center;font-size:14px;cursor:pointer;color:#215874}
-#mej-study-companion .mej-mascot-stage{height:145px;position:relative;pointer-events:auto;cursor:pointer}
+#mej-study-companion .mej-mascot-stage{height:145px;position:relative;pointer-events:none}
 #mej-study-companion .mej-mascot{height:135px;width:104px;position:absolute;bottom:0;right:0;transform-origin:center bottom;animation:mej-companion-walk 7s ease-in-out infinite}
 #mej-study-companion .mej-mascot svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 3px #123e5419)}
 #mej-study-companion .mej-mascot-arm-right{transform-origin:82px 78px;animation:mej-mascot-wave 5s ease-in-out infinite}

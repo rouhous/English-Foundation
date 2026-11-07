@@ -1,0 +1,28 @@
+name: Verify animated companion integration
+on:
+  push:
+    paths:
+      - 'assets/mej-study-companion.js'
+      - 'assets/mej-study-companion.css'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check browser JavaScript syntax and connected answer event
+        run: |
+          node --check assets/mej-study-companion.js
+          node --check scripts/install_mej_companion.cjs
+          node - <<'NODE'
+          const fs=require('fs');
+          const html=fs.readFileSync('index.html','utf8');
+          const js=fs.readFileSync('assets/mej-study-companion.js','utf8');
+          const css=fs.readFileSync('assets/mej-study-companion.css','utf8');
+          if(!html.includes('window.MEJCompanion?.react(ok)'))throw Error('Missing success / error event binding');
+          if(!html.includes('assets/mej-study-companion.js')||!html.includes('assets/mej-study-companion.css'))throw Error('Missing assets');
+          if(!js.includes('function setQuizVisibility')||!js.includes('speechSynthesis')||!css.includes('prefers-reduced-motion'))throw Error('Missing controls');
+          console.log('Companion syntax and integration verified');
+          NODE

@@ -119,7 +119,20 @@ function chartStars(){
 function schoolView(){
  const data=app.scope;
  app.students=app.teacherId?app.allStudents.filter(s=>s.teacherId===app.teacherId):app.allStudents.slice();
- app.groups=groupClasses(app.students);app.ready=true;
+ app.groups=groupClasses(app.students);
+ // Include registered class assignments even before any progress has arrived.
+ const selectedTeachers=(data.teachers||[]).filter(t=>!app.teacherId||t.id===app.teacherId);
+ const groupNames=new Set(app.groups.map(g=>g.name));
+ for(const teacher of selectedTeachers){
+   const assigned=String(teacher.classes||'').split(/[,،;؛\n]+/).map(s=>s.trim()).filter(Boolean);
+   for(const raw of assigned){
+    const name=key(raw);
+    if(name.length>35||groupNames.has(name))continue;
+    app.groups.push({name,students:[]});groupNames.add(name);
+   }
+ }
+ app.groups.sort((a,b)=>a.name.localeCompare(b.name,'ar',{numeric:true}));
+ app.ready=true;
  status('المدرسة: '+safe(data.schoolName)+' · '+(app.teacherId?'عرض المعلم المحدد':'عرض جميع المعلمين'));
  const live=app.students.filter(s=>s.kind==='live').length;
  const trial=app.students.length-live;
@@ -169,7 +182,7 @@ function openClass(name){
  $('overview').hidden=true;$('detail').hidden=false;$('studentDetail').hidden=true;
  $('detailTitle').textContent='طلاب الصف '+g.name;
  $('detailScope').textContent=g.students.filter(s=>s.kind==='trial').length+' سجلات تجريبية · '+g.students.filter(s=>s.kind==='live').length+' متزامنة';
- metrics($('detailMetrics'),[['عدد الطلاب',g.students.length],['أعلى نجوم',getGroupMax(g)],['مستوى أعلى طالب',Math.max(0,...g.students.map(s=>s.level))],['متوسط النجوم',Math.round(g.students.reduce((sum,s)=>sum+s.stars,0)/g.students.length)]]);
+ metrics($('detailMetrics'),[['عدد الطلاب',g.students.length],['أعلى نجوم',getGroupMax(g)],['مستوى أعلى طالب',Math.max(0,...g.students.map(s=>s.level))],['متوسط النجوم',g.students.length?Math.round(g.students.reduce((sum,s)=>sum+s.stars,0)/g.students.length):0]]);
  $('studentSearch').value='';renderList(g.students);
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
 }
@@ -185,7 +198,7 @@ function renderList(students){
    track.append(fill);b.append(track);
    b.onclick=()=>studentDetails(s);host.append(b)
  }
- if(!shown.length)host.append(node('p','notice','لا توجد نتائج مطابقة.'));
+ if(!shown.length)host.append(node('p','notice','لا توجد نتائج لهذا الصف بعد، وسيظهر الطلاب بعد ارتباطهم وإرسال تقدمهم.'));
 }
 function studentDetails(s){
  $('studentDetail').hidden=false;$('studentTitle').textContent=s.name;

@@ -10,3 +10,5 @@ for term in terms:
   fragment=s[max(0,m.start()-160):min(len(s),m.end()+190)]
   fragment=re.sub(r'data:image/[^;]+;base64,[A-Za-z0-9+/=]{90,}',"[IMAGE]",fragment)
   print("CONTEXT",repr(fragment[:450]))
+
+# Trigger read-only scan.

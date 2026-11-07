@@ -133,6 +133,28 @@ const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
 let verifiedTeacherCredential=null;
 let registrationMode='login';
+const SESSION='MEJ_STAFF_LOGIN_V2';
+const MAX_SESSION_AGE=45*60*1000;
+function cachedLogin(){
+ try{
+  const item=JSON.parse(sessionStorage.getItem(SESSION)||'null');
+  if(!item||typeof item.token!=='string'||!Number.isFinite(item.at)||Date.now()-item.at<0||Date.now()-item.at>MAX_SESSION_AGE)return null;
+  const raw=item.token.split('.')[1];
+  if(!raw)return null;
+  const payload=JSON.parse(atob(raw.replace(/-/g,'+').replace(/_/g,'/')));
+  if(!Number.isFinite(payload.exp)||payload.exp*1000<=Date.now()+5000)return null;
+  return item.token;
+ }catch(_){return null}
+}
+function showSignedIn(){
+ document.getElementById('identityPanel').hidden=true;
+ document.getElementById('roleChoice').hidden=true;
+}
+function showSignIn(){
+ document.getElementById('identityPanel').hidden=false;
+ document.getElementById('roleChoice').hidden=false;
+}
+
 function hide(){for(const id of ['teacherPanel','ownerPanel','ownerChoice','pendingPanel','schoolRegistrationPanel','schoolManagerPanel'])document.getElementById(id).hidden=true}
 function value(id,v){document.getElementById(id).textContent=String(v||'—')}
 async function call(action,credential){
@@ -146,12 +168,14 @@ async function onCredential(response){
   verifiedTeacherCredential=response.credential;
   const {r,data}=await call('teacher_status',response.credential);
   if(!r.ok||!data.ok){
+   showSignIn();
    if(registrationMode!=='login') document.getElementById(registrationMode==='school'?'schoolRegistrationPanel':'pendingPanel').hidden=false;
    status.textContent=registrationMode==='school'?'أدخل بيانات المدرسة بعد اعتماد بريدك من المالك.':registrationMode==='teacher'?'أكمل تسجيل المعلم والتحقق أولاً.':'هذا الحساب غير مسجّل بعد. اختر تسجيل مدرسة أو تسجيل معلم أعلاه.';return;
   }
+  showSignedIn();
   if(data.role==='owner'){
    verifiedOwnerCredential=response.credential;
-   sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:response.credential,at:Date.now()}));
+   sessionStorage.setItem(SESSION,JSON.stringify({token:response.credential,at:Date.now(),role:'owner'}));
    document.getElementById('roleChoice').hidden=true;
    document.getElementById('ownerChoice').hidden=false;
    status.textContent='';
@@ -184,7 +208,7 @@ async function onCredential(response){
   document.getElementById('teacherPanel').hidden=false;
   status.textContent='تم التحقق من هوية المعلم وترخيص المدرسة.';
   rootProgress('teacher',response.credential);
- }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
+ }catch(_){hide();showSignIn();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
 
 async function openOwnerManagement(){
@@ -340,11 +364,19 @@ document.getElementById('issueTeacherJoin').addEventListener('click',async()=>{
 document.getElementById('copyJoinIssue').addEventListener('click',()=>{
  const v=document.getElementById('joinIssueValue').value;if(v)navigator.clipboard?.writeText(v);
 });
+const existing=cachedLogin();
+if(existing){
+ document.getElementById('identityPanel').hidden=true;
+ document.getElementById('roleChoice').hidden=true;
+ onCredential({credential:existing});
+}else if(sessionStorage.getItem(SESSION)){
+ sessionStorage.removeItem(SESSION);
+}
 let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{
    google.accounts.id.initialize({client_id:CLIENT_ID,callback:onCredential,auto_select:false,cancel_on_tap_outside:true});
-   google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
+   if(!document.getElementById('identityPanel').hidden)google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
    status.textContent='';
   }catch(_){status.textContent='تعذر تحميل تسجيل Google.'}
  }else if(++attempts>70){clearInterval(timer);status.textContent='تعذر تحميل تسجيل Google؛ تحقق من الاتصال.'}

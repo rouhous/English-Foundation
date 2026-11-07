@@ -1,0 +1,29 @@
+name: Revise grade-specific Writing questions
+on:
+  push:
+    paths:
+      - 'scripts/revise_writing_mcqs.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  revise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Revise questions in application and review catalog
+        run: node scripts/revise_writing_mcqs.cjs
+      - name: Verify no trivial distractors remain in revised questions
+        run: |
+          node -e "let c=require('./reviews/admin-levels-catalog.json');let q=c.levels.flatMap(x=>x.parts.flatMap(p=>p.questions)).filter(x=>x.type==='Writing'&&x.id.match(/^L(6|7|8|9|10|11|12)-19[6-9]$/)); if(q.length!==28||q.some(x=>x.options.length!==3||x.options.filter(a=>a===x.answer).length!==1))process.exit(1);console.log('Validated',q.length,'writing questions')"
+      - name: Commit revised questions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/admin-levels-catalog.json reviews/quality-audit/writing-revisions.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace repeated simplistic Writing MCQs with grade-specific contexts"
+            git push
+          fi

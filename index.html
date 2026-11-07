@@ -2172,6 +2172,21 @@ async function sendReport(manual=false){
   if(manual)toast('أكمل اسم الطالب والصف أولاً.');
   return;
  }
+ if(!window.MEJStudentCloudProgress&&navigator.onLine){
+  // MEJ_RELOAD_SYNC_ON_RECONNECT_V1
+  // An offline PWA launch may have missed the external transport script.
+  try{
+   await new Promise((resolve,reject)=>{
+    document.getElementById('mej-cloud-progress-retry')?.remove();
+    const script=document.createElement('script');
+    script.id='mej-cloud-progress-retry';
+    script.src='./assets/student-cloud-progress-v1.js?v=2';
+    script.onload=resolve;script.onerror=reject;
+    document.head.append(script);
+    setTimeout(()=>reject(Error('SYNC_SCRIPT_TIMEOUT')),10000);
+   });
+  }catch(_){}
+ }
  if(!window.MEJStudentCloudProgress){if(manual)toast('خدمة المزامنة لم تُحمّل؛ تقدمك محفوظ محلياً.');return;}
  const profileId=String(profile.id||'');
  if(!profileId)return;

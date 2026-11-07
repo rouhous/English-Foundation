@@ -140,13 +140,23 @@ function openClass(name){
  $('detailTitle').textContent='طلاب الصف '+g.name;
  $('detailScope').textContent=g.students.filter(s=>s.kind==='trial').length+' سجلات تجريبية · '+g.students.filter(s=>s.kind==='live').length+' متزامنة';
  metrics($('detailMetrics'),[['عدد الطلاب',g.students.length],['أعلى نجوم',getGroupMax(g)],['مستوى أعلى طالب',Math.max(0,...g.students.map(s=>s.level))],['متوسط النجوم',Math.round(g.students.reduce((sum,s)=>sum+s.stars,0)/g.students.length)]]);
- $('studentSearch').value='';renderList(g.students);
+ $('studentSearch').value='';$('sortStudents').value='stars';renderList(g.students);
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
+}
+function sortedStudents(students){
+ const mode=$('sortStudents').value==='level'?'level':'stars';
+ const primary=mode==='level'?'level':'stars';
+ const secondary=mode==='level'?'stars':'level';
+ return [...students].sort((a,b)=>
+   integer(b[primary])-integer(a[primary])||
+   integer(b[secondary])-integer(a[secondary])||
+   String(a.name||'').localeCompare(String(b.name||''),'ar')
+ );
 }
 function renderList(students){
  const host=clear($('studentList'));
  const search=$('studentSearch').value.trim();
- const shown=students.filter(x=>!search||x.name.includes(search));
+ const shown=sortedStudents(students.filter(x=>!search||x.name.includes(search)));
  for(const s of shown){
    const b=node('button','student');b.type='button';
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
@@ -193,6 +203,7 @@ async function refresh(){
 $('back').addEventListener('click',()=>{history.replaceState(null,'',location.pathname);$('detail').hidden=true;$('overview').hidden=false;window.scrollTo(0,0)});
 $('closeStudent').addEventListener('click',()=>{$('studentDetail').hidden=true});
 $('studentSearch').addEventListener('input',()=>{const g=app.groups.find(x=>x.name===app.selected);if(g)renderList(g.students)});
+$('sortStudents').addEventListener('change',()=>{const g=app.groups.find(x=>x.name===app.selected);if(g)renderList(g.students)});
 $('issueCode').addEventListener('click',async()=>{
  const statusEl=$('codeStatus'),button=$('issueCode');
  if(!app.token){statusEl.textContent='سجل الدخول بحساب المعلم أولًا.';return}

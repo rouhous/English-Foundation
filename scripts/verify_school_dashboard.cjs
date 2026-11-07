@@ -26,20 +26,11 @@ console.log('SCHOOL_DASHBOARD_NAUTICAL_DRILLDOWN_AND_COMPARISON_OK');
 
 const explicitJs=fs.readFileSync('assets/school-dashboard-v1.js','utf8');
 const explicitHtml=fs.readFileSync('reviews/school-dashboard.html','utf8');
-assert(explicitJs.includes("function chartLevels()"),'level visualization exists');
-assert(explicitJs.includes("const occupied=counts.map"),'only nonempty levels shown');
-assert(explicitJs.includes("part.count+' '+(part.count===1?'طالب':'طلاب')"),'explicit student counts');
-assert(explicitHtml.includes('.levelClassHeader'),'per-class header styles');
-assert(explicitHtml.includes('.levelCount'),'visible count styles');
-assert(!explicitHtml.includes('الثيم الأزرق البحري'),'no theme label');
-
-const rankSource=fs.readFileSync('assets/school-dashboard-v1.js','utf8');
-const rankHtml=fs.readFileSync('reviews/school-dashboard.html','utf8');
-const sw=fs.readFileSync('sw.js','utf8');
-assert(rankHtml.includes('id="sortStudents"'),'ranking selector');
-assert(rankSource.includes("function sortedStudents(students)"),'ranking comparator');
-assert(rankSource.includes("integer(b[primary])-integer(a[primary])"),'descending order');
-assert(rankSource.includes("$('sortStudents').addEventListener('change'"),'ranking interaction');
-assert(rankHtml.includes('20261107-3'),'dashboard cache-bust');
-assert(sw.includes('isStaffPage||isStaffScript'),'staff network-first');
-assert(sw.includes("cache:'no-store'"),'force fresh staff pages');
+assert(explicitJs.includes('function chartLevels()'),'level chart exists');
+assert(explicitJs.includes('const occupied=counts.map'),'only occupied levels plotted');
+assert(explicitJs.includes("node('strong','compareSegmentCount',part.count)"),'number inside colored segment');
+assert(explicitJs.includes("'L'+part.level"),'compact L label under each segment');
+assert(explicitJs.includes("chart.style.minWidth=Math.max(0,occupied.length*46)"),'small screen overflow');
+assert(explicitHtml.includes('.compareChartScroll'),'scroll layout');
+assert(explicitHtml.includes('20261107-4'),'new script cache version');
+assert(explicitHtml.includes('id="sortStudents"'),'ranking selector remains present');

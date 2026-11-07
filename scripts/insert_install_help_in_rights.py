@@ -15,3 +15,5 @@ assert updated.replace(addition,'')==s,'Only the single instruction line may cha
 assert updated.index(marker)<updated.index('class="mej-rights-statement"')
 p.write_text(updated,encoding='utf-8')
 print('INSTALL_HELP_INSERTED_AS_FIRST_LINE_OF_EXISTING_RIGHTS_BOX_ONLY')
+
+# Run targeted copyright-box insertion.

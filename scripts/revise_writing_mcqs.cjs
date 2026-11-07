@@ -30,3 +30,4 @@ for(const row of summary.filter(x=>x.file==='reviews/admin-levels-catalog.json')
 fs.mkdirSync('reviews/quality-audit',{recursive:true});
 fs.writeFileSync('reviews/quality-audit/writing-revisions.json',JSON.stringify({status:'patched',count:updates?Object.keys(updates).length*4:0,changes:summary},null,2));
 console.log('Updated '+(summary.length/2)+' unique Writing questions consistently across source and review catalog');
+// Activate revision workflow on current branch.

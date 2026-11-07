@@ -94,3 +94,5 @@ assert s.index('id="mej-student-install-hint"')<s.index('id="mej-owner-rights-no
 assert marker in s
 assert s.count('id="mej-student-install-hint"')==1
 print('FIXED_VIEWPORT_INSTALL_NOTE_BETWEEN_START_AND_RIGHTS')
+
+# Trigger validated fixed-height layout migration.

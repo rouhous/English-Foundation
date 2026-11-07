@@ -376,7 +376,7 @@ let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{
    google.accounts.id.initialize({client_id:CLIENT_ID,callback:onCredential,auto_select:false,cancel_on_tap_outside:true});
-   if(!document.getElementById('identityPanel').hidden)google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
+   google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
    status.textContent='';
   }catch(_){status.textContent='تعذر تحميل تسجيل Google.'}
  }else if(++attempts>70){clearInterval(timer);status.textContent='تعذر تحميل تسجيل Google؛ تحقق من الاتصال.'}

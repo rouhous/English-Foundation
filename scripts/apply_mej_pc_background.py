@@ -29,3 +29,5 @@ assert 'background%20PC.png' in s
 assert '@media (min-width:901px)' in block
 p.write_text(s,encoding='utf8')
 print('DESKTOP_BACKGROUND_ADDED_NO_MOBILE_CHANGES',len(s))
+
+# Trigger validated installation of the approved desktop image.

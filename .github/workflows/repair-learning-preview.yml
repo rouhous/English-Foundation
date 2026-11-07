@@ -1,0 +1,44 @@
+name: Repair missing early-level learning cards
+on:
+  push:
+    paths: ['scripts/repair_learning_preview.cjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Patch actual student lesson preview
+        run: node scripts/repair_learning_preview.cjs
+      - name: Validate derived learning vocabulary in Grade 1 and Grade 2
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const src=fs.readFileSync('index.html','utf8');
+          const a=src.indexOf('function mejLearningPreviewWord('),b=src.indexOf('function learnLevel(',a);
+          if(a<0||b<=a)throw Error('Learning preview extractor missing');
+          const ctx={};vm.createContext(ctx);vm.runInContext(src.slice(a,b)+';this.getWord=mejLearningPreviewWord;',ctx);
+          const data=JSON.parse(fs.readFileSync('reviews/admin-levels-catalog.json','utf8'));
+          for(let grade=1;grade<=5;grade++){
+           const level=data.levels.find(x=>x.grade===grade);
+           for(const part of level.parts){
+            const words=new Set(part.questions.filter(q=>['Vocabulary','Spelling','Listening','Match','Blend','Phonics'].includes(q.type)).map(ctx.getWord).filter(Boolean));
+            if(words.size<5)throw Error('Level '+grade+' part '+part.part+' has only '+words.size+' preview words');
+            console.log('Validated',grade,'part',part.part,words.size,'words');
+           }
+          }
+          if(!src.includes('mejLearningPreviewWord(q)'))throw Error('Learning route does not use extraction');
+          NODE
+      - name: Commit repaired learning page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/early-learning-fix.json
+          git diff --cached --quiet || (git commit -m "Restore vocabulary preview before gameplay for foundation levels" && git push)

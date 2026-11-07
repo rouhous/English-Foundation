@@ -76,8 +76,10 @@ function studentLabel(s){return s.kind==='trial'?'تجريبي مستورد':'م
 function getGroupMax(g){return Math.max(0,...g.students.map(s=>s.stars))}
 function makeClassButton(g){
  const b=node('button','classCard');b.type='button';
- b.append(node('strong','', 'الصف '+g.name),node('div','mini',g.students.length+' طالب · '+g.students.filter(s=>s.kind==='trial').length+' تجريبي'));
- b.append(node('div','mini','⭐ أعلى رصيد: '+getGroupMax(g)));
+ b.append(node('strong','', 'الصف '+g.name));
+ b.append(node('div','mini','عدد الطلاب: '+g.students.length));
+ b.append(node('div','mini','أعلى مستوى: '+Math.max(0,...g.students.map(s=>s.level))));
+ b.append(node('div','mini','⭐ أعلى عدد نجوم: '+getGroupMax(g)));
  b.append(node('span','chip','عرض قائمة الطلاب ←'));
  b.addEventListener('click',()=>openClass(g.name));return b
 }
@@ -152,7 +154,7 @@ function schoolView(){
  const live=app.students.filter(s=>s.kind==='live').length;
  const trial=app.students.length-live;
  $('dataScope').textContent='عدد المعلمين: '+(data.teachers||[]).length+' · سجلات تجريبية: '+trial+' · متزامنة: '+live;
- metrics($('metrics'),[['المعلمون',app.teacherId?1:(data.teachers||[]).length],['الصفوف',app.groups.length],['الطلاب المسجلون',app.students.length],['أعلى نجوم',Math.max(0,...app.students.map(s=>s.stars))]]);
+ metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))]]);
  $('classCount').textContent=app.groups.length+' صفوف';
  clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
  if(!app.groups.length)$('classes').append(node('p','notice','لا توجد سجلات تقدم للمعلم أو الصفوف المحددة بعد.'));
@@ -197,7 +199,7 @@ function openClass(name){
  $('overview').hidden=true;$('detail').hidden=false;$('studentDetail').hidden=true;
  $('detailTitle').textContent='طلاب الصف '+g.name;
  $('detailScope').textContent=g.students.filter(s=>s.kind==='trial').length+' سجلات تجريبية · '+g.students.filter(s=>s.kind==='live').length+' متزامنة';
- metrics($('detailMetrics'),[['عدد الطلاب',g.students.length],['أعلى نجوم',getGroupMax(g)],['مستوى أعلى طالب',Math.max(0,...g.students.map(s=>s.level))],['متوسط النجوم',g.students.length?Math.round(g.students.reduce((sum,s)=>sum+s.stars,0)/g.students.length):0]]);
+ metrics($('detailMetrics'),[['الصف',g.name],['عدد الطلاب',g.students.length],['أعلى مستوى',Math.max(0,...g.students.map(s=>s.level))],['أعلى عدد نجوم',getGroupMax(g)]]);
  $('studentSearch').value='';$('sortStudents').value='stars';renderList(g.students);
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
 }

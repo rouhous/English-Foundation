@@ -1,0 +1,15 @@
+name: Verify Vocabulary Review Content Across All Levels
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/test_learning_vocab_review.cjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check real vocabulary extraction on all 26 curriculum parts
+        run: node scripts/test_learning_vocab_review.cjs

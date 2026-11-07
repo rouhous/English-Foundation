@@ -1,0 +1,5 @@
+const fs=require('fs');const src=fs.readFileSync('index.html','utf8');
+const queries=['function checkAnswer','function answer','function selectAnswer','showFeedback','correctAnswer','isCorrect','submitAnswer','answerBtn','correct','incorrect','renderQuestion','speechSynthesis','navigator.vibrate','addEventListener(\'click\'','const bank=','</body>'];
+const out={size:src.length,match:[]};
+for(const q of queries){let ix=0, found=[];while((ix=src.indexOf(q,ix))>=0&&found.length<6){found.push({pos:ix,snippet:src.slice(Math.max(0,ix-500),Math.min(src.length,ix+1100))});ix+=q.length}out.match.push({query:q,count:src.split(q).length-1,found})}
+fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/answer-flow-probe.json',JSON.stringify(out,null,2));console.log('probe:',src.length,'bytes')

@@ -32,7 +32,14 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <section id="overview" hidden>
  <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">النتائج المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
  <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
- <div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
+ <div class="sheet"><div class="subline"><div><h2>رمز ربط الطلاب</h2><p class="notice">يمكنك إصدار رمز خاص لطلابك من 6 أرقام، دون Google Sheets.</p></div></div>
+ <p class="warning">إصدار رمز جديد يلغي الرموز القديمة للانضمامات الجديدة فقط؛ الطلاب المرتبطون بالفعل لا يتأثرون.</p>
+ <div class="subline" style="margin-top:12px">
+  <button id="issueCode" type="button" class="button">إصدار رمز جديد</button>
+  <strong id="codeValue" style="letter-spacing:4px;font-size:24px" dir="ltr"></strong>
+ </div><p class="notice" role="status" id="codeStatus"></p>
+</div>
+<div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
 </section>
 <section id="detail" hidden>
  <div class="sheet"><div class="subline"><button id="back" class="button alt" type="button">← جميع الصفوف</button><span id="detailScope" class="notice"></span></div><h2 id="detailTitle">قائمة الطلاب</h2><div class="metricGrid" id="detailMetrics"></div><div style="height:14px"></div><input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off"><div id="studentList" class="students"></div></div>

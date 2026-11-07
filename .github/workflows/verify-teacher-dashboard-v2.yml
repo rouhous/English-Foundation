@@ -1,0 +1,17 @@
+name: Verify Teacher Class Dashboard
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/verify_teacher_dashboard_v2.cjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate dashboard scripts, drilldown and direct-login flow
+        run: node scripts/verify_teacher_dashboard_v2.cjs
+      - name: Verify native progress adapter
+        run: node scripts/test_mej_native_cloud.js

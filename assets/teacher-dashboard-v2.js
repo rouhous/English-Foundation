@@ -6,7 +6,7 @@ const GOOGLE_CLIENT='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleus
 const SESSION='MEJ_STAFF_LOGIN_V2',TTL=45*60*1000;
 const $=id=>document.getElementById(id);
 const app={token:null,students:[],groups:[],scope:null,selected:null,ready:false};
-const colors=['#1167ac','#1986cb','#39a5dc','#5cc2dd','#92dce5','#e3b967'];
+const colors=['#063a75','#0c4f91','#0868b4','#1582c8','#2e9bce','#49b1d8','#56c2e1','#83d3e7','#a7ddea','#c5e9f1','#dfb667','#e6c985','#f1ddac'];
 const safe=v=>v==null||v===''?'—':String(v);
 const integer=v=>Number.isFinite(Number(v))?Math.max(0,Math.trunc(Number(v))):0;
 function node(tag,className,text){const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=String(text);return e}
@@ -85,18 +85,22 @@ function section(title){const div=node('section','chart');div.append(node('h3','
 function chartLevels(){
  const panel=section('عدد الطلاب في كل مستوى');
  const legend=node('div','legend');
- [['0–2',colors[0]],['3–5',colors[1]],['6–8',colors[2]],['9–10',colors[3]],['11–12',colors[4]]].forEach(([txt,color])=>{
-  const p=node('span','',txt),i=node('i');i.style.background=color;p.prepend(i);legend.append(p)
- });
+ for(let lv=0;lv<=12;lv++){
+   const p=node('span','', 'L'+lv),i=node('i');i.style.background=colors[lv];
+   p.prepend(i);legend.append(p)
+ }
  const max=Math.max(1,...app.groups.map(g=>g.students.length));
  for(const g of app.groups){
   const row=node('div','chartRow');
   row.append(node('span','',g.name));
   const bar=node('div','stack');bar.setAttribute('role','img');
-  const count=[0,0,0,0,0];
-  for(const s of g.students){const l=Math.min(12,integer(s.level));count[l<=2?0:l<=5?1:l<=8?2:l<=10?3:4]++}
-  bar.setAttribute('aria-label','الصف '+g.name+': '+count.join('، '));
-  count.forEach((v,i)=>{if(!v)return;const el=node('span');el.style.cssText='width:'+(v/max*100)+'%;background:'+colors[i];bar.append(el)});
+  const count=Array.from({length:13},()=>0);
+  for(const student of g.students)count[Math.min(12,integer(student.level))]++;
+  bar.setAttribute('aria-label','الصف '+g.name+': '+count.map((n,i)=>'المستوى '+i+' '+n).join('، '));
+  count.forEach((v,i)=>{if(!v)return;const el=node('span');
+   el.style.cssText='width:'+(v/max*100)+'%;background:'+colors[i];
+   el.title='المستوى '+i+': '+v+' طالب';bar.append(el)
+  });
   row.append(bar,node('strong','',g.students.length));panel.append(row)
  }
  panel.append(legend);return panel
@@ -184,6 +188,23 @@ async function refresh(){
 $('back').addEventListener('click',()=>{history.replaceState(null,'',location.pathname);$('detail').hidden=true;$('overview').hidden=false;window.scrollTo(0,0)});
 $('closeStudent').addEventListener('click',()=>{$('studentDetail').hidden=true});
 $('studentSearch').addEventListener('input',()=>{const g=app.groups.find(x=>x.name===app.selected);if(g)renderList(g.students)});
+$('issueCode').addEventListener('click',async()=>{
+ const statusEl=$('codeStatus'),button=$('issueCode');
+ if(!app.token){statusEl.textContent='سجل الدخول بحساب المعلم أولًا.';return}
+ button.disabled=true;statusEl.textContent='جار إصدار رمز ربط الطلاب...';
+ try{
+  const r=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-staff-native',{
+   method:'POST',cache:'no-store',credentials:'omit',
+   headers:{Authorization:'Bearer '+app.token,'Content-Type':'application/json'},
+   body:JSON.stringify({action:'teacher_issue_student_code'}),signal:AbortSignal.timeout(16000)
+  });
+  const d=await r.json();
+  if(!r.ok||!d.ok||!/^[0-9]{6}$/.test(d.code))throw Error(d.error||'CODE_REJECTED');
+  $('codeValue').textContent=d.code;
+  statusEl.textContent='رمز الطلاب جاهز للمشاركة، ويستخدم مرة تسجيل لكل طالب.';
+ }catch(_){statusEl.textContent='تعذر إصدار الرمز. تحقق من صلاحيات حسابك واتصال الإنترنت.'}
+ finally{button.disabled=false}
+});
 $('refresh').addEventListener('click',refresh);
 $('print').addEventListener('click',()=>window.print());
 $('logout').addEventListener('click',()=>{sessionStorage.removeItem(SESSION);app.token=null;location.replace('./teacher-portal.html')});

@@ -18,3 +18,5 @@ const report={hookCount:1,loadedStylesheet:'assets/mej-study-companion.css',load
 fs.mkdirSync('reviews/quality-audit',{recursive:true});
 fs.writeFileSync('reviews/quality-audit/companion-install.json',JSON.stringify(report,null,2));
 console.log('Installed mascot celebration hook safely',JSON.stringify(report));
+
+// Trigger deployment of the accessible Omani student companion.

@@ -48,3 +48,5 @@ s=s[:style_start]+css+s[style_end:]
 p.write_text(s,encoding='utf8')
 assert s.index('id="mej-owner-rights-notice"')<s.index('id="mej-student-install-hint"')
 print('INSTALL_HINT_MOVED_BELOW_RIGHTS_IN_SCROLL_FLOW')
+
+# Trigger verified relocation of install help.

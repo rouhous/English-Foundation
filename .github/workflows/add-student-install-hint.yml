@@ -1,0 +1,35 @@
+name: Add Student Install Hint Above Copyright
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/add_student_install_hint.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-student-install-hint
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/add_student_install_hint.py
+      - name: Validate placement and HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf8')
+          assert s.count('id="mej-student-install-hint"')==1
+          assert s.index('id="mej-student-install-hint"')<s.index('id="mej-owner-rights-notice"')
+          print("INSTALL_POSITION_OK")
+          PY
+      - name: Commit changed landing page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Place concise student PWA installation help above copyright"
+            git push
+          fi

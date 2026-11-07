@@ -8,3 +8,5 @@ for term in ['mobile-ocean-v31','m31-art','m31-sea','m31-boat-restored','mobile-
     ctx=s[max(0,m.start()-220):m.end()+440]
     print('LINE',s.count('\\n',0,m.start())+1,repr(ctx[:750]))
 print('HTML_LENGTH',len(s))
+
+# Execute read-only audit.

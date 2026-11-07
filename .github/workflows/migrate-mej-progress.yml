@@ -23,7 +23,7 @@ jobs:
           import re
           from pathlib import Path
           s=Path('index.html').read_text(encoding='utf-8')
-          sections=re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>',s,flags=re.I)
+          sections=re.findall(r'<script[^>]*>(.*?)</script>',s,flags=re.I|re.S)
           assert sections
           Path('/tmp/mej-inline-check.js').write_text(sections[-1],encoding='utf8')
           print('Inline scripts:',len(sections))

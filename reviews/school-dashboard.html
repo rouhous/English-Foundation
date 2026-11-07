@@ -24,6 +24,16 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 @media print{body{background:white}header{background:white;color:#063764;padding-bottom:12px}.subtitle{color:#54748b}.actions,#loginRepair,.button{display:none!important}main{margin:0}.sheet{box-shadow:none;break-inside:avoid}}
 .teacherFilter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 2px}.teacherFilter label{font-weight:700}.teacherFilter select{font:inherit;padding:11px;border:1px solid #c0dfed;background:#f6fbff;color:#063764;border-radius:12px;flex:1;min-width:140px}
 @media(max-width:600px){.teacherFilter{align-items:stretch}.teacherFilter label{width:100%}.teacherFilter select{width:100%;min-width:0}}
+.levelsPanel{display:flex;flex-direction:column;gap:14px}
+.levelClass{border:1px solid #c8e1f2;background:#f9fcff;border-radius:15px;padding:13px}
+.levelClassHeader{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #dbeaf5;padding-bottom:9px;margin-bottom:12px;color:#093e6d}
+.levelClassHeader strong{font-size:16px}.levelClassHeader span{font-size:12px;color:#567991}
+.levelChips{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.levelChip{display:flex;align-items:center;gap:9px;border:1px solid #c5ddeb;border-radius:11px;background:white;padding:10px 12px;min-width:138px;flex:1 1 138px}
+.levelChip .levelAccent{display:block;flex:0 0 7px;height:32px;border-radius:6px}
+.levelChip .levelNumber{color:#123f63;font-size:13px}
+.levelChip .levelCount{margin-inline-start:auto;font-size:14px;color:#063764;white-space:nowrap}
+@media(max-width:600px){.levelChips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.levelChip{min-width:0;padding:9px 7px;gap:5px}.levelChip .levelNumber{font-size:12px}.levelChip .levelCount{font-size:12px}.levelChip .levelAccent{flex-basis:5px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/school-dashboard-v1.js?v=20261107-1" defer></script>
@@ -54,5 +64,5 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 </section>
 <section id="loading" class="sheet"><p role="status" id="message">جار التحقق من الحساب وتحميل الصفوف...</p></section>
 </main>
-<footer>بوابة المدرسة · البيانات خاصة بمسؤول المدرسة المعتمد · الثيم الأزرق البحري</footer>
+<footer>بوابة المدرسة · البيانات خاصة بمسؤول المدرسة المعتمد</footer>
 </body></html>

@@ -1,0 +1,312 @@
+{
+  "fileBytes": 3139314,
+  "lineCount": 2550,
+  "matches": {
+    "MEJ_STUDENT_ACCESS_V1": [
+      {
+        "offset": 502,
+        "line": 11,
+        "context": "HREE_STAGES_20261107 */\n(function(){\n 'use strict';\n const OWNER='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-owner-verify';\n const LICENSE='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license';\n const owner=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');\n const student=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');\n window.__MEJ_ACCESS_ROLE='public';\n const reveal=()=>document.getElementById('mej-owner-gate-style')?.remove();\n const allowed=(role,data)=>{\n   window.__MEJ_ACCESS_ROLE=role;\n   if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;\n   if(role==='student'&&typeof data?.schoolName==='string'){\n      localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);\n      localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',"
+      },
+      {
+        "offset": 3066755,
+        "line": 1797,
+        "context": "ypeof d.registration.studentOpen!=='boolean')throw Error('PILOT_STATUS_INVALID');\n return d.registration;\n}\nasync function mejPilotMayCreateStudent(){\n if(window.__MEJ_ACCESS_ROLE==='public')return true;\n if(window.__MEJ_ACCESS_ROLE==='owner')return true;\n if(window.__MEJ_ACCESS_ROLE==='student'&&localStorage.getItem('MEJ_STUDENT_ACCESS_V1'))return true;\n toast('يجب تفعيل ترخيص الطالب أولاً.');return false;\n}\nasync function mejPilotReserveStudent(profileId,teacherInvite){\n if(window.__MEJ_ACCESS_ROLE==='public')return true;\n try{\n  if(!window.crypto?.subtle)throw Error('CRYPTO_REQUIRED');\n  const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(profileId)));\n  const profileRef=Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).j"
+      },
+      {
+        "offset": 3067401,
+        "line": 1807,
+        "context": ",new TextEncoder().encode(String(profileId)));\n  const profileRef=Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');\n  const owner=window.__MEJ_ACCESS_ROLE==='owner'?sessionStorage.getItem('MEJ_OWNER_ACCESS_V1'):null;\n  const student=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1'):null;\n  if(!owner&&!student)throw Error('LICENSE_REQUIRED');\n  const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{\n    method:'POST',cache:'no-store',mode:'cors',\n    headers:{'Content-Type':'application/json',...(owner?{'Authorization':'Bearer '+owner}:{})},\n    body:JSON.stringify({action:'enroll_profile',profileRef,...(student?{accessToken:student}:{})}),\n    signal:AbortSignal.timeout("
+      },
+      {
+        "offset": 3070562,
+        "line": 1841,
+        "context": "s,studentRef:device}),signal:AbortSignal.timeout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رمز المعلم غير صحيح أو لم يُفعّل. تحقق من المدرسة والمعلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1'"
+      }
+    ],
+    "MEJ_STUDENT_DEVICE_REF_V1": [
+      {
+        "offset": 3069784,
+        "line": 1835,
+        "context": "place(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776));\n  if(!/^[0-9]{6}$/.test(digits)){toast('رمز المعلم يجب أن يتكون من 6 أرقام');return false}\n  if(!crypto?.subtle){toast('التحقق من رمز المعلم يتطلب اتصالًا آمنًا');return false}\n  try{\n    let device=localStorage.getItem('MEJ_STUDENT_DEVICE_REF_V1');\n    if(!device){device=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('MEJ_STUDENT_DEVICE_REF_V1',device)}\n    const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',\n       headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'activate_short',code:digits,stude"
+      },
+      {
+        "offset": 3069956,
+        "line": 1836,
+        "context": "م');return false}\n  if(!crypto?.subtle){toast('التحقق من رمز المعلم يتطلب اتصالًا آمنًا');return false}\n  try{\n    let device=localStorage.getItem('MEJ_STUDENT_DEVICE_REF_V1');\n    if(!device){device=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('MEJ_STUDENT_DEVICE_REF_V1',device)}\n    const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',\n       headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'activate_short',code:digits,studentRef:device}),signal:AbortSignal.timeout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED"
+      }
+    ],
+    "MEJ_ASSIGNED_TEACHER_CODE_V1": [
+      {
+        "offset": 3059293,
+        "line": 1716,
+        "context": "st linked=localStorage.getItem('MEJ_VERIFIED_TEACHER_LINKED_V1')==='1';\n if(schoolInput&&verifiedSchool){schoolInput.value=verifiedSchool;if(linked){schoolInput.readOnly=true;schoolInput.title='المدرسة مرتبطة بالمعلم المعتمد';}}\n const t=document.getElementById('teacherCode');\n if(t){\n   t.value=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n   t.readOnly=true;\n   const row=t.closest('.field');\n   if(row)row.style.display='none';\n }\n}\ndocument.getElementById('studentName')?.focus()}\nfunction closeProfile(){document.getElementById('journeyModal')?.remove()}\nasync function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;let created=null;if(isNew){create"
+      },
+      {
+        "offset": 3068909,
+        "line": 1827,
+        "context": "cherCode')?.value||'').trim();\n/* MEJ_SIX_DIGIT_TEACHER_PROFILE_LINK_20261106 */\nif(window.__MEJ_ACCESS_ROLE==='student'){\n  // Teacher affiliation was approved by the server during six-digit activation.\n  // Do not trust a different teacher code typed inside the student's profile.\n  teacherCode=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n if(localStorage.getItem('MEJ_VERIFIED_TEACHER_LINKED_V1')==='1'){const approvedSchool=(localStorage.getItem('MEJ_VERIFIED_SCHOOL_NAME_V1')||'').trim();if(!approvedSchool){toast('المدرسة لم تتحقق، أعد التفعيل عبر الإنترنت');return false}school=approvedSchool;}\n}\nif(!name){toast('اكتب اسم الطالب أولاً');return}if(section&&!/^[1-9][0-9]{0,2}$/.test(section)){toast('القسم يجب أن يكون رقمًا من 1 إلى 999 أو يُترك فارغًا');ret"
+      },
+      {
+        "offset": 3070834,
+        "line": 1845,
+        "context": "معلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');localStorage.removeItem('MEJ_ASSIGNED_TEACHER_NAME_V1')}\n    window.__MEJ_ACCESS_ROLE='student';\n    school=String(d.schoolName||'');teacherCode=d.teacherLinked===true?digits:'';\n  }catch(_){toast('تعذر التحقق من الرمز، تأكد من الاتصال بالإنترنت');return false}\n}\nif(teacherCod"
+      },
+      {
+        "offset": 3070994,
+        "line": 1847,
+        "context": "e||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');localStorage.removeItem('MEJ_ASSIGNED_TEACHER_NAME_V1')}\n    window.__MEJ_ACCESS_ROLE='student';\n    school=String(d.schoolName||'');teacherCode=d.teacherLinked===true?digits:'';\n  }catch(_){toast('تعذر التحقق من الرمز، تأكد من الاتصال بالإنترنت');return false}\n}\nif(teacherCode && !/^(?:[1-9]|1[0-2])$/.test(grade)){toast('اختر صفًا من 1 إلى 12 لإرسال التقارير');return}if(!p.name){\n if(mejPilotSaving)return false;\n mejPilotSaving=true"
+      }
+    ],
+    "reportId": [
+      {
+        "offset": 3109299,
+        "line": 2091,
+        "context": "iv class=\"week\"><b>📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class=\"actions\"><button class=\"btn light\" onclick=\"route('journey')\">⛵ رحلتي الحالية</button><button class=\"btn light\" onclick=\"route('home')\">🏠 الرئيسية</button></div></section>`;\n}\nfunction payload(p,event='progress',reportId=''){\n let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-"
+      },
+      {
+        "offset": 3109754,
+        "line": 2095,
+        "context": "r(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosti"
+      },
+      {
+        "offset": 3111293,
+        "line": 2105,
+        "context": "-'+random;\n}\n// A separate anonymous acknowledgement check: only a random receipt ID is sent, never a student's name.\nconst pendingReceipts=new Map();\nconst RECEIVER_EXPECTED_VERSION='2026-10-23-verified-ministry-six-digits-v4';\nwindow.WADI_RECEIPT_CALLBACK=function(data){\n const pending=data&&pendingReceipts.get(data.reportId);\n if(pending) pending(data);\n};\nlet wadiHealthResolve=null;\nwindow.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};\nfunction lookupReportReceipt(reportId){return new Promise(resolve=>{\n let finished=false;const js=document.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}\n let timer=setTi"
+      },
+      {
+        "offset": 3111482,
+        "line": 2110,
+        "context": "10-23-verified-ministry-six-digits-v4';\nwindow.WADI_RECEIPT_CALLBACK=function(data){\n const pending=data&&pendingReceipts.get(data.reportId);\n if(pending) pending(data);\n};\nlet wadiHealthResolve=null;\nwindow.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};\nfunction lookupReportReceipt(reportId){return new Promise(resolve=>{\n let finished=false;const js=document.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}\n let timer=setTimeout(()=>done(null),6500);\n pendingReceipts.set(reportId,done);\n js.onerror=()=>done(null);\n js.src=ENDPOINT+'?ack='+encodeURIComponent(reportId)+'&_='+Date.now();\n document.head.appendChi"
+      },
+      {
+        "offset": 3111662,
+        "line": 2112,
+        "context": "iHealthResolve=null;\nwindow.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};\nfunction lookupReportReceipt(reportId){return new Promise(resolve=>{\n let finished=false;const js=document.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}\n let timer=setTimeout(()=>done(null),6500);\n pendingReceipts.set(reportId,done);\n js.onerror=()=>done(null);\n js.src=ENDPOINT+'?ack='+encodeURIComponent(reportId)+'&_='+Date.now();\n document.head.appendChild(js);\n});}\nfunction testReceiverHealth(){return new Promise(resolve=>{\n let done=false;const js=document.createElement('script');\n function finish(d){if(done)return;done=true;cle"
+      },
+      {
+        "offset": 3111790,
+        "line": 2114,
+        "context": "portReceipt(reportId){return new Promise(resolve=>{\n let finished=false;const js=document.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}\n let timer=setTimeout(()=>done(null),6500);\n pendingReceipts.set(reportId,done);\n js.onerror=()=>done(null);\n js.src=ENDPOINT+'?ack='+encodeURIComponent(reportId)+'&_='+Date.now();\n document.head.appendChild(js);\n});}\nfunction testReceiverHealth(){return new Promise(resolve=>{\n let done=false;const js=document.createElement('script');\n function finish(d){if(done)return;done=true;clearTimeout(timer);js.remove();wadiHealthResolve=null;resolve(d||null)}\n const timer=setTimeout(()=>finish(null),7500);\n wadiHealt"
+      },
+      {
+        "offset": 3111878,
+        "line": 2116,
+        "context": "t.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId);clearTimeout(timer);js.remove();resolve(data||null)}\n let timer=setTimeout(()=>done(null),6500);\n pendingReceipts.set(reportId,done);\n js.onerror=()=>done(null);\n js.src=ENDPOINT+'?ack='+encodeURIComponent(reportId)+'&_='+Date.now();\n document.head.appendChild(js);\n});}\nfunction testReceiverHealth(){return new Promise(resolve=>{\n let done=false;const js=document.createElement('script');\n function finish(d){if(done)return;done=true;clearTimeout(timer);js.remove();wadiHealthResolve=null;resolve(d||null)}\n const timer=setTimeout(()=>finish(null),7500);\n wadiHealthResolve=finish;\n js.onerror=()=>finish(null);\n js.src=ENDPOINT+'?health=1&_='+Date.now("
+      },
+      {
+        "offset": 3113533,
+        "line": 2140,
+        "context": "atus.scoreVerification==='SERVER_VERIFIED'?'الخادم يعلن تحقق النتائج؛ يلزم اختبار مستقل قبل اعتمادها.':'⚠️ النتائج غير موثقة على الخادم، ولا تُستخدم لترتيب الطلاب.');}\n if(el)el.textContent=p.syncStatus;\n try{localStorage.setItem(DBKEY,JSON.stringify(db))}catch(e){}\n return status;\n}\nasync function verifyReportReceipt(reportId){\n let status=null;\n for(const delay of [1500,2500,4500]){\n  await new Promise(resolve=>setTimeout(resolve,delay));\n  status=await lookupReportReceipt(reportId);\n  if(status&&(status.received||status.state==='stored'||status.state==='rejected'||status.state==='receiver-error'))return status;\n }\n return status;\n}\n// MEJ_STAGE2_CLOUD_TRUST_LABEL_V1\nconst REPORT_ERROR_AR={EMPTY_OR_TOO_LARGE:'الطلب فارغ أو أكبر من الحد المسموح.',SCHEMA_MIS"
+      }
+    ],
+    "english-foundation-oman-progress-v1": [
+      {
+        "offset": 3109696,
+        "line": 2095,
+        "context": "d:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'"
+      }
+    ],
+    "function queueReport": [],
+    "function sendReport": [
+      {
+        "offset": 3114584,
+        "line": 2151,
+        "context": " متطابقة مع النسخة الجديدة.',GOOGLE_PERMISSION:'لا توجد صلاحيات كافية للكتابة في Google Sheets.',RECEIVER_ERROR:'حدث خطأ أثناء معالجة التقرير في السكربت.',INVALID_TEACHER_CODE:'رمز المعلم غير صحيح. راجع المعلم وتأكد من كتابته كما هو.',TEACHER_CODE_NOT_CONFIGURED:'لم يتم تهيئة رمز المعلم في Google Apps Script.'};\nasync function sendReport(manual=false){\n if(reportBusy){reportDirty=true;if(manual)toast('هناك تقرير جارٍ إرساله؛ سنحاول مجددًا.');return;}\n const p=active();if(!p.name){if(manual)toast('احفظ اسم الطالب أولًا.');return;}if(!String(p.teacherCode||'').trim()){p.syncStatus='🔒 لا تُرسل التقارير دون رمز المعلم. يمكن متابعة الدراسة محليًا.';let st=document.getElementById('syncStatus');if(st)st.textContent=p.syncStatus;if(manual)toast('أدخل رمز المعلم من الصفحة الرئي"
+      }
+    ],
+    "studentGrade": [
+      {
+        "offset": 3056918,
+        "line": 1707,
+        "context": "خدم جديد':'تعديل بيانات الطالب'}</h2><button class=\"btn light small\" onclick=\"closeProfile()\">✕</button></div><div class=\"grid\"><div class=\"field\"><label>اسم الطالب</label><input id=\"studentName\" maxlength=\"70\" value=\"${esc(item.name)}\" placeholder=\"الاسم الكامل\"></div><div class=\"field\"><label>الصف</label><select id=\"studentGrade\"><option value=\"\">اختر الصف</option>${Array.from({length:12},(_,i)=>i+1).map(g=>`<option value=\"${g}\" ${String(item.grade)===String(g)?'selected':''}>الصف ${g}</option>`).join('')}<option value=\"other\" ${item.grade==='other'?'selected':''}>تأسيس / مرحلة أخرى</option></select></div><div class=\"field\"><label>المدرسة</label><input id=\"studentSchool\" maxlength=\"100\" value=\"${esc(window.__MEJ_ACCESS_ROLE==='student'?(localStorage.getItem('M"
+      },
+      {
+        "offset": 3068355,
+        "line": 1822,
+        "context": "rue||result.enrolled!==true)throw Error('LICENSE_RESERVATION_DENIED');\n  return true;\n }catch(_){toast('تعذر اعتماد الطالب. تأكد من الاتصال والترخيص ثم حاول مجددًا.');return false}\n}\n\nasync function saveStudent(){let p=active();let name=document.getElementById('studentName').value.trim(),grade=document.getElementById('studentGrade').value,school=document.getElementById('studentSchool').value.trim(),section=(document.getElementById('studentSection')?.value||'').trim(),className=grade+(section?'_'+section:''),teacherCode=(document.getElementById('teacherCode')?.value||'').trim();\n/* MEJ_SIX_DIGIT_TEACHER_PROFILE_LINK_20261106 */\nif(window.__MEJ_ACCESS_ROLE==='student'){\n  // Teacher affiliation was approved by the server during six-digit activation.\n  // Do not tr"
+      },
+      {
+        "offset": 3109983,
+        "line": 2095,
+        "context": ">=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPer"
+      }
+    ],
+    "weeklyAttempts": [
+      {
+        "offset": 3110584,
+        "line": 2095,
+        "context": "vel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};\n}\nfunction makeReportId(){\n let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}\n return 'wadi-'+Date.now().toString(36)+'-'+random;\n}\n// A separate anonymous acknowledgement check: only "
+      }
+    ],
+    "levelStats": [
+      {
+        "offset": 3109318,
+        "line": 2092,
+        "context": "📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class=\"actions\"><button class=\"btn light\" onclick=\"route('journey')\">⛵ رحلتي الحالية</button><button class=\"btn light\" onclick=\"route('home')\">🏠 الرئيسية</button></div></section>`;\n}\nfunction payload(p,event='progress',reportId=''){\n let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event"
+      },
+      {
+        "offset": 3110298,
+        "line": 2095,
+        "context": "-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};\n}\nfunction makeReportId(){\n let random='';try{let values=new Uint8Array(16);crypt"
+      },
+      {
+        "offset": 3110509,
+        "line": 2095,
+        "context": "t:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};\n}\nfunction makeReportId(){\n let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}\n return 'wadi-'+Date.now()."
+      }
+    ],
+    "navigator.onLine": [
+      {
+        "offset": 3055013,
+        "line": 1694,
+        "context": "IMAL_V1\nfunction mejSimpleConnectionStatus(raw){\n const status=String(raw||'');\n if(/غير متصل|تعذر|فشل|خطأ|unavailable|offline|error/i.test(status))return '⚠️ تعذر الاتصال بالخدمة';\n if(/الاتصال بالخدمة|الوصول إلى خدمة الاستقبال ناجح|تم الاتصال|نجاح|successful/i.test(status))\n  return '✅ الاتصال بالخدمة متاح';\n return navigator.onLine?'الاتصال بالإنترنت متاح':'غير متصل بالإنترنت';\n}\nfunction refreshJourneySettingsStatus(){const p=active();const el=document.getElementById('journeySettingsStatus');if(el)el.textContent=mejSimpleConnectionStatus(p.syncStatus);}\nasync function settingsCheckConnection(){await checkSheetConnection();refreshJourneySettingsStatus()}\nasync function settingsSendReport(){await sendReport(true);refreshJourneySettingsStatus()}\nfunction copyJourne"
+      },
+      {
+        "offset": 3055615,
+        "line": 1701,
+        "context": "(){await checkSheetConnection();refreshJourneySettingsStatus()}\nasync function settingsSendReport(){await sendReport(true);refreshJourneySettingsStatus()}\nfunction copyJourneyDiagnostics(){const p=active();const info=[\n 'My English Journey — Official Release','Receiver version: '+RECEIVER_EXPECTED_VERSION,\n 'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),\n 'Sync status: '+(p.syncStatus||'Unknown'),'Last report ID: '+(p.lastReportId||'—'),\n 'Last confirmed report ID: '+(p.lastConfirmedReport||'—')].join('\\n');\n if(navigator.clipboard?.writeText){navigator.clipboard.writeText(info).then(()=>toast('تم نسخ تفاصيل التشخيص'),()=>toast('تعذر النسخ: قد يحتاج المتصفح إلى HTTPS'));}\n else{const a=document.createElement('textarea');a.value=info;d"
+      },
+      {
+        "offset": 3115084,
+        "line": 2154,
+        "context": "('احفظ اسم الطالب أولًا.');return;}if(!String(p.teacherCode||'').trim()){p.syncStatus='🔒 لا تُرسل التقارير دون رمز المعلم. يمكن متابعة الدراسة محليًا.';let st=document.getElementById('syncStatus');if(st)st.textContent=p.syncStatus;if(manual)toast('أدخل رمز المعلم من الصفحة الرئيسية، ثم احفظ ملف الطالب.');return;}\n if(!navigator.onLine){p.syncStatus='⚠️ لا يوجد اتصال بالإنترنت. التقدم محفوظ محليًا.';if(manual)toast(p.syncStatus);return;}\n const pid=p.id,receipt=makeReportId();reportBusy=true;\n p.lastReportId=receipt;\n p.syncStatus='⏳ إرسال تقرير '+receipt+' ...';\n let output=document.getElementById('syncStatus');if(output)output.textContent=p.syncStatus;\n try{\n  await fetch(ENDPOINT,{method:'POST',mode:'no-cors',credentials:'omit',cache:'no-store',headers:{'Content-T"
+      }
+    ],
+    "saveProfile": [
+      {
+        "offset": 3058322,
+        "line": 1707,
+        "context": "/div><div class=\"field\"><label>رمز المعلم (اختياري)</label><input id=\"teacherCode\" maxlength=\"6\" pattern=\"[0-9٠-٩]{6}\" inputmode=\"numeric\" type=\"text\" placeholder=\"6 أرقام، اختياري للتفعيل الكامل\" autocomplete=\"off\" value=\"${esc(item.teacherCode||'')}\"></div></div><div class=\"actions\"><button class=\"btn mint\" onclick=\"saveProfileModal(${isNew})\">💾 حفظ</button><button class=\"btn light\" onclick=\"closeProfile()\">إلغاء</button></div><button id=\"ee-recovery-entry\" type=\"button\" onclick=\"document.getElementById('ee-recovery-dialog').classList.add('open')\" aria-label=\"حفظ واسترجاع التقدم\">🔐 حفظ واسترجاع التقدم</button></div>`;modal.addEventListener('click',e=>{if(e.target===modal)closeProfile()});document.body.appendChild(modal);\n/* MEJ_VERIFIED_SCHOOL_PROFILE_2026110"
+      },
+      {
+        "offset": 3059571,
+        "line": 1724,
+        "context": " if(t){\n   t.value=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n   t.readOnly=true;\n   const row=t.closest('.field');\n   if(row)row.style.display='none';\n }\n}\ndocument.getElementById('studentName')?.focus()}\nfunction closeProfile(){document.getElementById('journeyModal')?.remove()}\nasync function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;let created=null;if(isNew){created=newProfile();db.profiles[created.id]=created;db.active=created.id}const ok=await saveStudent();if(!ok){if(created){delete db.profiles[created.id];db.active=oldId}return}closeProfile()}\nfunction letsGo(){if(!active().name){openProfile(true);toast('سجّل بياناتك"
+      }
+    ],
+    "saveProgress": [],
+    "localStorage.setItem": [
+      {
+        "offset": 834,
+        "line": 18,
+        "context": "ACCESS_V1');\n window.__MEJ_ACCESS_ROLE='public';\n const reveal=()=>document.getElementById('mej-owner-gate-style')?.remove();\n const allowed=(role,data)=>{\n   window.__MEJ_ACCESS_ROLE=role;\n   if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;\n   if(role==='student'&&typeof data?.schoolName==='string'){\n      localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);\n      localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',data.teacherLinked===true?'1':'0');\n   }\n   reveal();\n };\n const check=async()=>{\n   if(owner){\n     try{\n       const r=await fetch(OWNER,{method:'GET',mode:'cors',cache:'no-store',\n         headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.r"
+      },
+      {
+        "offset": 909,
+        "line": 19,
+        "context": ".getElementById('mej-owner-gate-style')?.remove();\n const allowed=(role,data)=>{\n   window.__MEJ_ACCESS_ROLE=role;\n   if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;\n   if(role==='student'&&typeof data?.schoolName==='string'){\n      localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);\n      localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',data.teacherLinked===true?'1':'0');\n   }\n   reveal();\n };\n const check=async()=>{\n   if(owner){\n     try{\n       const r=await fetch(OWNER,{method:'GET',mode:'cors',cache:'no-store',\n         headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){allowed('owner',d);return;}\n "
+      },
+      {
+        "offset": 2470273,
+        "line": 1460,
+        "context": " DBKEY and precedes the obsolete-data migrator.\ntry{\n const migrationKey='MEJ_TEST_ACCOUNT_RESET_20261105_V1_DONE';\n if(localStorage.getItem(migrationKey)!=='1'){\n  const retiring=['WADI_ENGLISH_EXPLORER_PROFILES_V1','EBO_OMAN_V4','EE_V38_RECOVERY_SESSIONS'];\n  for(const key of retiring)localStorage.removeItem(key);\n  localStorage.setItem(migrationKey,'1');\n }\n}catch(err){console.warn('Trial account reset deferred; local browser storage unavailable')}\n\nconst questionById=Object.fromEntries(BANK.map(x=>[x.id,x]));\nconst byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);\nlet db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};\nif(!Object.keys(db.profiles).length){\n  let migrated=false"
+      },
+      {
+        "offset": 2472722,
+        "line": 1492,
+        "context": "(raw)){\n  if(!Object.prototype.hasOwnProperty.call(questionById,id))continue;\n  const n=Number(value);\n  if(Number.isFinite(n)&&n>=2)total++;\n }\n profile.stars=Math.min(2600,total);\n return profile.stars\n}\nfunction persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}\nlet reportTimer=null,reportBusy=false,reportDirty=false;\nfunction scheduleReport(){clearTimeout(reportTimer);if(!String(active().teacherCode||'').trim())return;reportTimer=setTimeou"
+      },
+      {
+        "offset": 3069934,
+        "line": 1836,
+        "context": "يجب أن يتكون من 6 أرقام');return false}\n  if(!crypto?.subtle){toast('التحقق من رمز المعلم يتطلب اتصالًا آمنًا');return false}\n  try{\n    let device=localStorage.getItem('MEJ_STUDENT_DEVICE_REF_V1');\n    if(!device){device=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('MEJ_STUDENT_DEVICE_REF_V1',device)}\n    const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',\n       headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'activate_short',code:digits,studentRef:device}),signal:AbortSignal.timeout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error="
+      },
+      {
+        "offset": 3070540,
+        "line": 1841,
+        "context": "vate_short',code:digits,studentRef:device}),signal:AbortSignal.timeout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رمز المعلم غير صحيح أو لم يُفعّل. تحقق من المدرسة والمعلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_AS"
+      },
+      {
+        "offset": 3070605,
+        "line": 1842,
+        "context": "meout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رمز المعلم غير صحيح أو لم يُفعّل. تحقق من المدرسة والمعلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');localStorage.removeItem('MEJ_ASSIGNED_TE"
+      },
+      {
+        "offset": 3070687,
+        "line": 1843,
+        "context": "accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رمز المعلم غير صحيح أو لم يُفعّل. تحقق من المدرسة والمعلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');localStorage.removeItem('MEJ_ASSIGNED_TEACHER_NAME_V1')}\n    window.__MEJ_ACCESS_ROLE='student';\n    school=String(d.schoo"
+      }
+    ],
+    "WADI_RECEIPT_CALLBACK": [
+      {
+        "offset": 3111209,
+        "line": 2104,
+        "context": "ce(2)+Math.random().toString(36).slice(2)}\n return 'wadi-'+Date.now().toString(36)+'-'+random;\n}\n// A separate anonymous acknowledgement check: only a random receipt ID is sent, never a student's name.\nconst pendingReceipts=new Map();\nconst RECEIVER_EXPECTED_VERSION='2026-10-23-verified-ministry-six-digits-v4';\nwindow.WADI_RECEIPT_CALLBACK=function(data){\n const pending=data&&pendingReceipts.get(data.reportId);\n if(pending) pending(data);\n};\nlet wadiHealthResolve=null;\nwindow.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};\nfunction lookupReportReceipt(reportId){return new Promise(resolve=>{\n let finished=false;const js=document.createElement('script');\n function done(data){if(finished)return;finished=true;pendingReceipts.delete(reportId"
+      }
+    ],
+    "MEJ_VERIFIED_SCHOOL_NAME_V1": [
+      {
+        "offset": 856,
+        "line": 18,
+        "context": "_MEJ_ACCESS_ROLE='public';\n const reveal=()=>document.getElementById('mej-owner-gate-style')?.remove();\n const allowed=(role,data)=>{\n   window.__MEJ_ACCESS_ROLE=role;\n   if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;\n   if(role==='student'&&typeof data?.schoolName==='string'){\n      localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);\n      localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',data.teacherLinked===true?'1':'0');\n   }\n   reveal();\n };\n const check=async()=>{\n   if(owner){\n     try{\n       const r=await fetch(OWNER,{method:'GET',mode:'cors',cache:'no-store',\n         headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rou"
+      },
+      {
+        "offset": 3057369,
+        "line": 1707,
+        "context": "ade)===String(g)?'selected':''}>الصف ${g}</option>`).join('')}<option value=\"other\" ${item.grade==='other'?'selected':''}>تأسيس / مرحلة أخرى</option></select></div><div class=\"field\"><label>المدرسة</label><input id=\"studentSchool\" maxlength=\"100\" value=\"${esc(window.__MEJ_ACCESS_ROLE==='student'?(localStorage.getItem('MEJ_VERIFIED_SCHOOL_NAME_V1')||item.school||''):(item.school||''))}\" placeholder=\"سيحدد تلقائيا عند ارتباط الطالب بالمعلم\"></div><div class=\"field\"><label>القسم (اختياري) • Class section</label><input id=\"studentSection\" type=\"number\" min=\"1\" max=\"999\" step=\"1\" inputmode=\"numeric\" maxlength=\"3\" value=\"${esc((String(item.className||'').match(/^[0-9]{1,2}_([1-9][0-9]{0,2})$/)||[])[1]||(String(item.className||'').match(/^([1-9][0-9]{0,2})$/)&&String(item.className)!"
+      },
+      {
+        "offset": 3058926,
+        "line": 1711,
+        "context": "التقدم</button></div>`;modal.addEventListener('click',e=>{if(e.target===modal)closeProfile()});document.body.appendChild(modal);\n/* MEJ_VERIFIED_SCHOOL_PROFILE_20261106 */\nif(window.__MEJ_ACCESS_ROLE==='student'){\n const schoolInput=document.getElementById('studentSchool');\n const verifiedSchool=(localStorage.getItem('MEJ_VERIFIED_SCHOOL_NAME_V1')||'').trim();\n const linked=localStorage.getItem('MEJ_VERIFIED_TEACHER_LINKED_V1')==='1';\n if(schoolInput&&verifiedSchool){schoolInput.value=verifiedSchool;if(linked){schoolInput.readOnly=true;schoolInput.title='المدرسة مرتبطة بالمعلم المعتمد';}}\n const t=document.getElementById('teacherCode');\n if(t){\n   t.value=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n   t.readOnly=true;\n   const row=t.closest('.field');\n  "
+      },
+      {
+        "offset": 3069063,
+        "line": 1828,
+        "context": "proved by the server during six-digit activation.\n  // Do not trust a different teacher code typed inside the student's profile.\n  teacherCode=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n if(localStorage.getItem('MEJ_VERIFIED_TEACHER_LINKED_V1')==='1'){const approvedSchool=(localStorage.getItem('MEJ_VERIFIED_SCHOOL_NAME_V1')||'').trim();if(!approvedSchool){toast('المدرسة لم تتحقق، أعد التفعيل عبر الإنترنت');return false}school=approvedSchool;}\n}\nif(!name){toast('اكتب اسم الطالب أولاً');return}if(section&&!/^[1-9][0-9]{0,2}$/.test(section)){toast('القسم يجب أن يكون رقمًا من 1 إلى 999 أو يُترك فارغًا');return}if(window.__MEJ_ACCESS_ROLE==='public'&&teacherCode){\n  const digits=teacherCode.replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c"
+      },
+      {
+        "offset": 3070627,
+        "line": 1842,
+        "context": "nst d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رمز المعلم غير صحيح أو لم يُفعّل. تحقق من المدرسة والمعلم.');return false}\n    localStorage.setItem('MEJ_STUDENT_ACCESS_V1',d.accessToken);\n    localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',String(d.schoolName||''));\n    localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',d.teacherLinked===true?'1':'0');\n    if(d.teacherLinked===true){\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_CODE_V1',digits);\n      localStorage.setItem('MEJ_ASSIGNED_TEACHER_NAME_V1',String(d.teacherName||''));\n    }else{localStorage.removeItem('MEJ_ASSIGNED_TEACHER_CODE_V1');localStorage.removeItem('MEJ_ASSIGNED_TEACHER_NAME_V1')}\n    window._"
+      }
+    ],
+    "fetch(": [
+      {
+        "offset": 1090,
+        "line": 26,
+        "context": "if(role==='student'&&typeof data?.schoolName==='string'){\n      localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);\n      localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',data.teacherLinked===true?'1':'0');\n   }\n   reveal();\n };\n const check=async()=>{\n   if(owner){\n     try{\n       const r=await fetch(OWNER,{method:'GET',mode:'cors',cache:'no-store',\n         headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){allowed('owner',d);return;}\n     }catch(_){}\n     sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');\n   }\n   if(student){\n     try{\n       const r=await fetch(LICENSE,{method:'POST',mode:'cors',cac"
+      },
+      {
+        "offset": 1492,
+        "line": 35,
+        "context": "ation:'Bearer '+owner},signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){allowed('owner',d);return;}\n     }catch(_){}\n     sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');\n   }\n   if(student){\n     try{\n       const r=await fetch(LICENSE,{method:'POST',mode:'cors',cache:'no-store',\n         headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_student',accessToken:student}),\n         signal:AbortSignal.timeout(8500)});\n       const d=await r.json();\n       if(r.ok&&d.ok===true&&d.role==='student'){allowed('student',d);return;}\n     }catch(_){\n       // Offline: preserve an existing local licence without granting elevated\n       // acces"
+      },
+      {
+        "offset": 3066218,
+        "line": 1788,
+        "context": "ikojobumcke.supabase.co/functions/v1/mej-pilot-status';\nconst MEJ_PILOT_REGISTER_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register';\nlet mejPilotSaving=false;\nfunction mejPilotFull(){\n window.location.assign('./reviews/pilot-full.html');\n}\nasync function mejPilotReadStatus(){\n const r=await fetch(MEJ_PILOT_STATUS_URL,{cache:'no-store',mode:'cors',credentials:'omit',signal:AbortSignal.timeout(8000)});\n if(!r.ok)throw Error('PILOT_STATUS_UNAVAILABLE');\n const d=await r.json();\n if(!d.ok||!d.registration||typeof d.registration.studentOpen!=='boolean')throw Error('PILOT_STATUS_INVALID');\n return d.registration;\n}\nasync function mejPilotMayCreateStudent(){\n if(window.__MEJ_ACCESS_ROLE==='public')return true;\n if(window.__MEJ_ACCESS_R"
+      },
+      {
+        "offset": 3067509,
+        "line": 1809,
+        "context": "ring(16).padStart(2,'0')).join('');\n  const owner=window.__MEJ_ACCESS_ROLE==='owner'?sessionStorage.getItem('MEJ_OWNER_ACCESS_V1'):null;\n  const student=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1'):null;\n  if(!owner&&!student)throw Error('LICENSE_REQUIRED');\n  const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{\n    method:'POST',cache:'no-store',mode:'cors',\n    headers:{'Content-Type':'application/json',...(owner?{'Authorization':'Bearer '+owner}:{})},\n    body:JSON.stringify({action:'enroll_profile',profileRef,...(student?{accessToken:student}:{})}),\n    signal:AbortSignal.timeout(10000)\n  });\n  const result=await response.json();\n  if(response.status===409){toast('بلغ الت"
+      },
+      {
+        "offset": 3070017,
+        "line": 1837,
+        "context": "المعلم يتطلب اتصالًا آمنًا');return false}\n  try{\n    let device=localStorage.getItem('MEJ_STUDENT_DEVICE_REF_V1');\n    if(!device){device=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('MEJ_STUDENT_DEVICE_REF_V1',device)}\n    const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license',{method:'POST',mode:'cors',cache:'no-store',\n       headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'activate_short',code:digits,studentRef:device}),signal:AbortSignal.timeout(12000)});\n    const d=await response.json();\n    if(!response.ok||!d.ok||!d.accessToken){toast(d.error==='LICENSE_CAPACITY_REACHED'?'وصل الترخيص إلى عدد الطلاب المسموح':'رم"
+      },
+      {
+        "offset": 3115440,
+        "line": 2160,
+        "context": "ا يوجد اتصال بالإنترنت. التقدم محفوظ محليًا.';if(manual)toast(p.syncStatus);return;}\n const pid=p.id,receipt=makeReportId();reportBusy=true;\n p.lastReportId=receipt;\n p.syncStatus='⏳ إرسال تقرير '+receipt+' ...';\n let output=document.getElementById('syncStatus');if(output)output.textContent=p.syncStatus;\n try{\n  await fetch(ENDPOINT,{method:'POST',mode:'no-cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(p,manual?'manual-sync':'progress',receipt))});\n  const result=await verifyReportReceipt(receipt);\n  if(result&&(result.received||result.state==='stored')){\n   p.syncStatus='✅ تم استلام تقرير '+p.name+' في Google Sheets ('+new Date().toLocaleString('ar-OM')+'). النتائج المرسلة من الجها"
+      }
+    ],
+    "function sync": [],
+    "const MEJ_": [
+      {
+        "offset": 3065853,
+        "line": 1781,
+        "context": "eacherInvitation();\n  new MutationObserver(mejScheduleTeacherInvite).observe(document.body,{childList:true,subtree:true});\n },{once:true});\nelse {\n mejAttachTeacherInvitation();\n new MutationObserver(mejScheduleTeacherInvite).observe(document.body,{childList:true,subtree:true});\n}\n// MEJ_PILOT_CAPACITY_STUDENT_GATE_V1\nconst MEJ_PILOT_STATUS_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-status';\nconst MEJ_PILOT_REGISTER_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register';\nlet mejPilotSaving=false;\nfunction mejPilotFull(){\n window.location.assign('./reviews/pilot-full.html');\n}\nasync function mejPilotReadStatus(){\n const r=await fetch(MEJ_PILOT_STATUS_URL,{cache:'no-store',mode:'cors',credentials:'omit',signal:Ab"
+      },
+      {
+        "offset": 3065954,
+        "line": 1782,
+        "context": ":true,subtree:true});\n },{once:true});\nelse {\n mejAttachTeacherInvitation();\n new MutationObserver(mejScheduleTeacherInvite).observe(document.body,{childList:true,subtree:true});\n}\n// MEJ_PILOT_CAPACITY_STUDENT_GATE_V1\nconst MEJ_PILOT_STATUS_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-status';\nconst MEJ_PILOT_REGISTER_URL='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-pilot-register';\nlet mejPilotSaving=false;\nfunction mejPilotFull(){\n window.location.assign('./reviews/pilot-full.html');\n}\nasync function mejPilotReadStatus(){\n const r=await fetch(MEJ_PILOT_STATUS_URL,{cache:'no-store',mode:'cors',credentials:'omit',signal:AbortSignal.timeout(8000)});\n if(!r.ok)throw Error('PILOT_STATUS_UNAVAILABLE');\n const d=await r.json()"
+      }
+    ],
+    "MEJVerifiedSync": []
+  }
+}

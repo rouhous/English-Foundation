@@ -1,0 +1,39 @@
+name: Insert Install Help Above Existing Copyright Text
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/insert_install_help_in_rights.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-install-rights-inline
+  cancel-in-progress: false
+jobs:
+  insert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert one inline line with no other page edits
+        run: python scripts/insert_install_help_in_rights.py
+      - name: Validate original rights text and layout unchanged
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert s.count('id="mej-install-help-inline-rights"')==1
+          assert s.index('id="mej-install-help-inline-rights"')<s.index('class="mej-rights-statement"')
+          assert 'id="mej-owner-rights-notice"' in s
+          assert 'm31-start' in s
+          assert 'mej-student-install-hint' not in s
+          print('SINGLE_LINE_ABOVE_COPYRIGHT_VERIFIED')
+          PY
+      - name: Commit only index.html
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Add install instructions as first line inside existing copyright box"
+            git push
+          fi

@@ -22,10 +22,33 @@ function table(head,rows){
 function pct(a,b){return b>0?Math.round(100*a/b)+'%':'—'}
 function teacherDisplay(panel,data){
  const list=Array.isArray(data.students)?data.students:[];
+ const imported=Array.isArray(data.importedTrialStudents)?data.importedTrialStudents:[];
  const info=elem('p','المدرسة: '+label(data.schoolName)+' · عدد الطلاب ذوي التقدم المتزامن: '+list.length,'notice');panel.append(info);
  const advisory=elem('p','النجوم والدرجات المعروضة من تقارير أجهزة الطلاب، ولم يُتحقق بعد من كل إجابة على الخادم.','notice');advisory.style.color='#916b17';panel.append(advisory);
  const classes=[...new Set(list.map(x=>x.class_name||'غير محدد'))].sort((a,b)=>a.localeCompare(b,'ar'));
- if(list.length===0){panel.append(elem('p','لا توجد سجلات تقدم متزامنة لطلابك بعد. ستظهر هنا بعد ربط مزامنة الطالب وإرسال أول سجل.','notice'));return;}
+ if(list.length===0){panel.append(elem('p','لا توجد سجلات تقدم مباشرة حتى الآن. ستظهر هنا عند أول مزامنة من جهاز طالب مرتبط.','notice'));}
+ if(imported.length){
+   const section=elem('div');section.style.cssText='margin-top:20px;border-top:1px solid #d2e6e0;padding-top:15px';
+   section.append(elem('h3','السجلات التجريبية المستوردة من STAGING'));
+   const note=elem('p','هذه سجلات اختبارية قديمة للمعاينة، وليست حسابات طلاب مفعّلة أو تقدمًا سحابيًا مباشرًا.','notice');
+   note.style.color='#8e651b';section.append(note);
+   const classPick=elem('select');classPick.style.cssText='margin:8px 0;padding:8px;width:100%;border:1px solid #a9d3cc;border-radius:9px';
+   classPick.append(new Option('جميع الأقسام المستوردة',''));
+   [...new Set(imported.map(x=>x.class_name||'غير محدد'))].sort((a,b)=>a.localeCompare(b,'ar')).forEach(c=>classPick.append(new Option(c,c)));
+   section.append(classPick);
+   const host=elem('div');section.append(host);
+   function paint(){
+    host.replaceChildren();
+    const visible=imported.filter(x=>!classPick.value||(x.class_name||'غير محدد')===classPick.value);
+    host.append(table(['الطالب التجريبي','القسم','الصف','المستوى','الإتقان','النجوم','أنشطة الأسبوع'],visible.map(x=>[
+     x.student_name,x.class_name,x.grade,x.highest_level,
+     String(x.mastery_percent??0)+'%',x.stars,x.weekly_attempts
+    ])));
+   }
+   classPick.onchange=paint;paint();panel.append(section);
+ }
+
+ if(list.length===0)return;
  const bar=elem('div');bar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0';
  const select=elem('select');select.style.cssText='padding:9px;border:1px solid #a1c9c3;border-radius:10px;flex:1';
  select.append(new Option('كل الأقسام',''));classes.forEach(c=>select.append(new Option(c,c)));

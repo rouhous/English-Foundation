@@ -1,0 +1,31 @@
+name: Install Omani animated learning companion
+on:
+  push:
+    paths:
+      - 'scripts/install_mej_companion.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate companion JavaScript
+        run: node --check assets/mej-study-companion.js
+      - name: Integrate with original question answer event
+        run: node scripts/install_mej_companion.cjs
+      - name: Commit app changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/companion-install.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Enable Omani companion celebrations in student question flow"
+            git push
+          fi

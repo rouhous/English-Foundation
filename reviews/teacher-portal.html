@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<link id="portalManifest" rel="manifest" href="./teacher-manifest.webmanifest"><meta name="theme-color" content="#087b83"><link rel="apple-touch-icon" href="../icon-192.png">
 <title>بوابة المعلمين والمدرسة | رحلتي مع الإنجليزية</title>
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(155deg,#f3f9fc,#d5edf0 53%,#fdf8ec);font-family:system-ui,'Segoe UI',Tahoma,sans-serif;color:#114757;padding:17px;display:grid;place-items:center}
@@ -114,6 +115,7 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 <p class="notice">حساب Google سليم، لكنه لم يُربط بعد بسجل معلم مُعتمد في المدرسة. لن يتم تسجيلك أو منحك الوصول دون تحقق.</p>
 </section>
 
+<div class="pill small" id="installHelp" style="text-align:center">يمكن تثبيت هذه البوابة من قائمة المتصفح ← «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق». لا تحتاج إلى فتح تطبيق الطالب.</div>
 <p class="footer">هذه بوابة المدرسة والمعلم فقط، وليست تطبيق الطلاب. التحقق من Google خطوة داخل التسجيل وليس اختيارًا مستقلًا.</p>
 </main>
 <script>
@@ -121,6 +123,15 @@ main{width:100%;max-width:560px;background:#fffffff5;border:1px solid #c0e0e5;bo
 (function(){
 const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-teacher-portal';
+const params=new URLSearchParams(location.search);
+const directRole=params.get('role')==='school'?'school':params.get('role')==='teacher'?'teacher':null;
+document.getElementById('portalManifest').href=directRole==='school'?'./school-manifest.webmanifest':'./teacher-manifest.webmanifest';
+if(directRole){
+ document.title=(directRole==='school'?'بوابة مسؤول المدرسة':'بوابة المعلم')+' | رحلتي مع الإنجليزية';
+ document.querySelector('h1').textContent=directRole==='school'?'بوابة مسؤول المدرسة':'بوابة المعلم';
+ document.querySelector('.sub').textContent='سجّل بحساب Google المعتمد للمتابعة';
+ document.getElementById('roleChoice').hidden=true;
+}
 const status=document.getElementById('status');
 let verifiedOwnerCredential=null;
 let verifiedTeacherCredential=null;
@@ -320,6 +331,8 @@ document.getElementById('bridgeCopy').addEventListener('click',()=>{
 const value=document.getElementById('bridgeSecretValue').value;
 if(value)navigator.clipboard?.writeText(value);
 });
+if(directRole)selectRole(directRole);
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./portal-sw.js',{scope:'./'}).catch(()=>{});}
 let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{

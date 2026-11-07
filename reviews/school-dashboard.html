@@ -34,9 +34,9 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 .levelChip .levelNumber{color:#123f63;font-size:13px}
 .levelChip .levelCount{margin-inline-start:auto;font-size:14px;color:#063764;white-space:nowrap}
 @media(max-width:600px){.levelChips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.levelChip{min-width:0;padding:9px 7px;gap:5px}.levelChip .levelNumber{font-size:12px}.levelChip .levelCount{font-size:12px}.levelChip .levelAccent{flex-basis:5px}}
-</style>
+.sortControls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 14px}.sortControls label{font-weight:700;font-size:14px;color:#174d78}.sortControls select{flex:1;min-width:170px;border:1px solid #bdd9ec;background:#f5fbff;padding:11px;border-radius:12px;color:#0c4273;font:inherit}@media(max-width:520px){.sortControls select{width:100%}}</style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/school-dashboard-v1.js?v=20261107-1" defer></script>
+<script src="../assets/school-dashboard-v1.js?v=20261107-3" defer></script>
 </head><body>
 <header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة مسؤول المدرسة</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><a href="./teacher-portal.html?manage=1" title="طلبات المعلمين ورمز المدرسة">إدارة المعلمين</a><button id="refresh" type="button">↻ تحديث</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <main>
@@ -59,7 +59,14 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <h2 id="chartTitle">مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
 </section>
 <section id="detail" hidden>
- <div class="sheet"><div class="subline"><button id="back" class="button alt" type="button">← الصفوف</button><span id="detailScope" class="notice"></span></div><h2 id="detailTitle">قائمة الطلاب</h2><div class="metricGrid" id="detailMetrics"></div><div style="height:14px"></div><input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off"><div id="studentList" class="students"></div></div>
+ <div class="sheet"><div class="subline"><button id="back" class="button alt" type="button">← الصفوف</button><span id="detailScope" class="notice"></span></div><h2 id="detailTitle">قائمة الطلاب</h2><div class="metricGrid" id="detailMetrics"></div><div style="height:14px"></div><div class="sortControls">
+<label for="sortStudents">ترتيب الطلاب</label>
+<select id="sortStudents" aria-label="ترتيب الطلاب">
+<option value="stars">الأكثر نجومًا أولًا</option>
+<option value="level">الأعلى مستوى أولًا</option>
+</select>
+</div>
+<input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off"><div id="studentList" class="students"></div></div>
  <div class="sheet" id="studentDetail" hidden><div class="subline"><h2 id="studentTitle">تفاصيل تقدم الطالب</h2><button id="closeStudent" class="button alt" type="button">إغلاق</button></div><div id="studentDetails"></div></div>
 </section>
 <section id="loading" class="sheet"><p role="status" id="message">جار التحقق من الحساب وتحميل الصفوف...</p></section>

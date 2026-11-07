@@ -2192,7 +2192,16 @@ async function sendReport(manual=false){
    weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,
    diagnosticDone:profile.diagnosed===true,
    diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,
-   highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats
+   highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,
+   /* MEJ_STUDENT_PRIVATE_CLOUD_BACKUP_V1: only learning state; never teacher code or auth secrets */
+   privateState:{
+    correct:profile.correct||{},wrong:profile.wrong||{},
+    writing:profile.writing||{},
+    activity:(profile.activity||[]).slice(-1500),
+    diagnosticScore:profile.diagnosticScore??null,
+    diagnosticDate:profile.diagnosticDate||'',
+    journeyIsland:profile.journeyIsland??null
+   }
   };
   const result=await window.MEJStudentCloudProgress.queue(profileRef,snapshot);
   const messages={

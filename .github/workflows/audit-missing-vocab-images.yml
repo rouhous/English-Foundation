@@ -5,11 +5,22 @@ on:
     paths: ['scripts/audit_missing_vocab_images.cjs']
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Compare every word in all 26 levels to 12 approved image banks
+        with:
+          persist-credentials: true
+      - name: Compare every learning vocabulary word to 12 image banks and disk
         run: node --max-old-space-size=2048 scripts/audit_missing_vocab_images.cjs
+      - name: Publish updated missing-image report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/image-audit/
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified missing vocabulary image report"
+            git push
+          fi

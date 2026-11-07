@@ -90,3 +90,5 @@ if(!html.includes(mark)){
 console.log('LEGACY_RECONCILE '+JSON.stringify({sourceWords:627,availableInCurrentImageBank:imagesPresent,missingImagesFromCurrentBank:imageMissing,alreadyPresentInSourceStages:alreadyAll,insertedUniqueWords:newUnique,insertedStagePlacements:insert.length}));
 
 // Execute legacy-vocabulary reconciliation and safe learning preview import.
+
+// Re-run with deployment diagnostics.

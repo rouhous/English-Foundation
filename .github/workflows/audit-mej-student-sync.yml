@@ -1,0 +1,24 @@
+name: Audit Student Progress Integration Hooks
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/inspect_mej_student_hooks.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan existing student hooks
+        run: python scripts/inspect_mej_student_hooks.py
+      - name: Save non-sensitive integration map
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/mej-progress-hook-audit.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Record student sync hook map"
+            git push
+          fi

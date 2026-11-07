@@ -154,9 +154,8 @@ async function onCredential(response){
    const panel=document.getElementById('schoolManagerPanel');
    panel.hidden=false;
    status.textContent='تم التحقق من مسؤول المدرسة.';
-   await refreshManager(response.credential);
-   loadStaffApplications(response.credential,'managerApplications');
-   rootProgress('school_manager',response.credential);
+   sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:response.credential,at:Date.now()}));
+   location.replace('./school-dashboard.html');
    return;
   }
   if(data.role!=='teacher')throw Error('ROLE_DENIED');

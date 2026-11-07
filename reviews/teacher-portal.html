@@ -11,6 +11,7 @@
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/teacher-progress-v1.js" defer></script>
+<script src="../assets/staff-native-portal-v1.js" defer></script>
 </head>
 <body>
 <main>
@@ -56,7 +57,7 @@
 <input id="managerCodeValue" readonly dir="ltr" style="width:100%;padding:11px;display:none;letter-spacing:3px" aria-label="رمز المعلمين">
 <button type="button" id="managerCopyCode" style="display:none;padding:10px;border:1px solid #95c7c7;border-radius:8px;background:white;font:inherit">نسخ الرمز</button>
 </div>
-<div id="schoolTeachersList"></div>
+<div id="schoolTeachersList"></div><div id="managerApplications" class="panel" style="background:white"></div>
 <p class="notice">يظهر ملخص بيانات المدرسة أدناه مباشرة من القاعدة السحابية، دون الاعتماد على ملفات Google Sheets.</p>
 </section>
 <section id="teacherPanel" class="panel" hidden>
@@ -64,13 +65,19 @@
 <div class="row"><span>المعلم</span><strong id="teacherName"></strong></div>
 <div class="row"><span>المدرسة</span><strong id="schoolName"></strong></div>
 <div class="row"><span>الأقسام</span><strong id="teacherClasses"></strong></div>
-<div id="reportsAnchor"></div>
+<div class="panel" style="background:white">
+<strong>رمز ربط طلابك — 6 أرقام</strong>
+<p class="notice">عند إصدار رمز جديد يتوقف القديم عن تسجيل طلاب جدد، ولا ينقطع ارتباط الطلاب المسجلين.</p>
+<button type="button" id="teacherStudentCodeButton" style="font:inherit;padding:11px;border:0;border-radius:9px;background:#087b83;color:#fff">إصدار رمز طلابي</button>
+<input id="teacherStudentCodeValue" readonly dir="ltr" style="display:none;width:100%;margin-top:10px;padding:10px;letter-spacing:3px">
+<p id="teacherStudentCodeStatus" role="status" class="notice"></p>
+</div><div id="reportsAnchor"></div>
 <p class="notice">تظهر نتائج طلابك داخل هذه الصفحة من Supabase بعد مزامنتها؛ لم تعد بحاجة إلى فتح Google Sheets لعرض التقارير.</p>
 </section>
 <section id="ownerPanel" class="panel" hidden>
 <h2>إدارة مدرسة وادي الحواسنة — 2429</h2>
-<p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد التحقق من سجلهم الوزاري.</p>
-<div id="ownerSchoolStatus"></div>
+<p class="notice">صلاحية المالك غير محدودة. يتم تفعيل المعلمين ضمن حدود المدرسة بعد اعتماد مسؤول المدرسة لتسجيلهم.</p>
+<div id="ownerSchoolStatus"></div><div id="ownerApplications" class="panel" style="background:white"></div>
 <div class="panel" style="background:white">
 <strong>اعتماد مسؤول مدرسة وادي الحواسنة</strong>
 <p class="notice">يحدد المالك بريد Google الذي يحق له تسجيل المدرسة. لا يمنح اسم المدرسة أو رقم 2429 صلاحيات الإدارة وحدهما.</p>
@@ -89,31 +96,20 @@
 <input id="joinIssueValue" dir="ltr" readonly style="display:none;width:100%;padding:10px" aria-label="رمز انضمام المعلمين">
 <button type="button" id="copyJoinIssue" style="display:none;padding:10px">نسخ رمز المعلمين</button>
 </div>
-<div style="margin-top:14px;padding:12px;border:1px solid #c5e2da;border-radius:12px;background:white">
-<strong>ربط نموذج Google Forms الأصلي</strong>
-<p class="notice">يمكن للمالك إنشاء رمز سري لربط السجل القديم بترخيص المدرسة. يُدخل الرمز في خصائص Google Apps Script، ولا يُنشر على GitHub أو يُشارك مع الطلاب.</p>
-<button type="button" id="issueBridgeSecret" style="padding:12px;background:#0c747f;color:white;border:none;border-radius:11px;font:inherit">إنشاء رمز ربط النموذج</button>
-<p id="bridgeSecretStatus" class="notice"></p>
-<input id="bridgeSecretValue" dir="ltr" readonly style="width:100%;padding:10px;border:1px solid #aed6dc;border-radius:9px;display:none;font-family:monospace" aria-label="رمز ربط سجل المعلمين">
-<button type="button" id="bridgeCopy" style="display:none;padding:10px;border:0;background:#e7f5f4;border-radius:8px;font:inherit">نسخ رمز الربط</button>
-</div>
 <a class="link" href="./owner-login.html">لوحة ترخيص المالك</a>
 </section>
 <section id="pendingPanel" class="panel" hidden>
-<div class="pill small"><strong>1. التسجيل والتحقق الوزاري</strong><p>إذا لم تسجّل سابقًا، افتح نموذج المعلمين الأصلي وأكمل رابط التحقق الذي يصلك إلى البريد الوزاري @moe.om.</p>
-<a class="link" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/forms/d/e/1FAIpQLSd6PCdyT-qfvC4rrjZkym7AIOgU9gk1TrZC17Y8K5bRq48n0g/viewform">فتح نموذج تسجيل المعلم الأصلي</a></div>
-<p class="notice"><strong>2. ربط المعلم بالمدرسة</strong> — بعد إتمام التسجيل، أدخل البيانات ورمز المدرسة (6 أرقام)، ثم تحقق بحساب Google نفسه.</p>
-<h2>تفعيل المعلم بترخيص المدرسة</h2>
-<p class="notice">أكمل التحقق من بريدك الوزاري عبر النموذج الأصلي أولًا، ثم أدخل بيانات المدرسة والرمز المكوّن من 6 أرقام الذي زودتك به الإدارة.</p>
+<h2>تسجيل معلم جديد</h2>
+<p class="notice">يسجل المعلم بحساب Google ورمز المدرسة (6 أرقام)، ثم يعتمد مسؤول المدرسة الطلب داخل التطبيق دون Google Forms أو Apps Script.</p>
 <form id="teacherJoinForm" autocomplete="off">
-<label for="joinSchoolName">اسم المدرسة</label><input id="joinSchoolName" required placeholder="مدرسة وادي الحواسنة" style="width:100%;padding:10px;margin:5px 0 10px">
-<label for="joinSchoolNo">رقم المدرسة (4 أرقام)</label><input id="joinSchoolNo" inputmode="numeric" maxlength="4" required placeholder="2429" style="width:100%;padding:10px;margin:5px 0 10px">
-<label for="joinSchoolCode">رمز المدرسة (6 أرقام)</label><input id="joinSchoolCode" dir="ltr" required maxlength="6" placeholder="مثال: 482731" inputmode="numeric" pattern="[0-9٠-٩]{6}" style="width:100%;padding:10px;margin:5px 0 10px">
-<button type="submit" style="padding:12px;border:0;border-radius:10px;background:#087b83;color:white;font:inherit;width:100%">التحقق وتفعيل حساب المعلم</button>
+<label for="joinTeacherName">اسم المعلم الكامل</label><input id="joinTeacherName" required maxlength="120" placeholder="اسم المعلم" style="width:100%;padding:11px;margin:7px 0">
+<label for="joinSchoolNo">رقم المدرسة (4 أرقام)</label><input id="joinSchoolNo" inputmode="numeric" maxlength="4" required placeholder="2429" value="2429" pattern="[0-9٠-٩]{4}" style="width:100%;padding:11px;margin:7px 0">
+<label for="joinSchoolCode">رمز انضمام المعلمين (6 أرقام)</label><input id="joinSchoolCode" inputmode="numeric" maxlength="6" required placeholder="000000" pattern="[0-9٠-٩]{6}" style="width:100%;padding:11px;margin:7px 0;direction:ltr">
+<label for="joinClasses">الأقسام التي تدرّسها</label><input id="joinClasses" required maxlength="150" placeholder="مثال: 9/1، 9/2" style="width:100%;padding:11px;margin:7px 0">
+<button type="submit" style="padding:12px;border:0;border-radius:10px;background:#087b83;color:white;font:inherit;width:100%">إرسال طلب التسجيل إلى إدارة المدرسة</button>
 </form>
-<p id="teacherJoinStatus" role="status"></p>
-<h2>التحقق المدرسي لم يكتمل</h2>
-<p class="notice">حساب Google سليم، لكنه لم يُربط بعد بسجل معلم مُعتمد في المدرسة. لن يتم تسجيلك أو منحك الوصول دون تحقق.</p>
+<p class="notice">أكمل تسجيل الدخول بحساب Google الظاهر في أعلى الصفحة قبل إرسال الطلب.</p>
+<p id="teacherJoinStatus" class="notice" role="status" aria-live="polite"></p>
 </section>
 
 <div class="pill small" id="installHelp" style="text-align:center">يمكن تثبيت هذه البوابة من قائمة المتصفح ← «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق». لا تحتاج إلى فتح تطبيق الطالب.</div>
@@ -148,6 +144,7 @@ async function onCredential(response){
    verifiedOwnerCredential=response.credential;
    document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك.';
    const owner=await call('school_overview',response.credential);
+   loadStaffApplications(response.credential,'ownerApplications');
    if(owner.r.ok&&owner.data.ok){
      value('ownerSchoolStatus',`الترخيص: ${owner.data.school?.teacher_limit||'—'} معلمين، ${owner.data.school?.student_limit||'—'} طالب. المعلمون المعتمدون: ${owner.data.verifiedTeachers||0}`);
    }
@@ -158,6 +155,7 @@ async function onCredential(response){
    panel.hidden=false;
    status.textContent='تم التحقق من مسؤول المدرسة.';
    await refreshManager(response.credential);
+   loadStaffApplications(response.credential,'managerApplications');
    rootProgress('school_manager',response.credential);
    return;
   }
@@ -170,6 +168,7 @@ async function onCredential(response){
  }catch(_){hide();status.textContent='تعذر التحقق. تأكد من اتصال الإنترنت ثم أعد تسجيل الدخول.'}
 }
 
+function loadStaffApplications(credential,id){if(window.MEJNativeStaff?.applications)window.MEJNativeStaff.applications(credential,document.getElementById(id))}
 function rootProgress(role,credential){if(window.MEJTeacherProgress?.load)window.MEJTeacherProgress.load(credential,role)}
 function selectRole(mode){
  registrationMode=mode;
@@ -248,7 +247,7 @@ document.getElementById('managerIssueCode').addEventListener('click',async()=>{
   const d=await r.json();if(!r.ok||!d.ok||!/^[0-9]{6}$/.test(d.code))throw Error('NOT_AUTHORIZED');
   field.value=d.code;field.style.display='block';
   document.getElementById('managerCopyCode').style.display='inline-block';
-  output.textContent='رمز المعلمين جاهز للتوزيع على معلمي المدرسة بعد التحقق الوزاري.';
+  output.textContent='رمز المعلمين جاهز للتوزيع على معلمي المدرسة بعد اعتماد إدارة المدرسة.';
  }catch(_){output.textContent='تعذّر إصدار الرمز. تأكد من اعتماد حساب مسؤول المدرسة.'}
 });
 document.getElementById('managerCopyCode').addEventListener('click',()=>{
@@ -258,29 +257,31 @@ document.getElementById('managerCopyCode').addEventListener('click',()=>{
 document.getElementById('teacherJoinForm').addEventListener('submit',async event=>{
  event.preventDefault();
  const out=document.getElementById('teacherJoinStatus');
- if(!verifiedTeacherCredential){out.textContent='سجل الدخول بحساب Google أولًا.';return}
- const body={action:'claim_school_teacher_6',schoolName:document.getElementById('joinSchoolName').value.trim(),
- schoolNumber:document.getElementById('joinSchoolNo').value.trim(),joinCode:document.getElementById('joinSchoolCode').value.trim()};
- out.textContent='جار التحقق من المدرسة والبريد الوزاري...';
+ if(!verifiedTeacherCredential){out.textContent='اضغط تسجيل الدخول باستخدام Google أولًا.';return;}
+ out.textContent='جار إرسال الطلب إلى إدارة المدرسة...';
  try{
-  const response=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
-   headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedTeacherCredential},
-   body:JSON.stringify(body),signal:AbortSignal.timeout(12000)});
-  const data=await response.json();
-  if(!response.ok||!data.ok){
-   const errors={MINISTRY_VERIFICATION_REQUIRED:'لم يكتمل ربط التحقق الوزاري بالنظام. افتح رابط التحقق الوزاري وأكمل التسجيل ثم حاول مرة أخرى.',
-    TEACHER_LIMIT_REACHED:'اكتمل الحد المسموح للمعلمين في المدرسة.',
-    SCHOOL_LICENSE_INVALID:'رمز انضمام المدرسة غير صحيح أو غير نشط.',
-    SCHOOL_DETAILS_INVALID:'تحقق من اسم المدرسة ورقمها ورمز الانضمام.'};
-   out.textContent=errors[data.error]||'تعذر اعتماد الترخيص. راجع مسؤول المدرسة.';return;
-  }
-  out.textContent='تم تفعيل حساب المعلم بنجاح.';
-  const checked=await call('teacher_status',verifiedTeacherCredential);
-  if(checked.r.ok&&checked.data.ok){
-   document.getElementById('pendingPanel').hidden=true;
-   await onCredential({credential:verifiedTeacherCredential});
-  }
- }catch(_){out.textContent='تعذر الاتصال بخدمة التراخيص.'}
+  const d=await window.MEJNativeStaff.call(verifiedTeacherCredential,'teacher_apply',{
+   teacherName:document.getElementById('joinTeacherName').value.trim(),
+   schoolNumber:document.getElementById('joinSchoolNo').value.trim(),
+   joinCode:document.getElementById('joinSchoolCode').value.trim().replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)),
+   classes:document.getElementById('joinClasses').value.trim()
+  });
+  out.textContent=d.status==='approved'?'حسابك معتمد بالفعل. سجّل الدخول باستخدام Google.':'تم استلام طلبك. ستتمكن من الدخول بعد موافقة مسؤول المدرسة.';
+ }catch(error){
+  out.textContent=error.message==='INVALID_SCHOOL_JOIN_CODE'?'رمز المدرسة غير صحيح أو غير نشط.':
+   error.message==='INVALID_REGISTRATION'?'تحقق من بيانات المعلم ورقم المدرسة والأقسام والرمز.':
+   'تعذر تسجيل الطلب؛ تحقق من البيانات والاتصال.';
+ }
+});
+document.getElementById('teacherStudentCodeButton').addEventListener('click',async()=>{
+ const out=document.getElementById('teacherStudentCodeStatus'),input=document.getElementById('teacherStudentCodeValue');
+ if(!verifiedTeacherCredential){out.textContent='سجل الدخول بحساب المعلم.';return;}
+ out.textContent='جار إصدار رمز الطلاب...';
+ try{
+  const result=await window.MEJNativeStaff.call(verifiedTeacherCredential,'teacher_issue_student_code');
+  input.value=result.code;input.style.display='block';
+  out.textContent='تم إنشاء رمز الطلاب. شاركه مع طلابك فقط.';
+ }catch(_){out.textContent='تعذر إصدار الرمز. تحقق من اعتماد حساب المعلم.';}
 });
 document.getElementById('issueTeacherJoin').addEventListener('click',async()=>{
  const out=document.getElementById('joinIssueStatus'),field=document.getElementById('joinIssueValue');
@@ -300,26 +301,6 @@ document.getElementById('issueTeacherJoin').addEventListener('click',async()=>{
 document.getElementById('copyJoinIssue').addEventListener('click',()=>{
  const v=document.getElementById('joinIssueValue').value;if(v)navigator.clipboard?.writeText(v);
 });
-document.getElementById('issueBridgeSecret').addEventListener('click',async()=>{
-const status=document.getElementById('bridgeSecretStatus'),field=document.getElementById('bridgeSecretValue');
-if(!verifiedOwnerCredential){status.textContent='يجب تسجيل دخول المالك بحساب Google أولاً.';return}
-status.textContent='جار إصدار الرمز الخاص...';field.style.display='none';document.getElementById('bridgeCopy').style.display='none';
-try{
- const r=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',
-  headers:{'Content-Type':'application/json',Authorization:'Bearer '+verifiedOwnerCredential},
-  body:JSON.stringify({action:'owner_issue_registry_secret'}),signal:AbortSignal.timeout(12000)});
- const d=await r.json();if(!r.ok||!d.ok||!d.integrationSecret)throw Error('NOT_ALLOWED');
- field.value=d.integrationSecret;field.style.display='block';
- document.getElementById('bridgeCopy').style.display='inline-flex';
- status.textContent='احفظ هذا الرمز في Script Properties باسم MEJ_REGISTRY_BRIDGE_SECRET. تجديده يعطّل الرمز السابق.';
-}catch(_){status.textContent='تعذر إصدار رمز الربط. تحقق من هوية المالك والاتصال.'}
-});
-document.getElementById('bridgeCopy').addEventListener('click',()=>{
-const value=document.getElementById('bridgeSecretValue').value;
-if(value)navigator.clipboard?.writeText(value);
-});
-// Unified login: the Google sign-in button remains visible regardless of registration choice.
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./portal-sw.js',{scope:'./'}).catch(()=>{});}
 let attempts=0;const timer=setInterval(()=>{
  if(window.google?.accounts?.id){
   clearInterval(timer);try{

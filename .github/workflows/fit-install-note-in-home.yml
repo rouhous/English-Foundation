@@ -1,0 +1,38 @@
+name: Fit Install Hint Between Start and Rights Without Scrolling
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/fit_install_note_inside_home.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-home-install-fit
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Place installation note inside initial viewport
+        run: python scripts/fit_install_note_inside_home.py
+      - name: Check markup and fixed-screen CSS
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert s.index('id="mej-student-install-hint"')<s.index('id="mej-owner-rights-notice"')
+          assert 'height:100dvh!important' in s
+          assert 'flex:1 1 0!important' in s
+          assert s.count('id="mej-student-install-hint"')==1
+          print('VISIBLE_INSTALL_NOTE_LAYOUT_CHECK_OK')
+          PY
+      - name: Save only student home
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Fit installation note between start button and copyright without scrolling"
+            git push
+          fi

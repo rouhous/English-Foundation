@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#075caa"><meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<link rel="manifest" href="./portal-manifest.webmanifest"><link rel="apple-touch-icon" href="../icon-192.png">
+<title>لوحة المعلم — رحلتي مع الإنجليزية</title>
+<style>
+:root{--deep:#063764;--navy:#074b8e;--blue:#0874c4;--cyan:#00a3df;--sky:#e8f7ff;--gold:#dfae54;--muted:#54748b;--line:#c6e1f0;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--deep);font-family:system-ui,Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#e9f7ff 0%,#bfe8f9 60%,#edfaff 100%);min-height:100dvh}
+header{background:linear-gradient(135deg,#043866,#0874bd 62%,#0ca2da);color:#fff;padding:22px 18px 45px;position:relative;overflow:hidden}header:after{content:"";position:absolute;bottom:-28px;right:-5%;width:110%;height:55px;border-radius:50% 50% 0 0;background:#e9f7ff}header .inner{max-width:1100px;margin:auto;position:relative;z-index:1}
+.brand{font-size:12px;letter-spacing:1px;color:#bddff2;font-weight:700}.top{display:flex;align-items:start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+h1{font-size:clamp(24px,4.5vw,34px);margin:8px 0}h2{font-size:21px;margin:0 0 13px}h3{font-size:17px;margin:0 0 9px}.subtitle{color:#d7efff;font-size:14px;margin:4px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button,.actions a{border:1px solid #a4d4ec;border-radius:12px;background:#ffffff1c;color:white;padding:9px 13px;font:inherit;text-decoration:none;cursor:pointer}
+main{max-width:1100px;margin:-10px auto 50px;padding:0 14px;position:relative;z-index:2}.sheet{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(16px,3vw,24px);box-shadow:0 10px 30px #063c7220;margin-bottom:17px}
+.notice{color:#48677e;font-size:13px;line-height:1.8}.warning{border-right:4px solid var(--gold);background:#fff9e9;border-radius:10px;padding:10px 13px;font-size:13px;color:#8d641e}
+.metricGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.metric{border:1px solid #cce7f4;background:linear-gradient(145deg,#f5fcff,#e5f5ff);border-radius:16px;padding:16px}.metric strong{display:block;font-size:29px;color:var(--navy)}.metric small{color:var(--muted)}
+.classGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}.classCard{border:1px solid #b7ddec;background:linear-gradient(155deg,#fff,#eaf8ff);padding:17px;border-radius:17px;text-align:right;cursor:pointer;font:inherit;color:var(--deep);box-shadow:0 4px 15px #0c51800e}.classCard:hover,.classCard:focus-visible{outline:2px solid var(--cyan)}.classCard strong{display:block;font-size:22px}.classCard .mini{font-size:13px;color:var(--muted);margin:6px 0}.classCard .chip{display:inline-block;margin-top:8px;border-radius:9px;background:#d8ecff;padding:5px 9px;color:#075194;font-size:12px}.classCard .dot{color:var(--cyan)}
+.subline{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:15px}.button{border:0;background:var(--navy);color:white;padding:11px 16px;border-radius:11px;font:inherit;cursor:pointer}.button.alt{background:#e5f4ff;color:var(--deep);border:1px solid #c0dfed}.button:disabled{opacity:.55;cursor:wait}.students{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.student{display:flex;flex-direction:column;gap:7px;align-items:stretch;border:1px solid #c7e2ef;border-radius:15px;background:#f8fcff;padding:15px;text-align:right;color:var(--deep);font:inherit;cursor:pointer}.student strong{font-size:16px}.student span{font-size:12px;color:var(--muted)}.student:hover,.student:focus-visible{outline:2px solid #4db6ed}
+.progress{background:#d8ebf7;border-radius:99px;height:8px;overflow:hidden}.progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#0474b8,#42c7e8)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:15px}.chart{border:1px solid #d5e8f2;border-radius:16px;padding:16px;min-width:0}.chartRow{display:grid;grid-template-columns:65px 1fr 42px;gap:8px;align-items:center;margin:13px 0;font-size:12px}.bar{height:21px;border-radius:7px;background:#e3f2fc;overflow:hidden;display:flex}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#0767b1,#29a9df);min-width:0}.stack{display:flex;overflow:hidden;border-radius:8px;height:25px;background:#e8f2f9}.stack span{min-width:0;display:block;height:100%}.legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px;font-size:11px;color:#496a81}.legend i{display:inline-block;height:10px;width:10px;border-radius:3px;margin-left:4px}
+input[type=search]{border-radius:12px;border:1px solid #c2ddeb;padding:12px;width:100%;font:inherit;margin-bottom:14px}#detail[hidden],#overview[hidden],#authNotice[hidden]{display:none!important}.detailTable{width:100%;border-collapse:collapse}.detailTable td{border-bottom:1px solid #ddecf6;padding:11px 6px}.detailTable td:first-child{color:var(--muted)}.detailTable td:last-child{font-weight:700;text-align:left}
+#loginRepair{display:flex;justify-content:center;margin:16px auto 0;min-height:42px}#authNotice{padding:22px;text-align:center}
+footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
+@media(max-width:720px){.charts{grid-template-columns:1fr}.classGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.classCard{padding:13px}.classCard strong{font-size:18px}.metricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}header{padding-bottom:43px}}
+@media print{body{background:white}header{background:white;color:#063764;padding-bottom:12px}.subtitle{color:#54748b}.actions,#loginRepair,.button{display:none!important}main{margin:0}.sheet{box-shadow:none;break-inside:avoid}}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261107-2" defer></script>
+</head><body>
+<header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
+<main>
+<section id="authNotice" class="sheet" hidden><h2>تسجيل الدخول للمعلم</h2><p class="notice" id="authMessage">اختر حساب Google المعتمد لعرض طلابك.</p><div id="loginRepair"></div><a href="./teacher-portal.html" class="button alt" style="display:inline-block;text-decoration:none">العودة إلى البوابة</a></section>
+<section id="overview" hidden>
+ <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">النتائج المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
+ <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
+ <div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
+</section>
+<section id="detail" hidden>
+ <div class="sheet"><div class="subline"><button id="back" class="button alt" type="button">← جميع الصفوف</button><span id="detailScope" class="notice"></span></div><h2 id="detailTitle">قائمة الطلاب</h2><div class="metricGrid" id="detailMetrics"></div><div style="height:14px"></div><input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off"><div id="studentList" class="students"></div></div>
+ <div class="sheet" id="studentDetail" hidden><div class="subline"><h2 id="studentTitle">تفاصيل تقدم الطالب</h2><button id="closeStudent" class="button alt" type="button">إغلاق</button></div><div id="studentDetails"></div></div>
+</section>
+<section id="loading" class="sheet"><p role="status" id="message">جار التحقق من الحساب وتحميل الصفوف...</p></section>
+</main>
+<footer>بوابة المعلم · البيانات خاصة بالمعلم المعتمد · الثيم الأزرق البحري</footer>
+</body></html>

@@ -6,7 +6,7 @@ const GOOGLE_CLIENT='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleus
 const SESSION='MEJ_STAFF_LOGIN_V2',TTL=45*60*1000;
 const $=id=>document.getElementById(id);
 const app={token:null,students:[],groups:[],scope:null,selected:null,ready:false};
-const colors=['#063a75','#0c4f91','#0868b4','#1582c8','#2e9bce','#49b1d8','#56c2e1','#83d3e7','#a7ddea','#c5e9f1','#dfb667','#e6c985','#f1ddac'];
+const colors=['#074B8E','#D97706','#7C3AED','#0891B2','#BE185D','#15803D','#C2410C','#4338CA','#0F766E','#A21CAF','#A16207','#0369A1','#B91C1C'];
 const safe=v=>v==null||v===''?'—':String(v);
 const integer=v=>Number.isFinite(Number(v))?Math.max(0,Math.trunc(Number(v))):0;
 function node(tag,className,text){const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=String(text);return e}
@@ -83,27 +83,32 @@ function makeClassButton(g){
 }
 function section(title){const div=node('section','chart');div.append(node('h3','',title));return div}
 function chartLevels(){
- const panel=section('عدد الطلاب في كل مستوى');
- const legend=node('div','legend');
- for(let lv=0;lv<=12;lv++){
-   const p=node('span','', 'L'+lv),i=node('i');i.style.background=colors[lv];
-   p.prepend(i);legend.append(p)
- }
- const max=Math.max(1,...app.groups.map(g=>g.students.length));
+ const panel=section('توزيع الطلاب حسب المستوى داخل كل صف');
+ panel.classList.add('levelsPanel');
  for(const g of app.groups){
-  const row=node('div','chartRow');
-  row.append(node('span','',g.name));
-  const bar=node('div','stack');bar.setAttribute('role','img');
-  const count=Array.from({length:13},()=>0);
-  for(const student of g.students)count[Math.min(12,integer(student.level))]++;
-  bar.setAttribute('aria-label','الصف '+g.name+': '+count.map((n,i)=>'المستوى '+i+' '+n).join('، '));
-  count.forEach((v,i)=>{if(!v)return;const el=node('span');
-   el.style.cssText='width:'+(v/max*100)+'%;background:'+colors[i];
-   el.title='المستوى '+i+': '+v+' طالب';bar.append(el)
-  });
-  row.append(bar,node('strong','',g.students.length));panel.append(row)
+  const group=node('div','levelClass');
+  const header=node('div','levelClassHeader');
+  header.append(node('strong','', 'الصف '+g.name),node('span','', g.students.length+' طالب'));
+  group.append(header);
+  const counts=Array.from({length:13},()=>0);
+  for(const student of g.students)counts[Math.min(12,integer(student.level))]++;
+  const occupied=counts.map((n,i)=>({level:i,count:n})).filter(x=>x.count>0);
+  const pills=node('div','levelChips');
+  if(!occupied.length){pills.append(node('p','notice','لا توجد بيانات مستويات لهذا الصف بعد.'))}
+  for(const part of occupied){
+   const item=node('div','levelChip');
+   const number=node('span','levelNumber','المستوى '+part.level);
+   const count=node('strong','levelCount',part.count+' '+(part.count===1?'طالب':'طلاب'));
+   const color=node('i','levelAccent');
+   color.style.background=colors[part.level];
+   item.append(color,number,count);
+   item.title='الصف '+g.name+'، المستوى '+part.level+'، عدد الطلاب '+part.count;
+   pills.append(item)
+  }
+  group.append(pills);
+  panel.append(group)
  }
- panel.append(legend);return panel
+ return panel
 }
 function chartStars(){
  const panel=section('أعلى عدد نجوم في كل صف');

@@ -18,3 +18,5 @@ s=s.replace(target,insertion+target,1)
 p.write_text(s,encoding='utf-8')
 assert s.index(marker)<s.index('id="mej-owner-rights-notice"')
 print('STUDENT_INSTALL_HINT_ADDED_ABOVE_COPYRIGHT')
+
+# Run checked landing page patch.

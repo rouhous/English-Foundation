@@ -1,0 +1,6 @@
+{
+  "status": "patched",
+  "scope": "Grades 1-5 and any level with missing word fields",
+  "fix": "Derive learning preview vocabulary from existing official question data",
+  "studentScoresUnchanged": true
+}

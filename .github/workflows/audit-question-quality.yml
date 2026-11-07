@@ -1,0 +1,24 @@
+name: Audit all curriculum questions
+on:
+  push:
+    paths:
+      - 'scripts/audit_question_quality.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: node scripts/audit_question_quality.cjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/question-quality-report.json reviews/quality-audit/question-quality-issues.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish full curriculum question quality audit"
+            git push
+          fi

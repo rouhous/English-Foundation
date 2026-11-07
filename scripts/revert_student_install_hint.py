@@ -17,3 +17,5 @@ assert 'MEJ_INSTALL_VISIBLE_BETWEEN_START_RIGHTS_20261107' not in s
 assert len(s)<len(old)
 p.write_text(s,encoding="utf-8")
 print("STUDENT_HOME_INSTALL_ADDITIONS_REMOVED",nstyle,nnote,len(old)-len(s))
+
+# Apply verified restoration to the student page.

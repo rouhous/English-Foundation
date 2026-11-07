@@ -20,3 +20,4 @@ for(const word of words){
  if(!available.length)throw Error('Image file absent '+word);
 }
 console.log('PASS: review page JS, SW syntax and eight representative image links');
+// Verify currently deployed review image bank refresh.

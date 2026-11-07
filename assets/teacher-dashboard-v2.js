@@ -219,7 +219,7 @@ $('sortStudents').addEventListener('change',()=>{const g=app.groups.find(x=>x.na
 $('issueCode').addEventListener('click',async()=>{
  if(!app.token){window.alert('سجل الدخول بحساب المعلم أولًا.');return}
  const confirmed=window.confirm(
-  'هل تريد إصدار رمز جديد لربط الطلاب؟\n\nسيُلغى الرمز القديم للانضمامات الجديدة فقط.\nالطلاب المرتبطون مسبقًا سيبقون مرتبطين بك ولن تتغير بياناتهم أو نتائجهم.\n\nاضغط موافق لإصدار الرمز الجديد.'
+  `هل تريد إصدار رمز جديد لربط الطلاب؟\n\nسيُلغى الرمز القديم للانضمامات الجديدة فقط.\nالطلاب المرتبطون مسبقًا سيبقون مرتبطين بك ولن تتغير بياناتهم أو نتائجهم.\n\nاضغط موافق لإصدار الرمز الجديد.`
  );
  if(!confirmed)return;
  const statusEl=$('codeStatus'),button=$('issueCode');

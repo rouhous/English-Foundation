@@ -30,9 +30,9 @@
 <p id="status" role="status" aria-live="polite"></p>
 </div>
 <section id="schoolRegistrationPanel" class="panel" hidden>
-<p class="notice">أدخل بيانات المدرسة ومسؤولها. ترخيص وادي الحواسنة (2429) استثنائي مجاني؛ تفعيله يتطلب موافقة المالك على بريد المسؤول، ثم التحقق بحساب Google.</p>
+
 <h2>تسجيل مسؤول المدرسة</h2>
-<p class="notice">بعد تسجيل الدخول بحساب Google الذي اعتمده مالك التطبيق، أدخل اسم المدرسة ورقمها. الحساب المعتمد هو وحده الذي يحصل على صلاحيات مسؤول المدرسة.</p>
+
 <form id="schoolRegistrationForm">
 <label for="schoolManagerName">الاسم الكامل لمسؤول المدرسة</label>
 <input id="schoolManagerName" required maxlength="150" placeholder="اسم المسؤول" style="width:100%;padding:11px;margin:7px 0">
@@ -42,7 +42,7 @@
 <input id="schoolRegName" required value="مدرسة وادي الحواسنة" style="width:100%;padding:11px;margin:7px 0">
 <label for="schoolRegNo">رقم المدرسة (4 أرقام)</label>
 <input id="schoolRegNo" required maxlength="4" inputmode="numeric" pattern="[0-9٠-٩]{4}" value="2429" style="width:100%;padding:11px;margin:7px 0">
-<div class="pill small">الترخيص: <strong>وادي الحواسنة — استثنائي مجاني</strong>، 10 معلمين و500 طالب. رقم المدرسة ليس كلمة مرور.</div>
+
 <button type="submit" style="padding:12px;background:#086fb9;color:white;border:0;border-radius:11px;font:inherit;width:100%">التحقق وتفعيل المدرسة</button>
 </form>
 <p id="schoolRegStatus" class="notice" role="status"></p>
@@ -101,7 +101,7 @@
 </section>
 <section id="pendingPanel" class="panel" hidden>
 <h2>تسجيل معلم جديد</h2>
-<p class="notice">يسجل المعلم بحساب Google ورمز المدرسة (6 أرقام)، ثم يعتمد مسؤول المدرسة الطلب داخل التطبيق دون Google Forms أو Apps Script.</p>
+
 <form id="teacherJoinForm" autocomplete="off">
 <label for="joinTeacherName">اسم المعلم الكامل</label><input id="joinTeacherName" required maxlength="120" placeholder="اسم المعلم" style="width:100%;padding:11px;margin:7px 0">
 <label for="joinSchoolNo">رقم المدرسة (4 أرقام)</label><input id="joinSchoolNo" inputmode="numeric" maxlength="4" required placeholder="2429" value="2429" pattern="[0-9٠-٩]{4}" style="width:100%;padding:11px;margin:7px 0">
@@ -109,7 +109,7 @@
 <label for="joinClasses">الأقسام التي تدرّسها</label><input id="joinClasses" required maxlength="150" placeholder="مثال: 9/1، 9/2" style="width:100%;padding:11px;margin:7px 0">
 <button type="submit" style="padding:12px;border:0;border-radius:10px;background:#086fb9;color:white;font:inherit;width:100%">إرسال طلب التسجيل إلى إدارة المدرسة</button>
 </form>
-<p class="notice">أكمل تسجيل الدخول بحساب Google الظاهر في أعلى الصفحة قبل إرسال الطلب.</p>
+
 <p id="teacherJoinStatus" class="notice" role="status" aria-live="polite"></p>
 </section>
 
@@ -317,7 +317,7 @@ let attempts=0;const timer=setInterval(()=>{
   clearInterval(timer);try{
    google.accounts.id.initialize({client_id:CLIENT_ID,callback:onCredential,auto_select:false,cancel_on_tap_outside:true});
    google.accounts.id.renderButton(document.getElementById('googleSignIn'),{type:'standard',theme:'outline',size:'large',text:'signin_with',shape:'pill',width:290});
-   status.textContent='يمكن للمعلم ومسؤول المدرسة المسجلين الدخول مباشرة من هنا.';
+   status.textContent='';
   }catch(_){status.textContent='تعذر تحميل تسجيل Google.'}
  }else if(++attempts>70){clearInterval(timer);status.textContent='تعذر تحميل تسجيل Google؛ تحقق من الاتصال.'}
 },200);

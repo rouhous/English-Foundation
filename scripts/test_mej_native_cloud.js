@@ -29,3 +29,5 @@ const sample={studentName:'Sample Student',className:'9_1',grade:9,stars:42,atte
  r=await cloud.queue('not-a-profile',sample);assert.equal(r.state,'not_linked');
  console.log('MEJ_STUDENT_CLOUD_ADAPTER_TEST_PASSED');
 })().catch(err=>{console.error(err);process.exit(1)});
+
+// Trigger CI verification of the private sync adapter.

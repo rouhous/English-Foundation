@@ -1,0 +1,398 @@
+{
+  "status": "patched",
+  "count": 28,
+  "changes": [
+    {
+      "file": "index.html",
+      "id": "L6-196",
+      "grade": 6,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "Your class is writing an email to invite another class to a school event. Which greeting fits?"
+    },
+    {
+      "file": "index.html",
+      "id": "L6-197",
+      "grade": 6,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence gives a personal opinion about reading?"
+    },
+    {
+      "file": "index.html",
+      "id": "L6-198",
+      "grade": 6,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence is the best ending for an email inviting a friend to a school event?"
+    },
+    {
+      "file": "index.html",
+      "id": "L6-199",
+      "grade": 6,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "I like using a tablet for research. ___, I prefer reading printed stories."
+    },
+    {
+      "file": "index.html",
+      "id": "L7-196",
+      "grade": 7,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing your teacher to ask for advice about a project. Which greeting is appropriate?"
+    },
+    {
+      "file": "index.html",
+      "id": "L7-197",
+      "grade": 7,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses an opinion about protecting endangered animals?"
+    },
+    {
+      "file": "index.html",
+      "id": "L7-198",
+      "grade": 7,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which is the most suitable final sentence for an email asking your teacher for advice?"
+    },
+    {
+      "file": "index.html",
+      "id": "L7-199",
+      "grade": 7,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The students practised for two weeks. ___, they performed confidently at the festival."
+    },
+    {
+      "file": "index.html",
+      "id": "L8-196",
+      "grade": 8,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing to the school principal to suggest a recycling programme. Which opening suits the audience?"
+    },
+    {
+      "file": "index.html",
+      "id": "L8-197",
+      "grade": 8,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence clearly gives a reasoned opinion about reducing waste?"
+    },
+    {
+      "file": "index.html",
+      "id": "L8-198",
+      "grade": 8,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which closing best fits a formal suggestion to the school principal?"
+    },
+    {
+      "file": "index.html",
+      "id": "L8-199",
+      "grade": 8,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The project costs more at first. ___, it will save money over time."
+    },
+    {
+      "file": "index.html",
+      "id": "L9-196",
+      "grade": 9,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing a new exchange partner whom you have not met. Which greeting is most suitable?"
+    },
+    {
+      "file": "index.html",
+      "id": "L9-197",
+      "grade": 9,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence presents a personal viewpoint about online identity?"
+    },
+    {
+      "file": "index.html",
+      "id": "L9-198",
+      "grade": 9,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence best closes a friendly email to an exchange partner?"
+    },
+    {
+      "file": "index.html",
+      "id": "L9-199",
+      "grade": 9,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "Social media helps people stay connected. ___, it can also spread misleading information."
+    },
+    {
+      "file": "index.html",
+      "id": "L10-196",
+      "grade": 10,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing an environmental organisation to request data for a climate project. Which greeting is appropriate?"
+    },
+    {
+      "file": "index.html",
+      "id": "L10-197",
+      "grade": 10,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which is an evidence-based opinion about renewable energy?"
+    },
+    {
+      "file": "index.html",
+      "id": "L10-198",
+      "grade": 10,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence best closes a formal email requesting climate data?"
+    },
+    {
+      "file": "index.html",
+      "id": "L10-199",
+      "grade": 10,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "Renewable energy reduces emissions. ___, the initial installation cost may be high."
+    },
+    {
+      "file": "index.html",
+      "id": "L11-196",
+      "grade": 11,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing a formal email to request details about an educational exchange programme. Choose the appropriate greeting."
+    },
+    {
+      "file": "index.html",
+      "id": "L11-197",
+      "grade": 11,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses a supported opinion about cultural exchange?"
+    },
+    {
+      "file": "index.html",
+      "id": "L11-198",
+      "grade": 11,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which is the strongest ending for a formal request for programme details?"
+    },
+    {
+      "file": "index.html",
+      "id": "L11-199",
+      "grade": 11,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The trip offers valuable experiences. ___, the cost may prevent some students from taking part."
+    },
+    {
+      "file": "index.html",
+      "id": "L12-196",
+      "grade": 12,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing a formal email asking about a university scholarship. Which greeting best suits the recipient?"
+    },
+    {
+      "file": "index.html",
+      "id": "L12-197",
+      "grade": 12,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses a qualified opinion rather than a fact or a prediction?"
+    },
+    {
+      "file": "index.html",
+      "id": "L12-198",
+      "grade": 12,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "You have requested a refund in a formal email. Which closing sentence is most appropriate?"
+    },
+    {
+      "file": "index.html",
+      "id": "L12-199",
+      "grade": 12,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The course is affordable. ___, it does not provide accommodation."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L6-196",
+      "grade": 6,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "Your class is writing an email to invite another class to a school event. Which greeting fits?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L6-197",
+      "grade": 6,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence gives a personal opinion about reading?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L6-198",
+      "grade": 6,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence is the best ending for an email inviting a friend to a school event?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L6-199",
+      "grade": 6,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "I like using a tablet for research. ___, I prefer reading printed stories."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L7-196",
+      "grade": 7,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing your teacher to ask for advice about a project. Which greeting is appropriate?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L7-197",
+      "grade": 7,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses an opinion about protecting endangered animals?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L7-198",
+      "grade": 7,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which is the most suitable final sentence for an email asking your teacher for advice?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L7-199",
+      "grade": 7,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The students practised for two weeks. ___, they performed confidently at the festival."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L8-196",
+      "grade": 8,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing to the school principal to suggest a recycling programme. Which opening suits the audience?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L8-197",
+      "grade": 8,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence clearly gives a reasoned opinion about reducing waste?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L8-198",
+      "grade": 8,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which closing best fits a formal suggestion to the school principal?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L8-199",
+      "grade": 8,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The project costs more at first. ___, it will save money over time."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L9-196",
+      "grade": 9,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing a new exchange partner whom you have not met. Which greeting is most suitable?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L9-197",
+      "grade": 9,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence presents a personal viewpoint about online identity?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L9-198",
+      "grade": 9,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence best closes a friendly email to an exchange partner?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L9-199",
+      "grade": 9,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "Social media helps people stay connected. ___, it can also spread misleading information."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L10-196",
+      "grade": 10,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are emailing an environmental organisation to request data for a climate project. Which greeting is appropriate?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L10-197",
+      "grade": 10,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which is an evidence-based opinion about renewable energy?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L10-198",
+      "grade": 10,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which sentence best closes a formal email requesting climate data?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L10-199",
+      "grade": 10,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "Renewable energy reduces emissions. ___, the initial installation cost may be high."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L11-196",
+      "grade": 11,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing a formal email to request details about an educational exchange programme. Choose the appropriate greeting."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L11-197",
+      "grade": 11,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses a supported opinion about cultural exchange?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L11-198",
+      "grade": 11,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "Which is the strongest ending for a formal request for programme details?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L11-199",
+      "grade": 11,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The trip offers valuable experiences. ___, the cost may prevent some students from taking part."
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L12-196",
+      "grade": 12,
+      "oldPrompt": "Which is a suitable email opening?",
+      "newPrompt": "You are writing a formal email asking about a university scholarship. Which greeting best suits the recipient?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L12-197",
+      "grade": 12,
+      "oldPrompt": "Which sentence includes a clear opinion?",
+      "newPrompt": "Which sentence expresses a qualified opinion rather than a fact or a prediction?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L12-198",
+      "grade": 12,
+      "oldPrompt": "Which is a suitable closing sentence?",
+      "newPrompt": "You have requested a refund in a formal email. Which closing sentence is most appropriate?"
+    },
+    {
+      "file": "reviews/admin-levels-catalog.json",
+      "id": "L12-199",
+      "grade": 12,
+      "oldPrompt": "Choose the clearest link between ideas.",
+      "newPrompt": "The course is affordable. ___, it does not provide accommodation."
+    }
+  ]
+}

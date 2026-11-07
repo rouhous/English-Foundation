@@ -1,0 +1,28 @@
+name: Check restored 120 vocabulary image paths
+on:
+  push:
+    paths: ['scripts/check_master_ready_120_images.cjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check all images linked to 120 restored master words
+        run: node scripts/check_master_ready_120_images.cjs
+      - name: Publish per-word coverage result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/master-ready-120-image-check.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record image-file verification for 120 restored master words"
+            git push
+          fi

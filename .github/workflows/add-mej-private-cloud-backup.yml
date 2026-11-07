@@ -1,0 +1,37 @@
+name: Add MEJ Private Learning State Cloud Backup
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/extend_mej_cloud_details.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply private snapshot
+        run: python scripts/extend_mej_cloud_details.py
+      - name: Validate main script and cloud adapter
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf8')
+          matches=re.findall(r'<script[^>]*>(.*?)</script>',s,re.S|re.I)
+          assert matches
+          Path('/tmp/main-mej-check.js').write_text(matches[-1],encoding='utf8')
+          PY
+          node --check /tmp/main-mej-check.js
+          node --check assets/student-cloud-progress-v1.js
+          node scripts/test_mej_native_cloud.js
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Back up private learner mastery and drafts in Supabase"
+            git push
+          fi

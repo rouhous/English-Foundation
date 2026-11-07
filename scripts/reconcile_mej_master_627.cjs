@@ -88,3 +88,5 @@ if(!html.includes(mark)){
  fs.writeFileSync('index.html',html);
 }
 console.log('LEGACY_RECONCILE '+JSON.stringify({sourceWords:627,availableInCurrentImageBank:imagesPresent,missingImagesFromCurrentBank:imageMissing,alreadyPresentInSourceStages:alreadyAll,insertedUniqueWords:newUnique,insertedStagePlacements:insert.length}));
+
+// Execute legacy-vocabulary reconciliation and safe learning preview import.

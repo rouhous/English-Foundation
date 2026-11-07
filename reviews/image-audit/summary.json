@@ -1,0 +1,11 @@
+{
+  "generatedAt": "2026-11-07T16:25:08.857Z",
+  "scope": "All learning vocabulary across all catalog levels",
+  "uniqueWords": 449,
+  "byStatus": {
+    "linked_local_or_embedded": 307,
+    "no_approved_image": 142
+  },
+  "notVerifiedCount": 142,
+  "verifiedImageCount": 307
+}

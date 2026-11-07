@@ -47,23 +47,27 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 .compareSegmentLabel{font:700 12px system-ui,Tahoma,sans-serif;color:#0b3b67;padding:5px 0 2px;direction:ltr}
 @media(max-width:490px){.classCompareRow{grid-template-columns:52px minmax(0,1fr);gap:6px;padding:12px 0}.compareClassName{font-size:13px;min-height:35px}.compareSegmentCount{height:33px;font-size:15px}.compareSegmentLabel{font-size:11px}}
 
+.codeDialog{border:1px solid #b7d8eb;border-radius:20px;max-width:min(92vw,420px);width:100%;padding:22px;background:#fff;color:#063764;box-shadow:0 20px 60px #052a5160;text-align:center}
+.codeDialog::backdrop{background:#06284e88}.issuedCode{display:block;font-size:clamp(28px,6vw,40px);letter-spacing:5px;margin:18px 0;color:#074b8e}.codeDialogActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.codeDialogActions button{min-width:105px}
+@media(max-width:540px){.actions{width:100%;gap:5px}.actions button{font-size:12px;padding:9px 8px;flex:1;white-space:nowrap}}
+@media print{.codeDialog{display:none!important}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/teacher-dashboard-v2.js?v=20261107-4" defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261107-5" defer></script>
 </head><body>
-<header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
+<header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
+<dialog id="codeDialog" aria-labelledby="codeDialogTitle" class="codeDialog">
+ <h2 id="codeDialogTitle">رمز ربط الطلاب الجديد</h2>
+ <p class="notice">استخدم الرمز الجديد لربط الطلاب الجدد. الطلاب المرتبطون سابقًا يبقون مرتبطين بمعلمهم.</p>
+ <strong id="codeValue" dir="ltr" class="issuedCode"></strong>
+ <p id="codeStatus" class="notice" role="status" aria-live="polite"></p>
+ <div class="codeDialogActions"><button id="copyCode" type="button" class="button alt">نسخ الرمز</button><button id="closeCode" type="button" class="button">إغلاق</button></div>
+</dialog>
 <main>
 <section id="authNotice" class="sheet" hidden><h2>تسجيل الدخول للمعلم</h2><p class="notice" id="authMessage">اختر حساب Google المعتمد لعرض طلابك.</p><div id="loginRepair"></div><a href="./teacher-portal.html" class="button alt" style="display:inline-block;text-decoration:none">العودة إلى البوابة</a></section>
 <section id="overview" hidden>
  <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">البيانات المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
  <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
- <div class="sheet"><div class="subline"><div><h2>رمز ربط الطلاب</h2><p class="notice">يمكنك إصدار رمز خاص لطلابك من 6 أرقام، دون Google Sheets.</p></div></div>
- <p class="warning">إصدار رمز جديد يلغي الرموز القديمة للانضمامات الجديدة فقط؛ الطلاب المرتبطون بالفعل لا يتأثرون.</p>
- <div class="subline" style="margin-top:12px">
-  <button id="issueCode" type="button" class="button">إصدار رمز جديد</button>
-  <strong id="codeValue" style="letter-spacing:4px;font-size:24px" dir="ltr"></strong>
- </div><p class="notice" role="status" id="codeStatus"></p>
-</div>
 <div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
 </section>
 <section id="detail" hidden>

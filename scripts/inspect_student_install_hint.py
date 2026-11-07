@@ -12,3 +12,10 @@ for term in terms:
   print("CONTEXT",repr(fragment[:450]))
 
 # Trigger read-only scan.
+
+for term in ['mej-owner-rights-notice','mej-student-install-hint','mobile-ocean-v31','ocean-landing','overflow:hidden','position:fixed','position:absolute','Let’s Go','لنبدأ الرحلة']:
+ hits=list(re.finditer(re.escape(term),s,re.I))
+ print('DEEP',repr(term),'COUNT',len(hits))
+ for m in hits[-5:]:
+  line=s.count('\\n',0,m.start())+1
+  print('DEEPCTX',line,repr(s[max(0,m.start()-420):min(len(s),m.end()+550)][:1000]))

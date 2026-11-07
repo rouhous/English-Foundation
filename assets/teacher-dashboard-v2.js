@@ -76,8 +76,10 @@ function studentLabel(s){return s.kind==='trial'?'تجريبي مستورد':'م
 function getGroupMax(g){return Math.max(0,...g.students.map(s=>s.stars))}
 function makeClassButton(g){
  const b=node('button','classCard');b.type='button';
- b.append(node('strong','', 'الصف '+g.name),node('div','mini',g.students.length+' طالب · '+g.students.filter(s=>s.kind==='trial').length+' تجريبي'));
- b.append(node('div','mini','⭐ أعلى رصيد: '+getGroupMax(g)));
+ b.append(node('strong','', 'الصف '+g.name));
+ b.append(node('div','mini','عدد الطلاب: '+g.students.length));
+ b.append(node('div','mini','أعلى مستوى: '+Math.max(0,...g.students.map(s=>s.level))));
+ b.append(node('div','mini','⭐ أعلى عدد نجوم: '+getGroupMax(g)));
  b.append(node('span','chip','عرض قائمة الطلاب ←'));
  b.addEventListener('click',()=>openClass(g.name));return b
 }
@@ -137,7 +139,7 @@ function overall(data){
  status('المعلم: '+safe(data.teacherName)+' · المدرسة: '+safe(data.schoolName));
  const live=app.students.filter(s=>s.kind==='live').length,trial=app.students.length-live;
  $('dataScope').textContent='السجلات المستوردة للتجربة: '+trial+' · النتائج المباشرة: '+live+' (تُعرض منفصلة في تفاصيل الطلاب)';
- metrics($('metrics'),[['الصفوف',app.groups.length],['السجلات المعروضة',app.students.length],['تجريبية مستوردة',trial],['نجوم جميع السجلات',app.students.reduce((sum,s)=>sum+s.stars,0)]]);
+ metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))]]);
  $('classCount').textContent=app.groups.length+' صفوف';
  clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
  if(!app.groups.length)$('classes').append(node('p','notice','لا توجد سجلات مرتبطة بهذا الحساب بعد. تحقق من حساب المعلم والمزامنة.'));
@@ -149,7 +151,7 @@ function openClass(name){
  $('overview').hidden=true;$('detail').hidden=false;$('studentDetail').hidden=true;
  $('detailTitle').textContent='طلاب الصف '+g.name;
  $('detailScope').textContent=g.students.filter(s=>s.kind==='trial').length+' سجلات تجريبية · '+g.students.filter(s=>s.kind==='live').length+' متزامنة';
- metrics($('detailMetrics'),[['عدد الطلاب',g.students.length],['أعلى نجوم',getGroupMax(g)],['مستوى أعلى طالب',Math.max(0,...g.students.map(s=>s.level))],['متوسط النجوم',Math.round(g.students.reduce((sum,s)=>sum+s.stars,0)/g.students.length)]]);
+ metrics($('detailMetrics'),[['الصف',g.name],['عدد الطلاب',g.students.length],['أعلى مستوى',Math.max(0,...g.students.map(s=>s.level))],['أعلى عدد نجوم',getGroupMax(g)]]);
  $('studentSearch').value='';$('sortStudents').value='stars';renderList(g.students);
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
 }
@@ -215,9 +217,15 @@ $('closeStudent').addEventListener('click',()=>{$('studentDetail').hidden=true})
 $('studentSearch').addEventListener('input',()=>{const g=app.groups.find(x=>x.name===app.selected);if(g)renderList(g.students)});
 $('sortStudents').addEventListener('change',()=>{const g=app.groups.find(x=>x.name===app.selected);if(g)renderList(g.students)});
 $('issueCode').addEventListener('click',async()=>{
+ if(!app.token){window.alert('سجل الدخول بحساب المعلم أولًا.');return}
+ const confirmed=window.confirm(
+  'هل تريد إصدار رمز جديد لربط الطلاب؟\n\nسيُلغى الرمز القديم للانضمامات الجديدة فقط.\nالطلاب المرتبطون مسبقًا سيبقون مرتبطين بك ولن تتغير بياناتهم أو نتائجهم.\n\nاضغط موافق لإصدار الرمز الجديد.'
+ );
+ if(!confirmed)return;
  const statusEl=$('codeStatus'),button=$('issueCode');
- if(!app.token){statusEl.textContent='سجل الدخول بحساب المعلم أولًا.';return}
+ const dialog=$('codeDialog');
  button.disabled=true;statusEl.textContent='جار إصدار رمز ربط الطلاب...';
+ $('codeValue').textContent='';
  try{
   const r=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-staff-native',{
    method:'POST',cache:'no-store',credentials:'omit',
@@ -227,9 +235,22 @@ $('issueCode').addEventListener('click',async()=>{
   const d=await r.json();
   if(!r.ok||!d.ok||!/^[0-9]{6}$/.test(d.code))throw Error(d.error||'CODE_REJECTED');
   $('codeValue').textContent=d.code;
-  statusEl.textContent='رمز الطلاب جاهز للمشاركة، ويستخدم مرة تسجيل لكل طالب.';
- }catch(_){statusEl.textContent='تعذر إصدار الرمز. تحقق من صلاحيات حسابك واتصال الإنترنت.'}
- finally{button.disabled=false}
+  statusEl.textContent='تم إصدار الرمز. القديم لم يعد يقبل انضمامات جديدة، والطلاب المرتبطون مسبقًا لم يتأثروا.';
+ }catch(_){
+  statusEl.textContent='تعذر تأكيد إصدار الرمز. لم تُعرض أي قيمة غير مؤكدة؛ تحقق من الاتصال قبل المحاولة مجددًا.';
+ }finally{
+  button.disabled=false;
+  if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+ }
+});
+$('closeCode').addEventListener('click',()=>{
+ const dialog=$('codeDialog');if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open');
+});
+$('copyCode').addEventListener('click',async()=>{
+ const code=$('codeValue').textContent;
+ if(!/^[0-9]{6}$/.test(code)){ $('codeStatus').textContent='لا يوجد رمز جديد لنسخه.';return}
+ try{await navigator.clipboard.writeText(code);$('codeStatus').textContent='تم نسخ الرمز.'}
+ catch(_){$('codeStatus').textContent='تعذّر النسخ التلقائي. يمكنك تحديد الرمز الظاهر ونسخه.'}
 });
 $('refresh').addEventListener('click',refresh);
 $('print').addEventListener('click',()=>window.print());

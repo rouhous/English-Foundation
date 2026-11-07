@@ -31,3 +31,5 @@ const rows=[['grade','part','question_id','severity','issue','duplicate_of','pro
 const esc=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
 fs.writeFileSync('reviews/quality-audit/question-quality-issues.csv',rows.map(row=>row.map(esc).join(',')).join('\n')+'\n');
 console.log('QUESTION_QUALITY_AUDIT '+JSON.stringify(summary));
+
+// Run full question QA on current main branch.

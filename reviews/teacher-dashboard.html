@@ -22,6 +22,16 @@ input[type=search]{border-radius:12px;border:1px solid #c2ddeb;padding:12px;widt
 footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 @media(max-width:720px){.charts{grid-template-columns:1fr}.classGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.classCard{padding:13px}.classCard strong{font-size:18px}.metricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}header{padding-bottom:43px}}
 @media print{body{background:white}header{background:white;color:#063764;padding-bottom:12px}.subtitle{color:#54748b}.actions,#loginRepair,.button{display:none!important}main{margin:0}.sheet{box-shadow:none;break-inside:avoid}}
+.levelsPanel{display:flex;flex-direction:column;gap:14px}
+.levelClass{border:1px solid #c8e1f2;background:#f9fcff;border-radius:15px;padding:13px}
+.levelClassHeader{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #dbeaf5;padding-bottom:9px;margin-bottom:12px;color:#093e6d}
+.levelClassHeader strong{font-size:16px}.levelClassHeader span{font-size:12px;color:#567991}
+.levelChips{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.levelChip{display:flex;align-items:center;gap:9px;border:1px solid #c5ddeb;border-radius:11px;background:white;padding:10px 12px;min-width:138px;flex:1 1 138px}
+.levelChip .levelAccent{display:block;flex:0 0 7px;height:32px;border-radius:6px}
+.levelChip .levelNumber{color:#123f63;font-size:13px}
+.levelChip .levelCount{margin-inline-start:auto;font-size:14px;color:#063764;white-space:nowrap}
+@media(max-width:600px){.levelChips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.levelChip{min-width:0;padding:9px 7px;gap:5px}.levelChip .levelNumber{font-size:12px}.levelChip .levelCount{font-size:12px}.levelChip .levelAccent{flex-basis:5px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/teacher-dashboard-v2.js?v=20261107-2" defer></script>
@@ -30,7 +40,7 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <main>
 <section id="authNotice" class="sheet" hidden><h2>تسجيل الدخول للمعلم</h2><p class="notice" id="authMessage">اختر حساب Google المعتمد لعرض طلابك.</p><div id="loginRepair"></div><a href="./teacher-portal.html" class="button alt" style="display:inline-block;text-decoration:none">العودة إلى البوابة</a></section>
 <section id="overview" hidden>
- <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">النتائج المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
+ <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">البيانات المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
  <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
  <div class="sheet"><div class="subline"><div><h2>رمز ربط الطلاب</h2><p class="notice">يمكنك إصدار رمز خاص لطلابك من 6 أرقام، دون Google Sheets.</p></div></div>
  <p class="warning">إصدار رمز جديد يلغي الرموز القديمة للانضمامات الجديدة فقط؛ الطلاب المرتبطون بالفعل لا يتأثرون.</p>
@@ -47,5 +57,5 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 </section>
 <section id="loading" class="sheet"><p role="status" id="message">جار التحقق من الحساب وتحميل الصفوف...</p></section>
 </main>
-<footer>بوابة المعلم · البيانات خاصة بالمعلم المعتمد · الثيم الأزرق البحري</footer>
+<footer>بوابة المعلم · البيانات خاصة بالمعلم المعتمد</footer>
 </body></html>

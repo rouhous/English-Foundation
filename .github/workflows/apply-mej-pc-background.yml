@@ -1,0 +1,38 @@
+name: Apply Uploaded PC Background to Student Desktop Home
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/apply_mej_pc_background.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-desktop-background
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert desktop-only uploaded background
+        run: python scripts/apply_mej_pc_background.py
+      - name: Validate desktop background path and mobile isolation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf8')
+          assert 'MEJ_DESKTOP_BACKGROUND_PC_20261107' in s
+          assert s.count('assets/background%20PC.png')==2
+          assert Path('assets/background PC.png').stat().st_size>100000
+          assert '@media (min-width:901px)' in s
+          print('UPLOADED_PC_BACKGROUND_LINKED_DESKTOP_ONLY')
+          PY
+      - name: Save homepage patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Show uploaded background PC on desktop student home"
+            git push
+          fi

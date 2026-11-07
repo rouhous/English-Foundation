@@ -22,3 +22,5 @@ new='''highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,
 s=s.replace(old,new,1)
 p.write_text(s,encoding='utf8')
 print('PRIVATE_SNAPSHOT_PATCHED')
+
+# Trigger private cloud snapshot validation.

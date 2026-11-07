@@ -1,0 +1,41 @@
+name: Restore 120 master vocabulary terms to stage learning cards
+on:
+  push:
+    paths: ['scripts/install_mej_master_ready_120.cjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install exact master stage assignments
+        run: node scripts/install_mej_master_ready_120.cjs
+      - name: Verify all 120 words and 149 placements
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const report=JSON.parse(fs.readFileSync('reviews/quality-audit/master-restoration-120.json','utf8'));
+          if(report.uniqueWords!==120||report.stagePlacements!==149||report.assignments.length!==149)throw Error('Bad manifest counts');
+          const app=fs.readFileSync('index.html','utf8');
+          if(!app.includes('items.push(...restoredWords)'))throw Error('Not linked to learning route');
+          const unique=new Set(report.assignments.map(x=>x.word.toLowerCase()));
+          if(unique.size!==120)throw Error('Duplicate master vocabulary labels');
+          for(const v of report.assignments)if(!(v.part===1||v.part===2)||v.grade<1||v.grade>12)throw Error('Invalid stage');
+          console.log('PASS: 120 unique vocabulary words, 149 correct-stage learning placements');
+          NODE
+      - name: Commit application and restoration report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/master-restoration-120.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Restore 120 photographed master terms to 149 grade/stage learning placements"
+            git push
+          fi

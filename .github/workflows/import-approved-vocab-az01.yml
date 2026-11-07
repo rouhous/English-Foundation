@@ -1,0 +1,28 @@
+name: Import Approved Vocabulary 4x4 Batch 01
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/import/MEJ_4x4_16_384px_Equal_Crops.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-approved-batch01-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import approved original 384px images and link both learning pages
+        run: python scripts/import_mej_approved_az_batch01.py
+      - name: Commit exact images and image-bank mapping
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-az-approved-01 assets/approved-images-13.js index.html reviews/learning.html sw.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Integrate 16 approved 384px vocabulary images into MEJ"
+            git push
+          fi

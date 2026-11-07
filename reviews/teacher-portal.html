@@ -142,7 +142,7 @@ async function onCredential(response){
   }
   if(data.role==='owner'){
    verifiedOwnerCredential=response.credential;
-   document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك.';
+   document.getElementById('ownerPanel').hidden=false;status.textContent='تم التحقق من حساب المالك. يمكن إدارة طلبات المعلمين أدناه.';
    const owner=await call('school_overview',response.credential);
    loadStaffApplications(response.credential,'ownerApplications');
    if(owner.r.ok&&owner.data.ok){
@@ -181,7 +181,7 @@ function selectRole(mode){
  panel.hidden=false;
  document.getElementById('identityPanel').hidden=false;
  document.getElementById('identityTitle').textContent='تسجيل الدخول بحساب Google';
- document.getElementById('identityHelp').textContent=mode==='school'?'استكمل بيانات المدرسة أولًا، ثم تحقق بنفس حساب Google الذي اعتمده مالك التطبيق.':'أكمل التسجيل الوزاري وربط رمز المدرسة، ثم تحقق بحساب Google المستخدم في النموذج الأصلي.';
+ document.getElementById('identityHelp').textContent=mode==='school'?'استكمل بيانات المدرسة أولًا، ثم تحقق بنفس حساب Google الذي اعتمده مالك التطبيق.':'سجّل بحساب Google المعتمد، وأرسل طلب الانضمام إلى مسؤول المدرسة من النموذج أدناه.';
  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 document.getElementById('chooseTeacher').addEventListener('click',()=>selectRole('teacher'));

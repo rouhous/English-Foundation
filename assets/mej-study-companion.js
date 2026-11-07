@@ -119,6 +119,7 @@ function react(success,preview=false){
  if(!root)return;
  // Do not surface the companion on login or teacher administration pages.
  if(!preview&&!document.querySelector('#feedback'))return;
+ root.hidden=false;
  const phrase=(success?compliments:encouragements)[Math.floor(Math.random()*(success?compliments:encouragements).length)];
  const serial=++sequence;
  bubble.textContent=phrase;bubble.classList.add('mej-show');
@@ -132,5 +133,21 @@ function react(success,preview=false){
  window.setTimeout(()=>{if(serial!==sequence)return;bubble.classList.remove('mej-show');root.classList.remove('mej-success','mej-encourage')},2800);
 }
 window.MEJCompanion={react,mount,preferences:()=>({...settings})};
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+function setQuizVisibility(){
+ if(!root)return;
+ // Only appear on the student's active quiz view; never on login, settings or dashboards.
+ const feedback=document.getElementById('feedback');
+ const inQuiz=!!feedback&&!!feedback.closest('#app');
+ root.hidden=!inQuiz;
+}
+function boot(){
+ mount();
+ setQuizVisibility();
+ const app=document.getElementById('app');
+ if(app){
+  const observer=new MutationObserver(setQuizVisibility);
+  observer.observe(app,{childList:true,subtree:false});
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

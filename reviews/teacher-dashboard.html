@@ -51,9 +51,10 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 .codeDialog::backdrop{background:#06284e88}.issuedCode{display:block;font-size:clamp(28px,6vw,40px);letter-spacing:5px;margin:18px 0;color:#074b8e}.codeDialogActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.codeDialogActions button{min-width:105px}
 @media(max-width:540px){.actions{width:100%;gap:5px}.actions button{font-size:12px;padding:9px 8px;flex:1;white-space:nowrap}}
 @media print{.codeDialog{display:none!important}}
+.ownerScopeButtons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.ownerScopeButtons button{padding:15px 8px;border:1px solid #a9d5ed;border-radius:13px;background:#e9f5fd;color:#0b4d83;font:700 16px system-ui,Tahoma,sans-serif;cursor:pointer}.ownerScopeButtons button[aria-pressed="true"]{background:#075ca2;color:white;border-color:#075ca2}.ownerScopeButtons button:focus-visible{outline:3px solid #e7b955}@media(max-width:480px){.ownerScopeButtons button{font-size:14px;padding:13px 6px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/teacher-dashboard-v2.js?v=20261107-6" defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261107-7" defer></script>
 </head><body>
 <header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <dialog id="codeDialog" aria-labelledby="codeDialogTitle" class="codeDialog">
@@ -66,6 +67,14 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <main>
 <section id="authNotice" class="sheet" hidden><h2>تسجيل الدخول للمعلم</h2><p class="notice" id="authMessage">اختر حساب Google المعتمد لعرض طلابك.</p><div id="loginRepair"></div><a href="./teacher-portal.html" class="button alt" style="display:inline-block;text-decoration:none">العودة إلى البوابة</a></section>
 <section id="overview" hidden>
+ <div id="ownerScopes" class="sheet" hidden>
+ <h2>متابعة طلابي</h2>
+ <div class="ownerScopeButtons" role="group" aria-label="اختيار جهة ارتباط الطلاب">
+  <button id="ownerPrivate" type="button" aria-pressed="true">خاص</button>
+  <button id="ownerSchool" type="button" aria-pressed="false">مدرسة وادي الحواسنة</button>
+ </div>
+ <p id="ownerLinkedStatus" class="notice" role="status"></p>
+ </div>
  <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">البيانات المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
  <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
 <div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>

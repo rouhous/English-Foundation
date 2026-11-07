@@ -1,0 +1,171 @@
+{
+  "size": 3148141,
+  "match": [
+    {
+      "query": "function checkAnswer",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "function answer",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "function selectAnswer",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "showFeedback",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "correctAnswer",
+      "count": 2,
+      "found": [
+        {
+          "pos": 3114661,
+          "snippet": "ntName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};\n}\nfunction makeReportId(){\n let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}\n return 'wadi-'+Date.now().toString(36)+'-'+random;\n}\n// A separate anonymous acknowledgement check: only a random receipt ID is sent, never a student's name.\nconst pendingReceipts=new Map();\nconst RECEIVER_EXPECTED_VERSION='2026-10-23-verified-ministry-six-digits-v4';\nwindow.WADI_RECEIPT_CALLBACK=function(data){\n const pending=data&&pendingReceipts.get(data.reportId);\n if(pending) pending(data);\n};\nlet wadiHealthResolve=null;\nwindow.WADI_HEALTH_CALLBACK=function(data){if(wadiHealthResolve)wadiHealthResolve(data)};\nfunction lookupReportReceipt(reportId){return"
+        },
+        {
+          "pos": 3121299,
+          "snippet": "rofile)));\n   return {level:g,mastered,total:200,masteryPercent:Math.round(mastered*100/200)};\n  });\n  const week=new Date();week.setDate(week.getDate()-((week.getDay()+1)%7));week.setHours(0,0,0,0);\n  const attempts=Math.max(0,Math.min(10000000,Number(profile.attempts)||0));\n  const snapshot={\n   studentName:String(profile.name).slice(0,120),className:String(profile.className||'').slice(0,35),\n   grade:Number(profile.grade),stars:Math.max(0,Math.min(2600,Number(profile.stars)||0)),\n   attempts,correctAnswers:Math.min(attempts,Math.max(0,Number(profile.right)||0)),\n   masteredItems:Math.max(0,Math.min(2600,totalMaster(profile))),\n   weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,\n   diagnosticDone:profile.diagnosed===true,\n   diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,\n   highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,\n   /* MEJ_STUDENT_PRIVATE_CLOUD_BACKUP_V1: only learning state; never teacher code or auth secrets */\n   privateState:{\n    correct:profile.correct||{},wrong:profile.wrong||{},\n    writing:profile.writing||{},\n    activity:(profile.activity||[]).slice(-1500),\n    diagnosticScore:profile.diagnosticScore??null,\n    diagnosticDate:profile.diagnosticDate||'',\n    journeyIsland:profile.journeyIsland??null\n   }\n  };\n  const result=await window.MEJStudentCloudProgress.queue(profileRef,snapshot);\n  const messages={\n    synced:'✅ تم تأكيد حفظ التقدم في السحابة. يظهر لدى المعلم المرتبط.',\n    offline_pending:'📴 التقدم محفوظ محلياً وسيُرسل تلقائياً عند عودة الإنترنت.',"
+        }
+      ]
+    },
+    {
+      "query": "isCorrect",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "submitAnswer",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "answerBtn",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "correct",
+      "count": 172,
+      "found": [
+        {
+          "pos": 10049,
+          "snippet": "rtant}.stars{color:#e6a000;font-size:22px;letter-spacing:1px}.learning{display:flex;gap:14px;align-items:center;background:#f7faff;border-radius:18px;padding:14px;margin:10px 0}.learning img{width:86px;height:86px;object-fit:cover;border-radius:15px}.learning strong{font-size:23px;display:block;color:#253b77}.center{text-align:center}.type-box{display:flex;gap:8px;max-width:600px;margin:20px auto;flex-wrap:wrap}.type-box input{flex:1;min-width:200px;direction:ltr;text-align:left;font-size:20px}.correct{background:#e0f8e9;border-radius:13px;color:#117445;padding:14px}.incorrect{background:#ffebec;border-radius:13px;color:#ae3551;padding:14px}.typechips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.typechips button{border:0;border-radius:100px;padding:8px 14px;background:#e9eefb;color:#384d8f;font-weight:750;font-size:12px}.typechips button.active{background:#4054cf;color:white}.ministats{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}.week{background:#e9faf7;padding:14px;border-radius:15px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;text-align:right;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid var(--line)}th{color:#3f5079;background:#f7f8fe}.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:13px}.footer{text-align:center;color:#7482a2;padding:22px;font-size:12px;border-top:1px solid #e8eaf4;background:#fff}.bubble{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:"
+        },
+        {
+          "pos": 10125,
+          "snippet": "ay:flex;gap:14px;align-items:center;background:#f7faff;border-radius:18px;padding:14px;margin:10px 0}.learning img{width:86px;height:86px;object-fit:cover;border-radius:15px}.learning strong{font-size:23px;display:block;color:#253b77}.center{text-align:center}.type-box{display:flex;gap:8px;max-width:600px;margin:20px auto;flex-wrap:wrap}.type-box input{flex:1;min-width:200px;direction:ltr;text-align:left;font-size:20px}.correct{background:#e0f8e9;border-radius:13px;color:#117445;padding:14px}.incorrect{background:#ffebec;border-radius:13px;color:#ae3551;padding:14px}.typechips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.typechips button{border:0;border-radius:100px;padding:8px 14px;background:#e9eefb;color:#384d8f;font-weight:750;font-size:12px}.typechips button.active{background:#4054cf;color:white}.ministats{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}.week{background:#e9faf7;padding:14px;border-radius:15px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;text-align:right;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid var(--line)}th{color:#3f5079;background:#f7f8fe}.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:13px}.footer{text-align:center;color:#7482a2;padding:22px;font-size:12px;border-top:1px solid #e8eaf4;background:#fff}.bubble{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#ecedff}.speaking{background:#f4f7fd;padding:20px;border-radius:18px;margin-"
+        },
+        {
+          "pos": 18236,
+          "snippet": "r:1px solid #b8c9ef;border-radius:6px;padding:3px 5px;font-weight:800;font-size:10px;line-height:1.1}\n.preview-answer{font-size:10px;font-weight:700;color:#087f68;line-height:1.2;margin:auto 0 3px}\n.preview-check{background:linear-gradient(105deg,#20bd9b,#13a977);border-radius:7px;padding:5px 0;color:#fff;font-weight:800;font-size:11px}\n.preview-option{font-size:10px;background:#f0f4fc;border:1px solid #d7e0ef;border-radius:8px;padding:6px 3px;line-height:1.22;margin-bottom:6px}\n.preview-option.correct{background:#daf8e8;border:1px solid #5ccb9c;color:#087557;font-weight:800}\n@media(min-width:1100px){.hero-photos{gap:14px!important;padding:24px!important}.hero-preview{padding:14px}.preview-header{font-size:13px}.preview-header span{font-size:22px}.preview-instruction{font-size:13px}.preview-ar{font-size:12px}.preview-tiles span{font-size:12px}.preview-answer,.preview-option{font-size:12px}}\n@media(max-width:760px){.hero-photos{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;padding:0 20px 24px!important}.hero-preview,.hero-photo{aspect-ratio:1/1.22;min-height:185px;height:auto!important}.hero-preview{padding:10px 8px}.preview-header{font-size:12px}.preview-instruction{font-size:12px}.preview-ar{font-size:11px}.preview-option{font-size:11px}.preview-tiles span{font-size:11px}.preview-answer{font-size:11px}}\n@media(max-width:370px){.hero-photos{gap:9px!important;padding:0 12px 17px!important}.hero-preview{padding:8px 5px}.preview-header,.preview-instruction{font-size:10px}.preview-ar,.preview-option,.preview-tiles span{font-size:9px}}\n\n/* My English"
+        },
+        {
+          "pos": 34117,
+          "snippet": "le-actions button{font-size:10px;padding:3px}.ocean-art{margin-bottom:-33px}.ocean-art img{max-height:none}.ocean-start{min-height:57px;padding:8px 20px;margin-bottom:10px;font-size:25px}.ocean-nav{border-radius:19px;gap:2px;padding:4px}.ocean-nav button{padding:5px 1px;border-radius:15px}}\n@media(max-width:360px){.ocean-heading h1{font-size:30px}.ocean-dept{font-size:12px}.ocean-school{font-size:11px}.ocean-profile-actions button{font-size:9px}.ocean-student small{font-size:9px}}\n\n/* V3 visual corrections: logo banner gently fades into sky and image contains NO painted button */\n.ocean-logos{mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 83%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 83%,transparent 100%)}\n.ocean-heading{background:radial-gradient(ellipse at 50% 1%,#389cfaad 0%,transparent 75%)}\n.ocean-art{margin-bottom:-13px!important;overflow:hidden}\n.ocean-art img{max-height:none!important;height:auto!important;object-fit:contain}\n.ocean-start{margin-top:0!important}\n@media(max-width:520px){.ocean-logos{mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 82%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 82%,transparent 100%)}.ocean-art{margin-bottom:-8px!important}.ocean-start{margin-top:0!important}}\n\n/* V4: accessible contrast in light panels and clean homepage lettering */\n.ocean-heading h1{ text-shadow:0 3px 5px rgba(3,33,105,.62)!important; -webkit-text-stroke:0!important; }\n.ocean-heading h1 em{ text-shadow:0 3px 5px rgba(3,33,105,.56)!import"
+        },
+        {
+          "pos": 49826,
+          "snippet": "ourney-badge.locked{opacity:.79}\n#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}\n#app .journey-dashboard .journey-overview{background:linear-gradient(115deg,#095cac,#018abe);border:2px solid #65e1ff;box-shadow:0 9px 24px #012d5a70}\n#app .journey-dashboard .journey-map-compact{margin:11px 0 13px}\n#app .journey-dashboard p.caption{font-size:clamp(13px,1.35vw,17px)!important}\n/* Theme-compatible dialogs, previews and status text */\n#app .notice,#app .correct,#app .incorrect{color:#173a69}\n#app .correct{background:#d7f9e9}#app .incorrect{background:#ffebf0}\n#app .user-tile{background:#eef9ff;color:#103b70;border:1px solid #91d2f8}\n#app .user-tile small{color:#38628c}\n#app .badge{color:#036c60}\n#app .actions{gap:12px}\n/* Prevent RTL punctuation from jumping to the start of English-only lines */\n#app [lang=\"en\"],#app .ltr,#app .guide-en,#app .passage,#app .preview-option{direction:ltr;text-align:left;unicode-bidi:isolate}\n/* Laptop/tablet and phone: readable grid cells and no clipped controls */\n@media(max-width:900px){main.container{padding-left:12px;padding-right:12px}#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr))}}\n@media(max-width:700px){\n #app>.card{padding:16px;margin:12px 0;border-radius:20px}\n #app .quiz .card{padding:16px}\n #app .grid2{grid-template-columns:1fr}\n #app .choices{grid-template-columns:1fr;gap:9px}\n #app .choice{min-height:55px;padding:12px;font-size:16px}\n #app .journey-dashboard .journey-badges{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}\n #app .journey-dashboa"
+        },
+        {
+          "pos": 49842,
+          "snippet": "ked{opacity:.79}\n#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}\n#app .journey-dashboard .journey-overview{background:linear-gradient(115deg,#095cac,#018abe);border:2px solid #65e1ff;box-shadow:0 9px 24px #012d5a70}\n#app .journey-dashboard .journey-map-compact{margin:11px 0 13px}\n#app .journey-dashboard p.caption{font-size:clamp(13px,1.35vw,17px)!important}\n/* Theme-compatible dialogs, previews and status text */\n#app .notice,#app .correct,#app .incorrect{color:#173a69}\n#app .correct{background:#d7f9e9}#app .incorrect{background:#ffebf0}\n#app .user-tile{background:#eef9ff;color:#103b70;border:1px solid #91d2f8}\n#app .user-tile small{color:#38628c}\n#app .badge{color:#036c60}\n#app .actions{gap:12px}\n/* Prevent RTL punctuation from jumping to the start of English-only lines */\n#app [lang=\"en\"],#app .ltr,#app .guide-en,#app .passage,#app .preview-option{direction:ltr;text-align:left;unicode-bidi:isolate}\n/* Laptop/tablet and phone: readable grid cells and no clipped controls */\n@media(max-width:900px){main.container{padding-left:12px;padding-right:12px}#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr))}}\n@media(max-width:700px){\n #app>.card{padding:16px;margin:12px 0;border-radius:20px}\n #app .quiz .card{padding:16px}\n #app .grid2{grid-template-columns:1fr}\n #app .choices{grid-template-columns:1fr;gap:9px}\n #app .choice{min-height:55px;padding:12px;font-size:16px}\n #app .journey-dashboard .journey-badges{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}\n #app .journey-dashboard .journey-badg"
+        }
+      ]
+    },
+    {
+      "query": "incorrect",
+      "count": 4,
+      "found": [
+        {
+          "pos": 10123,
+          "snippet": "play:flex;gap:14px;align-items:center;background:#f7faff;border-radius:18px;padding:14px;margin:10px 0}.learning img{width:86px;height:86px;object-fit:cover;border-radius:15px}.learning strong{font-size:23px;display:block;color:#253b77}.center{text-align:center}.type-box{display:flex;gap:8px;max-width:600px;margin:20px auto;flex-wrap:wrap}.type-box input{flex:1;min-width:200px;direction:ltr;text-align:left;font-size:20px}.correct{background:#e0f8e9;border-radius:13px;color:#117445;padding:14px}.incorrect{background:#ffebec;border-radius:13px;color:#ae3551;padding:14px}.typechips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.typechips button{border:0;border-radius:100px;padding:8px 14px;background:#e9eefb;color:#384d8f;font-weight:750;font-size:12px}.typechips button.active{background:#4054cf;color:white}.ministats{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}.week{background:#e9faf7;padding:14px;border-radius:15px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;text-align:right;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid var(--line)}th{color:#3f5079;background:#f7f8fe}.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:13px}.footer{text-align:center;color:#7482a2;padding:22px;font-size:12px;border-top:1px solid #e8eaf4;background:#fff}.bubble{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#ecedff}.speaking{background:#f4f7fd;padding:20px;border-radius:18px;margi"
+        },
+        {
+          "pos": 49840,
+          "snippet": "ocked{opacity:.79}\n#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}\n#app .journey-dashboard .journey-overview{background:linear-gradient(115deg,#095cac,#018abe);border:2px solid #65e1ff;box-shadow:0 9px 24px #012d5a70}\n#app .journey-dashboard .journey-map-compact{margin:11px 0 13px}\n#app .journey-dashboard p.caption{font-size:clamp(13px,1.35vw,17px)!important}\n/* Theme-compatible dialogs, previews and status text */\n#app .notice,#app .correct,#app .incorrect{color:#173a69}\n#app .correct{background:#d7f9e9}#app .incorrect{background:#ffebf0}\n#app .user-tile{background:#eef9ff;color:#103b70;border:1px solid #91d2f8}\n#app .user-tile small{color:#38628c}\n#app .badge{color:#036c60}\n#app .actions{gap:12px}\n/* Prevent RTL punctuation from jumping to the start of English-only lines */\n#app [lang=\"en\"],#app .ltr,#app .guide-en,#app .passage,#app .preview-option{direction:ltr;text-align:left;unicode-bidi:isolate}\n/* Laptop/tablet and phone: readable grid cells and no clipped controls */\n@media(max-width:900px){main.container{padding-left:12px;padding-right:12px}#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr))}}\n@media(max-width:700px){\n #app>.card{padding:16px;margin:12px 0;border-radius:20px}\n #app .quiz .card{padding:16px}\n #app .grid2{grid-template-columns:1fr}\n #app .choices{grid-template-columns:1fr;gap:9px}\n #app .choice{min-height:55px;padding:12px;font-size:16px}\n #app .journey-dashboard .journey-badges{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}\n #app .journey-dashboard .journey-ba"
+        },
+        {
+          "pos": 49904,
+          "snippet": "template-columns:repeat(5,minmax(0,1fr));gap:11px}\n#app .journey-dashboard .journey-overview{background:linear-gradient(115deg,#095cac,#018abe);border:2px solid #65e1ff;box-shadow:0 9px 24px #012d5a70}\n#app .journey-dashboard .journey-map-compact{margin:11px 0 13px}\n#app .journey-dashboard p.caption{font-size:clamp(13px,1.35vw,17px)!important}\n/* Theme-compatible dialogs, previews and status text */\n#app .notice,#app .correct,#app .incorrect{color:#173a69}\n#app .correct{background:#d7f9e9}#app .incorrect{background:#ffebf0}\n#app .user-tile{background:#eef9ff;color:#103b70;border:1px solid #91d2f8}\n#app .user-tile small{color:#38628c}\n#app .badge{color:#036c60}\n#app .actions{gap:12px}\n/* Prevent RTL punctuation from jumping to the start of English-only lines */\n#app [lang=\"en\"],#app .ltr,#app .guide-en,#app .passage,#app .preview-option{direction:ltr;text-align:left;unicode-bidi:isolate}\n/* Laptop/tablet and phone: readable grid cells and no clipped controls */\n@media(max-width:900px){main.container{padding-left:12px;padding-right:12px}#app .journey-dashboard .journey-badges{grid-template-columns:repeat(5,minmax(0,1fr))}}\n@media(max-width:700px){\n #app>.card{padding:16px;margin:12px 0;border-radius:20px}\n #app .quiz .card{padding:16px}\n #app .grid2{grid-template-columns:1fr}\n #app .choices{grid-template-columns:1fr;gap:9px}\n #app .choice{min-height:55px;padding:12px;font-size:16px}\n #app .journey-dashboard .journey-badges{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}\n #app .journey-dashboard .journey-badge{min-height:130px}\n #app .actions>.btn{flex:1 1 145px}\n #app "
+        },
+        {
+          "pos": 3087973,
+          "snippet": "activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}\ndocument.getElementById('feedback').innerHTML=`<div class=\"${ok?'correct':'incorrect'}\"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir=\"auto\">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';}\nfunction skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}\nfunction stopQuiz(){activeSession=null;route('levels')}\nfunction endSession(){let s=activeSession;if(!s)return;const p=active();const pc=pct(s.score,s.ids.length);\nif(s.ki"
+        }
+      ]
+    },
+    {
+      "query": "renderQuestion",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "speechSynthesis",
+      "count": 4,
+      "found": [
+        {
+          "pos": 2480390,
+          "snippet": "[k]:null}\nfunction mejApprovedPhoto(word){\n const key=String(word||'').trim().toLowerCase();\n const choices=(window.MEJ_APPROVED_IMAGES||{})[key]||[];\n if(!choices.length)return '';\n const winner=choices.slice().sort((a,b)=>Number(b.preferred)-Number(a.preferred)||((b.w*b.h)-(a.w*a.h))||a.id-b.id)[0];\n return winner.src;\n}\nfunction imageHtml(word,size='standard'){let src=mejApprovedPhoto(word);return src?`<img src=\"${src}\" alt=\"${esc(word)}\" loading=\"lazy\">`:''}\nfunction speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}\n\n// Give beginner learners bilingual procedural guidance without revealing an answer.\nfunction beginnerGuide(q){\n  if(!q||q.g>6)return '';\n  const text={\n    Phonics:['Listen and identify the correct letter sound.','استمع جيدًا ثم اختر صوت الحرف أو الحروف الصحيح.'],\n    Blend:['Listen to the complete word and choose the matching written word.','استمع إلى الكلمة كاملة ثم اختر الكلمة المكتوبة المطابقة لما سمعت.'],\n    Vocabulary:['Read the question, then choose the matching word or meaning.','اقرأ السؤال ثم اختر الكلمة أو المعنى المناسب.'],\n    Spelling:['Study the spelling clues and write or choose the correct word.','ادرس الحروف والدلائل ثم اكتب الكلمة أو اختر تهجئتها الصحيحة دون صوت.'],\n    Listening:['Tap Listen, focus on the sounds, and choose an answer.','اضغط «استمع»، وركّز في المسموع، ثم اختر الإجابة.'],\n    Grammar:['Read the full sentence and choose the corr"
+        },
+        {
+          "pos": 2480474,
+          "snippet": "rCase();\n const choices=(window.MEJ_APPROVED_IMAGES||{})[key]||[];\n if(!choices.length)return '';\n const winner=choices.slice().sort((a,b)=>Number(b.preferred)-Number(a.preferred)||((b.w*b.h)-(a.w*a.h))||a.id-b.id)[0];\n return winner.src;\n}\nfunction imageHtml(word,size='standard'){let src=mejApprovedPhoto(word);return src?`<img src=\"${src}\" alt=\"${esc(word)}\" loading=\"lazy\">`:''}\nfunction speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}\n\n// Give beginner learners bilingual procedural guidance without revealing an answer.\nfunction beginnerGuide(q){\n  if(!q||q.g>6)return '';\n  const text={\n    Phonics:['Listen and identify the correct letter sound.','استمع جيدًا ثم اختر صوت الحرف أو الحروف الصحيح.'],\n    Blend:['Listen to the complete word and choose the matching written word.','استمع إلى الكلمة كاملة ثم اختر الكلمة المكتوبة المطابقة لما سمعت.'],\n    Vocabulary:['Read the question, then choose the matching word or meaning.','اقرأ السؤال ثم اختر الكلمة أو المعنى المناسب.'],\n    Spelling:['Study the spelling clues and write or choose the correct word.','ادرس الحروف والدلائل ثم اكتب الكلمة أو اختر تهجئتها الصحيحة دون صوت.'],\n    Listening:['Tap Listen, focus on the sounds, and choose an answer.','اضغط «استمع»، وركّز في المسموع، ثم اختر الإجابة.'],\n    Grammar:['Read the full sentence and choose the correct form.','اقرأ الجملة كاملة ثم اختر الصيغة الصحيحة.'],\n    Reading:['Read the text"
+        },
+        {
+          "pos": 2480586,
+          "snippet": "choices.slice().sort((a,b)=>Number(b.preferred)-Number(a.preferred)||((b.w*b.h)-(a.w*a.h))||a.id-b.id)[0];\n return winner.src;\n}\nfunction imageHtml(word,size='standard'){let src=mejApprovedPhoto(word);return src?`<img src=\"${src}\" alt=\"${esc(word)}\" loading=\"lazy\">`:''}\nfunction speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}\n\n// Give beginner learners bilingual procedural guidance without revealing an answer.\nfunction beginnerGuide(q){\n  if(!q||q.g>6)return '';\n  const text={\n    Phonics:['Listen and identify the correct letter sound.','استمع جيدًا ثم اختر صوت الحرف أو الحروف الصحيح.'],\n    Blend:['Listen to the complete word and choose the matching written word.','استمع إلى الكلمة كاملة ثم اختر الكلمة المكتوبة المطابقة لما سمعت.'],\n    Vocabulary:['Read the question, then choose the matching word or meaning.','اقرأ السؤال ثم اختر الكلمة أو المعنى المناسب.'],\n    Spelling:['Study the spelling clues and write or choose the correct word.','ادرس الحروف والدلائل ثم اكتب الكلمة أو اختر تهجئتها الصحيحة دون صوت.'],\n    Listening:['Tap Listen, focus on the sounds, and choose an answer.','اضغط «استمع»، وركّز في المسموع، ثم اختر الإجابة.'],\n    Grammar:['Read the full sentence and choose the correct form.','اقرأ الجملة كاملة ثم اختر الصيغة الصحيحة.'],\n    Reading:['Read the text carefully and answer the question.','اقرأ النص بعناية ثم أجب عن السؤال.'],\n    Writing:['Look at the model and "
+        },
+        {
+          "pos": 3086195,
+          "snippet": "lass=\"actions\"><button class=\"btn light\" id=\"skipBtn\" onclick=\"skipQuestion()\">تخطٍّ (تُحتسب محاولة)</button><button class=\"btn mint\" style=\"display:none\" id=\"nextBtn\" onclick=\"nextQuestion()\">التالي ←</button><button class=\"btn light\" onclick=\"stopQuiz()\">خروج</button></div></div></div>`;\nif(q.mode==='mcq')document.querySelectorAll('.choice').forEach((b,i)=>b.dataset.answer=opts[i]);if(builder)renderWordTiles();if(ordering)renderSentenceOrder();if(questionAllowsAudio(q)&&q.type==='Listening'&&'speechSynthesis' in window)setTimeout(()=>{if(shownId===q.id)speak(q.audio)},350)}\nfunction normalize(s){return String(s??'').toLowerCase().normalize('NFKC').trim().replace(/[\\u064b-\\u065f]/g,'').replace(/[.,!?؛،]/g,'').replace(/\\s+/g,' ')}\nfunction choose(i){let b=document.querySelector(`.choice[data-n=\"${i}\"]`);if(b)gradeAnswer(b.dataset.answer,b)}\nfunction submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}\nfunction gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){\n  p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toa"
+        }
+      ]
+    },
+    {
+      "query": "navigator.vibrate",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "addEventListener('click'",
+      "count": 3,
+      "found": [
+        {
+          "pos": 3058634,
+          "snippet": "ل')}</b> · الصف ${esc(p.grade||'—')}</p>\n <button class=\"btn light\" onclick=\"closeJourneySettings();openProfile(false)\">✎ تعديل بيانات الطالب ورمز المعلم</button></div>\n <div class=\"card\" style=\"margin:12px 0;padding:14px\"><h3>📡 الاتصال وتقارير المعلم</h3>\n <div class=\"notice blue\" id=\"journeySettingsStatus\">${esc(mejSimpleConnectionStatus(p.syncStatus))}</div>\n <div class=\"actions\"><button class=\"btn light\" onclick=\"settingsCheckConnection()\">🔎 فحص الاتصال</button></div></div></div>`;\n modal.addEventListener('click',e=>{if(e.target===modal)closeJourneySettings()});document.body.appendChild(modal);\n}\nfunction closeJourneySettings(){document.getElementById('journeySettingsModal')?.remove()}\n// MEJ_PUBLIC_SETTINGS_MINIMAL_V1\nfunction mejSimpleConnectionStatus(raw){\n const status=String(raw||'');\n if(/غير متصل|تعذر|فشل|خطأ|unavailable|offline|error/i.test(status))return '⚠️ تعذر الاتصال بالخدمة';\n if(/الاتصال بالخدمة|الوصول إلى خدمة الاستقبال ناجح|تم الاتصال|نجاح|successful/i.test(status))\n  return '✅ الاتصال بالخدمة متاح';\n return navigator.onLine?'الاتصال بالإنترنت متاح':'غير متصل بالإنترنت';\n}\nfunction refreshJourneySettingsStatus(){const p=active();const el=document.getElementById('journeySettingsStatus');if(el)el.textContent=mejSimpleConnectionStatus(p.syncStatus);}\nasync function settingsCheckConnection(){await checkSheetConnection();refreshJourneySettingsStatus()}\nasync function settingsSendReport(){await sendReport(true);refreshJourneySettingsStatus()}\nfunction copyJourneyDiagnostics(){const p=active();const info=[\n 'My English Journey — Official Release','Receiver v"
+        },
+        {
+          "pos": 3062806,
+          "snippet": "ic\" type=\"text\" placeholder=\"6 أرقام، اختياري للتفعيل الكامل\" autocomplete=\"off\" value=\"${esc(item.teacherCode||'')}\"></div></div><div class=\"actions\"><button class=\"btn mint\" onclick=\"saveProfileModal(${isNew})\">💾 حفظ</button><button class=\"btn light\" onclick=\"closeProfile()\">إلغاء</button></div><button id=\"ee-recovery-entry\" type=\"button\" onclick=\"document.getElementById('ee-recovery-dialog').classList.add('open')\" aria-label=\"حفظ واسترجاع التقدم\">🔐 حفظ واسترجاع التقدم</button></div>`;modal.addEventListener('click',e=>{if(e.target===modal)closeProfile()});document.body.appendChild(modal);\n/* MEJ_VERIFIED_SCHOOL_PROFILE_20261106 */\nif(window.__MEJ_ACCESS_ROLE==='student'){\n const schoolInput=document.getElementById('studentSchool');\n const verifiedSchool=(localStorage.getItem('MEJ_VERIFIED_SCHOOL_NAME_V1')||'').trim();\n const linked=localStorage.getItem('MEJ_VERIFIED_TEACHER_LINKED_V1')==='1';\n if(schoolInput&&verifiedSchool){schoolInput.value=verifiedSchool;if(linked){schoolInput.readOnly=true;schoolInput.title='المدرسة مرتبطة بالمعلم المعتمد';}}\n const t=document.getElementById('teacherCode');\n if(t){\n   t.value=(localStorage.getItem('MEJ_ASSIGNED_TEACHER_CODE_V1')||'').trim();\n   t.readOnly=true;\n   const row=t.closest('.field');\n   if(row)row.style.display='none';\n }\n}\ndocument.getElementById('studentName')?.focus()}\nfunction closeProfile(){document.getElementById('journeyModal')?.remove()}\nasync function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;let cre"
+        },
+        {
+          "pos": 3143340,
+          "snippet": "e,[role=\"heading\"]';\n  const cardSelector = '.card,.settings-card,.setting-card,section';\n\n  function linkGear(el) {\n    if (el.dataset.mejOwnerGear === 'yes') return;\n    el.dataset.mejOwnerGear = 'yes';\n    el.setAttribute('role','button');\n    el.setAttribute('tabindex','0');\n    el.setAttribute('aria-label','الإعدادات');\n    el.style.cursor = 'pointer';\n    function go(event) {\n      event.preventDefault();\n      event.stopPropagation();\n      window.location.assign(loginPath);\n    }\n    el.addEventListener('click',go);\n    el.addEventListener('keydown',event=>{\n      if (event.key==='Enter'||event.key===' ') go(event);\n    });\n  }\n\n  function findOriginalGear(heading) {\n    // Do not insert a second gear: use an existing icon or emoji only.\n    for (const el of heading.querySelectorAll('button,span,i,svg,img')) {\n      if (el.dataset.mejAdminGear || el.dataset.mejOwnerGear) continue;\n      const cls = typeof el.className==='string' ? el.className : (el.getAttribute('class')||'');\n      if (gearPattern.test((el.textContent||'').trim()) || /(?:fa-cog|fa-gear|settings-icon|lucide-settings)/i.test(cls)) {\n        gearPattern.lastIndex=0;\n        return el;\n      }\n      gearPattern.lastIndex=0;\n    }\n    for (const node of [...heading.childNodes]) {\n      if (node.nodeType!==Node.TEXT_NODE) continue;\n      const text=node.nodeValue||'';\n      const match=/⚙️|⚙|🔧/u.exec(text);\n      if (!match) continue;\n      const span=document.createElement('span');\n      span.textContent=match[0];\n      span.style.cssText='display:inline-flex;align-items:center;justify-content:center;m"
+        }
+      ]
+    },
+    {
+      "query": "const bank=",
+      "count": 0,
+      "found": []
+    },
+    {
+      "query": "</body>",
+      "count": 1,
+      "found": [
+        {
+          "pos": 3148127,
+          "snippet": "PYRIGHT_NOTICE_2026\" aria-label=\"حقوق الملكية\">\n<span id=\"mej-install-help-inline-rights\" style=\"display:block;font-size:12px;line-height:1.4;font-weight:600\">للتثبيت: افتح قائمة المتصفح (⋮) واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</span>\n<span class=\"mej-rights-statement\">© 2026 — جميع الحقوق محفوظة، يمنع النسخ أو التعديل</span>\n<span class=\"mej-rights-owner\"><b>حسام لطفي الرواتبي</b> <span aria-hidden=\"true\">|</span> <b dir=\"ltr\" lang=\"en\">Houssem Lotfi Rouatbi</b></span>\n</div>\n\n</body></html>"
+        }
+      ]
+    }
+  ]
+}

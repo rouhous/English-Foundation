@@ -32,3 +32,5 @@ console.log('MISSING_IMAGES_AUDIT_SUMMARY '+JSON.stringify({totalUnique:all.size
 console.log('MISSING_IMAGES_LIST_BEGIN');
 for(const e of noImage)console.log(e.word+' | '+e.levels.join(','));
 console.log('MISSING_IMAGES_LIST_END');
+
+// Run complete image coverage audit.

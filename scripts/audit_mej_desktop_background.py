@@ -10,3 +10,9 @@ for term in ['mobile-ocean-v31','m31-art','m31-sea','m31-boat-restored','mobile-
 print('HTML_LENGTH',len(s))
 
 # Execute read-only audit.
+
+for term in ['<style id="mej-poster-functional-home">','journey-home ocean-landing actual-v18','<div class="journey-home','actual-v18{','@media(min-width:901px)','desktop-poster']:
+ hits=list(re.finditer(re.escape(term),s,re.I))
+ print('DETAIL',repr(term),len(hits))
+ for m in hits[-3:]:
+  print('CTX',repr(s[max(0,m.start()-350):m.start()+3100][:3400]))

@@ -137,12 +137,23 @@ function overall(data){
  $('authNotice').hidden=true;$('loading').hidden=true;$('detail').hidden=true;$('overview').hidden=false;
  app.students=normalize(data);app.groups=groupClasses(app.students);app.ready=true;app.scope=data;
  status('المعلم: '+safe(data.teacherName)+' · المدرسة: '+safe(data.schoolName));
+ if(data.profileNotice==='OWNER_TEACHER_PROFILE_NOT_LINKED'){
+  $('issueCode').disabled=true;
+  $('issueCode').title='يجب ربط حساب المالك بسجل المعلم قبل إصدار رمز الطلاب';
+ }else{
+  $('issueCode').disabled=false;$('issueCode').title='';
+ }
  const live=app.students.filter(s=>s.kind==='live').length,trial=app.students.length-live;
  $('dataScope').textContent='السجلات المستوردة للتجربة: '+trial+' · النتائج المباشرة: '+live+' (تُعرض منفصلة في تفاصيل الطلاب)';
  metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))]]);
  $('classCount').textContent=app.groups.length+' صفوف';
  clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
- if(!app.groups.length)$('classes').append(node('p','notice','لا توجد سجلات مرتبطة بهذا الحساب بعد. تحقق من حساب المعلم والمزامنة.'));
+ if(!app.groups.length){
+  const text=data.profileNotice==='OWNER_TEACHER_PROFILE_NOT_LINKED'
+   ?'تم فتح لوحة المعلم لحساب المالك، لكن سجله كمعلم وارتباطات طلابه لم تُنقل إلى قاعدة البيانات الجديدة بعد. لن تُعرض سجلات معلم آخر تلقائيًا.'
+   :'لا توجد سجلات مرتبطة بهذا الحساب بعد. تحقق من حساب المعلم والمزامنة.';
+  $('classes').append(node('p','notice',text));
+ }
  clear($('charts'));if(app.groups.length)$('charts').append(chartLevels(),chartStars());
 }
 function openClass(name){

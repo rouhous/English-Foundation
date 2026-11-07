@@ -39,3 +39,16 @@ assert(summaryJs.includes('window.confirm('),'approval before code creation');
 assert(summaryJs.indexOf('window.confirm(')<summaryJs.indexOf("action:'teacher_issue_student_code'"),'confirm before API request');
 assert(html.includes('id="copyCode"'),'copy code button');
 
+
+const entry=fs.readFileSync('reviews/teacher-portal.html','utf8');
+assert(entry.includes('id="chooseSchool"'),'school registration visible');
+assert(entry.includes('id="chooseTeacher"'),'teacher registration visible');
+assert(entry.includes('id="googleSignIn"'),'Google login present');
+assert(entry.includes('إذا كنت مسجلًا، قم بالدخول بحساب Google'),'short login prompt');
+assert(entry.includes('id="installHelp"'),'install help present');
+assert(!entry.includes('لا تحتاج إلى فتح تطبيق الطالب'),'no distracting student app mention');
+const inline=entry.match(/<script>([\s\S]*?)<\/script>/);
+assert(inline,'inline staff code');
+new vm.Script(inline[1],{filename:'teacher-portal-inline.js'});
+assert(!inline[1].includes("getElementById('identityTitle')"),'no reference to removed heading');
+console.log('SIMPLIFIED_STAFF_ENTRY_VALIDATED');

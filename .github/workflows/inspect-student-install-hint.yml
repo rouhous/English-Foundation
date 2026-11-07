@@ -1,0 +1,14 @@
+name: Inspect Student Start and Copyright Placement
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/inspect_student_install_hint.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/inspect_student_install_hint.py

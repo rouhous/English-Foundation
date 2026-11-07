@@ -20,7 +20,7 @@ assert(explicitJs.includes("node('strong','compareSegmentCount',part.count)"),'n
 assert(explicitJs.includes("'L'+part.level"),'compact L label under each segment');
 assert(explicitJs.includes("chart.style.minWidth=Math.max(0,occupied.length*46)"),'small screen overflow');
 assert(explicitHtml.includes('.compareChartScroll'),'scroll layout');
-assert(explicitHtml.includes('20261107-5'),'new script cache version');
+assert(explicitHtml.includes('20261107-6'),'new script cache version');
 assert(explicitHtml.includes('id="sortStudents"'),'ranking selector remains present');
 
 // Latest overview/class indicators and teacher code safety regression.
@@ -52,3 +52,12 @@ assert(inline,'inline staff code');
 new vm.Script(inline[1],{filename:'teacher-portal-inline.js'});
 assert(!inline[1].includes("getElementById('identityTitle')"),'no reference to removed heading');
 console.log('SIMPLIFIED_STAFF_ENTRY_VALIDATED');
+
+assert(entry.includes('id="ownerChoice"'),'owner choice visible');
+assert(entry.includes('id="ownerTeacherGo"'),'owner teacher route');
+assert(entry.includes('id="ownerAdminGo"'),'owner admin route');
+assert(entry.includes('id="ownerBack"'),'owner may return to choice');
+assert(entry.includes("document.getElementById('ownerChoice').hidden=false"),'owner sees choice after login');
+assert(entry.includes("location.assign('./teacher-dashboard.html')"),'owner teacher dashboard route');
+assert(entry.includes("document.getElementById('ownerAdminGo').addEventListener('click',openOwnerManagement)"),'owner management route');
+assert(summaryJs.includes("data.profileNotice==='OWNER_TEACHER_PROFILE_NOT_LINKED'"),'accurate owner teacher no-link state');

@@ -35,3 +35,5 @@ if(!src.includes('mejLearningPreviewWord(q)'))throw Error('Patch did not apply')
 fs.mkdirSync('reviews/quality-audit',{recursive:true});
 fs.writeFileSync('reviews/quality-audit/early-learning-fix.json',JSON.stringify({status:'patched',scope:'Grades 1-5 and any level with missing word fields',fix:'Derive learning preview vocabulary from existing official question data',studentScoresUnchanged:true},null,2));
 console.log('Patched lesson preview word extraction in index.html');
+
+// Execute learning card fix on current published branch.

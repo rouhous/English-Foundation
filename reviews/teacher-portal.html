@@ -201,7 +201,7 @@ async function openOwnerManagement(){
 }
 document.getElementById('ownerTeacherGo').addEventListener('click',()=>{
  if(!verifiedOwnerCredential)return;
- sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:verifiedOwnerCredential,at:Date.now()}));
+ sessionStorage.setItem('MEJ_STAFF_LOGIN_V2',JSON.stringify({token:verifiedOwnerCredential,at:Date.now(),role:'owner'}));
  location.assign('./teacher-dashboard.html');
 });
 document.getElementById('ownerAdminGo').addEventListener('click',openOwnerManagement);

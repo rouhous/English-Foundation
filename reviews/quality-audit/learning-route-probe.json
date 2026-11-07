@@ -1,0 +1,115 @@
+{
+  "length": 3148328,
+  "res": [
+    {
+      "pattern": "Listen to the example words",
+      "count": 1,
+      "near": [
+        {
+          "at": 3092540,
+          "snippet": " its first sound. • اضغط البطاقة لسماع كلمة نموذجية وركّز على صوت البداية.</p><div class=\"grid\" style=\"grid-template-columns:repeat(auto-fill,minmax(105px,1fr))\">${PHONICS.map(([ph,ex])=>`<button class=\"btn light\" style=\"font-size:16px;line-height:1.65;direction:ltr\" onclick=\"speak(${jsStr(ex)},.75)\">/${esc(ph)}/<br><small>${esc(ex)} 🔊</small></button>`).join('')}</div><h3>🧩 لعبة دمج الأصوات</h3><div id=\"blendLab\" class=\"notice blue\"></div>`:'';\ndocument.getElementById('app').innerHTML=`<section class=\"card\"><h2 class=\"section-title\">📘 التعلّم • Level ${g}</h2><p>${esc(LV[g][1])}</p>${g<=6?`<div class=\"bi-guide\"><div class=\"guide-en\">🇬🇧 Listen to the example words, practice reading, then play the activities.</div><div class=\"guide-ar\">🇴🇲 استمع إلى الكلمات النموذجية، وتدرّب على قراءتها، ثم انتقل إلى الأنشطة.</div></div>`:''}${phonics}${soundLab}<div class=\"actions\"><button class=\"btn mint\" onclick=\"${part ? 'beginStagePart('+g+','+part+')' : 'beginLevel('+g+')'}\">▶ ابدأ اللعب</button><button class=\"btn light\" onclick=\"route('levels')\">عودة إلى المستويات</button></div><div class=\"grid\">${items.map(q=>`<div class=\"learning\"><div>${imageHtml(q.word)}</div><div style=\"flex:1\"><strong class=\"ltr\">${esc(q.word)}</strong><small class=\"muted\">${esc(q.type==='Blend'?q.prompt:(q.prompt||'انطق الكلمة'))}</small><button class=\"btn small light\" style=\"display:block;margin-top:6px\" onclick=\"speak(${jsStr(q.word)},.72)\">🔊 استمع</button></div></div>`).join('')}</div></section>`;if(g===0)newBlend()}\nlet blendTarget='',blendOrder=[],blendPicked='';\nfunction newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}\nfunction renderBlend(){let el=document.getElementById('blendLab');if(!el)return;el.innerHTML=`<div class=\"bi-guide\"><div class=\"guide-en\">🇬🇧 Listen, then tap the shuffled letters in the correct order.</div><div class=\"g"
+        }
+      ]
+    },
+    {
+      "pattern": "First reading",
+      "count": 1,
+      "near": [
+        {
+          "at": 2404293,
+          "snippet": "1+nnysLvKXMZYI+7xTHT38pNvlBWlFGZpZ2tI/6GOcZ9TVmwP9+CTFm3pwHT4YALl7QpyacicMJTMSqG9+Fi3dAORZk06z5XAl9wppj0Crf5hQKSU+aiUnRr/OesHzcwwlE80SzTq55XPhvl82kfDszGKuQLhd9i39ggObgYDn3IB8RmvTQ02vH7SiA5AZ9TJ33mBmHroGdxr4RsEyys/Hbmp06jhFrlxnfHX63izBjQ8xOpkTNZKr8mv1fyrtgF1bDqz1o41pB5JIIgMCFYOM+cxkP89qqBkNOjBgqgm7sSEDsxNkwrLrZDnrUPCzA9rVCzphjwGbCKgZuWrihY6xKT6bpImkuCA6Y9aWFvDwtTvXldaW6ToCSRUdkKXjqeXnWEz0ViG5dJSgMwj81M70yhB21Mj55L6r+6Itef4gKYRdbEfiR9a05+oGoDV7N84z/589eiQZnVblcvRG9/9M+B+AmiNEDCrNszylzeAAA==\"};\nconst LV={\"0\":[\"Phonics Lab • مختبر الأصوات\",\"Letters → sounds → blending → real words\",\"المستوى صفر مفتوح للجميع\"],\"1\":[\"First Words • الكلمات الأولى\",\"First reading • basic words • sentences\",\"التأسيس\"],\"2\":[\"Everyday English • الإنجليزية اليومية\",\"Family • food • home • routines\",\"الحياة اليومية\"],\"3\":[\"Reading Builder • بناء القراءة\",\"Time • hobbies • present simple\",\"قراءة وقواعد\"],\"4\":[\"Confident Reader • القارئ المتقدم\",\"School • places • past simple\",\"قراءة وفهم\"],\"5\":[\"Bridge to Grade 6 • الجسر للسادس\",\"Future plans • technology • description\",\"الجسر للسادس\"],\"6\":[\"Grade 6 • الصف السادس\",\"Free-time / Technology / Places • Homes / Clothes / Adventures\",\"Team Together Oman 6A\"],\"7\":[\"Grade 7 • الصف السابع\",\"Entertainment / Animals / Travel • City Life / Our Future / Reading\",\"Team Together Oman 7A\"],\"8\":[\"Grade 8 • الصف الثامن\",\"Our planet / Sports / Spending • Communication / Inventions / Learning\",\"Team Together Oman 8A\"],\"9\":[\"Grade 9 • الصف التاسع\",\"Identity • Connections • The future is now\",\"Gold Experience Oman 9A\"],\"10\":[\"Grade 10 • الصف العاشر\",\"New Media / Climate / Energy / Civilisation • Stories / Health / Transport / Business\",\"English for Me 10A\"],\"11\":[\"Grade 11 • الصف الحادي عشر\",\"Communication / Teenage / Tourism / Innovation • Inspiration / Connections\",\"Engage with English 11A\"],\"12\":[\"Grade 12 • الصف الثاني عشر\",\"Retail / University / Hospitality / Transport • Media / Careers / Safety / Citizenship\",\"En"
+        }
+      ]
+    },
+    {
+      "pattern": "Family • food",
+      "count": 1,
+      "near": [
+        {
+          "at": 2404391,
+          "snippet": "9wppj0Crf5hQKSU+aiUnRr/OesHzcwwlE80SzTq55XPhvl82kfDszGKuQLhd9i39ggObgYDn3IB8RmvTQ02vH7SiA5AZ9TJ33mBmHroGdxr4RsEyys/Hbmp06jhFrlxnfHX63izBjQ8xOpkTNZKr8mv1fyrtgF1bDqz1o41pB5JIIgMCFYOM+cxkP89qqBkNOjBgqgm7sSEDsxNkwrLrZDnrUPCzA9rVCzphjwGbCKgZuWrihY6xKT6bpImkuCA6Y9aWFvDwtTvXldaW6ToCSRUdkKXjqeXnWEz0ViG5dJSgMwj81M70yhB21Mj55L6r+6Itef4gKYRdbEfiR9a05+oGoDV7N84z/589eiQZnVblcvRG9/9M+B+AmiNEDCrNszylzeAAA==\"};\nconst LV={\"0\":[\"Phonics Lab • مختبر الأصوات\",\"Letters → sounds → blending → real words\",\"المستوى صفر مفتوح للجميع\"],\"1\":[\"First Words • الكلمات الأولى\",\"First reading • basic words • sentences\",\"التأسيس\"],\"2\":[\"Everyday English • الإنجليزية اليومية\",\"Family • food • home • routines\",\"الحياة اليومية\"],\"3\":[\"Reading Builder • بناء القراءة\",\"Time • hobbies • present simple\",\"قراءة وقواعد\"],\"4\":[\"Confident Reader • القارئ المتقدم\",\"School • places • past simple\",\"قراءة وفهم\"],\"5\":[\"Bridge to Grade 6 • الجسر للسادس\",\"Future plans • technology • description\",\"الجسر للسادس\"],\"6\":[\"Grade 6 • الصف السادس\",\"Free-time / Technology / Places • Homes / Clothes / Adventures\",\"Team Together Oman 6A\"],\"7\":[\"Grade 7 • الصف السابع\",\"Entertainment / Animals / Travel • City Life / Our Future / Reading\",\"Team Together Oman 7A\"],\"8\":[\"Grade 8 • الصف الثامن\",\"Our planet / Sports / Spending • Communication / Inventions / Learning\",\"Team Together Oman 8A\"],\"9\":[\"Grade 9 • الصف التاسع\",\"Identity • Connections • The future is now\",\"Gold Experience Oman 9A\"],\"10\":[\"Grade 10 • الصف العاشر\",\"New Media / Climate / Energy / Civilisation • Stories / Health / Transport / Business\",\"English for Me 10A\"],\"11\":[\"Grade 11 • الصف الحادي عشر\",\"Communication / Teenage / Tourism / Innovation • Inspiration / Connections\",\"Engage with English 11A\"],\"12\":[\"Grade 12 • الصف الثاني عشر\",\"Retail / University / Hospitality / Transport • Media / Careers / Safety / Citizenship\",\"Engage with English 12A\"]};\nconst GLOSS={\"1\":[{\"en\":\"family\",\"ar\":\"عائلة\",\"img\":\"data:image/svg+xml;"
+        }
+      ]
+    },
+    {
+      "pattern": "ابدأ اللعب",
+      "count": 1,
+      "near": [
+        {
+          "at": 3092876,
+          "snippet": "🔊</small></button>`).join('')}</div><h3>🧩 لعبة دمج الأصوات</h3><div id=\"blendLab\" class=\"notice blue\"></div>`:'';\ndocument.getElementById('app').innerHTML=`<section class=\"card\"><h2 class=\"section-title\">📘 التعلّم • Level ${g}</h2><p>${esc(LV[g][1])}</p>${g<=6?`<div class=\"bi-guide\"><div class=\"guide-en\">🇬🇧 Listen to the example words, practice reading, then play the activities.</div><div class=\"guide-ar\">🇴🇲 استمع إلى الكلمات النموذجية، وتدرّب على قراءتها، ثم انتقل إلى الأنشطة.</div></div>`:''}${phonics}${soundLab}<div class=\"actions\"><button class=\"btn mint\" onclick=\"${part ? 'beginStagePart('+g+','+part+')' : 'beginLevel('+g+')'}\">▶ ابدأ اللعب</button><button class=\"btn light\" onclick=\"route('levels')\">عودة إلى المستويات</button></div><div class=\"grid\">${items.map(q=>`<div class=\"learning\"><div>${imageHtml(q.word)}</div><div style=\"flex:1\"><strong class=\"ltr\">${esc(q.word)}</strong><small class=\"muted\">${esc(q.type==='Blend'?q.prompt:(q.prompt||'انطق الكلمة'))}</small><button class=\"btn small light\" style=\"display:block;margin-top:6px\" onclick=\"speak(${jsStr(q.word)},.72)\">🔊 استمع</button></div></div>`).join('')}</div></section>`;if(g===0)newBlend()}\nlet blendTarget='',blendOrder=[],blendPicked='';\nfunction newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}\nfunction renderBlend(){let el=document.getElementById('blendLab');if(!el)return;el.innerHTML=`<div class=\"bi-guide\"><div class=\"guide-en\">🇬🇧 Listen, then tap the shuffled letters in the correct order.</div><div class=\"guide-ar\">🇴🇲 استمع للكلمة، ثم اضغط الحروف المبعثرة بالترتيب الصحيح.</div></div><div class=\"center\" style=\"font-size:32px;letter-spacing:7px;direction:ltr;min-height:47px\">${esc(blendPicked)||'· · ·'}</div><div class=\"actions\" style=\"justify-content:center\">${blendOrder.map((o,i)=>`<button class=\"btn ${o.used?'light':'gold'}\" style=\"f"
+        }
+      ]
+    },
+    {
+      "pattern": "function openLearning",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "function showLearning",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "function renderLearning",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "learningWords",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "route('learn",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "route('quiz",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "function route(",
+      "count": 1,
+      "near": [
+        {
+          "at": 2488958,
+          "snippet": "ence-builder\"><div class=\"order-hint\">🧩 Arrange the words to make a sentence.<span>رتّب الكلمات لتكوين جملة صحيحة.</span></div><div id=\"orderBuilt\" class=\"order-built placeholder\" dir=\"ltr\"></div><div class=\"order-rack\" id=\"orderRack\" dir=\"ltr\"></div><div class=\"actions\" style=\"justify-content:center\"><button class=\"btn light small\" onclick=\"undoOrderWord()\">↶ Undo • تراجع</button><button class=\"btn light small\" onclick=\"clearOrderWords()\">↺ Clear • امسح</button><button class=\"btn mint\" onclick=\"submitSentenceOrder()\">✓ Check • تحقّق</button></div></div>`;}\n\nlet current='home',activeSession=null,shownId=null,answerLock=false,speakTarget='';\nfunction route(page){current=page;document.getElementById('journeyNav')?.classList.toggle('open',page!=='home'&&page!=='journey');document.querySelectorAll('.navbutton').forEach(b=>b.classList.toggle('active',b.dataset.route===page));if(page==='home')home();else if(page==='journey')journey();else if(page==='levels')levels();else if(page==='skills')skills();else if(page==='diagnostic')diagnosticLanding();else if(page==='reports')reports();else if(page==='ranking')window.showClassRanking();window.scrollTo({top:0,behavior:'instant'});}\nconst JOURNEY_BADGES=[['🌱','الرحّالة الصغير'],['🧭','المغامر'],['📖','مكتشف الكلمات'],['⭐','صياد النجوم'],['🏝️','مرشد الجزر'],['🌊','قاهر البحار'],['⚓','ربان المعرفة'],['⛵','القبطان الصغير'],['🗺️','ابن ماجد'],['🏆','أسطورة الرحلة']];\nfunction currentIsland(p=active()){if(Number.isInteger(Number(p.journeyIsland))&&p.journeyIsland!==undefined&&permitted(Number(p.journeyIsland)))return Number(p.journeyIsland);if(p.diagnosed)return Math.min(12,Math.max(0,Number(p.assigned)||0));return 0}\nfunction islandBadges(g,p=active()){let m=countMaster(g,p);return JOURNEY_BADGES.map(([em,name],i)=>({em,name,earned:m>=(i+1)*20,target:(i+1)*20}))}\nfunction voyageArt(){return `<div class=\"voyage-scene\" id=\"voyageScene\" role=\"img\" aria-label=\"طفل عماني يقود سفينة خشبي"
+        }
+      ]
+    },
+    {
+      "pattern": "function displayQuestion",
+      "count": 1,
+      "near": [
+        {
+          "at": 3083321,
+          "snippet": "eginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;let p=active();let permittedPool=mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1);let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}\nfunction trainWrong(g){beginLevel(g,null,true)}\nfunction displayQuestion(){if(!activeSession){route('levels');return}if(activeSession.index>=activeSession.ids.length){endSession();return}const q=questionById[activeSession.ids[activeSession.index]];shownId=q.id;answerLock=false;let step=activeSession.index+1;const pctQ=pct(step-1,activeSession.ids.length);let visual=q.pic||q.word||q.answer;let showPicture=q.type==='Match'||q.type==='Describe'||q.type==='Blend'||(q.g===0&&q.type==='Phonics');let show=showPicture?imageHtml(visual):'';\nlet opts=shuffle(q.options||[]);let builder=isWordBuilder(q),ordering=isSentenceOrder(q);if(builder){builderTiles=mixedLetters(q.answer);builderPicked=[]}if(ordering)initSentenceOrder(q);let promptRaw=ordering?'Arrange the words to make a correct sentence.':builder?'Listen carefully, then build the word with the mixed-up letters.':(q.g===0&&q.type==='Blend'?'Listen to the word. Which written word matches what you hear?':q.prompt);let promptText=esc(promptRaw);let left=/[A-Za-z]/.test(promptRaw)&&!/[\\u0600-\\u06FF]/.test(promptRaw);const inp=ordering?sentenceOrderMarkup():builder?wordBuilderMarkup():(q.mode==='type'?`<div class=\"type-box\"><input class=\"answer-input\" id=\"typed\" autocomplete=\"off\" spellcheck=\"false\" aria-label=\"Answer\" onkeydown=\"if(event.key==='Enter')submitTyped()\"><button class=\"btn "
+        }
+      ]
+    },
+    {
+      "pattern": "function imageHtml(",
+      "count": 1,
+      "near": [
+        {
+          "at": 2480287,
+          "snippet": "'sun','solar power':'sun','fort':'fort','castle':'fort','desert':'mountain','mountain':'mountain','boat':'boat','island':'beach','beach':'beach','coast':'beach','tree':'tree','bus':'bus','transport':'bus','reading':'reading','museum':'fort'};\n return cands[s]||''}\nfunction realPhoto(word){let k=photoKey(word);return k?PHOTO[k]:null}\nfunction mejApprovedPhoto(word){\n const key=String(word||'').trim().toLowerCase();\n const choices=(window.MEJ_APPROVED_IMAGES||{})[key]||[];\n if(!choices.length)return '';\n const winner=choices.slice().sort((a,b)=>Number(b.preferred)-Number(a.preferred)||((b.w*b.h)-(a.w*a.h))||a.id-b.id)[0];\n return winner.src;\n}\nfunction imageHtml(word,size='standard'){let src=mejApprovedPhoto(word);return src?`<img src=\"${src}\" alt=\"${esc(word)}\" loading=\"lazy\">`:''}\nfunction speak(t,rate=.87){if(!('speechSynthesis' in window)){toast('النطق الصوتي غير مدعوم في هذا المتصفح.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(String(t||''));u.lang='en-GB';u.rate=rate;u.pitch=1;speechSynthesis.speak(u)}\n\n// Give beginner learners bilingual procedural guidance without revealing an answer.\nfunction beginnerGuide(q){\n  if(!q||q.g>6)return '';\n  const text={\n    Phonics:['Listen and identify the correct letter sound.','استمع جيدًا ثم اختر صوت الحرف أو الحروف الصحيح.'],\n    Blend:['Listen to the complete word and choose the matching written word.','استمع إلى الكلمة كاملة ثم اختر الكلمة المكتوبة المطابقة لما سمعت.'],\n    Vocabulary:['Read the question, then choose the matching word or meaning.','اقرأ السؤال ثم اختر الكلمة أو المعنى المناسب.'],\n    Spelling:['Study the spelling clues and write or choose the correct word.','ادرس الحروف والدلائل ثم اكتب الكلمة أو اختر تهجئتها الصحيحة دون صوت.'],\n    Listening:['Tap Listen, focus on the sounds, and choose an answer.','اضغط «استمع»، وركّز في المسموع، ثم اختر الإجابة.'],\n    Grammar:['Read the full sentence and choose the correct form.','اقرأ الجملة ك"
+        }
+      ]
+    },
+    {
+      "pattern": "learning-stage",
+      "count": 0,
+      "near": []
+    },
+    {
+      "pattern": "learning-card",
+      "count": 0,
+      "near": []
+    }
+  ]
+}

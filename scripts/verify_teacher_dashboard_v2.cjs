@@ -20,7 +20,7 @@ assert(explicitJs.includes("node('strong','compareSegmentCount',part.count)"),'n
 assert(explicitJs.includes("'L'+part.level"),'compact L label under each segment');
 assert(explicitJs.includes("chart.style.minWidth=Math.max(0,occupied.length*46)"),'small screen overflow');
 assert(explicitHtml.includes('.compareChartScroll'),'scroll layout');
-assert(explicitHtml.includes('20261107-6'),'new script cache version');
+assert(explicitHtml.includes('20261107-7'),'new script cache version');
 assert(explicitHtml.includes('id="sortStudents"'),'ranking selector remains present');
 
 // Latest overview/class indicators and teacher code safety regression.
@@ -61,3 +61,12 @@ assert(entry.includes("document.getElementById('ownerChoice').hidden=false"),'ow
 assert(entry.includes("location.assign('./teacher-dashboard.html')"),'owner teacher dashboard route');
 assert(entry.includes("document.getElementById('ownerAdminGo').addEventListener('click',openOwnerManagement)"),'owner management route');
 assert(summaryJs.includes("data.profileNotice==='OWNER_TEACHER_PROFILE_NOT_LINKED'"),'accurate owner teacher no-link state');
+
+assert(entry.includes("role:'owner'"),'owner role stored alongside login token');
+assert(html.includes('id="ownerScopes"'),'owner private/school selection exists');
+assert(html.includes('id="ownerPrivate"'),'owner personal group');
+assert(html.includes('id="ownerSchool"'),'Wadi group');
+assert(summaryJs.includes("app.owner?'owner_rosters':'teacher_roster'"),'owner-specific server authorization');
+assert(summaryJs.includes("app.ownerScope='private'"),'private group handler');
+assert(summaryJs.includes("app.ownerScope='school'"),'school group handler');
+assert(summaryJs.includes("scope.linkedCount"),'linked students counted separately from synced progress');

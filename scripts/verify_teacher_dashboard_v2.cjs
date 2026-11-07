@@ -70,3 +70,12 @@ assert(summaryJs.includes("app.owner?'owner_rosters':'teacher_roster'"),'owner-s
 assert(summaryJs.includes("app.ownerScope='private'"),'private group handler');
 assert(summaryJs.includes("app.ownerScope='school'"),'school group handler');
 assert(summaryJs.includes("scope.linkedCount"),'linked students counted separately from synced progress');
+
+const portalSessionJs=entry.match(/<script>([\s\S]*?)<\/script>/)[1];
+assert(portalSessionJs.includes('function cachedLogin()'),'restore recent authenticated session');
+assert(portalSessionJs.includes("onCredential({credential:existing})"),'validate cached token with backend');
+assert(portalSessionJs.includes('function showSignedIn()'),'hide login UI after verified sign-in');
+assert(portalSessionJs.includes("document.getElementById('identityPanel').hidden=true"),'hide Google login panel');
+assert(portalSessionJs.includes('function showSignIn()'),'allow login again when needed');
+assert(portalSessionJs.includes("payload.exp*1000<=Date.now()+5000"),'enforce JWT expiry');
+assert(portalSessionJs.includes("role:'owner'"),'preserve owner role');

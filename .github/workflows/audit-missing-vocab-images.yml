@@ -1,0 +1,15 @@
+name: Audit Missing Vocabulary Images
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/audit_missing_vocab_images.cjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare every word in all 26 levels to 12 approved image banks
+        run: node --max-old-space-size=2048 scripts/audit_missing_vocab_images.cjs

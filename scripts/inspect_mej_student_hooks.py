@@ -23,3 +23,5 @@ for needle in patterns:
 Path("diagnostics").mkdir(exist_ok=True)
 Path("diagnostics/mej-progress-hook-audit.json").write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding="utf-8")
 print("AUDIT_OK", len(s),sum(len(v) for v in out["matches"].values()))
+
+# Trigger read-only audit workflow after initial installation.

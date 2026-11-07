@@ -29,3 +29,5 @@ for(const {grade,part} of assigned)counts[grade][part-1]++;
 fs.mkdirSync('reviews/quality-audit',{recursive:true});
 fs.writeFileSync('reviews/quality-audit/master-restoration-120.json',JSON.stringify({source:'MEJ master inventory / 120 image-prepared exact text matches',uniqueWords:120,stagePlacements:assigned.length,assignments:assigned,countsByGradeAndPart:counts,scope:'Learning preview only; no test/question/progress changes',status:'installed'},null,2));
 console.log('RESTORED_MASTER_120 '+JSON.stringify({uniqueWords:120,stagePlacements:assigned.length,counts}));
+
+// Trigger install of the master-backed 120 word learning restoration.

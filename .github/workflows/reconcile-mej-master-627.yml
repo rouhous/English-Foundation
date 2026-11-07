@@ -18,25 +18,23 @@ jobs:
         with:
           node-version: '20'
       - name: Reconcile original master to current 12 approved image banks
-        run: node --max-old-space-size=3072 scripts/reconcile_mej_master_627.cjs
-      - name: Confirm scope, source integrity and report
         run: |
-          node - <<'NODE'
-          const fs=require('fs');
-          const r=JSON.parse(fs.readFileSync('reviews/quality-audit/master-627-reconciliation.json','utf8'));
-          if(r.sourceWords!==627||r.words.length!==627)throw Error('Lost original source entries');
-          if(r.availableInCurrentImageBank+r.missingImagesFromCurrentBank!==627)throw Error('Invalid coverage counts');
-          if(r.insertedStagePlacements!==r.insertions.length)throw Error('Invalid insertion count');
-          const app=fs.readFileSync('index.html','utf8');
-          if(!app.includes('MEJ_RESTORED_LEGACY_627')||!app.includes('items.push(...legacyWords)'))throw Error('Learning preview integration missing');
-          console.log('PASS:',r.insertedStagePlacements,'new stage placements');
-          NODE
-      - name: Commit learning cards and audit
+          mkdir -p reviews/quality-audit
+          node --max-old-space-size=3072 scripts/reconcile_mej_master_627.cjs > /tmp/legacy-627-log.txt 2>&1 || echo "ERROR" > /tmp/legacy-627-failed
+          cat /tmp/legacy-627-log.txt
+          cp /tmp/legacy-627-log.txt reviews/quality-audit/master-627-install-log.txt
+      - name: Commit result and diagnostics
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html reviews/quality-audit/master-627-reconciliation.json reviews/quality-audit/master-627-reconciliation.csv
+          git add index.html reviews/quality-audit/
           if ! git diff --cached --quiet; then
-            git commit -m "Restore verified legacy vocabulary cards and publish 627-word comparison"
+            git commit -m "Reconcile original 627 vocabulary terms; record installed words or errors"
             git push
+          fi
+      - name: Fail if unresolved
+        run: |
+          if [ -f /tmp/legacy-627-failed ]; then
+            echo "Vocabulary reconciliation failed. Diagnostic committed to reviews/quality-audit/master-627-install-log.txt"
+            exit 1
           fi

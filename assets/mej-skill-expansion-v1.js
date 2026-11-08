@@ -27,7 +27,7 @@ const css=document.createElement('style');css.textContent=`
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
 // MEJ_MATCH_G1_G4_CATALOG_IMAGE_FIX_V1
-const normalizeWord=value=>String(value||'').toLowerCase().trim().replace(/\\s+/g,' ');
+const normalizeWord=value=>String(value||'').toLowerCase().trim().replace(/\s+/g,' ');
 async function ensureCatalog(){
  if(catalog?.levels?.length)return catalog;
  const response=await fetch(CATALOG,{cache:'no-store'});
@@ -54,9 +54,9 @@ function vocabulary(grade){
  return [...new Set(qs.filter(q=>q.type==='Vocabulary')
   .map(q=>{
    const direct=normalizeWord(q.word||q.pictureWord);
-   if(/^[a-z][a-z\\s'-]*$/.test(direct))return direct;
+   if(/^[a-z][a-z\s'-]*$/.test(direct))return direct;
    const answer=normalizeWord(q.answer);
-   return /^[a-z][a-z\\s'-]*$/.test(answer)?answer:'';
+   return /^[a-z][a-z\s'-]*$/.test(answer)?answer:'';
   }).filter(Boolean))];
 }
 const imageShardLoaded=new Set();

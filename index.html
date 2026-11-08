@@ -1939,11 +1939,37 @@ if(q.mode==='mcq')document.querySelectorAll('.choice').forEach((b,i)=>b.dataset.
 function normalize(s){return String(s??'').toLowerCase().normalize('NFKC').trim().replace(/[\u064b-\u065f]/g,'').replace(/[.,!?؛،]/g,'').replace(/\s+/g,' ')}
 function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
 function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
+/* Grammar-specific explanations appear in the existing answer-feedback panel. */
+function mejGrammarCorrection(q){
+ if(!q||q.type!=='Grammar')return '';
+ const p=String(q.prompt||'').toLowerCase(),a=String(q.answer||'').trim().toLowerCase();
+ const tests=[
+  [/\b(am|is|are|was|were)\b/,()=>/was|were/.test(a)?'في الماضي نستخدم was مع I/he/she/it، وwere مع you/we/they.':'نستخدم am مع I، وis مع he/she/it والمفرد، وare مع you/we/they والجمع.'],
+  [/\b(a|an|the)\b/,()=>a==='an'?'نستخدم an قبل الكلمة التي تبدأ بصوت متحرك، مثل an apple.':a==='a'?'نستخدم a قبل الاسم المفرد المعدود الذي يبدأ بصوت ساكن، مثل a book.':'نستخدم the عندما نشير إلى اسم محدد أو معروف.'],
+  [/\b(he|she|it|they|we|you|i)\b/,()=>['he','she','it','they','we','you','i'].includes(a)?'اختر الضمير بحسب المعنى: he للمذكر، she للمؤنث، it لغير العاقل، they للجمع.':'طابق الفعل مع الفاعل، وفي المضارع البسيط نضيف s أو es مع he/she/it.'],
+  [/\b(this|that|these|those)\b/,()=> 'This وThat للمفرد، وThese وThose للجمع؛ This وThese للقريب.'],
+  [/\b(do|does|did|don.t|doesn.t)\b/,()=> 'نستخدم do مع I/you/we/they وdoes مع he/she/it، وdid للماضي. بعد الفعل المساعد يأتي الفعل في صورته الأساسية.'],
+  [/\b(have|has|had)\b/,()=> 'نستخدم have مع I/you/we/they، وhas مع he/she/it، وhad للماضي.'],
+  [/\b(can|could|should|must|may|might|will|would)\b/,()=> 'بعد الأفعال الناقصة مثل can وshould وmust وwill نستخدم الفعل الأساسي دون s أو to.'],
+  [/\b(there is|there are|much|many|some|any)\b/,()=> 'نستخدم there is للمفرد وthere are للجمع؛ many مع الأسماء المعدودة وmuch مع غير المعدودة.'],
+  [/\b(in|on|at)\b/,()=> 'في الوقت نستخدم at للساعات، وon للأيام والتواريخ، وin للشهور والسنوات.'],
+  [/\b(than|most|more|better|best|bigger|biggest)\b/,()=> 'للمقارنة نستخدم الصفة + er أو more ثم than، وللتفضيل نستخدم the + est أو the most.'],
+  [/\b(yesterday|ago|last week|last year|past)\b/,()=> 'عند الحديث عن حدث انتهى في الماضي نستخدم الماضي البسيط، مثل played أو went.'],
+  [/\b(now|at the moment|look!)\b/,()=> 'للحدث الجاري الآن نستخدم am/is/are + الفعل مع ing.']
+ ];
+ let explanation='';
+ for(const [re,fn] of tests){if(re.test(p)||re.test(a)){explanation=fn();break}}
+ if(!explanation&&/\b\w+(ed|ing)\b/.test(a))explanation=/ing$/.test(a)?'للتعبير عن فعل مستمر نستخدم الفعل مع ing بعد فعل be المناسب.':'في الماضي البسيط للأفعال المنتظمة نضيف ed، أما الأفعال الشاذة فلها تصريف خاص.';
+ if(!explanation&&/s$/.test(a)&&!/\s/.test(a))explanation='في المضارع البسيط نضيف s أو es إلى الفعل مع he/she/it.';
+ if(!explanation&&q.tip&&String(q.tip).trim()!=='اقرأ الجملة كاملة قبل الاختيار.')explanation=String(q.tip);
+ if(!explanation)explanation='انظر إلى الفاعل والزمن في الجملة ثم اختر الصيغة التي تطابقهما، وقارنها بالإجابة الصحيحة.';
+ return '<div class="mej-grammar-rule" dir="rtl" style="margin-top:12px;padding:12px 14px;background:#edf8ff;border:2px solid #69b5e4;border-radius:12px;color:#164069;font-size:16px;line-height:1.8;text-align:right"><strong>📘 شرح القاعدة</strong><div>'+esc(explanation)+'</div><div style="margin-top:5px;font-weight:700;color:#116047">✓ '+esc(q.prompt||'').replace(/___|_{2,}/g,esc(q.answer))+'</div></div>';
+}
 function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
   p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
 if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
-document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}}
+document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}${!ok?mejGrammarCorrection(q):''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}}
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
 function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
 function stopQuiz(){activeSession=null;route('levels')}

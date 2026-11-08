@@ -2,11 +2,79 @@
   "date": "2026-11-08",
   "missingMasterWords": 948,
   "byTreatment": {
-    "needs_manual_classification": 948
+    "number_card": 23,
+    "calendar_word": 11,
+    "image_candidate": 903,
+    "arabic_explanation_review": 11
   },
-  "illustratedCandidates": 0,
-  "projectedImageBatches": 0,
-  "batchSize": 16,
-  "summary": "Detailed production list based on current GitHub image evidence, not previous 994 count",
-  "warning": "Preliminary type categories; abstract terms and aliases require individual checking; images are not produced here"
+  "imageCandidates": 903,
+  "imageBatchesOf16": 57,
+  "batchPolicy": "Produce two batches at a time; only crop/insert after user visual approval",
+  "warning": "Categories are preliminary; the exact picture-to-word match must still be reviewed",
+  "firstBatch": [
+    {
+      "word": "apples",
+      "stage": "1B"
+    },
+    {
+      "word": "arms",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "body",
+      "stage": "1B"
+    },
+    {
+      "word": "brother",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "cakes",
+      "stage": "1B"
+    },
+    {
+      "word": "carrots",
+      "stage": "1B"
+    },
+    {
+      "word": "crayon",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "dad",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "doll",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "eraser",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "face",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "feet",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "frog",
+      "stage": "1B"
+    },
+    {
+      "word": "hair",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "hands",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "hippo",
+      "stage": "1B"
+    }
+  ]
 }

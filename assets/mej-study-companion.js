@@ -267,3 +267,85 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 })();
+
+
+/* MEJ_QUESTION_CLARITY_V2 — explicit activity type, visibly distinct prompts,
+   and safe alternative instructions for repeated vocabulary questions.
+   No answer, scoring, passage, or saved progress is changed. */
+(function(){
+ 'use strict';
+ const styles=`
+ #app .mej-v2-question{font-family:"Trebuchet MS",Verdana,Arial,sans-serif!important;font-size:clamp(19px,2.6vw,27px)!important;font-weight:800!important;line-height:1.65!important;letter-spacing:.15px;color:#075a80!important;background:#e9f8ff!important;border:2px solid #63c4df!important;border-radius:13px!important;padding:12px 15px!important;margin:13px 0!important;display:block!important;white-space:normal!important}
+ #app .mej-v2-question[lang="ar"]{font-family:Tahoma,"Segoe UI",sans-serif!important;direction:rtl;text-align:right}
+ #app .mej-v2-skill{display:block;width:max-content;max-width:100%;font-family:Tahoma,"Segoe UI",sans-serif;font-size:14px;font-weight:800;line-height:1.5;padding:5px 11px;margin:6px 0 7px;border-radius:7px;color:#fff;background:#146b80;direction:rtl}
+ #app .mej-v2-passage{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(17px,2.15vw,22px)!important;line-height:1.9!important;white-space:pre-line}
+ @media(max-width:600px){#app .mej-v2-question{font-size:20px!important;padding:10px 12px!important}}
+ `;
+ const css=document.createElement('style');css.id='mej-question-clarity-v2';css.textContent=styles;
+ const labels={Reading:'📖 قراءة وفهم',Listening:'🎧 استماع',Grammar:'📘 قواعد',Vocabulary:'🔤 مفردات',Writing:'✍️ كتابة'};
+ const alternatives=[
+  [/^اختر معنى الكلمة الإنجليزية:\s*(.+)$/u,['ما معنى الكلمة الإنجليزية: $1؟','اختر الترجمة الصحيحة للكلمة: $1','أي معنى يناسب الكلمة: $1؟']],
+  [/^اكتب الكلمة الإنجليزية بمعنى:\s*(.+)$/u,['ما الكلمة الإنجليزية التي تعني: $1؟','اكتب بالإنجليزية كلمة معناها: $1','أكمل بالكلمة الإنجليزية المناسبة لمعنى: $1']],
+  [/^Listen carefully and select the word\.?$/i,['Listen and choose the correct word.','Which word can you hear? Listen carefully.','Listen first, then select the matching word.']]
+ ];
+ let previous='',step=0,busy=false;
+ function ownText(node){return (node.textContent||'').replace(/\s+/g,' ').trim()}
+ function typeFromText(scope){
+  const labelsText=Array.from(scope.querySelectorAll('span,small,strong,h2,h3,h4')).slice(0,45).map(e=>ownText(e)).filter(t=>t.length<55).join(' | ');
+  const m=labelsText.match(/\b(Reading|Listening|Grammar|Vocabulary|Writing)\b/i);
+  if(m)return m[1][0].toUpperCase()+m[1].slice(1).toLowerCase();
+  if(/قراءة|فهم المقروء/.test(labelsText))return 'Reading';
+  if(/استماع|إنصات/.test(labelsText))return 'Listening';
+  if(/قواعد/.test(labelsText))return 'Grammar';
+  if(/مفردات/.test(labelsText))return 'Vocabulary';
+  if(/كتابة/.test(labelsText))return 'Writing';
+  return '';
+ }
+ function isQuestion(t){return /[?؟]\s*$/.test(t)||/^(اختر معنى الكلمة الإنجليزية:|اكتب الكلمة الإنجليزية بمعنى:|Listen carefully and select the word|Choose |Select |Write |Read and |What |Where |When |Who |Which |How |Why |Is |Are |Do |Does |Did )/i.test(t)}
+ function variant(text){
+  for(const [re,templates] of alternatives){
+   const m=text.match(re);if(!m)continue;
+   const choice=templates[step%templates.length];return choice.replace('$1',m[1]||'');
+  }
+  return text;
+ }
+ function refresh(){
+  busy=false;
+  const app=document.getElementById('app');if(!app||!app.querySelector('#feedback'))return;
+  const root=app.querySelector('#feedback')?.closest('section.card,.card,section')||app;
+  const nodes=[...root.querySelectorAll('h1,h2,h3,h4,p,.question,.question-text,.question-prompt,.prompt,.mej-question-prompt')];
+  const candidates=nodes.filter(el=>{
+   if(el.closest('#feedback,button,label,.options,.answers,.mej-v2-skill,.mej-question-passage'))return false;
+   if(el.children.length && !el.classList.contains('mej-question-prompt'))return false;
+   const t=ownText(el);return t.length>=5&&t.length<=290&&isQuestion(t);
+  });
+  const prompt=candidates.find(el=>el.classList.contains('mej-question-prompt'))||candidates[candidates.length-1];
+  if(!prompt)return;
+  const original=prompt.dataset.mejV2Original||ownText(prompt);
+  // Treat a new question as a new event, but never reshuffle on feedback changes.
+  const fingerprint=original+'|'+(root.querySelector('.passage,.reading-passage,.mej-question-passage')?.textContent||'').slice(0,90);
+  if(previous!==fingerprint){previous=fingerprint;step++;}
+  if(!prompt.dataset.mejV2Original)prompt.dataset.mejV2Original=original;
+  const changed=variant(original);
+  if(ownText(prompt)!==changed)prompt.textContent=changed;
+  prompt.classList.add('mej-v2-question');
+  prompt.lang=/[\u0600-\u06FF]/.test(changed)?'ar':'en';
+  const skill=typeFromText(root)||(/Listen/i.test(original)?'Listening':/معنى الكلمة|الكلمة الإنجليزية/.test(original)?'Vocabulary':root.querySelector('.passage,.reading-passage,.mej-question-passage')?'Reading':'');
+  if(skill){
+   let marker=prompt.previousElementSibling;
+   if(!marker?.classList.contains('mej-v2-skill')){
+    marker=document.createElement('div');marker.className='mej-v2-skill';prompt.before(marker);
+   }
+   marker.textContent='نوع السؤال: '+labels[skill];
+  }
+  root.querySelectorAll('.passage,.reading-passage,.mej-question-passage').forEach(e=>e.classList.add('mej-v2-passage'));
+ }
+ function schedule(){if(busy)return;busy=true;queueMicrotask(refresh)}
+ function boot(){
+  if(!document.getElementById(css.id))document.head.appendChild(css);
+  const app=document.getElementById('app');if(!app)return;
+  new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

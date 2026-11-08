@@ -1,0 +1,26 @@
+name: Install 32 owner-approved vocabulary pictures
+on:
+  push:
+    paths:
+      - 'assets/import/MEJ_Cropped_Linked_32_2026-11-08.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Crop import verification and stage linking
+        run: node scripts/install_owner_approved_cropped_32.cjs
+      - name: Publish approved pictures and update offline app
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-owner-approved-32-20261108 assets/approved-images-15.js index.html reviews/learning.html sw.js reviews/image-audit/MEJ_32_OWNER_APPROVED_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install user-approved 32 cropped pictures safely" && git push)

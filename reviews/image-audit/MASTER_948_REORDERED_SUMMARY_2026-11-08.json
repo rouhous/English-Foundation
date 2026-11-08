@@ -1,17 +1,21 @@
 {
   "date": "2026-11-08",
-  "missingMasterWords": 948,
-  "byTreatment": {
+  "masterMissingImageWords": 948,
+  "counts": {
     "number_card": 23,
     "calendar_word": 11,
-    "image_candidate": 903,
-    "arabic_explanation_review": 11
+    "image_candidate": 647,
+    "arabic_explanation_complex": 106,
+    "arabic_explanation": 161
   },
-  "imageCandidates": 903,
-  "imageBatchesOf16": 57,
-  "batchPolicy": "Produce two batches at a time; only crop/insert after user visual approval",
-  "warning": "Categories are preliminary; the exact picture-to-word match must still be reviewed",
-  "firstBatch": [
+  "excludedFromImageCreation": 301,
+  "remainingForIllustration": 647,
+  "groups4x4": 41,
+  "lastGridItems": 7,
+  "scope": "Only the backlog and generation queue; vocabulary must remain available to students with Arabic explanation",
+  "outstandingVisualApproval": "Every generated picture still requires semantic visual QA",
+  "note": "Abstract and semantically ambiguous terms excluded; exclusions can be reversed during educator review",
+  "firstRemaining": [
     {
       "word": "apples",
       "stage": "1B"
@@ -76,5 +80,9 @@
       "word": "hippo",
       "stage": "1B"
     }
+  ],
+  "suggestedReviewCategories": [
+    "arabic_explanation_complex",
+    "arabic_explanation"
   ]
 }

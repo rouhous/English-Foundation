@@ -1,0 +1,27 @@
+name: Audit current 13 approved vocabulary image banks
+on:
+  push:
+    paths:
+      - 'scripts/audit_live_13_image_banks.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/audit_live_13_image_banks.cjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/image-audit/live-approved-bank-index.json reviews/image-audit/live-approved-bank-index.b64
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish validated current vocabulary image bank coverage"
+            git push
+          fi

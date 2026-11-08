@@ -1,0 +1,26 @@
+name: Install five owner-approved MEJ vocabulary images
+on:
+  push:
+    paths:
+      - 'scripts/install_mej_five_new_owner_approved.cjs'
+      - 'assets/MEJ_5_NEW_OWNER_APPROVED_READY_FOR_GITHUB_2026-11-08.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/install_mej_five_new_owner_approved.cjs
+      - name: Publish five approved image files and learning mappings
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-owner-approved-5new-20261108 assets/approved-images-18.js index.html sw.js reviews/learning.html reviews/image-audit/MEJ_FIVE_NEW_OWNER_APPROVED_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install five owner-approved vocabulary pictures" && git push)

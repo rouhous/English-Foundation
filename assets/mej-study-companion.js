@@ -423,3 +423,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
+
+
+/* Load the in-app vocabulary/skills expansion after the learner interface starts. */
+(function(){
+ if(window.MEJSkillExpansionRequested)return;
+ window.MEJSkillExpansionRequested=true;
+ function load(){
+  if(document.querySelector('script[data-mej-skill-expansion]'))return;
+  const script=document.createElement('script');
+  script.dataset.mejSkillExpansion='1';
+  script.src='./assets/mej-skill-expansion-v1.js?v=20261108b';
+  script.defer=true;
+  document.head.appendChild(script);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});
+ else load();
+})();

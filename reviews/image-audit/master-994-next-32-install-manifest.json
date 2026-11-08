@@ -1,0 +1,232 @@
+{
+  "status": "awaiting_binary_archive_upload",
+  "archive": "assets/import/MEJ_32_Cropped_4x4_Batches_2026-11-08.zip",
+  "imageCount": 32,
+  "sourceResolution": "approx 313×313 each, upscaled to 384×384; upscaling is not native resolution",
+  "entries": [
+    {
+      "word": "3D cinema",
+      "stages": "7A",
+      "batch": "01",
+      "position": 1,
+      "filename": "B01_01_3D-cinema.webp"
+    },
+    {
+      "word": "Arabian camel",
+      "stages": "5B",
+      "batch": "01",
+      "position": 2,
+      "filename": "B01_02_Arabian-camel.webp"
+    },
+    {
+      "word": "Arabian leopard",
+      "stages": "5B",
+      "batch": "01",
+      "position": 3,
+      "filename": "B01_03_Arabian-leopard.webp"
+    },
+    {
+      "word": "Arabian tahr",
+      "stages": "5B",
+      "batch": "01",
+      "position": 4,
+      "filename": "B01_04_Arabian-tahr.webp"
+    },
+    {
+      "word": "Argentina",
+      "stages": "5B",
+      "batch": "01",
+      "position": 5,
+      "filename": "B01_05_Argentina.webp"
+    },
+    {
+      "word": "Britain",
+      "stages": "4A",
+      "batch": "01",
+      "position": 6,
+      "filename": "B01_06_Britain.webp"
+    },
+    {
+      "word": "English",
+      "stages": "4A",
+      "batch": "01",
+      "position": 7,
+      "filename": "B01_07_English.webp"
+    },
+    {
+      "word": "ICT",
+      "stages": "4A",
+      "batch": "01",
+      "position": 8,
+      "filename": "B01_08_ICT.webp"
+    },
+    {
+      "word": "Italy",
+      "stages": "5B",
+      "batch": "01",
+      "position": 9,
+      "filename": "B01_09_Italy.webp"
+    },
+    {
+      "word": "Morocco",
+      "stages": "5B",
+      "batch": "01",
+      "position": 10,
+      "filename": "B01_10_Morocco.webp"
+    },
+    {
+      "word": "New Year",
+      "stages": "11B",
+      "batch": "01",
+      "position": 11,
+      "filename": "B01_11_New-Year.webp"
+    },
+    {
+      "word": "Olympic Games",
+      "stages": "11B",
+      "batch": "01",
+      "position": 12,
+      "filename": "B01_12_Olympic-Games.webp"
+    },
+    {
+      "word": "P.E.",
+      "stages": "4A",
+      "batch": "01",
+      "position": 13,
+      "filename": "B01_13_P-E.webp"
+    },
+    {
+      "word": "SMS",
+      "stages": "11A",
+      "batch": "01",
+      "position": 14,
+      "filename": "B01_14_SMS.webp"
+    },
+    {
+      "word": "Science Fair",
+      "stages": "10A",
+      "batch": "01",
+      "position": 15,
+      "filename": "B01_15_Science-Fair.webp"
+    },
+    {
+      "word": "Social Studies",
+      "stages": "4A",
+      "batch": "01",
+      "position": 16,
+      "filename": "B01_16_Social-Studies.webp"
+    },
+    {
+      "word": "T-shirt",
+      "stages": "1B, 2B",
+      "batch": "02",
+      "position": 1,
+      "filename": "B02_01_T-shirt.webp"
+    },
+    {
+      "word": "TV",
+      "stages": "10A, 9A",
+      "batch": "02",
+      "position": 2,
+      "filename": "B02_02_TV.webp"
+    },
+    {
+      "word": "Word Lists",
+      "stages": "10B",
+      "batch": "02",
+      "position": 3,
+      "filename": "B02_03_Word-Lists.webp"
+    },
+    {
+      "word": "a bag of fruit",
+      "stages": "4A",
+      "batch": "02",
+      "position": 4,
+      "filename": "B02_04_a-bag-of-fruit.webp"
+    },
+    {
+      "word": "a beard",
+      "stages": "5A",
+      "batch": "02",
+      "position": 5,
+      "filename": "B02_05_a-beard.webp"
+    },
+    {
+      "word": "a bottle of water",
+      "stages": "4A",
+      "batch": "02",
+      "position": 6,
+      "filename": "B02_06_a-bottle-of-water.webp"
+    },
+    {
+      "word": "a bowl of soup",
+      "stages": "4A",
+      "batch": "02",
+      "position": 7,
+      "filename": "B02_07_a-bowl-of-soup.webp"
+    },
+    {
+      "word": "a box of cereal",
+      "stages": "4A",
+      "batch": "02",
+      "position": 8,
+      "filename": "B02_08_a-box-of-cereal.webp"
+    },
+    {
+      "word": "a can of lemonade",
+      "stages": "4A",
+      "batch": "02",
+      "position": 9,
+      "filename": "B02_09_a-can-of-lemonade.webp"
+    },
+    {
+      "word": "a cold",
+      "stages": "5B",
+      "batch": "02",
+      "position": 10,
+      "filename": "B02_10_a-cold.webp"
+    },
+    {
+      "word": "a cough",
+      "stages": "5B",
+      "batch": "02",
+      "position": 11,
+      "filename": "B02_11_a-cough.webp"
+    },
+    {
+      "word": "a cup of coffee",
+      "stages": "4A",
+      "batch": "02",
+      "position": 12,
+      "filename": "B02_12_a-cup-of-coffee.webp"
+    },
+    {
+      "word": "a glass of milk",
+      "stages": "4A",
+      "batch": "02",
+      "position": 13,
+      "filename": "B02_13_a-glass-of-milk.webp"
+    },
+    {
+      "word": "a headache",
+      "stages": "5B",
+      "batch": "02",
+      "position": 14,
+      "filename": "B02_14_a-headache.webp"
+    },
+    {
+      "word": "a high temperature",
+      "stages": "5B",
+      "batch": "02",
+      "position": 15,
+      "filename": "B02_15_a-high-temperature.webp"
+    },
+    {
+      "word": "a moustache",
+      "stages": "5A",
+      "batch": "02",
+      "position": 16,
+      "filename": "B02_16_a-moustache.webp"
+    }
+  ]
+}

@@ -423,26 +423,3 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
-
-
-/* Optional practice gateway: separate exercises, never grants stars or edits mastery. */
-(function(){
- 'use strict';
- function mount(){
-  const app=document.getElementById('app');if(!app)return;
-  if(!app.textContent||!(/رحلتي|المستويات|Learning Journey|الجزر|Placement|تحديد المستوى/.test(app.textContent.slice(0,1800))))return;
-  if(app.querySelector('#mej-extra-practice-link'))return;
-  const anchor=document.createElement('a');
-  anchor.id='mej-extra-practice-link';anchor.href='./reviews/extra-practice.html';
-  anchor.textContent='📚 تدريب إضافي • أسئلة متنوعة بدون تغيير النجوم';
-  anchor.style.cssText='display:block;width:fit-content;max-width:95%;margin:14px auto;padding:12px 16px;border-radius:13px;background:#e5f8fc;color:#00577a;border:2px solid #7bcede;text-decoration:none;font:800 16px/1.5 Tahoma,sans-serif;text-align:center';
-  app.appendChild(anchor);
- }
- function boot(){
-  const app=document.getElementById('app');if(!app)return;
-  let queued=false;
-  new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;mount()})}).observe(app,{childList:true,subtree:false});
-  mount();
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-})();

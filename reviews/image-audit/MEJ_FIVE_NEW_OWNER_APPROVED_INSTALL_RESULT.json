@@ -1,0 +1,16 @@
+{
+  "status": "installed",
+  "ownerApproved": 5,
+  "images": 5,
+  "learningPlacements": 5,
+  "words": [
+    "go hiking",
+    "go camping",
+    "go sailing",
+    "go snorkelling",
+    "photography"
+  ],
+  "archive": "assets/MEJ_5_NEW_OWNER_APPROVED_READY_FOR_GITHUB_2026-11-08.zip",
+  "sourceResolution": "301x301 upscaled 384x384",
+  "studentDataChanged": false
+}

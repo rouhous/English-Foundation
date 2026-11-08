@@ -1,0 +1,26 @@
+name: Install owner-reviewed images from last three grids
+on:
+  push:
+    paths:
+      - 'reviews/image-audit/MEJ_LAST_3_GRIDS_OWNER_DECISIONS_2026-11-08.csv'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install only images explicitly approved
+        run: node scripts/install_mej_last3_25_reviewed.cjs
+      - name: Publish image bank, routes and review result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-last3-owner-reviewed-20261108 assets/approved-images-17.js index.html reviews/learning.html sw.js reviews/image-audit/MEJ_LAST_3_GRIDS_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install approved last-three-grid vocabulary images" && git push)

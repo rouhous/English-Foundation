@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-08",
+  "masterMissingImageWords": 948,
+  "counts": {
+    "number_card": 23,
+    "calendar_word": 11,
+    "image_candidate": 647,
+    "arabic_explanation_complex": 106,
+    "arabic_explanation": 161
+  },
+  "excludedFromImageCreation": 301,
+  "remainingForIllustration": 647,
+  "groups4x4": 41,
+  "lastGridItems": 7,
+  "scope": "Only the backlog and generation queue; vocabulary must remain available to students with Arabic explanation",
+  "outstandingVisualApproval": "Every generated picture still requires semantic visual QA",
+  "note": "Abstract and semantically ambiguous terms excluded; exclusions can be reversed during educator review",
+  "firstRemaining": [
+    {
+      "word": "apples",
+      "stage": "1B"
+    },
+    {
+      "word": "arms",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "body",
+      "stage": "1B"
+    },
+    {
+      "word": "brother",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "cakes",
+      "stage": "1B"
+    },
+    {
+      "word": "carrots",
+      "stage": "1B"
+    },
+    {
+      "word": "crayon",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "dad",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "doll",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "eraser",
+      "stage": "1A, 2A"
+    },
+    {
+      "word": "face",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "feet",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "frog",
+      "stage": "1B"
+    },
+    {
+      "word": "hair",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "hands",
+      "stage": "1B, 2A"
+    },
+    {
+      "word": "hippo",
+      "stage": "1B"
+    }
+  ],
+  "suggestedReviewCategories": [
+    "arabic_explanation_complex",
+    "arabic_explanation"
+  ]
+}

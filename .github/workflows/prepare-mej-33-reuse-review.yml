@@ -1,0 +1,23 @@
+name: Prepare reuse image review and next two batches
+on:
+  push:
+    paths: ['scripts/prepare_33_reuse_visual_review.cjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/prepare_33_reuse_visual_review.cjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/image-audit/33-image-reuse-candidates.json reviews/image-audit/33-image-reuse-visual-review.html reviews/image-audit/next-two-4x4-without-33-pending-reuse.json
+          git diff --cached --quiet || (git commit -m "Publish 33 existing image comparison review and next 32 distinct vocabulary words" && git push)

@@ -150,4 +150,65 @@ function boot(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+}
+/* MEJ_GRAMMAR_CORRECTION_V1 — short Arabic rule after a wrong grammar answer.
+   Observes the existing answer-feedback panel; does not alter scoring or navigation. */
+(function installGrammarCorrection(){
+ const rules=[
+  [/\b(present perfect|have been|has been|have .*ed|has .*ed|since|for \d+ years)\b/i,'المضارع التام: نستخدم have/has + التصريف الثالث للربط بين الماضي والحاضر. نستخدم since لبداية المدة وfor لطولها.','She has lived here for two years.'],
+  [/\b(past continuous|was .*ing|were .*ing|while)\b/i,'الماضي المستمر: نستخدم was/were + الفعل مع ing لوصف حدث كان مستمرًا في الماضي.','I was reading when he called.'],
+  [/\b(present continuous|am .*ing|is .*ing|are .*ing|now|at the moment)\b/i,'المضارع المستمر: نستخدم am/is/are + الفعل مع ing لحدث يقع الآن.','She is studying now.'],
+  [/\b(past simple|yesterday|last (night|week|year|month)|ago|did not|didn't)\b/i,'الماضي البسيط: نستخدم التصريف الماضي للحدث المنتهي؛ وبعد did أو didn’t نستخدم الفعل في صورته الأساسية.','He visited Muscat yesterday.'],
+  [/\b(will|going to|future|tomorrow|next week)\b/i,'المستقبل: نستخدم will + الفعل الأساسي، أو am/is/are going to + الفعل الأساسي للخطط والنوايا.','They are going to travel tomorrow.'],
+  [/\b(comparative|superlative|than|the most|better|best|worse|worst)\b/i,'المقارنة: نستخدم الصفة + er أو more مع than للمقارنة، وthe + est أو the most للتفضيل.','Ali is taller than Sami.'],
+  [/\b(passive|was built|were built|is made|are made|by whom)\b/i,'المبني للمجهول: نستخدم be بالزمن المناسب + التصريف الثالث عندما يكون التركيز على الفعل أو المفعول.','The bridge was built in 2010.'],
+  [/\b(if clause|conditional|unless|if I were|would have|would)\b/i,'الجملة الشرطية: راقب نوع الشرط؛ الشرط الأول If + present ثم will + verb، والشرط الثاني If + past ثم would + verb.','If it rains, we will stay home.'],
+  [/\b(must|should|could|might|may|can|have to|modal)\b/i,'الأفعال الناقصة: يأتي الفعل في صورته الأساسية بعد can, should, must, may وغيرها، دون to أو s.','You should drink water.'],
+  [/\b(a or an|an apple|a book|article|the article|determiner)\b/i,'أدوات التعريف: نستخدم a قبل الصوت الساكن وan قبل الصوت المتحرك، وthe عند الحديث عن شيء محدد.','She has an umbrella.'],
+  [/\b(he|she|it|every day|usually|always|often|doesn't|does not|present simple)\b/i,'المضارع البسيط: نضيف s أو es للفعل مع he/she/it في الإثبات، وبعد does أو doesn’t يعود الفعل إلى صورته الأساسية.','She plays tennis every day.'],
+  [/\b(preposition|in\/on\/at|in or on|on or at|at or in)\b/i,'حروف الجر: غالبًا نستخدم at مع الساعة، on مع الأيام والتواريخ، وin مع الشهور والسنوات والفترات.','We meet on Monday at 8 o’clock.'],
+  [/\b(there is|there are|singular|plural|much|many|some|any)\b/i,'المفرد والجمع: نستخدم is وthere is للمفرد، وare وthere are للجمع. وتأتي many مع المعدود وmuch مع غير المعدود.','There are many books.'],
+  [/\b(question tag|question word|do you|does she|did he|wh-question)\b/i,'صياغة السؤال: نستخدم فعلًا مساعدًا مناسبًا قبل الفاعل، مثل do/does في المضارع وdid في الماضي، ثم الفعل الأساسي.','Where does she live?'],
+  [/\b(relative clause|who|which|whose|where)\b/i,'ضمائر الوصل: who للأشخاص، which للأشياء، where للأماكن، وwhose للملكية.','This is the boy who helped me.']
+ ];
+ const tidy=x=>String(x||'').replace(/\s+/g,' ').trim();
+ function explain(context){
+  for(const [re,ar,en] of rules){if(re.test(context))return {ar,en};}
+  return {ar:'راجع تركيب الجملة: حدّد الفاعل والزمن أولًا، ثم لاحظ شكل الفعل وترتيب الكلمات في الإجابة الصحيحة.',en:''};
+ }
+ let scheduled=false;
+ function refresh(){
+  scheduled=false;
+  const feedback=document.querySelector('#app #feedback');
+  if(!feedback)return;
+  const bad=feedback.classList.contains('incorrect')||!!feedback.querySelector('.incorrect')||
+    /(?:إجابة خاطئة|غير صحيحة|حاول مجدداً|try again|incorrect|wrong answer)/i.test(tidy(feedback.textContent));
+  if(!bad){feedback.querySelector('#mej-grammar-correction')?.remove();return;}
+  const app=document.getElementById('app');
+  const scope=feedback.closest('section.card')||feedback.closest('.card')||app;
+  const body=tidy(scope?.textContent).slice(0,1500);
+  const isGrammar=/(?:\bgrammar\b|قواعد|قاعدة نحوية|صحح الجملة|اختر الصيغة الصحيحة)/i.test(body);
+  if(!isGrammar){feedback.querySelector('#mej-grammar-correction')?.remove();return;}
+  const context=body.replace(tidy(feedback.textContent),'');
+  const {ar,en}=explain(context);
+  const existing=feedback.querySelector('#mej-grammar-correction');
+  if(existing&&existing.dataset.rule===ar)return;
+  existing?.remove();
+  const card=document.createElement('div');card.id='mej-grammar-correction';
+  card.dataset.rule=ar;card.dir='rtl';card.setAttribute('role','note');
+  card.style.cssText='margin-top:12px;padding:12px 14px;background:#f1f8ff;color:#153b67;border:1px solid #98c8f1;border-radius:12px;font-size:clamp(14px,1.8vw,17px);line-height:1.7;text-align:right';
+  const head=document.createElement('strong');head.textContent='📘 تذكّر القاعدة';
+  const line=document.createElement('div');line.textContent=ar;
+  card.append(head,line);
+  if(en){const ex=document.createElement('div');ex.dir='ltr';ex.style.cssText='margin-top:6px;color:#176b52;font-weight:700;text-align:left';ex.textContent='Example: '+en;card.append(ex);}
+  feedback.appendChild(card);
+ }
+ function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(refresh);}
+ function start(){
+  const app=document.getElementById('app');if(!app)return;
+  new MutationObserver(schedule).observe(app,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
 })();

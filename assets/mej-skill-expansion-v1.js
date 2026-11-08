@@ -123,18 +123,24 @@ function interceptLegacy(event){
 document.addEventListener('click',interceptLegacy,true);
 window.MEJOpenSkillExpansion=open;
 
-function attach(){
- const app=document.getElementById('app');if(!app)return;
- if(app.querySelector('#mej-open-skill-mix'))return;
- // This gateway lives within the learner app, not on a standalone website.
- if(!/رحلتي|المستويات|Learning Journey|الجزر|Placement|تحديد المستوى/.test((app.textContent||'').slice(0,2100)))return;
- const b=node('button','','🧩 أنشطة التوصيل وإكمال الفقرات');b.id='mej-open-skill-mix';
- b.onclick=()=>open().catch(()=>{window.alert('تعذر تحميل بنك المفردات. يرجى الاتصال بالإنترنت ثم إعادة المحاولة.')});
- app.append(b);
-}
+// MEJ_HOME_EXTRA_ACTIVITY_BUTTON_REMOVED_V1
+// Keep skill activities available in their existing learning menus;
+// never add the standalone shortcut beneath the home footer.
 function boot(){
- document.head.append(css);const app=document.getElementById('app');if(!app)return;
- let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;attach()})}).observe(app,{childList:true,subtree:false});attach();refreshLegacyMenu();
+ document.head.append(css);
+ const app=document.getElementById('app');
+ if(!app)return;
+ const refresh=()=>{
+  document.getElementById('mej-open-skill-mix')?.remove();
+  refreshLegacyMenu();
+ };
+ let pending=false;
+ new MutationObserver(()=>{
+  if(pending)return;
+  pending=true;
+  queueMicrotask(()=>{pending=false;refresh()});
+ }).observe(app,{childList:true,subtree:false});
+ refresh();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

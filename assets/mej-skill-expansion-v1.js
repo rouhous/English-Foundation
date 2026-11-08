@@ -77,19 +77,54 @@ function makeCloze(grade){
  const check=node('button','','تحقق من الإجابات');check.onclick=()=>{if(position!==slots.length)return;done=true;const good=slots.filter((s,i)=>s.dataset.choice===answers[i]).length;feedback.textContent=good===slots.length?'✅ ممتاز! جميع الكلمات في مواضعها الصحيحة.':'الإجابات الصحيحة: '+answers.join(' • ');const next=node('button','','فقرة أخرى');next.onclick=()=>makeCloze(grade);target.append(next)};
  target.append(prompt,para,choices,check,feedback);
 }
-async function open(){
+async function open(requestedGrade){
  if(!catalog){const r=await fetch(CATALOG);if(!r.ok)throw Error('CATALOG_UNAVAILABLE');catalog=await r.json()}
+ document.getElementById('mej-skills-overlay')?.remove();
  root=node('div');root.id='mej-skills-overlay';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
  const sheet=node('div','sheet');const header=node('div','head');header.append(node('h2','','أنشطة المفردات والمهارات'));
  const close=node('button','','إغلاق ×');close.onclick=()=>root.remove();header.append(close);
  const info=node('p','','أنشطة تنويع ومراجعة داخل التطبيق، دون تغيير النجوم أو إتقان الأنشطة الأصلية حتى اعتماد التقييم.');
  const controls=node('div');const select=node('select');for(let g=1;g<=12;g++){const opt=node('option','', 'الصف '+g);opt.value=String(g);select.append(opt)}
- const grade=Math.min(12,Math.max(1,Number(window.MEJ_ACTIVE_GRADE)||Number(localStorage.getItem('MEJ_ACTIVITY_GRADE'))||1));select.value=String(grade);
+ const grade=Math.min(12,Math.max(1,Number(requestedGrade)||Number(window.MEJ_ACTIVE_GRADE)||Number(localStorage.getItem('MEJ_ACTIVITY_GRADE'))||1));select.value=String(grade);
  const start=node('button','','بدء النشاط');start.onclick=()=>{const g=Number(select.value);if(g<=4)makeMatch(g);else makeCloze(g)};
  controls.append(select,start);
  const content=node('div');content.id='mej-skill-content';
  sheet.append(header,info,controls,content);root.append(sheet);document.body.append(root);start.click();
 }
+
+// Replace legacy Match entries with the real vocabulary-image matching / cloze
+// activities. Legacy counts reflect only questions tagged "Match", not the
+// available vocabulary or approved images; they are misleading.
+function legacyMatchMenu(){
+ const app=document.getElementById('app');
+ if(!app)return false;
+ const heading=Array.from(app.querySelectorAll('h1,h2,h3,h4')).some(e=>/\bMatch\b/i.test(e.textContent||'') && /اختر المستوى/.test(e.textContent||''));
+ return heading;
+}
+function refreshLegacyMenu(){
+ if(!legacyMatchMenu())return;
+ const app=document.getElementById('app');
+ for(const el of app.querySelectorAll('button')){
+  const raw=(el.textContent||'').trim();
+  const match=raw.match(/المستوى\s*(\d+)\s*[—–-]\s*\d+\s*عنصر/);
+  if(!match)continue;
+  const grade=Number(match[1]);if(grade<1||grade>12)continue;
+  el.dataset.mejExpandedGrade=String(grade);
+  const label=grade<=4?'توصيل كلمات بالصور':'إكمال فقرات بالمفردات';
+  const newText='المستوى '+grade+' — '+label;
+  if(el.textContent!==newText)el.textContent=newText;
+ }
+}
+function interceptLegacy(event){
+ const btn=event.target?.closest?.('button[data-mej-expanded-grade]');
+ if(!btn||!legacyMatchMenu())return;
+ event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+ const grade=Number(btn.dataset.mejExpandedGrade);
+ open(grade).catch(()=>window.alert('تعذر تحميل الأنشطة. تحقق من اتصال الإنترنت وإتاحة بنك المفردات.'));
+}
+document.addEventListener('click',interceptLegacy,true);
+window.MEJOpenSkillExpansion=open;
+
 function attach(){
  const app=document.getElementById('app');if(!app)return;
  if(app.querySelector('#mej-open-skill-mix'))return;
@@ -101,7 +136,7 @@ function attach(){
 }
 function boot(){
  document.head.append(css);const app=document.getElementById('app');if(!app)return;
- let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;attach()})}).observe(app,{childList:true,subtree:false});attach();
+ let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;attach()})}).observe(app,{childList:true,subtree:false});attach();refreshLegacyMenu();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

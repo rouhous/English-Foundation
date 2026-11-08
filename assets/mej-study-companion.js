@@ -349,3 +349,43 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* Diagnostic return navigation: return to voyage (second screen), not the home screen. */
+(function(){
+ 'use strict';
+ const returnLabel='↩ العودة إلى رحلتي';
+ function onDiagnostic(){
+  return !!document.querySelector('.navbutton.active[data-route="diagnostic"],.navbutton[data-route="diagnostic"].active');
+ }
+ function update(){
+  if(!onDiagnostic())return;
+  const app=document.getElementById('app');if(!app)return;
+  for(const el of app.querySelectorAll('button,a,[role="button"]')){
+   if(el.dataset.mejReturnVoyage==='1')continue;
+   const label=(el.textContent||'').replace(/\s+/g,' ').trim();
+   const click=el.getAttribute('onclick')||'';
+   const homeAction=/\b(?:route|goTo|navigate)\s*\(\s*['"]home['"]\s*\)/i.test(click);
+   const homeLabel=/العودة\s*(?:إلى|لل)?\s*(?:الصفحة\s*)?الرئيسية|back\s+to\s+home/i.test(label);
+   if(!(homeLabel||homeAction&&/عودة|رجوع|back/i.test(label)))continue;
+   el.dataset.mejReturnVoyage='1';
+   el.textContent=returnLabel;
+  }
+ }
+ function click(event){
+  const el=event.target?.closest?.('[data-mej-return-voyage="1"]');
+  if(!el||!onDiagnostic())return;
+  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+  if(typeof window.route==='function')window.route('journey');
+  else if(typeof route==='function')route('journey');
+ }
+ function boot(){
+  const app=document.getElementById('app');if(!app)return;
+  let pending=false;
+  const schedule=()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;update()})};
+  new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
+  document.addEventListener('click',click,true);
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

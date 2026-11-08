@@ -336,7 +336,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    if(!marker?.classList.contains('mej-v2-skill')){
     marker=document.createElement('div');marker.className='mej-v2-skill';prompt.before(marker);
    }
-   marker.textContent='نوع السؤال: '+labels[skill];
+   if(marker.textContent!=='نوع السؤال: '+labels[skill])marker.textContent='نوع السؤال: '+labels[skill];
   }
   root.querySelectorAll('.passage,.reading-passage,.mej-question-passage').forEach(e=>e.classList.add('mej-v2-passage'));
  }

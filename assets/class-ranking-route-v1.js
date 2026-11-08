@@ -15,7 +15,7 @@
    mount.textContent='ترتيب الصف غير متاح حاليًا.';
    return;
   }
-  const provider=window.MEJ_VERIFIED_RANKING_PROVIDER || (async function(){
+  const provider=(async function(){
    const token=localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'';
    if(!/^[a-f0-9]{64}$/.test(token))throw Error('STUDENT_LOGIN_REQUIRED');
    const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-class-ranking',{

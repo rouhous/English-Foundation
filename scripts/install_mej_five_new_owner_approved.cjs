@@ -59,3 +59,5 @@ const report={status:'installed',ownerApproved:5,images:5,learningPlacements:rou
 fs.mkdirSync('reviews/image-audit',{recursive:true});
 fs.writeFileSync('reviews/image-audit/MEJ_FIVE_NEW_OWNER_APPROVED_INSTALL_RESULT.json',JSON.stringify(report,null,2)+'\n');
 console.log('MEJ_FIVE_NEW_INSTALL '+JSON.stringify(report));
+
+// Trigger installation after archive was uploaded to assets/.

@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-08",
+  "missingMasterWords": 948,
+  "byTreatment": {
+    "needs_manual_classification": 948
+  },
+  "illustratedCandidates": 0,
+  "projectedImageBatches": 0,
+  "batchSize": 16,
+  "summary": "Detailed production list based on current GitHub image evidence, not previous 994 count",
+  "warning": "Preliminary type categories; abstract terms and aliases require individual checking; images are not produced here"
+}

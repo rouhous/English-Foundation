@@ -1888,7 +1888,17 @@ function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='publ
 function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
 function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
 // MEJ_STAGE1_DIAGNOSTIC_V1
-function mejPartUnlocked(g,part,p=active()){if(part===1)return true;if(part!==2)return false;const first=mejStageQuestions(g,1);return first.length>0&&mejStageMastered(g,1,p)===first.length}
+// MEJ_PRIOR_PARTS_UNLOCKED_V1
+function mejPartUnlocked(g,part,p=active()){
+  g=Number(g);part=Number(part);
+  if(part===1)return true;
+  if(part!==2||!Number.isInteger(g)||g<0||g>12)return false;
+  // The student has already reached a later stage: all earlier parts stay open.
+  if(g<maxAllowed(p))return true;
+  // At the current stage, part 2 only opens after completing part 1.
+  const first=mejStageQuestions(g,1);
+  return first.length>0&&mejStageMastered(g,1,p)===first.length;
+}
 function beginStagePart(g,part){if(!checkAccess(g))return;if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
 function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
 // The school grade limits both placement questions and the suggested placement level.

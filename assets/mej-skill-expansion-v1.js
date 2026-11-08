@@ -26,16 +26,62 @@ const css=document.createElement('style');css.textContent=`
 `;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
-function imgFor(word){const bank=window.MEJ_APPROVED_IMAGES||{};const arr=bank[word.toLowerCase().trim()]||bank[word];const options=Array.isArray(arr)?arr:arr?[arr]:[];return options.find(x=>x?.status==='approved'&&typeof x.src==='string'&&x.w>=316&&x.h>=316)?.src||null}
+// MEJ_MATCH_G1_G4_CATALOG_IMAGE_FIX_V1
+const normalizeWord=value=>String(value||'').toLowerCase().trim().replace(/\\s+/g,' ');
+async function ensureCatalog(){
+ if(catalog?.levels?.length)return catalog;
+ const response=await fetch(CATALOG,{cache:'no-store'});
+ if(!response.ok)throw new Error('CATALOG_UNAVAILABLE');
+ const json=await response.json();
+ if(!Array.isArray(json.levels))throw new Error('CATALOG_INVALID');
+ catalog=json;
+ return catalog;
+}
+function imgFor(word){
+ const bank=window.MEJ_APPROVED_IMAGES||{};
+ const key=normalizeWord(word);
+ const options=bank[key]||bank[word]||[];
+ const entries=Array.isArray(options)?options:[options];
+ return entries.find(item=>item && item.status==='approved' && typeof item.src==='string' &&
+  (Number(item.w)||Number(item.width)||0)>=316 &&
+  (Number(item.h)||Number(item.height)||0)>=316)?.src||null;
+}
 function vocabulary(grade){
  const level=catalog?.levels?.find(l=>Number(l.grade)===grade);
- const qs=level?level.parts.flatMap(p=>p.questions):(typeof byGrade!=='undefined'?(byGrade[grade]||[]):[]);
- return [...new Set(qs.filter(q=>q.type==='Vocabulary').map(q=>{
- const word=(q.word||q.pictureWord||'').trim();
- if(word)return word;
- const a=(q.answer||'').trim();
- return /^[a-z][a-z\s-]*$/i.test(a)?a:'';
- }).filter(Boolean))];
+ const qs=level?.parts?.flatMap(part=>part.questions||[])||[];
+ // The reviewed curriculum stores bilingual Vocabulary questions:
+ // Arabic answers must not be shown as English matching labels.
+ return [...new Set(qs.filter(q=>q.type==='Vocabulary')
+  .map(q=>{
+   const direct=normalizeWord(q.word||q.pictureWord);
+   if(/^[a-z][a-z\\s'-]*$/.test(direct))return direct;
+   const answer=normalizeWord(q.answer);
+   return /^[a-z][a-z\\s'-]*$/.test(answer)?answer:'';
+  }).filter(Boolean))];
+}
+const imageShardLoaded=new Set();
+async function loadImageShard(index){
+ if(imageShardLoaded.has(index))return;
+ const url='./assets/approved-images-'+String(index).padStart(2,'0')+'.js';
+ await new Promise((resolve,reject)=>{
+  const script=document.createElement('script');
+  script.src=url;
+  script.onload=()=>{imageShardLoaded.add(index);resolve()};
+  script.onerror=()=>reject(new Error('IMAGE_SHARD_'+index));
+  document.head.append(script);
+ });
+}
+async function ensureMatchingImages(grade){
+ await ensureCatalog();
+ let matched=vocabulary(grade).filter(word=>imgFor(word)).length;
+ if(matched>=4)return;
+ // Respect the approved banks only; never replace a missing picture with
+ // generated or mismatched imagery. Retry omitted shards as needed.
+ for(let i=1;i<=18 && matched<4;i+=3){
+  const group=[i,i+1,i+2].filter(n=>n<=18);
+  await Promise.allSettled(group.map(loadImageShard));
+  matched=vocabulary(grade).filter(word=>imgFor(word)).length;
+ }
 }
 function renderMatch(){
  const target=root.querySelector('#mej-skill-content');target.replaceChildren();
@@ -57,9 +103,16 @@ function renderMatch(){
  };words.append(b)});
  target.append(images,words,feedback);
 }
-function makeMatch(grade){
+async function makeMatch(grade){
+ const target=root.querySelector('#mej-skill-content');
+ target.textContent='جارٍ تحميل المفردات والصور المعتمدة…';
+ try{await ensureMatchingImages(grade)}
+ catch(error){console.warn('Matching resource loading:',error)}
  const possible=shuffle(vocabulary(grade).map(word=>({word,img:imgFor(word)})).filter(x=>x.img));
- if(possible.length<4){root.querySelector('#mej-skill-content').textContent='لا تتوفر أربع صور معتمدة ومطابقة لهذا الصف حاليًا. لن نعرض صورًا غير مطابقة.';return}
+ if(possible.length<4){
+  target.textContent='لا تتوفر أربع صور معتمدة ومطابقة لهذا الصف حاليًا. تحقق من اتصال الإنترنت ثم أعد المحاولة.';
+  return;
+ }
  session={grade,words:possible.slice(0,4)};renderMatch();
 }
 function makeCloze(grade){
@@ -84,7 +137,7 @@ async function open(requestedGrade){
  const info=node('p','','أنشطة تنويع ومراجعة داخل التطبيق، دون تغيير النجوم أو إتقان الأنشطة الأصلية حتى اعتماد التقييم.');
  const controls=node('div');const select=node('select');for(let g=1;g<=12;g++){const opt=node('option','', 'الصف '+g);opt.value=String(g);select.append(opt)}
  const grade=Math.min(12,Math.max(1,Number(requestedGrade)||Number(window.MEJ_ACTIVE_GRADE)||Number(localStorage.getItem('MEJ_ACTIVITY_GRADE'))||1));select.value=String(grade);
- const start=node('button','','بدء النشاط');start.onclick=()=>{const g=Number(select.value);if(g<=4)makeMatch(g);else makeCloze(g)};
+ const start=node('button','','بدء النشاط');start.onclick=()=>{const g=Number(select.value);if(g<=4)makeMatch(g).catch(err=>{console.error(err);root.querySelector('#mej-skill-content').textContent='تعذر تحميل النشاط. أعد المحاولة عند توفر الاتصال.'});else makeCloze(g)};
  controls.append(select,start);
  const content=node('div');content.id='mej-skill-content';
  sheet.append(header,info,controls,content);root.append(sheet);document.body.append(root);start.click();

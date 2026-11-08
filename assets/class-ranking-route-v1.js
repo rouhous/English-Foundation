@@ -15,7 +15,18 @@
    mount.textContent='ترتيب الصف غير متاح حاليًا.';
    return;
   }
-  const provider=window.MEJ_VERIFIED_RANKING_PROVIDER;
+  const provider=window.MEJ_VERIFIED_RANKING_PROVIDER || (async function(){
+   const token=localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'';
+   if(!/^[a-f0-9]{64}$/.test(token))throw Error('STUDENT_LOGIN_REQUIRED');
+   const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-class-ranking',{
+    method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+    body:JSON.stringify({action:'my_class'}),signal:AbortSignal.timeout(16000)
+   });
+   const result=await response.json();
+   if(!response.ok||result.ok!==true)throw Error(result.error||'RANKING_UNAVAILABLE');
+   return result;
+  });
   if(typeof provider!=='function'){
    window.MEJClassRanking.unavailable(mount,
      'ترتيب صفي سيظهر بعد اعتماد تسجيل الطالب وحماية النجوم على الخادم. لا يتم عرض نتائج الحسابات التجريبية.');
@@ -31,7 +42,7 @@
   }).catch(()=>{
    if(sequence===requestSequence&&mount.isConnected)
     window.MEJClassRanking.unavailable(mount,
-      'تعذر التحقق من ترتيب الصف. لن تُعرض نتائج غير موثقة.');
+      'تعذر تحميل الترتيب. تأكد من ربط حساب الطالب وحفظ تقدمه سحابيًا، ثم حاول مجددًا.');
   });
  };
   // Settings entry: content inspection only, without elevating student permissions.

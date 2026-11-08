@@ -356,20 +356,23 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  'use strict';
  const returnLabel='↩ العودة إلى رحلتي';
  function onDiagnostic(){
-  return !!document.querySelector('.navbutton.active[data-route="diagnostic"],.navbutton[data-route="diagnostic"].active');
+  const app=document.getElementById('app');
+  if(!app)return false;
+  const text=(app.textContent||'').slice(0,1800);
+  return /(?:Placement|تحديد المستوى)/i.test(text)&&/(?:Quiz|اختبار تشخيصي)/i.test(text);
  }
  function update(){
   if(!onDiagnostic())return;
   const app=document.getElementById('app');if(!app)return;
   for(const el of app.querySelectorAll('button,a,[role="button"]')){
-   if(el.dataset.mejReturnVoyage==='1')continue;
+   // Keep fixing the actual button even after app re-renders it.
    const label=(el.textContent||'').replace(/\s+/g,' ').trim();
    const click=el.getAttribute('onclick')||'';
    const homeAction=/\b(?:route|goTo|navigate)\s*\(\s*['"]home['"]\s*\)/i.test(click);
    const homeLabel=/العودة\s*(?:إلى|لل)?\s*(?:الصفحة\s*)?الرئيسية|back\s+to\s+home/i.test(label);
    if(!(homeLabel||homeAction&&/عودة|رجوع|back/i.test(label)))continue;
    el.dataset.mejReturnVoyage='1';
-   el.textContent=returnLabel;
+   if(el.textContent!==returnLabel)el.textContent=returnLabel;
   }
  }
  function click(event){
@@ -377,7 +380,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(!el||!onDiagnostic())return;
   event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
   if(typeof window.route==='function')window.route('journey');
-  else if(typeof route==='function')route('journey');
+  else if(typeof window.journey==='function')window.journey();
  }
  function boot(){
   const app=document.getElementById('app');if(!app)return;

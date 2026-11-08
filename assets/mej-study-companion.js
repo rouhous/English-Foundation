@@ -182,7 +182,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const feedback=document.querySelector('#app #feedback');
   if(!feedback)return;
   const bad=feedback.classList.contains('incorrect')||!!feedback.querySelector('.incorrect')||
-    /(?:إجابة خاطئة|غير صحيحة|حاول مجدداً|try again|incorrect|wrong answer)/i.test(tidy(feedback.textContent));
+    /(?:❌|✖|إجابة خاطئة|غير صحيحة|حاول مجدداً|try again|incorrect|wrong answer)/i.test(tidy(feedback.textContent));
   if(!bad){feedback.querySelector('#mej-grammar-correction')?.remove();return;}
   const app=document.getElementById('app');
   const scope=feedback.closest('section.card')||feedback.closest('.card')||app;

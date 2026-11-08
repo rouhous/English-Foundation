@@ -211,4 +211,59 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
+}
+/* MEJ_READING_QUESTION_LAYOUT_V1 — separate passage from question without changing answers. */
+(function installQuestionLayout(){
+ const style=document.createElement('style');
+ style.id='mej-question-layout-style';
+ style.textContent=[
+  '#app .mej-question-passage{display:block;white-space:pre-line;line-height:1.9;font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,2vw,21px);color:#18365b;margin:0 0 14px;padding:12px 15px;background:#f6faff;border-inline-start:4px solid #75b6ec;border-radius:10px;direction:ltr;text-align:left}',
+  '#app .mej-question-prompt{display:block;clear:both;margin:13px 0 12px;padding:9px 12px;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;font-size:clamp(17px,2.25vw,23px);font-weight:800;line-height:1.65;color:#13578a;border-inline-start:4px solid #18a4be;background:#edfaff;border-radius:9px}',
+  '#app .mej-question-prompt:lang(en){direction:ltr;text-align:left}',
+  '#app .mej-question-prompt:lang(ar){direction:rtl;text-align:right}',
+  '#app .passage{display:block;white-space:pre-line;line-height:1.9;font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,2vw,21px);color:#18365b;margin-block:8px 14px}',
+  '@media(max-width:600px){#app .mej-question-passage{padding:10px 11px;margin-bottom:11px}#app .mej-question-prompt{padding:9px 10px;margin-top:11px}}'
+ ].join('\n');
+ function start(){
+  if(!document.getElementById(style.id))document.head.appendChild(style);
+  const app=document.getElementById('app');
+  if(!app)return;
+  let pending=false;
+  function refresh(){
+   pending=false;
+   if(!app.querySelector('#feedback'))return;
+   // Only examine compact text prompts. Never touch the student's answer, choices or passage markup.
+   const nodes=app.querySelectorAll('h2,h3,h4,p,.question,.question-text,.question-prompt,.prompt');
+   nodes.forEach(el=>{
+    if(el.closest('#feedback,button,label,.mej-question-prompt,.mej-question-passage,.options,.answers,.learning'))return;
+    if(el.dataset.mejQuestionLayout==='done')return;
+    if(el.children.length!==0)return;
+    const raw=el.textContent.trim();
+    if(raw.length<20||raw.length>1050)return;
+    // A question and preceding short text in one element.
+    const match=raw.match(/^([\s\S]+[.!؟])\s+([^.!؟\n]*[?؟])$/);
+    if(match&&match[1].length>18&&match[2].trim().length>4){
+     const first=document.createElement('span');first.className='mej-question-passage';first.textContent=match[1];
+     const question=document.createElement('span');question.className='mej-question-prompt';
+     question.lang=/[\u0600-\u06FF]/.test(match[2])?'ar':'en';question.textContent=match[2].trim();
+     el.replaceChildren(first,question);
+     el.dataset.mejQuestionLayout='done';return;
+    }
+    // When the question is already separate, make it visually distinct from nearby passage.
+    if(/[?؟]\s*$/.test(raw)&&raw.length<260){
+     const passage=el.previousElementSibling;
+     if(passage&&(passage.matches('.passage,.reading-passage,blockquote,p')||passage.textContent.trim().length>65)){
+      el.classList.add('mej-question-prompt');
+      el.lang=/[\u0600-\u06FF]/.test(raw)?'ar':'en';
+      el.dataset.mejQuestionLayout='done';
+     }
+    }
+   });
+  }
+  function schedule(){if(pending)return;pending=true;queueMicrotask(refresh);}
+  new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
+  refresh();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
 })();

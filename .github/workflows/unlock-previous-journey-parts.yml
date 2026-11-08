@@ -1,0 +1,27 @@
+name: Unlock all previous journey levels
+on:
+  push:
+    paths:
+      - scripts/unlock_previous_journey_parts.py
+      - .github/workflows/unlock-previous-journey-parts.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Patch and syntax-check progression
+        run: python3 scripts/unlock_previous_journey_parts.py
+      - name: Commit repaired learner levels
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Keep previously reached stage parts unlocked"
+            git push
+          fi

@@ -1,0 +1,340 @@
+{
+  "date": "2026-11-08",
+  "ownerApproved": 32,
+  "previousSoftReviewAlsoApproved": [
+    "application form",
+    "atlas",
+    "black",
+    "brown"
+  ],
+  "nativeResolution": "313x313",
+  "resolutionException": "User explicitly approved; avoid upscaling without disclosure",
+  "masterMissingImageCount": 26,
+  "alreadyApprovedPrimaryKept": 4,
+  "extraOutsideOriginalMaster": 2,
+  "expectedStagePlacements": 27,
+  "archiveExpected": "assets/import/MEJ_Cropped_Linked_32_2026-11-08.zip",
+  "repoInstallation": "Pending upload of image binary ZIP; approval metadata saved now",
+  "items": [
+    {
+      "no": 1,
+      "word": "application form",
+      "stages": "12B",
+      "imageFile": "001_application_form.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 2,
+      "word": "archaeological park",
+      "stages": "10A",
+      "imageFile": "002_archaeological_park.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 3,
+      "word": "artist",
+      "stages": "3A",
+      "imageFile": "003_artist.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 4,
+      "word": "atlas",
+      "stages": "8B",
+      "imageFile": "004_atlas.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 5,
+      "word": "aunt",
+      "stages": "2A",
+      "imageFile": "005_aunt.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 6,
+      "word": "balcony",
+      "stages": "2B",
+      "imageFile": "006_balcony.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 7,
+      "word": "banana",
+      "stages": "2B",
+      "imageFile": "007_banana.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 8,
+      "word": "baseball cap",
+      "stages": "3A",
+      "imageFile": "008_baseball_cap.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 9,
+      "word": "beans",
+      "stages": "2B",
+      "imageFile": "009_beans.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 10,
+      "word": "beautiful beaches",
+      "stages": "11A",
+      "imageFile": "010_beautiful_beaches.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 11,
+      "word": "bedroom",
+      "stages": "2B",
+      "imageFile": "011_bedroom.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 12,
+      "word": "big wheel",
+      "stages": "4B",
+      "imageFile": "012_big_wheel.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 13,
+      "word": "bike",
+      "stages": "2A",
+      "imageFile": "013_bike.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 14,
+      "word": "black",
+      "stages": "2A",
+      "imageFile": "014_black.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 15,
+      "word": "boat",
+      "stages": "3A",
+      "imageFile": "015_boat.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 16,
+      "word": "boots",
+      "stages": "2B",
+      "imageFile": "016_boots.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 17,
+      "word": "brown",
+      "stages": "2A",
+      "imageFile": "017_brown.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 18,
+      "word": "brush the horses",
+      "stages": "3B",
+      "imageFile": "018_brush_the_horses.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 19,
+      "word": "build a robot",
+      "stages": "4B, 5A",
+      "imageFile": "019_build_a_robot.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 20,
+      "word": "build a sandcastle",
+      "stages": "4B",
+      "imageFile": "020_build_a_sandcastle.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 21,
+      "word": "building",
+      "stages": "10A",
+      "imageFile": "021_building.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 22,
+      "word": "busy souks",
+      "stages": "11A",
+      "imageFile": "022_busy_souks.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 23,
+      "word": "buy an ice cream",
+      "stages": "4B",
+      "imageFile": "023_buy_an_ice_cream.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 24,
+      "word": "cafe",
+      "stages": "",
+      "imageFile": "024_cafe.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "already_has_approved_image",
+      "installPolicy": "keep_existing_primary_no_duplicate"
+    },
+    {
+      "no": 25,
+      "word": "cakes",
+      "stages": "1B",
+      "imageFile": "025_cakes.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 26,
+      "word": "campus",
+      "stages": "12A",
+      "imageFile": "026_campus.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 27,
+      "word": "canteen",
+      "stages": "",
+      "imageFile": "027_canteen.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "outside_1741_master",
+      "installPolicy": "store_new_image_no_stage_insertion"
+    },
+    {
+      "no": 28,
+      "word": "cap",
+      "stages": "",
+      "imageFile": "028_cap.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "already_has_approved_image",
+      "installPolicy": "keep_existing_primary_no_duplicate"
+    },
+    {
+      "no": 29,
+      "word": "carpenter",
+      "stages": "",
+      "imageFile": "029_carpenter.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "outside_1741_master",
+      "installPolicy": "store_new_image_no_stage_insertion"
+    },
+    {
+      "no": 30,
+      "word": "carrots",
+      "stages": "1B",
+      "imageFile": "030_carrots.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "master_missing_image",
+      "installPolicy": "install_new_image_and_learning_stages"
+    },
+    {
+      "no": 31,
+      "word": "castle",
+      "stages": "",
+      "imageFile": "031_castle.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "already_has_approved_image",
+      "installPolicy": "keep_existing_primary_no_duplicate"
+    },
+    {
+      "no": 32,
+      "word": "cat",
+      "stages": "",
+      "imageFile": "032_cat.webp",
+      "sourceDimensions": "313x313",
+      "ownerDecision": "approved",
+      "masterStatus": "already_has_approved_image",
+      "installPolicy": "keep_existing_primary_no_duplicate"
+    }
+  ]
+}

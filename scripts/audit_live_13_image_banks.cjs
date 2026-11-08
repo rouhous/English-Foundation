@@ -41,3 +41,5 @@ fs.writeFileSync('reviews/image-audit/live-approved-bank-index.json',JSON.string
 const compressed=zlib.deflateSync(Buffer.from(JSON.stringify(payload))).toString('base64');
 fs.writeFileSync('reviews/image-audit/live-approved-bank-index.b64',compressed+'\n');
 console.log('IMAGE_AUDIT '+JSON.stringify(result));
+
+// Run re-inventory on the current deployed branch.

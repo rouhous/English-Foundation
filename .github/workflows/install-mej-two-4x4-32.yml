@@ -1,0 +1,40 @@
+name: Install cropped MEJ 4x4 groups 19 and 20
+on:
+  push:
+    paths:
+      - 'assets/import/MEJ_32_Cropped_4x4_Batches_2026-11-08.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Crop validation, install and link all 32 words
+        run: node scripts/install_mej_two_4x4_32.cjs
+      - name: Verify installed image bank and app links
+        run: |
+          node --check assets/approved-images-13.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const report=JSON.parse(fs.readFileSync('reviews/image-audit/master-32-install-result.json','utf8'));
+          if(report.images!==32||report.placements!==34)throw Error('Expected 32 images / 34 stage placements');
+          for(const p of report.paths)if(!fs.existsSync(p)||fs.statSync(p).size<1000)throw Error('Missing '+p);
+          if(!fs.readFileSync('index.html','utf8').includes('items.push(...image32Words)'))throw Error('Not connected to lesson preview');
+          console.log('32 images and 34 stage assignments validated');
+          NODE
+      - name: Commit images, bank and learning pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-batches-19-20 assets/approved-images-13.js index.html reviews/learning.html sw.js reviews/image-audit/master-32-install-result.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Install 32 Omani vocabulary pictures into Grade 1-11 learning stages"
+            git push
+          fi

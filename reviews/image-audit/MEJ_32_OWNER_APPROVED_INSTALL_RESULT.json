@@ -1,0 +1,15 @@
+{
+  "status": "installed",
+  "ownerApproved": 32,
+  "newImageFiles": 28,
+  "alreadyExistingNoDuplicates": 4,
+  "masterWordsLinked": 26,
+  "learningPlacements": 27,
+  "outsideMasterStored": [
+    "canteen",
+    "carpenter"
+  ],
+  "sourceSize": "313x313",
+  "review": "All 32 user-approved; no additional review requested",
+  "scope": "Learning only; do not alter quiz results or user data"
+}

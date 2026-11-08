@@ -392,3 +392,34 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* Diagnostic label correction: '24' is the number of questions, not the grade. */
+(function(){
+ 'use strict';
+ function correct(){
+  const app=document.getElementById('app');if(!app)return;
+  for(const el of app.querySelectorAll('p,div,span,small')){
+   if(el.children.length||el.closest('button,#feedback'))continue;
+   const value=el.textContent||'';
+   if(!/Registered grade:\s*\d+/i.test(value)||value.length>250)continue;
+   const full=value.match(/Registered grade:\s*(\d+)\s*[•|·]\s*(?:الصف\s*(\d+)|(\d+)\s*الصف)\s*questions,?\s*up to Level\s*(\d+)/i);
+   let fixed;
+   if(full){
+    const count=full[1], grade=full[2]||full[3], max=full[4];
+    fixed='Grade '+grade+' Placement Test • '+count+' Questions • Levels 0–'+max;
+   }else{
+    fixed=value.replace(/Registered grade:\s*(\d+)/i,(_,count)=>'Diagnostic questions: '+count);
+   }
+   if(fixed!==value)el.textContent=fixed;
+  }
+ }
+ function start(){
+  const app=document.getElementById('app');if(!app)return;
+  let scheduled=false;
+  const queue=()=>{if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;correct()})};
+  new MutationObserver(queue).observe(app,{childList:true,subtree:true,characterData:true});
+  queue();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();

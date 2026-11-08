@@ -21,7 +21,7 @@
   function render(host,payload){
     if(!host)return false;
     if(!payload||payload.ok!==true||payload.scope!=='OWN_VERIFIED_CLASS'||
-       payload.scoreVerification!=='SERVER_CHECKED_PILOT'||
+       !['SERVER_CHECKED_PILOT','CLIENT_REPORTED_UNVERIFIED'].includes(payload.scoreVerification)||
        !Array.isArray(payload.entries)||payload.entries.length>100||
        !payload.entries.some(item=>item.isMe===true)||
        payload.entries.some(item=>!Number.isInteger(item.rank)||item.rank<1||
@@ -34,7 +34,7 @@
     const card=element('section','mej-class-ranking');
     card.appendChild(element('h2','mej-ranking-title','🏆 ترتيب طلاب صفي'));
     card.appendChild(element('p','mej-ranking-subtitle',
-      'الفصل '+String(payload.className||'')+' • الترتيب حسب عدد النجوم الموثقة فقط'));
+      'الفصل '+String(payload.className||'')+' • الترتيب حسب عدد النجوم'));
     const list=element('ol','mej-ranking-list');
     payload.entries.forEach(item=>{
       const li=element('li','mej-ranking-student'+(item.isMe?' mej-ranking-self':''));
@@ -45,7 +45,7 @@
     });
     card.appendChild(list);
     card.appendChild(element('p','mej-ranking-footnote',
-      'يعتمد الترتيب على نجوم الأسئلة المتقنة فقط. لا تُعرض مستويات الطلاب.'));
+      payload.scoreVerification==='CLIENT_REPORTED_UNVERIFIED'?'ترتيب تجريبي حسب النجوم المحفوظة؛ لم تُراجع النجوم خادميًا بعد. لا تُعرض مستويات الطلاب.':'يعتمد الترتيب على نجوم الأسئلة المتقنة فقط. لا تُعرض مستويات الطلاب.'));
     host.appendChild(card);
     return true;
   }

@@ -167,13 +167,11 @@ self.addEventListener('fetch',event=>{
       }catch(_){}
       return null;
     };
-    if(prior){
-      // Launch immediately and refresh the shell in the background.
-      event.waitUntil(refresh());
-      return prior;
-    }
-    const timeout=new Promise(resolve=>setTimeout(()=>{controller.abort();resolve(null)},4500));
+    // Give the latest deployed build a short chance, then open the
+    // already installed shell instead of leaving the OS splash visible.
+    const timeout=new Promise(resolve=>setTimeout(()=>{controller.abort();resolve(null)},prior?1800:4500));
     return (await Promise.race([refresh(),timeout])) ||
+      prior ||
       await caches.match(new URL('./index.html',self.location.href),{ignoreSearch:true}) ||
       Response.error();
    }

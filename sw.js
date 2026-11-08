@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-public-20261108-match-menu-repair';
+const CACHE='mej-public-20261108-source-match-diagnostic-v2';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-study-companion.js','./assets/mej-skill-expansion-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -145,6 +145,17 @@ self.addEventListener('fetch',event=>{
     catch(_){return new Response('Login requires an internet connection.',{
      status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
     })}
+   }
+   // Main learner HTML must update immediately online; preserve cached offline startup.
+   if(isMain){
+    const cache=await caches.open(CACHE);
+    try{
+     const fresh=await fetch(request,{cache:'no-store'});
+     if(fresh.ok){await cache.put('./index.html',fresh.clone());return fresh;}
+    }catch(_){}
+    const previous=await cache.match('./index.html');
+    if(previous)return previous;
+    return Response.error();
    }
    const cached=cacheKey?await(await caches.open(CACHE)).match(cacheKey):null;
    if(cached){

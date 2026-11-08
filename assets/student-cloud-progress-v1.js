@@ -4,6 +4,7 @@
 (function(root){
 'use strict';
 const ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-progress';
+const ENROLL_ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-license';
 const QUEUE='MEJ_PROGRESS_PENDING_SUPABASE_V1';
 const REVISIONS='MEJ_PROGRESS_SERVER_REVISIONS_V1';
 const TOKEN='MEJ_STUDENT_ACCESS_V1';
@@ -48,6 +49,14 @@ async function post(action,token,data){
  if(!r.ok||result.ok!==true){const e=new Error(result.error||'CLOUD_UNAVAILABLE');e.status=r.status;throw e}
  return result;
 }
+async function ensureEnrollment(profileRef,token){
+ const r=await fetch(ENROLL_ENDPOINT,{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({action:'enroll_profile',profileRef,accessToken:token}),signal:AbortSignal.timeout(16000)});
+ const data=await r.json();
+ if(!r.ok||data.ok!==true||data.enrolled!==true)throw Error(data.error||'STUDENT_ENROLLMENT_PENDING');
+ return true;
+}
 async function flush(){
  if(pendingPromise)return pendingPromise;
  pendingPromise=(async()=>{
@@ -59,6 +68,9 @@ async function flush(){
   let rev=revisionMap[item.profileRef];
   try{
    if(!Number.isSafeInteger(rev)){
+    // Recover a valid six-digit-code login that has not yet attached its local
+    // learner profile. Enrollment is checked server-side against its own token.
+    await ensureEnrollment(item.profileRef,token);
     const cloud=await post('student_get',token);
     if(cloud.hasSnapshot){
      return {state:'needs_review',error:'CLOUD_PROGRESS_EXISTS_NO_LOCAL_REVISION'};

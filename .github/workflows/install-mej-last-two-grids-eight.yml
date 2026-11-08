@@ -1,0 +1,27 @@
+name: Install 8 new vocabulary images from last two groups
+on:
+  push:
+    paths:
+      - 'assets/import/MEJ_Last_Two_Groups_32_Cropped_8_Approved.zip'
+      - 'assets/MEJ_Last_Two_Groups_32_Cropped_8_Approved.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Extract, validate, attach images to learning stages
+        run: node scripts/install_mej_last_two_grids_eight.cjs
+      - name: Publish approved pictures
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-two-grids-eight-20261108 assets/approved-images-19.js index.html sw.js reviews/learning.html reviews/image-audit/MEJ_LAST_TWO_GRIDS_8_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install 8 last-two-grids vocabulary images" && git push)

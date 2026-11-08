@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-public-20261108-source-match-diagnostic-v2';
+const CACHE='mej-public-20261108-launch-recovery-v1';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-study-companion.js','./assets/mej-skill-expansion-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -29,7 +29,10 @@ async function warmPictures(){
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
-  await cache.addAll(CORE);
+  // A single optional missing asset must never invalidate the entire app shell.
+  await Promise.all(CORE.map(async item=>{
+    try{await cache.add(item)}catch(error){console.warn('Optional shell item unavailable:',item)}
+  }));
   await self.skipWaiting();
  })());
 });
@@ -149,13 +152,30 @@ self.addEventListener('fetch',event=>{
    // Main learner HTML must update immediately online; preserve cached offline startup.
    if(isMain){
     const cache=await caches.open(CACHE);
-    try{
-     const fresh=await fetch(request,{cache:'no-store'});
-     if(fresh.ok){await cache.put('./index.html',fresh.clone());return fresh;}
-    }catch(_){}
-    const previous=await cache.match('./index.html');
-    if(previous)return previous;
-    return Response.error();
+    const prior=await cache.match('./index.html') ||
+      await caches.match(new URL('./index.html',self.location.href),{ignoreSearch:true});
+    // Do not strand installed Android PWAs on their OS splash while a
+    // slow connection waits indefinitely. Network refresh is bounded.
+    const controller=new AbortController();
+    const refresh=async()=>{
+      try{
+        const fresh=await fetch(request,{cache:'no-store',signal:controller.signal});
+        if(fresh.ok){
+          try{await cache.put('./index.html',fresh.clone())}catch(_){}
+          return fresh;
+        }
+      }catch(_){}
+      return null;
+    };
+    if(prior){
+      // Launch immediately and refresh the shell in the background.
+      event.waitUntil(refresh());
+      return prior;
+    }
+    const timeout=new Promise(resolve=>setTimeout(()=>{controller.abort();resolve(null)},4500));
+    return (await Promise.race([refresh(),timeout])) ||
+      await caches.match(new URL('./index.html',self.location.href),{ignoreSearch:true}) ||
+      Response.error();
    }
    const cached=cacheKey?await(await caches.open(CACHE)).match(cacheKey):null;
    if(cached){

@@ -1,0 +1,478 @@
+{
+  "createdAt": "2026-11-08",
+  "previousOwnerApprovedZipInstalled": 32,
+  "salvagedEight": "Previously approved but not yet verified installed: excluded from image regeneration",
+  "filters": {
+    "installed": [
+      "application form",
+      "archaeological park",
+      "artist",
+      "atlas",
+      "aunt",
+      "balcony",
+      "banana",
+      "baseball cap",
+      "beans",
+      "beautiful beaches",
+      "bedroom",
+      "big wheel",
+      "bike",
+      "black",
+      "boat",
+      "boots",
+      "brown",
+      "brush the horses",
+      "build a robot",
+      "build a sandcastle",
+      "building",
+      "busy souks",
+      "buy an ice cream",
+      "cakes",
+      "campus",
+      "carrots"
+    ],
+    "salvage": [
+      "arms",
+      "face",
+      "hair",
+      "feet",
+      "pencil case",
+      "eraser",
+      "sandals",
+      "bathroom"
+    ],
+    "nonGenerative": [
+      "café",
+      "numbers 1–10",
+      "numbers 11–20"
+    ]
+  },
+  "remaining": 588,
+  "groups": [
+    {
+      "batch": 1,
+      "entries": [
+        {
+          "cell": 1,
+          "word": "body",
+          "stage": "1B"
+        },
+        {
+          "cell": 2,
+          "word": "brother",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 3,
+          "word": "crayon",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 4,
+          "word": "doll",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 5,
+          "word": "frog",
+          "stage": "1B"
+        },
+        {
+          "cell": 6,
+          "word": "hippo",
+          "stage": "1B"
+        },
+        {
+          "cell": 7,
+          "word": "jacket",
+          "stage": "1B"
+        },
+        {
+          "cell": 8,
+          "word": "lemons",
+          "stage": "1B"
+        },
+        {
+          "cell": 9,
+          "word": "lizard",
+          "stage": "1B"
+        },
+        {
+          "cell": 10,
+          "word": "pencil",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 11,
+          "word": "sister",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 12,
+          "word": "skirt",
+          "stage": "1B, 2B"
+        },
+        {
+          "cell": 13,
+          "word": "snake",
+          "stage": "1B, 2B"
+        },
+        {
+          "cell": 14,
+          "word": "socks",
+          "stage": "1B"
+        },
+        {
+          "cell": 15,
+          "word": "spider",
+          "stage": "1B, 2B"
+        },
+        {
+          "cell": 16,
+          "word": "sweets",
+          "stage": "1B"
+        }
+      ]
+    },
+    {
+      "batch": 2,
+      "entries": [
+        {
+          "cell": 1,
+          "word": "teddy",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 2,
+          "word": "whiteboard",
+          "stage": "1A"
+        },
+        {
+          "cell": 3,
+          "word": "yo-yo",
+          "stage": "1A, 2A"
+        },
+        {
+          "cell": 4,
+          "word": "action figure",
+          "stage": "2A"
+        },
+        {
+          "cell": 5,
+          "word": "arm",
+          "stage": "2A"
+        },
+        {
+          "cell": 6,
+          "word": "bend",
+          "stage": "2A"
+        },
+        {
+          "cell": 7,
+          "word": "bread",
+          "stage": "2B"
+        },
+        {
+          "cell": 8,
+          "word": "cheese",
+          "stage": "2B"
+        },
+        {
+          "cell": 9,
+          "word": "clap",
+          "stage": "2A"
+        },
+        {
+          "cell": 10,
+          "word": "clean the floor",
+          "stage": "2B"
+        },
+        {
+          "cell": 11,
+          "word": "cloudy",
+          "stage": "2B"
+        },
+        {
+          "cell": 12,
+          "word": "cousin",
+          "stage": "2A"
+        },
+        {
+          "cell": 13,
+          "word": "cupboard",
+          "stage": "2A"
+        },
+        {
+          "cell": 14,
+          "word": "dinosaur",
+          "stage": "2A"
+        },
+        {
+          "cell": 15,
+          "word": "ears",
+          "stage": "2A"
+        },
+        {
+          "cell": 16,
+          "word": "eyes",
+          "stage": "2A"
+        }
+      ]
+    },
+    {
+      "batch": 3,
+      "entries": [
+        {
+          "cell": 1,
+          "word": "fair",
+          "stage": "2A"
+        },
+        {
+          "cell": 2,
+          "word": "fingers",
+          "stage": "2A"
+        },
+        {
+          "cell": 3,
+          "word": "flat",
+          "stage": "2B"
+        },
+        {
+          "cell": 4,
+          "word": "foggy",
+          "stage": "2B"
+        },
+        {
+          "cell": 5,
+          "word": "fur",
+          "stage": "2B"
+        },
+        {
+          "cell": 6,
+          "word": "garage",
+          "stage": "2B"
+        },
+        {
+          "cell": 7,
+          "word": "grandad",
+          "stage": "2A"
+        },
+        {
+          "cell": 8,
+          "word": "grandma",
+          "stage": "2A"
+        },
+        {
+          "cell": 9,
+          "word": "hall",
+          "stage": "2B"
+        },
+        {
+          "cell": 10,
+          "word": "hamster",
+          "stage": "2B"
+        },
+        {
+          "cell": 11,
+          "word": "hearing",
+          "stage": "2A"
+        },
+        {
+          "cell": 12,
+          "word": "helicopter",
+          "stage": "2A"
+        },
+        {
+          "cell": 13,
+          "word": "knees",
+          "stage": "2A"
+        },
+        {
+          "cell": 14,
+          "word": "lay the table",
+          "stage": "2B"
+        },
+        {
+          "cell": 15,
+          "word": "living room",
+          "stage": "2B"
+        },
+        {
+          "cell": 16,
+          "word": "make the bed",
+          "stage": "2B"
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "entries": [
+        {
+          "cell": 1,
+          "word": "me",
+          "stage": "2A"
+        },
+        {
+          "cell": 2,
+          "word": "mouth",
+          "stage": "2A"
+        },
+        {
+          "cell": 3,
+          "word": "noisy",
+          "stage": "2A, 4B, 9A"
+        },
+        {
+          "cell": 4,
+          "word": "parrot",
+          "stage": "2B"
+        },
+        {
+          "cell": 5,
+          "word": "pasta",
+          "stage": "2B"
+        },
+        {
+          "cell": 6,
+          "word": "peas",
+          "stage": "2B"
+        },
+        {
+          "cell": 7,
+          "word": "pencil sharpener",
+          "stage": "2A"
+        },
+        {
+          "cell": 8,
+          "word": "potato",
+          "stage": "2B"
+        },
+        {
+          "cell": 9,
+          "word": "rice",
+          "stage": "2B"
+        },
+        {
+          "cell": 10,
+          "word": "scary",
+          "stage": "2A"
+        },
+        {
+          "cell": 11,
+          "word": "scissors",
+          "stage": "2A"
+        },
+        {
+          "cell": 12,
+          "word": "scooter",
+          "stage": "2A"
+        },
+        {
+          "cell": 13,
+          "word": "shelf",
+          "stage": "2A"
+        },
+        {
+          "cell": 14,
+          "word": "shell",
+          "stage": "2B"
+        },
+        {
+          "cell": 15,
+          "word": "short",
+          "stage": "2B"
+        },
+        {
+          "cell": 16,
+          "word": "shorts",
+          "stage": "2B"
+        }
+      ]
+    },
+    {
+      "batch": 5,
+      "entries": [
+        {
+          "cell": 1,
+          "word": "sight",
+          "stage": "2A"
+        },
+        {
+          "cell": 2,
+          "word": "slide",
+          "stage": "2A"
+        },
+        {
+          "cell": 3,
+          "word": "smell",
+          "stage": "2A"
+        },
+        {
+          "cell": 4,
+          "word": "stamp",
+          "stage": "2A"
+        },
+        {
+          "cell": 5,
+          "word": "stormy",
+          "stage": "2B"
+        },
+        {
+          "cell": 6,
+          "word": "stretch",
+          "stage": "2A"
+        },
+        {
+          "cell": 7,
+          "word": "swing",
+          "stage": "2A"
+        },
+        {
+          "cell": 8,
+          "word": "table",
+          "stage": "2A"
+        },
+        {
+          "cell": 9,
+          "word": "tail",
+          "stage": "2B"
+        },
+        {
+          "cell": 10,
+          "word": "taste",
+          "stage": "2A"
+        },
+        {
+          "cell": 11,
+          "word": "teeth",
+          "stage": "2B"
+        },
+        {
+          "cell": 12,
+          "word": "toes",
+          "stage": "2A"
+        },
+        {
+          "cell": 13,
+          "word": "tomato",
+          "stage": "2B"
+        },
+        {
+          "cell": 14,
+          "word": "tortoise",
+          "stage": "2B"
+        },
+        {
+          "cell": 15,
+          "word": "touch",
+          "stage": "2A"
+        },
+        {
+          "cell": 16,
+          "word": "trousers",
+          "stage": "2B"
+        }
+      ]
+    }
+  ]
+}

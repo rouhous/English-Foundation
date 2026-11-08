@@ -28,9 +28,8 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
 function imgFor(word){const bank=window.MEJ_APPROVED_IMAGES||{};const arr=bank[word.toLowerCase().trim()]||bank[word];const options=Array.isArray(arr)?arr:arr?[arr]:[];return options.find(x=>x?.status==='approved'&&typeof x.src==='string'&&x.w>=316&&x.h>=316)?.src||null}
 function vocabulary(grade){
- const level=catalog.levels.find(l=>Number(l.grade)===grade);
- if(!level)return [];
- const qs=level.parts.flatMap(p=>p.questions);
+ const level=catalog?.levels?.find(l=>Number(l.grade)===grade);
+ const qs=level?level.parts.flatMap(p=>p.questions):(typeof byGrade!=='undefined'?(byGrade[grade]||[]):[]);
  return [...new Set(qs.filter(q=>q.type==='Vocabulary').map(q=>{
  const word=(q.word||q.pictureWord||'').trim();
  if(word)return word;
@@ -78,7 +77,6 @@ function makeCloze(grade){
  target.append(prompt,para,choices,check,feedback);
 }
 async function open(requestedGrade){
- if(!catalog){const r=await fetch(CATALOG);if(!r.ok)throw Error('CATALOG_UNAVAILABLE');catalog=await r.json()}
  document.getElementById('mej-skills-overlay')?.remove();
  root=node('div');root.id='mej-skills-overlay';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
  const sheet=node('div','sheet');const header=node('div','head');header.append(node('h2','','أنشطة المفردات والمهارات'));

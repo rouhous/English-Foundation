@@ -58,3 +58,5 @@ fs.writeFileSync(swPath,sw);
 const report={state:'owner_approved_reuse_installed',approved:selected.length,rejected:rejected.length,newImageFiles:0,newImageAliases:selected.length,learningPlacements:insert.length,sourceImages:selected,rejectedWords:rejected,scope:'Vocabulary learning only; no quiz grades, student progress, or user accounts modified'};
 fs.writeFileSync('reviews/image-audit/MEJ_33_reuse_install_result.json',JSON.stringify(report,null,2)+'\n');
 console.log('REUSE_INSTALL '+JSON.stringify({approved:selected.length,rejected:rejected.length,placements:insert.length}));
+
+// Owner decision record imported and deployment requested on 2026-11-08.

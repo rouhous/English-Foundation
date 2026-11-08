@@ -1,0 +1,26 @@
+name: Install 38 owner-approved cropped vocabulary pictures
+on:
+  push:
+    paths:
+      - 'assets/import/MEJ_38_OWNER_APPROVED_READY_FOR_GITHUB_2026-11-08.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate and install 38 approved vocabulary pictures
+        run: node scripts/install_mej_38_owner_approved_5grids.cjs
+      - name: Publish images and learning links
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-5grid-owner-38-20261108 assets/approved-images-16.js index.html sw.js reviews/learning.html reviews/image-audit/MEJ_38_OWNER_APPROVED_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install 38 owner-approved five-grid WebP pictures" && git push)

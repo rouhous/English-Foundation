@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "checks": {
+    "3d_loader": true,
+    "fallback_2d_loader": true,
+    "selected_profile": true,
+    "quiz_feedback_hook": false,
+    "reward_original": true,
+    "encourage_original": true,
+    "webgl_fallback": true,
+    "webgl_native": true,
+    "offline_cached": true,
+    "star_code_untouched": true,
+    "syntax_mej-study-companion": true,
+    "syntax_mej-companion-motion-v1": true,
+    "syntax_mej-companion-3d-v1": true,
+    "syntax_mej-companion-setup-v1": true
+  },
+  "feedback_matches": 0,
+  "source_bytes": 3212418
+}

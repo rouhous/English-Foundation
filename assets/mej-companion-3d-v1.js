@@ -5,7 +5,10 @@ if(window.MEJCompanion3D)return;
 const find=id=>document.getElementById(id);
 const learner=()=>{try{return typeof active==="function"?active():null}catch(e){return null}};
 const reduced=()=>!!window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-let root,host,canvas,gl,program,buffer,indexBuffer,n=0,U={},ready=false,raf=0,clock=0,last=0,action="idle",until=0,identity="";
+// All iPad browsers run WebKit; use the animated SVG fallback to avoid GPU pressure.
+const isIPad=()=>/iPad/i.test(navigator.userAgent)||(/Macintosh/i.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+const safeMode=isIPad()||new URLSearchParams(location.search).has("mejSafe");
+let root,host,canvas,gl,program,buffer,indexBuffer,n=0,U={},ready=false,raf=0,clock=0,last=0,action="idle",until=0,identity="",previousPage="",lastWander=0;
 const style=document.createElement("style");
 style.textContent="#mej-study-companion.mej-webgl{width:84px;bottom:max(65px,env(safe-area-inset-bottom) + 54px);right:3px;z-index:1290}#mej-study-companion.mej-webgl .mej-mascot{width:84px;height:117px;animation:none!important;transform:none!important}#mej-study-companion.mej-webgl .mej-mascot-stage{height:121px}#mej-study-companion.mej-webgl canvas{width:100%;height:100%;display:block}#mej-study-companion.mej-webgl .mej-companion-bubble{bottom:124px;font-size:12px}#mej-study-companion.mej-webgl .mej-mascot-tools{top:-8px}@media(max-width:650px){#mej-study-companion.mej-webgl{width:67px}#mej-study-companion.mej-webgl .mej-mascot{width:67px;height:94px}#mej-study-companion.mej-webgl .mej-mascot-stage{height:98px}#mej-study-companion.mej-webgl .mej-companion-bubble{bottom:103px}}";
 document.head.append(style);
@@ -13,6 +16,7 @@ const vertex="attribute vec3 xyz;attribute vec3 norm;uniform vec3 pos,scale,angl
 const fragment="precision mediump float;uniform vec4 tint;varying float lit;void main(){gl_FragColor=vec4(tint.rgb*lit,tint.a);}";
 function sh(type,text){const s=gl.createShader(type);gl.shaderSource(s,text);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s}
 function init(){
+ if(safeMode)return false;
  root=find("mej-study-companion");host=root?.querySelector(".mej-mascot");
  if(!host)return false;
  if(ready&&canvas?.isConnected)return true;
@@ -144,6 +148,7 @@ function wrap(){
  old.__webglHook=true;
 }
 function boot(){
+ if(safeMode){window.MEJCompanion3D={play:()=>{},refresh:()=>{},safeMode:true,reason:isIPad()?"iPad WebKit":"user safe mode"};return}
  wrap();const app=find("app");
  if(app)new MutationObserver(()=>{wrap();refresh()}).observe(app,{childList:true,subtree:false});
  window.addEventListener("mej-companion-change",()=>{identity="";refresh();play("wave",1800)});

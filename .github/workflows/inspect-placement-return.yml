@@ -1,0 +1,23 @@
+name: Diagnose placement Return freeze
+on:
+  push:
+    paths:
+      - scripts/inspect_placement_return.py
+      - .github/workflows/inspect-placement-return.yml
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/inspect_placement_return.py
+      - name: Commit narrow audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/placement-return-audit.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit placement Return handlers"
+            git push
+          fi

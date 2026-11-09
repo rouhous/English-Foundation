@@ -1,0 +1,26 @@
+name: Audit deployed 3D companion integration
+on:
+  push:
+    paths:
+      - scripts/audit_companion_3d.py
+      - .github/workflows/audit-companion-3d.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: python3 scripts/audit_companion_3d.py
+      - name: Store audit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/mej-companion-3d-qa.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit offline WebGL companion integration"
+            git push
+          fi

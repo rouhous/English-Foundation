@@ -2,6 +2,8 @@
    Local visuals + Web Audio, no external media, storage only for user preferences. */
 (function(){
 'use strict';
+/* Student safety: companion temporarily disabled across all devices. */
+return;
 if(window.MEJCompanion)return;
 const KEY='MEJ_COMPANION_SETTINGS_V1';
 const compliments=['Awesome!','Excellent!','You are amazing!','Let’s go!','Unbelievable!','Fantastic!','Great job!','Brilliant!'];

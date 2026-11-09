@@ -4,7 +4,7 @@
     "3d_loader": true,
     "fallback_2d_loader": true,
     "selected_profile": true,
-    "quiz_feedback_hook": false,
+    "quiz_feedback_hook": true,
     "reward_original": true,
     "encourage_original": true,
     "webgl_fallback": true,

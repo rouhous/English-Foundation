@@ -1,0 +1,27 @@
+name: Fix resumable placement on iPad
+on:
+  push:
+    paths:
+      - scripts/fix_placement_resume.py
+      - .github/workflows/fix-placement-resume.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch and verify placement resume
+        run: |
+          python3 scripts/fix_placement_resume.py
+          python3 scripts/fix_placement_resume.py --check
+      - name: Commit only verified application patch
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Preserve and resume student placement sessions across navigation and reload"
+            git push
+          fi

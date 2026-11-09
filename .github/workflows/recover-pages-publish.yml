@@ -3,6 +3,10 @@ on:
   push:
     paths:
       - .github/workflows/recover-pages-publish.yml
+      - reviews/companion-2d-lab.html
+      - index.html
+      - sw.js
+      - assets/mej-companion-*.js
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,6 +34,7 @@ jobs:
           cp index.html sw.js manifest.webmanifest mobile-home-fix.css _site/
           cp icon-*.png _site/
           cp -a assets reviews _site/
+          test -s _site/reviews/companion-2d-lab.html
           touch _site/.nojekyll
           printf 'Recovery package: '
           du -sh _site

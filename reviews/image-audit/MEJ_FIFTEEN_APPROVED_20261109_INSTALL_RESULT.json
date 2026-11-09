@@ -1,0 +1,93 @@
+{
+  "status": "installed",
+  "ownerApproved": 15,
+  "newImages": 15,
+  "learningPlacements": 16,
+  "words": [
+    "skip",
+    "throw a ball",
+    "scooter",
+    "playing basketball",
+    "go fishing",
+    "play chess",
+    "sew",
+    "make a pizza",
+    "bake a cake",
+    "take a selfie",
+    "pencil sharpener",
+    "make the bed",
+    "tie a shoelace",
+    "play board games",
+    "do the washing up"
+  ],
+  "stages": [
+    {
+      "word": "skip",
+      "stage": "4B"
+    },
+    {
+      "word": "throw a ball",
+      "stage": "5A"
+    },
+    {
+      "word": "scooter",
+      "stage": "2A"
+    },
+    {
+      "word": "playing basketball",
+      "stage": "4A"
+    },
+    {
+      "word": "go fishing",
+      "stage": "4B"
+    },
+    {
+      "word": "play chess",
+      "stage": "4B"
+    },
+    {
+      "word": "sew",
+      "stage": "4B"
+    },
+    {
+      "word": "make a pizza",
+      "stage": "5A"
+    },
+    {
+      "word": "bake a cake",
+      "stage": "5A"
+    },
+    {
+      "word": "take a selfie",
+      "stage": "6A"
+    },
+    {
+      "word": "pencil sharpener",
+      "stage": "2A"
+    },
+    {
+      "word": "make the bed",
+      "stage": "2B"
+    },
+    {
+      "word": "tie a shoelace",
+      "stage": "5A"
+    },
+    {
+      "word": "play board games",
+      "stage": "4B"
+    },
+    {
+      "word": "play board games",
+      "stage": "6A"
+    },
+    {
+      "word": "do the washing up",
+      "stage": "5B"
+    }
+  ],
+  "zipPath": "assets/MEJ_5_Groups_80_Cropped_15_For_Review_2026-11-09.zip",
+  "finalImageResolution": "384x384",
+  "sourceResolution": "313-314 pixels per cell, upscaled",
+  "studentDataChanged": false
+}

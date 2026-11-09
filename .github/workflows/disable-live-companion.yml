@@ -1,0 +1,26 @@
+name: Remove companion from live learner app
+on:
+  push:
+    paths:
+      - scripts/disable_live_companion.py
+      - .github/workflows/disable-live-companion.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  disable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: python3 scripts/disable_live_companion.py
+      - name: Publish safe student HTML
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Remove companion renderers from live student application"
+            git push
+          fi

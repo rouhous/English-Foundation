@@ -1,17 +1,17 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>My English Journey • Rigged 2D Companion Test</title>
 <style>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#15456e;background:#d7f0fd}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(#1283c4,#8dd5f5 44%,#eefaff)}main{max-width:830px;margin:0 auto;padding:15px 12px 40px}.header{text-align:center;color:white;text-shadow:0 2px 5px #0b4772}h1{margin:4px 0;font-size:clamp(25px,5vw,36px)}.subtitle{margin:0 0 12px;font-weight:650}.safety{margin:8px 0 13px;padding:9px 12px;background:#fff9e7;border:1px solid #e5c775;border-radius:12px;line-height:1.4;font-size:13px}.hero{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.hero button,.actions button,.actions2 button{font:700 15px system-ui;border-radius:11px;min-height:44px;padding:9px 13px;background:#fff;color:#124e7d;border:2px solid #6bb5df;cursor:pointer}.hero button[aria-pressed=true],.actions button[aria-pressed=true],.actions2 .active{background:#086aa8;color:white;border-color:#044776}.scene{position:relative;overflow:hidden;margin:12px 0;border-radius:23px;border:3px solid #7dd7ff;height:clamp(330px,53vw,450px);box-shadow:0 8px 20px #064b8745;background:radial-gradient(circle at 82% 17%,#ffedac 0 34px,transparent 35px),linear-gradient(#68c7f3 0%,#cdf1fe 67%,#33b6d5 68%,#55c6ce 76%,#e5cf9c 77%,#f4e1b1 100%)}.island{position:absolute;bottom:23%;left:0;width:35%;height:15%;border-radius:90% 70% 0 0;background:#549c7d91}.speech{position:absolute;z-index:3;top:13px;right:12px;padding:9px 12px;background:#fffef8;border:2px solid #f2c85a;border-radius:16px;font-weight:850;box-shadow:0 3px 9px #15395844;text-align:center;max-width:52%;font-size:clamp(13px,2.8vw,18px)}.ground-shadow{position:absolute;bottom:15%;left:calc(50% - 60px);width:120px;height:16px;background:#235c5a36;border-radius:50%;filter:blur(6px);will-change:transform}.character{position:absolute;bottom:16.5%;left:calc(50% - 107px);width:214px;height:310px;overflow:visible;filter:drop-shadow(2px 5px 3px #285b6b55)}svg{width:100%;height:100%;overflow:visible}#hero-glint{pointer-events:none}.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.actions2{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:10px 0}.actions2 button{padding:10px 14px}.status{background:#fff;border-radius:12px;padding:9px 12px;text-align:center;font-size:13px}.footnote{font-size:12px;text-align:center;color:#426887;line-height:1.5}.actions button:focus-visible,.hero button:focus-visible{outline:3px solid #f6bf2c} @media(max-width:490px){.actions{grid-template-columns:repeat(3,minmax(0,1fr))}.character{width:184px;height:272px;left:calc(50% - 92px)}.speech{max-width:58%}}@media(prefers-reduced-motion:reduce){.character{filter:none}}
-</style></head><body><main>
+.actions2 .speed-active{background:#0f7d9d;color:white;border-color:#095473}.performance{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center;margin-top:9px}.performance label{font-size:13px;font-weight:750}.performance select{font:700 14px system-ui;padding:7px;border:1px solid #5badd7;border-radius:10px;background:white;color:#164875}.performance .readout{font:700 12px system-ui;border-radius:10px;background:#eaf9ff;padding:8px 10px}.actions2 button{touch-action:manipulation}@media(max-width:430px){.actions2 button{font-size:13px;padding:9px 10px}}</style></head><body><main>
 <div class="header"><h1>⛵ My English Journey</h1><p class="subtitle">Rigged 2D Omani Companion • Real Limb Animation</p></div>
 <div class="safety"><strong>Independent animation lab.</strong> The main student app and diagnostic remain companion-free. This page does not read or update student accounts, questions, or stars.</div>
 <div class="hero"><button id="boy" type="button" aria-pressed="true">👦 Omani Boy</button><button id="girl" type="button" aria-pressed="false">👧 Omani Girl</button></div>
 <div class="scene" id="scene"><div class="island"></div><div class="speech" id="bubble" aria-live="polite">Welcome aboard!</div><div class="ground-shadow" id="shadow"></div><svg id="character" class="character" viewBox="0 0 220 320" aria-label="Animated Omani child with independent joints" role="img"></svg></div>
 <div class="actions" id="actions"><button aria-pressed="true" data-m="idle">🧍 Idle</button><button aria-pressed="false" data-m="wave">👋 Wave</button><button aria-pressed="false" data-m="walk">🚶 Walk</button><button aria-pressed="false" data-m="run">🏃 Run</button><button aria-pressed="false" data-m="jump">🦘 Jump</button><button aria-pressed="false" data-m="point">👉 Point</button><button aria-pressed="false" data-m="celebrate">🎉 Celebrate</button><button aria-pressed="false" data-m="encourage">💪 Encourage</button></div>
-<div class="actions2"><button id="pause" type="button">⏸ Pause</button><button id="reset" type="button">↺ Reset</button><button id="correct" type="button">✓ Correct</button><button id="wrong" type="button">↻ Wrong</button><button id="voice" type="button">🔇 Voice off</button></div><div class="status" id="status" role="status">Idle — independent arms, elbows, legs, head and body ready.</div><p class="footnote">The actual arms, forearms, legs, body and head change pose at separately animated joints. Lightweight SVG; no WebGL or external dependencies. Prototyping rig, not yet a Bodymovin/Lottie export.</p>
+<div class="actions2"><button id="pause" type="button">⏸ Pause</button><button id="reset" type="button">↺ Reset</button><button id="correct" type="button">✓ Correct</button><button id="wrong" type="button">↻ Wrong</button><button id="voice" type="button">🔇 Voice off</button></div><div class="performance"><label for="pace">Animation speed</label><select id="pace"><option value="0.5">0.5× Slow</option><option value="1" selected>1× Normal</option><option value="1.5">1.5× Fast</option></select><span class="readout" id="perf">FPS: — • SVG joints: 10</span><button id="sequence" type="button">▶ Demo sequence</button></div><div class="status" id="status" role="status">Idle — independent arms, elbows, legs, head and body ready.</div><p class="footnote">The actual arms, forearms, legs, body and head change pose at separately animated joints. Lightweight SVG; no WebGL or external dependencies. Prototyping rig, not yet a Bodymovin/Lottie export.</p>
 </main><script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id), scene=$('scene'), figure=$('character'),bubble=$('bubble'),status=$('status');
-let gender='boy',action='idle',paused=false,voice=false,frame=0,last=0,raf=0,ends=0,lastType='',timing=0;
+let gender='boy',action='idle',paused=false,voice=false,frame=0,last=0,raf=0,ends=0,lastType='',timing=0,speed=1,smoothed=null,frames=0,frameStart=0,frameRate=0,demoTimer=0;
 const colors={skin:'#f5bf99',hand:'#f4bf99',girlDress:'#98386e',girlOutline:'#5e255e',boyRobe:'#f7faff'};
 function drawing(g){const girl=g==='girl';const robe=girl?'url(#girlFabric)':'url(#whiteFabric)';
  figure.innerHTML=`<defs>
@@ -22,8 +22,8 @@ function drawing(g){const girl=g==='girl';const robe=girl?'url(#girlFabric)':'ur
 <linearGradient id="kumma" x1="0" y1="0" x2="1" y2="1"><stop stop-color="white"/><stop offset="1" stop-color="#c0cce8"/></linearGradient>
 </defs>
 <g id="translate" transform="translate(0 0)"><g id="torso-tilt" transform="rotate(0 110 154)">
- <g id="leg-left" transform="rotate(0 91 210)"><path d="M85 202 Q88 239 78 258" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="23" fill="none" stroke-linecap="round"/><path d="M78 253Q67 261 61 275Q60 283 74 284L94 278Q102 270 90 261Z" fill="#5b3b3b" stroke="#402e2f" stroke-width="2"/><path d="M67 267L88 265" stroke="#b99578" stroke-width="3"/></g>
- <g id="leg-right" transform="rotate(0 128 210)"><path d="M131 203 Q128 236 138 257" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="23" fill="none" stroke-linecap="round"/><path d="M131 257Q142 258 154 273Q158 283 144 285L123 277Q115 266 131 257Z" fill="#5b3b3b" stroke="#402e2f" stroke-width="2"/><path d="M128 265L148 270" stroke="#b99578" stroke-width="3"/></g>
+ <g id="leg-left" transform="rotate(0 91 210)"><path d="M89 203Q84 223 84 242" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="24" fill="none" stroke-linecap="round"/><g id="shin-left" transform="rotate(0 84 242)"><path d="M84 238L78 259" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="19" fill="none" stroke-linecap="round"/><path d="M78 253Q67 261 61 275Q60 283 74 284L94 278Q102 270 90 261Z" fill="#5b3b3b" stroke="#402e2f" stroke-width="2"/><path d="M67 267L88 265" stroke="#b99578" stroke-width="3"/></g></g>
+ <g id="leg-right" transform="rotate(0 128 210)"><path d="M129 203Q134 222 135 241" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="24" fill="none" stroke-linecap="round"/><g id="shin-right" transform="rotate(0 135 241)"><path d="M135 238L138 257" stroke="${girl?'#782e67':'#e9f4ff'}" stroke-width="19" fill="none" stroke-linecap="round"/><path d="M131 257Q142 258 154 273Q158 283 144 285L123 277Q115 266 131 257Z" fill="#5b3b3b" stroke="#402e2f" stroke-width="2"/><path d="M128 265L148 270" stroke="#b99578" stroke-width="3"/></g></g>
  <g id="arm-left" transform="rotate(0 79 149)"><path d="M79 145Q67 161 60 185" fill="none" stroke="${girl?'#94366e':'#edf6ff'}" stroke-width="24" stroke-linecap="round"/><g id="forearm-left" transform="rotate(0 60 185)"><path d="M60 180L54 202" stroke="${girl?'#9e3d77':'#f7faff'}" stroke-width="19" fill="none" stroke-linecap="round"/><path d="M52 200Q41 208 44 219Q52 229 61 218L62 205Z" fill="url(#skin)" stroke="#d79471" stroke-width="1.6"/></g><path d="M64 181Q70 173 76 172" fill="none" stroke="${girl?'#dba960':'#b9c9df'}" stroke-width="2"/></g>
  <g id="arm-right" transform="rotate(0 145 149)"><path d="M145 146Q157 168 163 187" fill="none" stroke="${girl?'#94366e':'#edf6ff'}" stroke-width="24" stroke-linecap="round"/><g id="forearm-right" transform="rotate(0 163 186)"><path d="M163 182L170 201" fill="none" stroke="${girl?'#9e3d77':'#f7faff'}" stroke-width="19" stroke-linecap="round"/><path d="M168 201Q163 209 170 219Q181 226 185 212L178 202Z" fill="url(#skin)" stroke="#d79471" stroke-width="1.6"/></g><path d="M148 174Q155 172 159 181" fill="none" stroke="${girl?'#dba960':'#b9c9df'}" stroke-width="2"/></g>
  <path d="M92 143 Q111 133 130 142 L150 207Q113 223 74 209Z" fill="${robe}" stroke="${girl?'#7a3b74':'#b0c9df'}" stroke-width="2.8"/>
@@ -41,40 +41,47 @@ function drawing(g){const girl=g==='girl';const robe=girl?'url(#girlFabric)':'ur
 const ctrl={idle:'Ready for the journey!',wave:'Hello! Welcome aboard!',walk:'Let’s go!',run:'Here we go!',jump:'Jump for joy!',point:'Look over there!',celebrate:'Awesome!',encourage:'You can do it!'};
 // An actual joint-pose timeline: left/right upper and lower arm rotations,
 // left/right leg rotations, head rotation, torso lean and vertical lift.
-const base={al:6,ar:-5,fl:0,fr:0,ll:0,lr:0,hd:0,lean:0,y:0};
+const base={al:6,ar:-5,fl:0,fr:0,ll:0,lr:0,kl:0,kr:0,hd:0,lean:0,y:0};
 function pose(kind,t){const p={...base},sin=Math.sin,cos=Math.cos;
  if(kind==='idle'){p.y=sin(t*2)*1.4;p.hd=sin(t*1.2)*1.3;p.ar=sin(t*.8)*4}
  if(kind==='wave'){p.ar=-100+sin(t*12)*15;p.fr=-20;p.hd=sin(t*3)*2}
- if(kind==='walk'){const w=sin(t*8);p.ll=w*27;p.lr=-w*27;p.al=-w*18;p.ar=w*18;p.fl=8;p.fr=-8;p.y=-Math.abs(sin(t*8))*3;p.lean=4}
- if(kind==='run'){const w=sin(t*15);p.ll=w*43;p.lr=-w*43;p.al=-w*34;p.ar=w*34;p.fl=-25;p.fr=-25;p.y=-Math.abs(sin(t*15))*9;p.lean=11}
- if(kind==='jump'){const u=(t*.9)%1;const lift=Math.pow(Math.sin(Math.PI*u),1.6);p.y=-lift*58;p.ll=-lift*23;p.lr=lift*23;p.al=-lift*36;p.ar=lift*36;p.lean=lift*4}
+ if(kind==='walk'){const w=sin(t*8);p.ll=w*26;p.lr=-w*26;p.kl=Math.max(0,w)*38;p.kr=Math.max(0,-w)*38;p.al=-w*18;p.ar=w*18;p.fl=8;p.fr=-8;p.y=-Math.abs(sin(t*8))*3;p.lean=4}
+ if(kind==='run'){const w=sin(t*15);p.ll=w*43;p.lr=-w*43;p.kl=15+Math.max(0,w)*54;p.kr=15+Math.max(0,-w)*54;p.al=-w*34;p.ar=w*34;p.fl=-25;p.fr=-25;p.y=-Math.abs(sin(t*15))*9;p.lean=11}
+ if(kind==='jump'){const u=(t*.9)%1;const lift=Math.pow(Math.sin(Math.PI*u),1.6);p.y=-lift*58;p.ll=-lift*23;p.lr=lift*23;p.kl=lift*45;p.kr=lift*45;p.al=-lift*36;p.ar=lift*36;p.lean=lift*4}
  if(kind==='point'){p.ar=-71;p.fr=-35;p.hd=-9;p.al=3;p.lean=-3}
- if(kind==='celebrate'){const w=sin(t*8);p.ar=-120+w*9;p.al=120-w*9;p.fr=-24;p.fl=24;p.y=-Math.abs(sin(t*8))*23;p.hd=w*3}
+ if(kind==='celebrate'){const w=sin(t*8);p.ar=-120+w*9;p.al=120-w*9;p.fr=-24;p.fl=24;p.y=-Math.abs(sin(t*8))*23;p.kl=12;p.kr=12;p.hd=w*3}
  if(kind==='encourage'){p.ar=-35+sin(t*8)*12;p.fr=-55;p.al=15;p.hd=sin(t*7)*9;p.y=sin(t*4)*2}
  return p;
 }
 function part(id,a,x,y){const el=$(id);if(el)el.setAttribute('transform',`rotate(${a.toFixed(2)} ${x} ${y})`)}
 function render(ms){raf=0;if(paused||document.hidden)return;
- const delta=Math.min(0.08,(ms-last||40)/1000);last=ms;frame+=delta;
- const s=pose(action,frame);
- $('translate').setAttribute('transform',`translate(0 ${s.y.toFixed(1)})`);part('torso-tilt',s.lean,110,154);part('arm-left',s.al,79,149);part('arm-right',s.ar,145,149);part('forearm-left',s.fl,60,185);part('forearm-right',s.fr,163,186);part('leg-left',s.ll,91,210);part('leg-right',s.lr,128,210);part('head',s.hd,112,116);
+ const delta=Math.min(0.07,(ms-last||40)/1000);last=ms;frame+=delta*speed;
+ const target=pose(action,frame);
+ if(!smoothed)smoothed={...target};
+ const mix=Math.min(1,delta*15);
+ for(const k of Object.keys(target))smoothed[k]+=(target[k]-smoothed[k])*mix;
+ const s=smoothed;
+ $('translate').setAttribute('transform',`translate(0 ${s.y.toFixed(1)})`);part('torso-tilt',s.lean,110,154);part('arm-left',s.al,79,149);part('arm-right',s.ar,145,149);part('forearm-left',s.fl,60,185);part('forearm-right',s.fr,163,186);part('leg-left',s.ll,91,210);part('leg-right',s.lr,128,210);part('shin-left',s.kl,84,242);part('shin-right',s.kr,135,241);part('head',s.hd,112,116);
+ frames++;if(ms-frameStart>1250){frameRate=Math.round(frames*1000/(ms-frameStart));frames=0;frameStart=ms;$('perf').textContent='FPS: '+frameRate+' • SVG joints: 10'};
  $('shadow').style.transform=`scale(${(1-Math.min(-s.y/160,.35)).toFixed(2)})`;
  if(ends&&ms>ends){action='idle';ends=0;frame=0;updateControls()}
  raf=requestAnimationFrame(render);
 }
-function start(){if(paused||raf||document.hidden)return;last=0;raf=requestAnimationFrame(render)}
+function start(){if(paused||raf||document.hidden)return;last=0;frameStart=performance.now();frames=0;raf=requestAnimationFrame(render)}
 function updateControls(){$('actions').querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===action)));status.textContent=`${gender==='boy'?'Omani boy':'Omani girl'} • ${action.toUpperCase()} — head, shoulders, elbows and legs animated independently.`}
 function speak(t){bubble.textContent=t;if(voice&&'speechSynthesis'in window){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.94;speechSynthesis.speak(u)}catch(e){}}}
 function setAction(a,ms=0){action=a;ends=ms?performance.now()+ms:0;frame=0;updateControls();start();speak(ctrl[a]);}
-function pick(g){gender=g;drawing(g);$('boy').setAttribute('aria-pressed',String(g==='boy'));$('girl').setAttribute('aria-pressed',String(g==='girl'));frame=0;setAction('idle')}
+function pick(g){gender=g;drawing(g);smoothed=null;$('boy').setAttribute('aria-pressed',String(g==='boy'));$('girl').setAttribute('aria-pressed',String(g==='girl'));frame=0;setAction('idle')}
+$('pace').onchange=e=>{speed=Number(e.target.value)||1};
+$('sequence').onclick=()=>{clearInterval(demoTimer);const moves=['wave','walk','run','jump','point','celebrate','encourage','idle'];let i=0;setAction(moves[i]);demoTimer=setInterval(()=>{i++;if(i>=moves.length){clearInterval(demoTimer);demoTimer=0;return}setAction(moves[i])},2200)};
 $('actions').onclick=e=>{const btn=e.target.closest('button[data-m]');if(btn)setAction(btn.dataset.m)};
 $('boy').onclick=()=>pick('boy');$('girl').onclick=()=>pick('girl');
 $('correct').onclick=()=>{setAction('celebrate',2000);speak(['Awesome!','Excellent!','Amazing!','Unbelievable!'][Math.floor(Math.random()*4)])};
 $('wrong').onclick=()=>{setAction('encourage',2200);speak(['Try again!','Don’t give up!','You can do it!','One more chance!'][Math.floor(Math.random()*4)])};
 $('pause').onclick=()=>{paused=!paused;if(paused){cancelAnimationFrame(raf);raf=0}else start();$('pause').textContent=paused?'▶ Resume':'⏸ Pause'};
-$('reset').onclick=()=>{paused=false;$('pause').textContent='⏸ Pause';setAction('idle')};
+$('reset').onclick=()=>{clearInterval(demoTimer);demoTimer=0;smoothed=null;paused=false;$('pause').textContent='⏸ Pause';setAction('idle')};
 $('voice').onclick=()=>{voice=!voice;$('voice').textContent=voice?'🔊 Voice on':'🔇 Voice off';if(!voice&&window.speechSynthesis)speechSynthesis.cancel()};
-document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0}else start()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;clearInterval(demoTimer);demoTimer=0}else start()});
 // Test page only; never invoked by live student application.
 pick('boy');
 })();

@@ -869,3 +869,105 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* AI writing feedback V1: explicit opt-in, securely proxied through Supabase.
+ * Never expose provider secrets, never send text automatically. */
+(function installMEJAIWritingFeedback(){
+ 'use strict';
+ const ENDPOINT='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-writing-ai';
+ const ID='mej-writing-ai-feedback';
+ function writing(){
+  const area=[...document.querySelectorAll('textarea')].find(e=>e.offsetWidth>0&&e.offsetHeight>0&&/Introduction|Body|Conclusion/i.test(e.placeholder||''));
+  if(!area)return null;
+  const section=area.closest('section.card,section,.card,main,article')||area.parentElement?.parentElement;
+  if(!section||!/writing|كتابة|المسودة/i.test(section.textContent||''))return null;
+  const selects=[...section.querySelectorAll('select')];
+  const grade=selects.find(s=>[...s.options].some(o=>/^(11|12)$/.test(o.value||o.textContent.trim())));
+  const topic=selects.find(s=>s!==grade&&!s.dataset.mejGenreSelector&&s.options.length>1);
+  return {area,section,grade,topic,genre:document.getElementById('mej-writing-genre')};
+ }
+ function element(tag,txt,parent,style){
+  const node=document.createElement(tag);node.textContent=txt;
+  if(style)node.style.cssText=style;
+  if(parent)parent.append(node);
+  return node;
+ }
+ function feedbackView(root,obj){
+  root.replaceChildren();
+  element('h3','مراجعة الكتابة بالذكاء الاصطناعي',root,'margin:6px 0;color:#075f83');
+  const sections=[
+   ['ملخص',obj.summary],
+   ['نقاط القوة',obj.strengths],
+   ['الأفكار ومدى مطابقتها للموضوع',[obj.ideas?.assessment,obj.ideas?.relevance,...(obj.ideas?.missing_ideas||[])]],
+   ['ترتيب الأفكار والفقرات',[obj.organization?.assessment,...(obj.organization?.paragraph_notes||[]),...(obj.organization?.suggested_order||[])]],
+   ['تراكيب الجمل',[obj.sentences?.assessment,...(obj.sentences?.issues||[]).map(i=>'«'+i.original+'» ← '+i.suggestion+' | '+i.why)]],
+   ['القواعد والإملاء والترقيم',[obj.language?.assessment,...(obj.language?.issues||[]).map(i=>'«'+i.original+'» ← '+i.suggestion+' | '+i.why)]],
+   ['خصائص نوع الكتابة',[obj.genre?.assessment,...(obj.genre?.conventions_to_improve||[])]],
+   ['خطوات التحسين التالية',obj.next_steps],
+   ['مثال قصير للتحسين',obj.model_example]
+  ];
+  sections.forEach(([heading,items])=>{
+   const details=document.createElement('details');details.open=true;
+   details.style.cssText='padding:9px 10px;border:1px solid #a7d9eb;border-radius:11px;background:#fff;margin:9px 0';
+   const summary=element('summary',heading,details,'font-weight:800;cursor:pointer;color:#0a6389');
+   summary.setAttribute('role','heading');
+   for(const v of (Array.isArray(items)?items:[items])){
+    if(typeof v!=='string'||!v.trim())continue;
+    element('p',v,details,'margin:6px 0;font-weight:400;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere');
+   }
+   root.append(details);
+  });
+  element('small','هذه ملاحظات تعليمية آلية، وليست درجة رسمية. راجع مقترحات التصحيح قبل اعتمادها.',root,'display:block;margin:8px 0;color:#416376');
+ }
+ let busy=false;
+ function mount(){
+  const w=writing();if(!w)return;
+  if(document.getElementById(ID))return;
+  const outer=document.createElement('div');outer.id=ID;outer.dir='rtl';
+  outer.style.cssText='margin:13px 0;padding:13px;border:2px solid #65b9d5;border-radius:16px;background:#eaf8ff;color:#173b56;font:600 15px/1.7 Tahoma,Arial,sans-serif';
+  element('h3','🤖 مراجعة متكاملة بالذكاء الاصطناعي',outer,'margin:0 0 6px');
+  element('p','تفحص ملاءمة الأفكار، ترابطها، ترتيب الفقرات، الجمل، الإملاء والقواعد، مع اقتراحات تحسين تناسب نوع الكتابة.',outer,'font-weight:400;margin:0 0 8px');
+  const consent=document.createElement('label');consent.style.cssText='display:flex;align-items:flex-start;gap:7px;font-size:13px;font-weight:400';
+  const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.style.cssText='width:18px;height:18px;flex:none;margin-top:4px';
+  consent.append(checkbox,document.createTextNode(' أوافق على إرسال نص الكتابة فقط إلى خدمة الذكاء الاصطناعي للتحليل. لن يُرسل الاسم أو حساب الطالب، ولا يُرسل النص تلقائيًا.'));
+  outer.append(consent);
+  const button=element('button','✨ حلّل كتابتي بالذكاء الاصطناعي',outer,'display:block;width:100%;margin:12px 0;border:0;border-radius:12px;padding:12px;background:#087fa9;color:white;font:800 16px Tahoma,Arial;cursor:pointer');
+  button.type='button';
+  const status=element('div','',outer,'font-size:13px;white-space:pre-wrap');
+  status.setAttribute('aria-live','polite');
+  const results=document.createElement('div');outer.append(results);
+  button.addEventListener('click',async()=>{
+   if(busy)return;
+   if(!checkbox.checked){status.textContent='يرجى الموافقة على إرسال النص للتحليل أولًا.';return;}
+   if(!navigator.onLine){status.textContent='مراجعة AI تحتاج اتصالًا بالإنترنت. يمكنك استخدام المراجعة البنيوية المحلية.';return;}
+   const cur=writing();if(!cur)return;
+   const text=cur.area.value.trim();
+   if(text.length<50||text.length>7000){status.textContent='اكتب بين 50 و7000 حرف قبل طلب التحليل.';return;}
+   const topic=cur.topic?.selectedOptions?.[0]?.textContent||'';
+   const grade=Number(cur.grade?.value||0);
+   const genre=cur.genre?.value||'opinion';
+   if(!topic||![11,12].includes(grade)){status.textContent='اختر الصف والموضوع أولًا.';return;}
+   busy=true;button.disabled=true;button.style.opacity='.55';results.replaceChildren();
+   status.textContent='يتم تحليل الأفكار وترتيب الفقرات والتراكيب اللغوية...';
+   const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),27000);
+   try{
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,topic,grade,genre}),signal:controller.signal});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok||!data.ok)throw new Error(data.message||'خدمة AI غير متاحة حاليًا ('+res.status+').');
+    status.textContent='اكتملت المراجعة. طبّق الملاحظات ثم أعد كتابة النص بنفسك.';
+    feedbackView(results,data.feedback||{});
+   }catch(error){
+    status.textContent='تعذرت مراجعة AI: '+(error.name==='AbortError'?'انتهت مهلة الاتصال.':error.message||'خطأ في الخدمة')+' المسودة لم تتغير.';
+   }finally{clearTimeout(timeout);busy=false;button.disabled=false;button.style.opacity='1';}
+  });
+  const anchor=document.getElementById('mej-writing-genre-panel')||document.getElementById('mej-writing-lab-v1')||w.area;
+  anchor.parentElement.insertBefore(outer,anchor.nextSibling);
+ }
+ let pending=false;
+ function schedule(){if(pending)return;pending=true;setTimeout(()=>{pending=false;if(!writing())document.getElementById(ID)?.remove();else mount()},180);}
+ function boot(){
+  schedule();new MutationObserver(schedule).observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

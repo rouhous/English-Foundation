@@ -38,7 +38,7 @@ try{
  for(const r of records){
   const name=r.ShortlistFile;
   if(path.basename(name)!==name||!/^G\d{2}_\d{2}_[a-z_]+\.webp$/.test(name))throw Error('Invalid WebP name '+name);
-  const data=fs.readFileSync(path.join(root,'shortlist_15',name));
+  const data=fs.readFileSync(path.join(root,'shortlist',name));
   if(data.length<1000||data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')throw Error('Invalid WebP '+name);
   const stageParts=r.Stages.split(',').map(s=>s.trim());
   for(const stage of stageParts){

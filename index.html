@@ -1941,19 +1941,38 @@ function placementPlan(ceiling,questionCount=24){
   }
   return shuffle(ids);
 }
+// MEJ_PLACEMENT_RESUME_IPAD_V1
+function mejDiagnosticKey(){return 'MEJ_DIAGNOSTIC_CHECKPOINT_V1_'+String(db.active||'')}
+function mejReadDiagnostic(){try{
+const draft=JSON.parse(localStorage.getItem(mejDiagnosticKey())||'null'),p=active();
+if(!draft||draft.kind!=='diagnostic'||!p||draft.registeredGrade!==p.grade||draft.ceiling!==placementCeiling(p))return null;
+if(!Array.isArray(draft.ids)||draft.ids.length!==24||!draft.ids.every(id=>!!questionById[id]))return null;
+if(!Number.isInteger(draft.index)||draft.index<0||draft.index>draft.ids.length)return null;
+if(!Number.isInteger(draft.score)||draft.score<0||draft.score>draft.ids.length)return null;
+if(!Array.isArray(draft.responses)||draft.responses.length>draft.ids.length)return null;
+return draft
+}catch(_){return null}}
+function mejHasDiagnostic(){return !!mejReadDiagnostic()}
+function mejSaveDiagnostic(nextIndex){if(!activeSession||activeSession.kind!=='diagnostic')return;
+try{localStorage.setItem(mejDiagnosticKey(),JSON.stringify({...activeSession,index:nextIndex===undefined?activeSession.index:nextIndex}))}catch(e){console.warn('Checkpoint unavailable',e)}}
+function mejRestoreDiagnostic(){const draft=mejReadDiagnostic();if(!draft)return false;activeSession=draft;return true}
+function mejClearDiagnostic(){try{localStorage.removeItem(mejDiagnosticKey())}catch(_){}}
+
 function diagnosticLanding(){
   const p=active(),cap=placementCeiling(p);
   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-  document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('journey')">↩ العودة إلى رحلتي</button></div></section>`;
+  document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${mejHasDiagnostic()?'متابعة التشخيص':p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('journey')">↩ العودة إلى رحلتي</button></div></section>`;
 }
 function startDiagnostic(){
   const p=active();
+  if(mejRestoreDiagnostic()){displayQuestion();return;}
   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
   const cap=placementCeiling(p);
   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
   const ids=placementPlan(cap,24);
   activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
+  mejSaveDiagnostic();
   displayQuestion();
 }
 // MEJ_STAGE1_ALL_PATHS_GUARDED_V3
@@ -1998,10 +2017,10 @@ function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q
   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
   p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
 if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
-document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}${!ok?mejGrammarCorrection(q):''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}}
+document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}${!ok?mejGrammarCorrection(q):''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}if(activeSession?.kind==='diagnostic')mejSaveDiagnostic(activeSession.index+1);}
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
-function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
-function stopQuiz(){const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
+function nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}
+function stopQuiz(){if(activeSession?.kind==='diagnostic'){mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
 function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.
@@ -2011,7 +2030,7 @@ if(s.kind==='diagnostic'){
   const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
   grade=Math.min(ceiling,grade);
   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
-}else persist();activeSession=null;
+}else persist();if(s.kind==='diagnostic')mejClearDiagnostic();activeSession=null;
 document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستوى التأسيسي متاح دائمًا، والمراحل الأعلى تُفتح بحسب التقدم. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ رحلة جديدة بعد إتقان 200 عنصر في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('${returnTarget}')">${returnTarget==='skills'?'مركز المهارات':'خريطة المستويات'}</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade},${s.skillType?jsStr(s.skillType):'null'})">جولة جديدة</button>`:''}</div></div>`}
 // Preview words must also be extracted from older Grade 1-5 questions with empty word fields.
 function mejLearningPreviewWord(q){
@@ -2460,6 +2479,7 @@ function importProgress(){
  x.click();
 }
 route('home');
+if(mejRestoreDiagnostic())displayQuestion();
 
 // Keep Latin sentences and their final punctuation in left-to-right order inside RTL pages.
 function enforceEnglishTextDirection(root=document.getElementById('app')){

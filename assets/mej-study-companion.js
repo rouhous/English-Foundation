@@ -423,3 +423,39 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
+
+
+/* 2026-11-09: Quiz return goes to its parent skills screen, not the home/levels exit.
+ * Delegated listener survives question rerenders; no answers/progress are modified. */
+(function installQuizReturnToSkills(){
+ 'use strict';
+ const root=()=>document.getElementById('app');
+ const labelOf=el=>(el?.textContent||'').replace(/\s+/g,' ').trim();
+ const isQuiz=()=>{const app=root();return !!(app&&app.querySelector('#feedback')&&
+   /(?:السؤال\s*\d+|Question\s*\d+|Level\s*\d+\s*[•·]\s*(?:Reading|Listening|Grammar|Vocabulary|Writing))/i.test(app.textContent||''));};
+ function refresh(){
+  if(!isQuiz())return;
+  const app=root();
+  for(const btn of app.querySelectorAll('button,[role="button"],a')){
+   const label=labelOf(btn);
+   if(!/^(?:خروج|Exit|Quit)$/i.test(label))continue;
+   btn.dataset.mejQuizReturn='1';
+   if(label!=='↩ عودة')btn.textContent='↩ عودة';
+  }
+ }
+ document.addEventListener('click',function(event){
+  const button=event.target?.closest?.('[data-mej-quiz-return="1"]');
+  if(!button||!isQuiz())return;
+  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+  if(typeof window.route==='function')window.route('skills');
+  else if(typeof window.history?.back==='function')window.history.back();
+ },true);
+ function boot(){
+  const app=root();if(!app)return;
+  let queued=false;
+  const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;refresh()})};
+  new MutationObserver(schedule).observe(app,{subtree:true,childList:true});
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

@@ -1,0 +1,36 @@
+{
+  "status": "installed",
+  "ownerApproved": 4,
+  "newImages": 4,
+  "learningPlacements": 5,
+  "words": [
+    "scientist",
+    "spacesuit",
+    "watch",
+    "junk food"
+  ],
+  "stages": [
+    {
+      "word": "scientist",
+      "stage": "4A"
+    },
+    {
+      "word": "scientist",
+      "stage": "10B"
+    },
+    {
+      "word": "spacesuit",
+      "stage": "5A"
+    },
+    {
+      "word": "watch",
+      "stage": "6B"
+    },
+    {
+      "word": "junk food",
+      "stage": "10B"
+    }
+  ],
+  "zipPath": "assets/MEJ_4_Approved_Ready_For_GitHub_2026-11-09.zip",
+  "studentDataChanged": false
+}

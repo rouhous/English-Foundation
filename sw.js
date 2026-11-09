@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-public-20261109-companion-onboarding-v1';
+const CACHE='mej-public-20261109-companion-avatar-v2';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-companion-setup-v1.js','./assets/mej-study-companion.js','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-study-companion.css','./assets/mej-mobile-ui-v2.css','./assets/mej-skill-expansion-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -72,7 +72,7 @@ self.addEventListener('fetch',event=>{
  const isStaffScript=/\/assets\/(?:teacher-dashboard-v2|school-dashboard-v1|teacher-progress-v1|staff-native-portal-v1)\.js$/.test(path);
  // Approved vocabulary image banks must always refresh online, while retaining
  // an offline copy of the latest successfully downloaded version.
- const isCompanionAsset=path.endsWith('/assets/mej-study-companion.js')||path.endsWith('/assets/student-cloud-progress-v1.js')||path.endsWith('/assets/mej-skill-expansion-v1.js');
+ const isCompanionAsset=path.endsWith('/assets/mej-companion-setup-v1.js')||path.endsWith('/assets/mej-study-companion.js')||path.endsWith('/assets/student-cloud-progress-v1.js')||path.endsWith('/assets/mej-skill-expansion-v1.js');
  if(isCompanionAsset){
    event.respondWith((async()=>{
      const cache=await caches.open(CACHE);

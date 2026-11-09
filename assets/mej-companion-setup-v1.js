@@ -62,6 +62,7 @@ function open(force){
   // This updates the existing learner profile instead of creating another user.
   if(typeof persist==='function')persist(false);
   close();attachAvatar();
+  window.dispatchEvent(new CustomEvent('mej-companion-change',{detail:{id:current.id,kind:chosen,name}}));
  };
  sheet.append(title,intro,picks,label,input,alert,save);
  if(force){const cancel=document.createElement('button');cancel.type='button';cancel.textContent='إلغاء';cancel.style.cssText='margin-top:10px;width:100%;padding:8px;border:0;background:transparent;color:#13559a';cancel.onclick=close;sheet.append(cancel)}
@@ -91,8 +92,8 @@ function attachAvatar(){
  const app=document.getElementById('app'),p=profile();
  if(!app||!valid(p))return;
  const old=app.querySelector('.j23-avatar');
- if(!old)return;
  let button=app.querySelector('#mej-companion-avatar-button');
+ if(!old&&!button)return;
  if(!button){
   button=document.createElement('button');
   button.type='button';button.id='mej-companion-avatar-button';

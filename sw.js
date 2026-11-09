@@ -2,14 +2,14 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-public-20261108-launch-recovery-v1';
+const CACHE='mej-public-20261108-two-grids-8';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-study-companion.js','./assets/mej-skill-expansion-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];
-const IMAGE_SHARDS=Array.from({length:18},(_,i)=>
+const IMAGE_SHARDS=Array.from({length:19},(_,i)=>
  './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261107-approved-all');
 let warmStarted=false;
 async function warmPictures(){
@@ -54,7 +54,7 @@ self.addEventListener('message',event=>{
    const found=await Promise.all(IMAGE_SHARDS.map(p=>cache.match(p).then(Boolean)));
    event.source?.postMessage({type:'MEJ_OFFLINE_STATUS',
     coreCached:!!(await cache.match('./index.html')),
-    imageShardsCached:found.filter(Boolean).length,imageShardsTotal:18});
+    imageShardsCached:found.filter(Boolean).length,imageShardsTotal:19});
   })());
  }
 });

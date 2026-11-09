@@ -1,0 +1,27 @@
+name: Apply compact learner levels and skill navigation
+on:
+  push:
+    paths:
+      - scripts/apply_mej_compact_skills_nav.py
+      - assets/mej-mobile-ui-v2.css
+      - .github/workflows/apply-mej-compact-skills-nav.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: python3 scripts/apply_mej_compact_skills_nav.py
+      - name: Commit verified UI changes
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Compact learner levels and return skill practice to skill centre"
+            git push
+          fi

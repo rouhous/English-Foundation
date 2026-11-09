@@ -1,0 +1,28 @@
+name: Install 15 owner-approved vocabulary images
+on:
+  push:
+    paths:
+      - 'assets/MEJ_5_Groups_80_Cropped_15_For_Review_2026-11-09.zip'
+      - 'assets/import/MEJ_5_Groups_80_Cropped_15_For_Review_2026-11-09.zip'
+      - 'scripts/install_mej_fifteen_owner_approved_20261109.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate uploaded images and link to learning stages
+        run: node scripts/install_mej_fifteen_owner_approved_20261109.cjs
+      - name: Commit installed images and offline cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-approved-15-20261109 assets/approved-images-21.js index.html sw.js reviews/learning.html reviews/image-audit/MEJ_FIFTEEN_APPROVED_20261109_INSTALL_RESULT.json
+          git diff --cached --quiet || (git commit -m "Install 15 approved vocabulary images with 16 learning placements" && git push)

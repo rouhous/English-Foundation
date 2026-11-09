@@ -21,7 +21,7 @@ function lower(g){
  });
 }
 const banks={};for(let g=1;g<=12;g++)banks[g]=g>=11?UPPER.filter(x=>x.grade===g):lower(g);
-let lock=false,queued=false,activeGrade=null,activeBlock=null,selectedGenre='',selectedSemester='1',selectedTopic='';
+let lock=false,queued=false,activeGrade=null,activeBlock=null,selectedGenre='',selectedSemester='1',selectedTopic='',selectedUnit='',selectedLesson='';
 function option(value,text){const x=document.createElement('option');x.value=value;x.textContent=text;return x;}
 function find(){
  const area=[...document.querySelectorAll('textarea')].find(x=>x.offsetWidth>0&&x.offsetHeight>0&&/Introduction|Body|Conclusion/i.test(x.placeholder||''));
@@ -34,52 +34,112 @@ function find(){
 }
 function build(w){
  let panel=document.getElementById('mej-writing-genre-panel');
- if(panel&&panel.parentElement!==w.topic.parentElement){panel.remove();panel=null;}
+ if(panel&&panel.parentElement!==w.topic.parentElement){panel.remove();panel=null}
  if(panel)return panel;
  panel=document.createElement('div');panel.id='mej-writing-genre-panel';panel.dir='rtl';
- panel.style.cssText='margin:12px 0;padding:12px;border:2px solid #a3d5ef;border-radius:13px;background:#effaff;color:#124464;font:700 15px Tahoma,Arial';
- const l1=document.createElement('label');l1.textContent='1. اختر نوع الكتابة';
- const genre=document.createElement('select');genre.id='mej-writing-genre';genre.dataset.mejGenreSelector='1';
- const l2=document.createElement('label');l2.textContent='2. الفصل الدراسي';
- const sem=document.createElement('select');sem.id='mej-writing-semester';sem.dataset.mejGenreSelector='1';
- sem.append(option('1','الفصل الأول'),option('2','الفصل الثاني'));
- const info=document.createElement('small');info.id='mej-writing-topic-note';
- info.style.cssText='display:block;font-size:12px;font-weight:400;margin-top:8px';
- for(const e of [genre,sem])e.style.cssText='display:block;box-sizing:border-box;width:100%;padding:10px;border:1px solid #a5c9db;border-radius:9px;background:white;font:500 16px Arial;margin:5px 0 9px';
- panel.append(l1,genre,l2,sem,info);w.topic.before(panel);
- genre.addEventListener('change',()=>{selectedGenre=genre.value;selectedTopic='';fill(find());});
- sem.addEventListener('change',()=>{selectedSemester=sem.value;selectedTopic='';fill(find());});
+ panel.style.cssText='box-sizing:border-box;width:100%;max-width:100%;margin:10px 0;padding:10px;border:2px solid #a3d5ef;border-radius:14px;background:#effaff;color:#124464;font:600 14px Tahoma,Arial,sans-serif';
+ function addSelect(id,text){
+  const label=document.createElement('label');label.style.cssText='display:block;margin:6px 0 9px;font-size:14px;font-weight:700';
+  label.textContent=text;
+  const select=document.createElement('select');select.id=id;select.dataset.mejGenreSelector='1';select.setAttribute('aria-label',text);
+  select.style.cssText='box-sizing:border-box;display:block;width:100%;max-width:100%;min-height:44px;padding:9px 10px;margin-top:4px;border:1px solid #9bc5db;border-radius:9px;background:white;color:#173d60;font:500 14px Tahoma,Arial,sans-serif;text-overflow:ellipsis;white-space:nowrap';
+  label.append(select);panel.append(label);return select;
+ }
+ const genre=addSelect('mej-writing-genre','1. نوع الكتابة');
+ const sem=addSelect('mej-writing-semester','2. الفصل الدراسي');
+ const axis=addSelect('mej-writing-unit','3. المحور');
+ const lesson=addSelect('mej-writing-lesson','4. الدرس');
+ const title=document.createElement('div');title.textContent='5. اختر موضوعًا';title.style.cssText='font-weight:700;font-size:14px;margin-top:8px';panel.append(title);
+ const results=document.createElement('div');results.id='mej-writing-topic-buttons';panel.append(results);
+ const help=document.createElement('p');help.id='mej-writing-topic-note';help.style.cssText='font-size:12px;font-weight:400;line-height:1.6;color:#41647a';panel.append(help);
+ w.topic.before(panel);
+ w.topic.style.cssText+=';position:absolute!important;width:1px!important;height:1px!important;max-width:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important';
+ w.topic.setAttribute('aria-hidden','true');w.topic.tabIndex=-1;
+ function update(key,value){
+  if(key==='genre')selectedGenre=value;
+  if(key==='semester')selectedSemester=value;
+  if(key==='unit')selectedUnit=value;
+  if(key==='lesson')selectedLesson=value;
+  if(key!=='lesson'){selectedLesson=''}
+  if(key==='genre'||key==='semester'){selectedUnit=''}
+  selectedTopic='';
+  fill(find());
+ }
+ genre.addEventListener('change',()=>update('genre',genre.value));
+ sem.addEventListener('change',()=>update('semester',sem.value));
+ axis.addEventListener('change',()=>update('unit',axis.value));
+ lesson.addEventListener('change',()=>update('lesson',lesson.value));
  w.topic.addEventListener('change',()=>{selectedTopic=w.topic.value;});
  return panel;
 }
 function fill(w){
  if(!w||lock)return;
- lock=true;try{
-  const grade=Number(w.grade.value);
-  if(!banks[grade])return;
-  const panel=build(w),genre=panel.querySelector('#mej-writing-genre'),sem=panel.querySelector('#mej-writing-semester'),info=panel.querySelector('#mej-writing-topic-note');
+ lock=true;
+ try{
+  const grade=Number(w.grade.value);if(!banks[grade])return;
+  const panel=build(w);
+  const genre=panel.querySelector('#mej-writing-genre');
+  const sem=panel.querySelector('#mej-writing-semester');
+  const axis=panel.querySelector('#mej-writing-unit');
+  const lesson=panel.querySelector('#mej-writing-lesson');
+  const results=panel.querySelector('#mej-writing-topic-buttons');
   if(activeGrade!==grade||activeBlock!==w.root){
-   activeGrade=grade;activeBlock=w.root;selectedGenre='';selectedTopic='';selectedSemester='1';
-   genre.replaceChildren(option('','— اختر نوع الكتابة أولًا —'));
-   for(const value of genres(grade))genre.append(option(value,gen[value]));
+   activeGrade=grade;activeBlock=w.root;selectedGenre='';selectedSemester='1';selectedTopic='';selectedUnit='';selectedLesson='';
   }
-  genre.value=selectedGenre;sem.value=selectedSemester;
+  function items(el,options,placeholder,chosen){
+   const signature=JSON.stringify(options.map(x=>x[0]));
+   if(el.dataset.items!==signature){
+    el.replaceChildren(option('',placeholder));
+    options.forEach(([v,t])=>el.append(option(v,t)));
+    el.dataset.items=signature;
+   }
+   el.value=options.some(x=>x[0]===chosen)?chosen:'';
+   el.disabled=!options.length;
+  }
+  items(genre,genres(grade).map(x=>[x,gen[x]]),'اختر النوع',selectedGenre);
+  items(sem,[['1','الفصل الأول'],['2','الفصل الثاني']],'اختر الفصل',selectedSemester);
   const rows=banks[grade].filter(x=>x.genre===selectedGenre&&String(x.semester)===selectedSemester);
-  const signature=[grade,selectedGenre,selectedSemester].join('|');
+  const axisOf=x=>grade>=11?x.unit.split(' · Unit ')[0]:x.unit;
+  const lessonOf=x=>grade>=11?(x.unit.split(' — ').slice(1).join(' — ')||x.unit):x.unit;
+  const units=[...new Set(rows.map(axisOf))];
+  if(!units.includes(selectedUnit)){selectedUnit='';selectedLesson='';selectedTopic=''}
+  items(axis,units.map(x=>[x,x]),'اختر المحور',selectedUnit);
+  const lessons=[...new Set(rows.filter(x=>axisOf(x)===selectedUnit).map(lessonOf))];
+  if(!lessons.includes(selectedLesson)){selectedLesson='';selectedTopic=''}
+  items(lesson,lessons.map(x=>[x,x]),'اختر الدرس',selectedLesson);
+  const shown=rows.filter(x=>axisOf(x)===selectedUnit&&lessonOf(x)===selectedLesson);
+  if(!shown.some(x=>x.title===selectedTopic))selectedTopic='';
+  const signature=JSON.stringify([grade,selectedGenre,selectedSemester,selectedUnit,selectedLesson]);
   if(w.topic.dataset.mejWritingCurriculum!==signature){
    w.topic.replaceChildren(option('','— اختر موضوعًا —'));
-   const groups=new Map();
-   for(const item of rows){
-    let group=groups.get(item.unit);
-    if(!group){group=document.createElement('optgroup');group.label=(grade>=11?'المحور: ':'محور تدريبي: ')+item.unit;w.topic.append(group);groups.set(item.unit,group);}
-    const o=option(item.title,item.title);o.dataset.mejGenre=item.genre;o.dataset.mejKeywords=item.unit.toLowerCase();group.append(o);
-   }
-   w.topic.dataset.mejWritingCurriculum=signature;w.topic.value=rows.some(x=>x.title===selectedTopic)?selectedTopic:'';
-   w.topic.disabled=!selectedGenre;
+   shown.forEach(x=>{
+    const o=option(x.title,x.title);o.dataset.mejGenre=x.genre;o.dataset.mejKeywords=x.unit.toLowerCase();w.topic.append(o);
+   });
+   w.topic.dataset.mejWritingCurriculum=signature;
+   results.replaceChildren();
+   shown.forEach(x=>{
+    const btn=document.createElement('button');btn.type='button';btn.textContent=x.title;btn.dataset.topic=x.title;
+    btn.style.cssText='display:block;box-sizing:border-box;width:100%;padding:9px 10px;margin:7px 0;border:1px solid #9bc5db;border-radius:9px;color:#183b57;background:white;text-align:left;direction:ltr;white-space:normal;overflow-wrap:anywhere;font:500 14px/1.5 Arial,sans-serif;cursor:pointer';
+    btn.addEventListener('click',()=>{
+     selectedTopic=x.title;w.topic.value=x.title;
+     w.topic.dispatchEvent(new Event('change',{bubbles:true}));
+     fill(find());
+    });
+    results.append(btn);
+   });
   }
-  info.textContent=grade>=11?'موضوعان لكل نوع في كل وحدة دراسية من محاور الفصل.':grade<=4?'تدريبات متدرجة على الجمل والوصف والسرد؛ المحاور تدريبية وليست أسماء وحدات الكتاب.':'تدريبات متدرجة حسب نواتج التقويم؛ أسماء المحاور تدريبية وليست عناوين وحدات رسمية.';
-  const ai=document.getElementById('mej-writing-ai-feedback');
-  if(ai)ai.style.display=grade>=11?'':'none';
+  w.topic.value=selectedTopic||'';
+  [...results.querySelectorAll('button')].forEach(btn=>{
+   const selected=btn.dataset.topic===selectedTopic;
+   btn.setAttribute('aria-pressed',String(selected));
+   btn.style.background=selected?'#d8f2ff':'white';
+   btn.style.borderColor=selected?'#087da8':'#9bc5db';
+   btn.style.fontWeight=selected?'700':'500';
+  });
+  panel.querySelector('#mej-writing-topic-note').textContent=grade>=11?
+   'يظهر موضوعان فقط لكل درس ونوع كتابة.':
+   'أنشطة تدريبية متدرجة وليست بالضرورة عناوين الوحدات الرسمية.';
+  const ai=document.getElementById('mej-writing-ai-feedback');if(ai)ai.style.display=grade>=11?'':'none';
  }finally{lock=false;}
 }
 function schedule(){if(queued)return;queued=true;setTimeout(()=>{queued=false;fill(find());},160)}

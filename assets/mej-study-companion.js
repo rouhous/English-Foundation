@@ -686,33 +686,32 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(parent)parent.append(node);
   return node;
  }
- function feedbackView(root,obj){
-  root.replaceChildren();
-  element('h3','مراجعة الكتابة بالذكاء الاصطناعي',root,'margin:6px 0;color:#075f83');
-  const sections=[
-   ['ملخص',obj.summary],
-   ['نقاط القوة',obj.strengths],
-   ['الأفكار ومدى مطابقتها للموضوع',[obj.ideas?.assessment,obj.ideas?.relevance,...(obj.ideas?.missing_ideas||[])]],
-   ['ترتيب الأفكار والفقرات',[obj.organization?.assessment,...(obj.organization?.paragraph_notes||[]),...(obj.organization?.suggested_order||[])]],
-   ['تراكيب الجمل',[obj.sentences?.assessment,...(obj.sentences?.issues||[]).map(i=>'«'+i.original+'» ← '+i.suggestion+' | '+i.why)]],
-   ['القواعد والإملاء والترقيم',[obj.language?.assessment,...(obj.language?.issues||[]).map(i=>'«'+i.original+'» ← '+i.suggestion+' | '+i.why)]],
-   ['خصائص نوع الكتابة',[obj.genre?.assessment,...(obj.genre?.conventions_to_improve||[])]],
-   ['خطوات التحسين التالية',obj.next_steps],
-   ['مثال قصير للتحسين',obj.model_example]
-  ];
-  sections.forEach(([heading,items])=>{
-   const details=document.createElement('details');details.open=true;
-   details.style.cssText='padding:9px 10px;border:1px solid #a7d9eb;border-radius:11px;background:#fff;margin:9px 0';
-   const summary=element('summary',heading,details,'font-weight:800;cursor:pointer;color:#0a6389');
-   summary.setAttribute('role','heading');
-   for(const v of (Array.isArray(items)?items:[items])){
-    if(typeof v!=='string'||!v.trim())continue;
-    element('p',v,details,'margin:6px 0;font-weight:400;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere');
-   }
-   root.append(details);
-  });
-  element('small','هذه ملاحظات تعليمية آلية، وليست درجة رسمية. راجع مقترحات التصحيح قبل اعتمادها.',root,'display:block;margin:8px 0;color:#416376');
+ function feedbackView(root,obj,score){
+ root.replaceChildren();
+ const title=document.createElement('h3');title.textContent='مراجعة كتابتي — خمس نقاط';title.style.cssText='margin:8px 0;color:#075f83';root.append(title);
+ const scoring=document.createElement('div');scoring.style.cssText='padding:12px;border-radius:12px;background:white;border:2px solid #98c8df;text-align:center;margin:8px 0';
+ const number=document.createElement('strong');number.textContent=score&&typeof score.value==='number'?score.value+' / '+score.max:'لم تتوفر درجة';
+ number.style.cssText='display:block;font:800 27px Tahoma,Arial,sans-serif;color:#075f83';scoring.append(number);
+ const note=document.createElement('small');note.textContent='تقدير تدريبي بالذكاء الاصطناعي، مسترشد بأوصاف سُلّم الوزارة وليس نتيجة رسمية';scoring.append(note);root.append(scoring);
+ function para(parent,text){
+  const node=document.createElement('p');node.textContent=text||'';node.style.cssText='font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin:5px 0';parent.append(node);
  }
+ para(root,obj.summary);
+ const names=['مطابقة المحتوى','كمية المعلومات أو الأحداث','بنية الموضوع','الإملاء وعلامات الترقيم','اللغة والتراكيب'];
+ (obj.five_points||[]).slice(0,5).forEach((item,i)=>{
+  const card=document.createElement('div');card.style.cssText='background:white;border:1px solid #a7d9eb;border-radius:11px;margin:9px 0;padding:10px';
+  const heading=document.createElement('strong');heading.textContent=(i+1)+'. '+names[i];card.append(heading);
+  para(card,'✓ '+(item.what_works||''));
+  para(card,'✎ للتحسين: '+(item.what_to_improve||''));
+  if(item.short_example)para(card,'مثال: '+item.short_example);
+  root.append(card);
+ });
+ if(obj.next_step){
+  const next=document.createElement('div');next.style.cssText='border:1px solid #78c7df;border-radius:10px;padding:10px;margin-top:8px;background:#f6fcff';
+  para(next,'خطوتك التالية: '+obj.next_step);root.append(next);
+ }
+ para(root,'أعد كتابة النص بنفسك بعد قراءة الملاحظات. المراجعة آلية وتحتاج إلى اعتماد المعلم إن استُخدمت في التقويم.');
+}
  let busy=false;
  function mount(){
   const w=writing();if(!w)return;
@@ -720,11 +719,19 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const outer=document.createElement('div');outer.id=ID;outer.dir='rtl';
   outer.style.cssText='margin:13px 0;padding:13px;border:2px solid #65b9d5;border-radius:16px;background:#eaf8ff;color:#173b56;font:600 15px/1.7 Tahoma,Arial,sans-serif';
   element('h3','🤖 مراجعة متكاملة بالذكاء الاصطناعي',outer,'margin:0 0 6px');
-  element('p','تفحص ملاءمة الأفكار، ترابطها، ترتيب الفقرات، الجمل، الإملاء والقواعد، مع اقتراحات تحسين تناسب نوع الكتابة.',outer,'font-weight:400;margin:0 0 8px');
+  element('p','مراجعة مبسطة لطالب يتعلم الإنجليزية لغة ثانية: خمس نقاط عن المحتوى والمعلومات والتنظيم والإملاء والتراكيب، مع درجة تدريبية تقديرية.',outer,'font-weight:400;margin:0 0 8px');
   const consent=document.createElement('label');consent.style.cssText='display:flex;align-items:flex-start;gap:7px;font-size:13px;font-weight:400';
   const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.style.cssText='width:18px;height:18px;flex:none;margin-top:4px';
   consent.append(checkbox,document.createTextNode(' أوافق على إرسال نص الكتابة فقط إلى خدمة الذكاء الاصطناعي للتحليل. لن يُرسل الاسم أو حساب الطالب، ولا يُرسل النص تلقائيًا.'));
   outer.append(consent);
+  const scoreLabel=document.createElement('label');scoreLabel.textContent='مقياس الدرجة التدريبية';
+  scoreLabel.style.cssText='display:block;margin-top:9px;font-size:13px;font-weight:700';
+  const maxSelect=document.createElement('select');maxSelect.id='mej-writing-max-score';
+  maxSelect.style.cssText='display:block;box-sizing:border-box;width:100%;margin:6px 0;padding:10px;border:1px solid #9bc5db;border-radius:9px;background:white;color:#17445b;font:500 15px Tahoma,Arial,sans-serif';
+  for(const [value,label] of [['5','من 5 درجات'],['10','من 10 درجات']]){
+   const o=document.createElement('option');o.value=value;o.textContent=label;maxSelect.append(o);
+  }
+  scoreLabel.append(maxSelect);outer.append(scoreLabel);
   const button=element('button','✨ حلّل كتابتي بالذكاء الاصطناعي',outer,'display:block;width:100%;margin:12px 0;border:0;border-radius:12px;padding:12px;background:#087fa9;color:white;font:800 16px Tahoma,Arial;cursor:pointer');
   button.type='button';
   const status=element('div','',outer,'font-size:13px;white-space:pre-wrap');
@@ -740,16 +747,16 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    const topic=cur.topic?.selectedOptions?.[0]?.textContent||'';
    const grade=Number(cur.grade?.value||0);
    const genre=cur.genre?.value||'opinion';
-   if(!topic||![11,12].includes(grade)){status.textContent='اختر الصف والموضوع أولًا.';return;}
+   if(!topic||![5,6,7,8,9,10,11,12].includes(grade)){status.textContent='اختر الصف والموضوع أولًا.';return;}
    busy=true;button.disabled=true;button.style.opacity='.55';results.replaceChildren();
    status.textContent='يتم تحليل الأفكار وترتيب الفقرات والتراكيب اللغوية...';
    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),27000);
    try{
-    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,topic,grade,genre}),signal:controller.signal});
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,topic,grade,genre,maxScore:Number(maxSelect.value)}),signal:controller.signal});
     const data=await res.json().catch(()=>({}));
     if(!res.ok||!data.ok)throw new Error(data.message||'خدمة AI غير متاحة حاليًا ('+res.status+').');
     status.textContent='اكتملت المراجعة. طبّق الملاحظات ثم أعد كتابة النص بنفسك.';
-    feedbackView(results,data.feedback||{});
+    feedbackView(results,data.feedback||{},data.score);
    }catch(error){
     status.textContent='تعذرت مراجعة AI: '+(error.name==='AbortError'?'انتهت مهلة الاتصال.':error.message||'خطأ في الخدمة')+' المسودة لم تتغير.';
    }finally{clearTimeout(timeout);busy=false;button.disabled=false;button.style.opacity='1';}

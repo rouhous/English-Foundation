@@ -1,0 +1,25 @@
+name: Verify companion avatar entry
+on:
+  push:
+    paths:
+      - assets/mej-companion-setup-v1.js
+      - .github/workflows/verify-companion-avatar.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript and expected handlers
+        run: |
+          node --check assets/mej-companion-setup-v1.js
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('assets/mej-companion-setup-v1.js','utf8');
+          for(const needle of ['MEJ_COMPANION_AVATAR_ENTRY_V2','j23-avatar','mej-companion-avatar-button','button.onclick=()=>open(true)','current.companion={kind:chosen,name','persist(false)','attachAvatar();']){
+            if(!s.includes(needle))throw Error('Missing companion function: '+needle);
+          }
+          console.log('Companion avatar and editing handlers verified');
+          NODE

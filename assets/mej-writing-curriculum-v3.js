@@ -139,7 +139,7 @@ function fill(w){
   panel.querySelector('#mej-writing-topic-note').textContent=grade>=11?
    'يظهر موضوعان فقط لكل درس ونوع كتابة.':
    'أنشطة تدريبية متدرجة وليست بالضرورة عناوين الوحدات الرسمية.';
-  const ai=document.getElementById('mej-writing-ai-feedback');if(ai)ai.style.display=grade>=11?'':'none';
+  const ai=document.getElementById('mej-writing-ai-feedback');if(ai)ai.style.display=grade>=5?'':'none';
  }finally{lock=false;}
 }
 function schedule(){if(queued)return;queued=true;setTimeout(()=>{queued=false;fill(find());},160)}

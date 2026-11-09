@@ -3,6 +3,8 @@
    Leaves the original quiz feedback/score system untouched. */
 (function(){
 'use strict';
+/* Student safety: companion temporarily disabled across all devices. */
+return;
 const avatar=()=>{try{return typeof active==='function'?active()?.companion:null}catch(_){return null}};
 const student=()=>{try{return typeof active==='function'?active():null}catch(_){return null}};
 const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;

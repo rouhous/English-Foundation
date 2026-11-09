@@ -55,6 +55,8 @@ function build(w){
  w.topic.before(panel);
  w.topic.style.cssText+=';position:absolute!important;width:1px!important;height:1px!important;max-width:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important';
  w.topic.setAttribute('aria-hidden','true');w.topic.tabIndex=-1;
+ const previous=w.topic.previousElementSibling;
+ if(previous && previous!==panel && /اختر مهمة الكتابة|اختر الموضوع|Choose writing topic/i.test(previous.textContent||''))previous.style.display='none';
  function update(key,value){
   if(key==='genre')selectedGenre=value;
   if(key==='semester')selectedSemester=value;

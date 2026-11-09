@@ -25,5 +25,9 @@ for file in ['assets/mej-study-companion.js','assets/mej-companion-motion-v1.js'
 report={'status':'PASS' if all(v for k,v in checks.items() if k!='quiz_feedback_hook') else 'CHECK','checks':checks,'feedback_matches':len(re.findall(r'MEJCompanion\\.react',html)),'source_bytes':len(html)}
 Path('diagnostics').mkdir(exist_ok=True)
 Path('diagnostics/mej-companion-3d-qa.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
-print(json.dumps(report,ensure_ascii=False,indent=2))
+for needle in ['function gradeAnswer(', 'function submitTyped(', 'function skipQuestion(', "getElementById('feedback')", 'function choose(']:
+ matches=[m.start() for m in re.finditer(re.escape(needle),html)]
+ report.setdefault('answer_sites',{})[needle]=[html[max(0,x-150):min(len(html),x+3000)] for x in matches[:3]]
+Path('diagnostics/mej-companion-3d-qa.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+print(json.dumps({'status':report['status'],'checks':report['checks'],'site_counts':{k:len(v) for k,v in report['answer_sites'].items()}},ensure_ascii=False))
 assert report['status']=='PASS'

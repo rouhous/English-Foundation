@@ -2,9 +2,9 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-public-20261108-two-grids-8';
+const CACHE='mej-public-20261109-quiz-back-offline-9';
 const CORE=['./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
- './manifest.webmanifest','./assets/mej-study-companion.js','./assets/mej-skill-expansion-v1.js','./icon-192.png','./icon-512.png',
+ './manifest.webmanifest','./assets/mej-study-companion.js','./assets/mej-study-companion.css','./assets/mej-mobile-ui-v2.css','./assets/mej-skill-expansion-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
@@ -40,6 +40,8 @@ self.addEventListener('activate',event=>{
  event.waitUntil((async()=>{
   await self.clients.claim();
   // Leave older caches until the new shell is present. Preserve all user data.
+  const current=await caches.open(CACHE);
+  if(!await current.match('./index.html'))return; // Keep an older working offline shell if upgrade was interrupted.
   const keys=await caches.keys();
   await Promise.all(keys.filter(k=>k!==CACHE && /^(?:english-explorer-|my-english-journey-|mej-)/.test(k))
    .map(k=>caches.delete(k)));
@@ -54,7 +56,7 @@ self.addEventListener('message',event=>{
    const found=await Promise.all(IMAGE_SHARDS.map(p=>cache.match(p).then(Boolean)));
    event.source?.postMessage({type:'MEJ_OFFLINE_STATUS',
     coreCached:!!(await cache.match('./index.html')),
-    imageShardsCached:found.filter(Boolean).length,imageShardsTotal:19});
+    imageShardsCached:found.filter(Boolean).length,imageShardsTotal:IMAGE_SHARDS.length});
   })());
  }
 });

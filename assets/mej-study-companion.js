@@ -779,3 +779,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  const script=document.createElement('script');script.dataset.mejWritingV3='1';script.src=path;
  script.defer=true;document.head.appendChild(script);
 })();
+
+/* Writing skills router: separate non-star exercises for grades 1–7. */
+(function(){
+ const add=()=>{
+  if(document.querySelector('script[data-mej-writing-skills]'))return;
+  const script=document.createElement('script');
+  script.dataset.mejWritingSkills='1';
+  script.src='./assets/mej-writing-skills-v1.js';
+  document.head.append(script);
+ };
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add,{once:true});else add();
+})();

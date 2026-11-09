@@ -459,3 +459,210 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* Writing lab v1: explicit return, curriculum-aligned practice topics, user-initiated
+ * LanguageTool proofing. Drafts stay in the existing app; no automatic remote upload. */
+(function installMEJWritingLab(){
+ 'use strict';
+ const TOPICS={
+  12:{
+   1:[
+    ['Retail Therapy','Malls and traditional markets in Oman: which offers a better shopping experience?','shopping markets malls prices products customers'],
+    ['Retail Therapy','Should teenagers spend less money on famous brands?','brands money teenagers spending shopping'],
+    ['Retail Therapy','How do advertisements influence young people?','advertisements products customers influence brands'],
+    ['Retail Therapy','The advantages and disadvantages of online shopping','online shopping delivery advantages disadvantages'],
+    ['Starting University','How can students prepare for life at university?','university students study preparation skills'],
+    ['Starting University','The benefits and challenges of studying abroad','study abroad country language university challenges'],
+    ['Starting University','Write a letter thanking a teacher for their help','teacher school thank help learning'],
+    ['Starting University','How to manage time during the first year at university','university time study schedule management'],
+    ['Tourism and Hospitality','How can Oman attract more tourists?','oman tourism visitors hotels attractions'],
+    ['Tourism and Hospitality','Describe a memorable holiday in Oman','holiday oman trip visit experience'],
+    ['Tourism and Hospitality','Why is good customer service important in hotels?','service hotels guests tourists staff'],
+    ['Tourism and Hospitality','The benefits of tourism for local communities','tourism local jobs economy community'],
+    ['Travel and Transport','Public transport or private cars: which is better?','transport cars buses environment traffic'],
+    ['Travel and Transport','How can we reduce traffic congestion?','traffic roads cars congestion solutions'],
+    ['Travel and Transport','Ways to improve road safety in Oman','roads safety drivers accidents rules'],
+    ['Travel and Transport','The future of air and rail travel','travel aircraft trains transport future']
+   ],
+   2:[
+    ['News and the Media','The advantages and dangers of social media news','news media online information sources'],
+    ['News and the Media','What makes a reliable news report?','news reporter reliable facts information'],
+    ['News and the Media','Write a short news story about a school event','school event news report students'],
+    ['News and the Media','The role of interviews in journalism','interviews journalists questions information'],
+    ['Work and Careers','What is your dream job and why?','career job work skills future'],
+    ['Work and Careers','How can students prepare for a job interview?','job interview questions skills preparation'],
+    ['Work and Careers','Write a formal email applying for a summer job','job application email skills experience'],
+    ['Work and Careers','Why is teamwork important in the workplace?','team work colleagues cooperation success'],
+    ['Health and Safety','How can teenagers maintain a healthy lifestyle?','health diet exercise sleep lifestyle'],
+    ['Health and Safety','The importance of safety rules at home','home safety accidents rules prevention'],
+    ['Health and Safety','Why should young people practise sports?','sports exercise health fitness people'],
+    ['Health and Safety','How should families prepare for emergencies?','emergency safety families first aid preparedness'],
+    ['Citizenship','What makes a responsible citizen?','citizen responsibility community rights duties'],
+    ['Citizenship','How can young people volunteer in Oman?','volunteer oman community help organisations'],
+    ['Citizenship','The importance of protecting public places','public places environment citizens clean'],
+    ['Citizenship','How can Omani citizens contribute to the world?','oman citizens global community cooperation']
+   ]
+  },
+  11:{
+   1:[
+    ['Communication','The advantages and disadvantages of mobile phones','mobile phones communication advantages disadvantages'],
+    ['Communication','Why is body language important?','body language gestures communication people'],
+    ['Communication','Write an email inviting a friend to Oman','email friend oman invitation visit'],
+    ['Communication','How can teenagers use the internet safely?','internet teenagers safety privacy online'],
+    ['Those Teenage Things','The qualities of a good friend','friendship friends trust honest support'],
+    ['Those Teenage Things','Challenges teenagers face today','teenagers school challenges family stress'],
+    ['Those Teenage Things','How can parents and teenagers understand each other?','parents teenagers family communication respect'],
+    ['Those Teenage Things','Positive and negative influences on teenagers','teenagers influences habits behaviour choices'],
+    ['Travellers and Tourists','Describe a tourist destination in Oman','tourism destination oman attractions travel'],
+    ['Travellers and Tourists','Why do people enjoy travelling?','travel tourists culture experiences places'],
+    ['Travellers and Tourists','Design a two-day tour for visitors to Oman','tour oman itinerary visit attractions'],
+    ['Travellers and Tourists','The benefits of domestic tourism','oman tourism local economy travel'],
+    ['Innovation','How can smart homes improve our lives?','smart homes technology devices convenience'],
+    ['Innovation','Advantages and disadvantages of virtual reality','virtual reality technology advantages disadvantages'],
+    ['Innovation','Is online shopping better than shopping in stores?','shopping online stores products delivery'],
+    ['Innovation','An invention that changed the world','invention technology change life']
+   ],
+   2:[
+    ['The Brightest and Best','Why are the Olympic Games important?','olympic sports athletes countries games'],
+    ['The Brightest and Best','Describe an inspiring athlete or achiever','athlete success training inspiration'],
+    ['The Brightest and Best','What can we learn from record breakers?','record achievement effort determination success'],
+    ['The Brightest and Best','Describe a famous natural wonder','nature mountain natural wonder world'],
+    ['Sources of Inspiration','A person who inspires you','inspiration person achievements qualities'],
+    ['Sources of Inspiration','How can music inspire young people?','music inspiration teenagers feelings'],
+    ['Sources of Inspiration','Write about a story that taught you a lesson','story characters lesson experience'],
+    ['Sources of Inspiration','Why is reading important for teenagers?','reading books knowledge imagination'],
+    ['Connections','The benefits and risks of social networking','social networks friends online benefits risks'],
+    ['Connections','Why is volunteering important?','volunteer community people help'],
+    ['Connections','How can we build strong relationships?','relationships friends family communication trust'],
+    ['Connections','The value of remembering family traditions','memory family traditions culture'],
+    ['Beginnings and Endings','Describe an important change in your life','life change experience feelings'],
+    ['Beginnings and Endings','How do people celebrate the New Year?','new year celebration traditions families'],
+    ['Beginnings and Endings','Describe a festival in Oman','festival oman celebration traditions'],
+    ['Beginnings and Endings','How can students prepare for life after school?','school future plans study career']
+   ]
+  }
+ };
+ const ID='mej-writing-lab-v1';
+ const normalize=s=>(s||'').replace(/\s+/g,' ').trim();
+ const wordset=s=>new Set((s.toLowerCase().match(/[a-z]{3,}/g)||[]).filter(w=>!/^(the|and|for|this|that|with|from|have|there|they|are|was|were|but|about|your|into|their|which)$/.test(w)));
+ function locate(){
+  const textareas=[...document.querySelectorAll('textarea')].filter(e=>e.offsetWidth>0&&e.offsetHeight>0);
+  const area=textareas.find(e=>/Introduction|Body|Conclusion/i.test(e.placeholder||''))||textareas.find(e=>e.closest('#app'))||null;
+  if(!area)return null;
+  const section=area.closest('section.card,section,.card,main,article')||area.parentElement?.parentElement;
+  if(!section)return null;
+  const body=normalize(section.textContent).slice(0,2400);
+  if(!/كتابة|writing|مهمة الكتابة|المسودة|مراجعة بنيوية/i.test(body))return null;
+  const selects=[...section.querySelectorAll('select')];
+  const gradeSelect=selects.find(s=>[...s.options].some(o=>/^(?:11|12)$/.test(o.value||o.textContent.trim())));
+  const topicSelect=selects.find(s=>s!==gradeSelect&&s.options.length>1);
+  return {area,section,gradeSelect,topicSelect};
+ }
+ function addTopics(w){
+  if(!w.gradeSelect||!w.topicSelect)return;
+  const grade=parseInt(w.gradeSelect.value,10);
+  const selections=TOPICS[grade];if(!selections)return;
+  if(w.topicSelect.dataset.mejWritingTopicsGrade===String(grade))return;
+  w.topicSelect.querySelectorAll('optgroup[data-mej-writing-topics]').forEach(e=>e.remove());
+  for(const sem of [1,2]){
+   const group=document.createElement('optgroup');
+   group.label='الفصل '+(sem===1?'الأول':'الثاني')+' — موضوعات تدريبية إضافية';
+   group.dataset.mejWritingTopics='1';
+   selections[sem].forEach(([theme,title,keywords])=>{
+    if([...w.topicSelect.options].some(o=>normalize(o.textContent).toLowerCase()===title.toLowerCase()))return;
+    const opt=document.createElement('option');
+    opt.value=title;
+    opt.textContent=theme+' • '+title;
+    opt.dataset.mejKeywords=keywords;group.append(opt);
+   });
+   if(group.children.length)w.topicSelect.append(group);
+  }
+  w.topicSelect.dataset.mejWritingTopicsGrade=String(grade);
+ }
+ function relevance(w){
+  const chosen=w.topicSelect?.selectedOptions?.[0];
+  const keywords=chosen?.dataset.mejKeywords;
+  if(!keywords)return 'مطابقة الموضوع: لا تتوفر كلمات مفتاحية لهذا العنوان، وتحتاج الأفكار إلى مراجعة المعلم.';
+  const words=wordset(w.area.value);
+  const targets=[...wordset(keywords)];
+  const hits=targets.filter(t=>words.has(t)||[...words].some(x=>x.startsWith(t.slice(0,Math.min(5,t.length)))));
+  return 'مؤشر ارتباط الكلمات بالموضوع: '+hits.length+'/'+targets.length+
+   ' — مؤشر تقريبي لا يستطيع الحكم على صحة الأفكار أو تنظيم الحجج.';
+ }
+ function show(w){
+  let panel=document.getElementById(ID);
+  if(panel&&panel.dataset.target===String(w.area.dataset.mejWritingArea||''))return panel;
+  if(panel)panel.remove();
+  panel=document.createElement('div');panel.id=ID;panel.dir='rtl';
+  if(!w.area.dataset.mejWritingArea)w.area.dataset.mejWritingArea='active';
+  panel.dataset.target=w.area.dataset.mejWritingArea;
+  panel.style.cssText='margin:12px 0;padding:12px;border:2px solid #a9d7ef;border-radius:16px;background:#eaf8ff;color:#173d5c;font:600 15px/1.65 Tahoma,Arial,sans-serif';
+  const header=document.createElement('div');header.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px';
+  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة إلى المهارات';
+  const check=document.createElement('button');check.type='button';check.textContent='🔎 تدقيق الإملاء والقواعد (بالإنترنت)';
+  for(const b of [back,check])b.style.cssText='flex:1 1 180px;border:0;border-radius:11px;padding:10px;background:#157fba;color:white;font:700 15px Tahoma;cursor:pointer';
+  header.append(back,check);
+  const note=document.createElement('div');note.textContent='الفحص اللغوي عبر LanguageTool مجاني ويُرسل النص للخدمة فقط عند الضغط على زر التدقيق. لا تستخدم أسماء أو بيانات شخصية. المراجعة لا تغني عن تقييم المعلم.';
+  note.style.cssText='font-size:12px;font-weight:400;margin:6px 0';
+  const status=document.createElement('div');status.setAttribute('aria-live','polite');
+  status.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px';
+  const credit=document.createElement('a');credit.href='https://languagetool.org/';credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent='LanguageTool — خدمة التدقيق اللغوي';credit.style.cssText='display:block;font-size:12px;margin-top:6px';
+  panel.append(header,note,status,credit);
+  const anchor=w.area.closest('div')||w.area;
+  anchor.parentNode.insertBefore(panel,anchor.nextSibling);
+  back.addEventListener('click',()=>{
+   // Writing is a skill: do not route back to grade levels or the home screen.
+   if(typeof window.route==='function')window.route('skills');
+   else if(typeof window.history?.back==='function')window.history.back();
+  });
+  check.addEventListener('click',async()=>{
+   const current=locate();if(!current)return;
+   const text=current.area.value.trim();
+   if(!text){status.textContent='اكتب نصًا أولًا.';return;}
+   if(text.length>19000){status.textContent='النص طويل جدًا للفحص المجاني.';return;}
+   status.textContent='جاري التدقيق اللغوي...';
+   check.disabled=true;
+   try{
+    const payload=new URLSearchParams({text,language:'en-US',enabledOnly:'false'});
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),18000);
+    let response;
+    try{response=await fetch('https://api.languagetool.org/v2/check',{method:'POST',body:payload,signal:controller.signal});}
+    finally{clearTimeout(timer);}
+    if(!response.ok)throw new Error('HTTP '+response.status);
+    const result=await response.json();
+    const matches=(result.matches||[]).slice(0,30);
+    status.replaceChildren();
+    const title=document.createElement('strong');
+    title.textContent=matches.length?'ملاحظات لغوية محتملة ('+matches.length+')':'لم تُكتشف أخطاء بالقواعد المتاحة. هذا لا يعني أن النص خالٍ تمامًا من الأخطاء.';
+    status.append(title,document.createElement('hr'));
+    matches.forEach((m,i)=>{
+     const p=document.createElement('p');p.style.cssText='margin:7px 0;padding:8px;background:white;border-radius:8px;font-weight:400';
+     const quoted=text.slice(Math.max(0,m.offset||0),Math.min(text.length,(m.offset||0)+(m.length||0)));
+     const suggestions=(m.replacements||[]).slice(0,3).map(r=>r.value).join(' / ');
+     p.textContent=(i+1)+'. «'+quoted+'» — '+(m.message||'تحقق من هذه العبارة')+(suggestions?' | اقتراح: '+suggestions:'');
+     status.append(p);
+    });
+    const relevanceNote=document.createElement('p');relevanceNote.textContent=relevance(current);status.append(relevanceNote);
+   }catch(e){
+    status.textContent='تعذر الاتصال بخدمة التدقيق حاليًا. بقيت المسودة محفوظة في الصفحة ويمكن مواصلة المراجعة البنيوية دون إنترنت. ('+String(e.message||'تعذر الاتصال')+')';
+   }finally{check.disabled=false;}
+  });
+  return panel;
+ }
+ let running=false;
+ function scan(){
+  if(running)return;running=true;
+  try{const w=locate();if(w){addTopics(w);show(w);}else document.getElementById(ID)?.remove();}
+  finally{running=false;}
+ }
+ let scheduled=false;
+ function schedule(){if(scheduled)return;scheduled=true;setTimeout(()=>{scheduled=false;scan()},120);}
+ function boot(){
+  scan();
+  document.addEventListener('change',event=>{if(event.target?.tagName==='SELECT')schedule()},true);
+  new MutationObserver(schedule).observe(document.getElementById('app')||document.body,{subtree:true,childList:true});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

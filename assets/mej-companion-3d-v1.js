@@ -56,7 +56,12 @@ function draw(now){
  const user=learner();if(!ready||!user?.companion?.kind||document.hidden||root?.hidden)return;
  const motion=!(reduced()||root.classList.contains("mej-no-motion"));
  if(now>until)action="idle";
- clock+=Math.min(.05,(now-last||33)/1000);last=now;
+ if(now-last<(action==="idle"?62:30)){raf=requestAnimationFrame(draw);return}
+ clock+=Math.min(.07,(now-last||33)/1000);last=now;
+ const onQuiz=!!find("feedback")?.closest("#app");
+ if(!onQuiz&&!reduced()&&action==="idle"&&now-lastWander>10500){
+  lastWander=now;action=["walk","wave","run","point"][Math.floor(now/10500)%4];until=now+1450;
+ }
  const t=clock,pace=action==="run"?17:action==="walk"?9:2;
  const wave=motion?Math.sin(t*pace):0;
  const hop=motion?(["jump","celebrate"].includes(action)?Math.abs(Math.sin(t*9))*.30:action==="run"?Math.abs(wave)*.09:Math.sin(t*2)*.012):0;
@@ -133,6 +138,7 @@ function wrap(){
  old.react=function(success,preview){
   const val=orig.apply(this,arguments);
   play(success?"celebrate":"nod",2700);
+  window.setTimeout(()=>{const visible=!!find("feedback")?.closest("#app");const speaking=!!root?.querySelector(".mej-companion-bubble.mej-show");if(visible&&!speaking&&root){root.hidden=true;stop()}},3100);
   return val;
  };
  old.__webglHook=true;

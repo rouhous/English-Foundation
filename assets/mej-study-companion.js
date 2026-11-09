@@ -150,7 +150,7 @@ function boot(){
  }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-}
+})();
 /* MEJ_GRAMMAR_CORRECTION_V1 — short Arabic rule after a wrong grammar answer.
    Observes the existing answer-feedback panel; does not alter scoring or navigation. */
 (function installGrammarCorrection(){
@@ -211,7 +211,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
-}
 /* MEJ_READING_QUESTION_LAYOUT_V1 — separate passage from question without changing answers. */
 (function installQuestionLayout(){
  const style=document.createElement('style');
@@ -266,9 +265,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
-})();
-
-
 /* MEJ_QUESTION_CLARITY_V2 — explicit activity type, visibly distinct prompts,
    and safe alternative instructions for repeated vocabulary questions.
    No answer, scoring, passage, or saved progress is changed. */

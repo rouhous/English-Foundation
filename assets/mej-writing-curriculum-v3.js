@@ -20,7 +20,58 @@ function lower(g){
   return genres(g).flatMap(genre=>prompts[genre].map(title=>({grade:g,semester,unit,genre,title})));
  });
 }
-const banks={};for(let g=1;g<=12;g++)banks[g]=g>=11?UPPER.filter(x=>x.grade===g):lower(g);
+
+/* G8–G10: verified curriculum unit titles (G9 B held until book verified).
+   Prompts are original practice, not copied from coursebook tasks. */
+const VERIFIED_UNITS={
+ 8:[
+  [1,"Our planet","Protecting wildlife and the environment"],
+  [1,"Adventure sports","Adventure sports and safety"],
+  [1,"Spend or save?","Spending, saving and shopping choices"],
+  [2,"Let's talk!","Communication and speaking confidently"],
+  [2,"Inventions","Useful inventions and everyday problems"],
+  [2,"Celebrating learning","Learning achievements and school experiences"]
+ ],
+ 9:[
+  [1,"Identity","Personal identity, personality and interests"],
+  [1,"Connections","Languages and relationships"],
+  [1,"The future is now","Technology, AI and the future"]
+ ],
+ 10:[
+  [1,"New Media","Media technology and communication"],
+  [1,"Climate Change","Causes and solutions to climate change"],
+  [1,"Renewable Energy","Clean energy and electricity"],
+  [1,"Civilisation","Human civilisation and its development"],
+  [2,"Stories","Storytelling and events in the past"],
+  [2,"Healthy Lifestyle","Health, exercise and good habits"],
+  [2,"The Future of Transport","Future vehicles and transport technology"],
+  [2,"Entrepreneurship","Starting a business and Omani entrepreneurs"]
+ ]
+};
+function curriculumTasks(g){
+ return VERIFIED_UNITS[g].flatMap(([semester,unit,focus],index)=>{
+  const names={
+   opinion:[
+    "Do you think "+focus.toLowerCase()+" is important for young people? Give reasons and an example.",
+    "What are the benefits and challenges of "+focus.toLowerCase()+"? Explain your opinion."
+   ],
+   story:[
+    "Write a short story about a memorable experience related to "+focus.toLowerCase()+". Include a beginning, problem and ending.",
+    "Imagine an unexpected event involving "+focus.toLowerCase()+". Tell the events in a clear order."
+   ],
+   informative:[
+    "Explain "+focus.toLowerCase()+" with facts and two examples.",
+    "Write a short report about "+focus.toLowerCase()+". Organise the information clearly."
+   ],
+   email:[
+    "Write an email to a friend about "+focus.toLowerCase()+". Explain why you are writing and give details.",
+    "Write an email asking for or giving information about "+focus.toLowerCase()+". Use a suitable greeting and closing."
+   ]
+  };
+  return Object.entries(names).flatMap(([genre,prompts])=>prompts.map(title=>({grade:g,semester,unit,genre,title,verifiedUnit:true,practice:true})));
+ });
+}
+const banks={};for(let g=1;g<=12;g++)banks[g]=g>=11?UPPER.filter(x=>x.grade===g):g>=8?curriculumTasks(g):lower(g);
 let lock=false,queued=false,activeGrade=null,activeBlock=null,selectedGenre='',selectedSemester='1',selectedTopic='',selectedUnit='',selectedLesson='';
 function option(value,text){const x=document.createElement('option');x.value=value;x.textContent=text;return x;}
 function find(){

@@ -94,6 +94,17 @@
  function stop(){clearInterval(frameTimer);frameTimer=0;clearTimeout(hideTimer);hideTimer=0;const el=$('mej-companion-actor');if(el)el.hidden=true}
  function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
  function speak(message){if(!sound||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang='en-GB';u.rate=.94;speechSynthesis.speak(u)}catch(_){}}
+ const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7};
+ function play(name,duration=1900){
+  if(!(name in POSES)||inDiagnostic()||!enabled()||document.hidden)return false;
+  const p=profile(),g=p?.companion?.kind;if(g!=='boy'&&g!=='girl')return false;
+  let host=$('mej-companion-actor');if(!host){host=document.createElement('div');host.id='mej-companion-actor';host.setAttribute('aria-hidden','true');host.innerHTML='<div class="mej-c-sprite"></div><div class="mej-c-bubble"></div>';document.body.append(host)}
+  stop();host.hidden=false;host.style.display='block';const sp=host.querySelector('.mej-c-sprite');sp.style.backgroundImage='url("'+ART[g].sheet+'")';frame(sp,POSES[name]);
+  host.classList.toggle('mej-c-bounce',name==='excited');const captions={idle:'Ready!',walk:'Let’s go!',run:'Here we go!',excited:'Awesome!',sorry:'Try again!',pointing:'Look here!',thinking:'Think carefully!',football:'Let’s play!'};
+  host.querySelector('.mej-c-bubble').textContent=captions[name];const token=++animationNo;
+  hideTimer=setTimeout(()=>{if(token===animationNo)stop()},Math.min(3000,Math.max(500,duration)));
+  return true;
+ }
  const positives=['Awesome!','Excellent!','Amazing!','Let’s go!','Unbelievable!'];
  const retries=['Try again!','Don’t give up!','You can do it!','One more chance!'];
  function react(ok){
@@ -127,6 +138,6 @@
   queue();
  }
  window.MEJCompanion={react};
- window.MEJCompanionLive={open:()=>open(true),refresh:queue,react,stop};
+ window.MEJCompanionLive={open:()=>open(true),refresh:queue,react,play,stop,availableActions:Object.keys(POSES)};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

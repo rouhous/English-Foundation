@@ -1,6 +1,8 @@
 /* Native WebGL Omani 3D companion. No external libraries; works offline. */
 (function(){
 "use strict";
+/* Student safety: companion temporarily disabled across all devices. */
+return;
 if(window.MEJCompanion3D)return;
 const find=id=>document.getElementById(id);
 const learner=()=>{try{return typeof active==="function"?active():null}catch(e){return null}};

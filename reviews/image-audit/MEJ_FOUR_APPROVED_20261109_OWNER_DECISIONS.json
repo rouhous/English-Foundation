@@ -1,0 +1,45 @@
+{
+  "status": "approved_pending_binary_upload",
+  "date": "2026-11-09",
+  "ownerApproved": 4,
+  "duplicateExclusions": 44,
+  "learningPlacements": 5,
+  "images": [
+    {
+      "word": "scientist",
+      "stages": [
+        "4A",
+        "10B"
+      ],
+      "file": "G01_12_scientist.webp"
+    },
+    {
+      "word": "spacesuit",
+      "stages": [
+        "5A"
+      ],
+      "file": "G01_14_spacesuit.webp"
+    },
+    {
+      "word": "watch",
+      "stages": [
+        "6B"
+      ],
+      "file": "G02_06_watch.webp"
+    },
+    {
+      "word": "junk food",
+      "stages": [
+        "10B"
+      ],
+      "file": "G03_08_junk_food.webp"
+    }
+  ],
+  "zipUploadPaths": [
+    "assets/MEJ_4_Approved_Ready_For_GitHub_2026-11-09.zip",
+    "assets/import/MEJ_4_Approved_Ready_For_GitHub_2026-11-09.zip"
+  ],
+  "installer": "scripts/install_mej_four_owner_approved_20261109.cjs",
+  "workflow": ".github/workflows/install-mej-four-20261109.yml",
+  "note": "The approved binary images have not yet been uploaded; installer starts after ZIP push."
+}

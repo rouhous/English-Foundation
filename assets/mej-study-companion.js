@@ -620,7 +620,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    status.textContent='جاري التدقيق اللغوي...';
    check.disabled=true;
    try{
-    const payload=new URLSearchParams({text,language:'en-US',enabledOnly:'false'});
+    const payload=new URLSearchParams({text,language:'en-GB',enabledOnly:'false'});
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),18000);
     let response;

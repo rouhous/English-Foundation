@@ -24,6 +24,7 @@ const css=document.createElement('style');css.textContent=`
 #mej-skills-overlay .chip{background:#d7edf4;border-radius:20px;padding:5px 10px;margin:4px;display:inline-block}
 #mej-open-skill-mix{display:block;margin:12px auto;padding:12px 16px;border-radius:13px;background:#e1f7fb;color:#005979;border:2px solid #7ac3d2;font:800 16px Tahoma,sans-serif}
 `;
+css.textContent += "\n/* MEJ_COMPACT_ACTIVITY_MODAL_V2 */\n#mej-skills-overlay{padding:max(8px,env(safe-area-inset-top,0px)) 8px max(8px,env(safe-area-inset-bottom,0px))!important;background:#0758a5d9!important;box-sizing:border-box!important}\n#mej-skills-overlay .sheet{box-sizing:border-box!important;width:min(100%,640px)!important;margin:4px auto!important;padding:12px!important;border:2px solid #8bd7fa!important;border-radius:20px!important;background:linear-gradient(145deg,#f7fdff,#dff5ff)!important;box-shadow:0 8px 28px #003b7980!important}\n#mej-skills-overlay .head{gap:8px!important;margin:0 0 9px!important;min-height:0!important}\n#mej-skills-overlay .head h2{font-size:clamp(18px,4.7vw,24px)!important;line-height:1.3!important;margin:0!important;color:#0d3e79!important}\n#mej-skills-overlay .head button{padding:7px 11px!important;min-height:36px!important;max-width:100px!important;font-size:14px!important;flex-shrink:0!important}\n#mej-skills-overlay button{font-weight:700!important;line-height:1.25!important}\n#mej-skills-overlay .sheet>div:not(.head){min-width:0}\n#mej-skills-overlay select,#mej-skills-overlay .sheet>div>button{min-height:38px!important;padding:7px 10px!important;font-size:15px!important}\n#mej-skills-overlay #mej-skill-content{margin-top:10px!important}\n#mej-skills-overlay #mej-skill-content>p{font-size:14px!important;margin:6px 0!important;line-height:1.5!important}\n#mej-skills-overlay .passage{font:500 clamp(16px,4vw,20px)/1.75 Georgia,serif!important;padding:12px!important;margin:8px 0 12px!important;box-shadow:0 4px 0 #aac8f4!important}\n#mej-skills-overlay .blank{min-width:58px!important;padding:1px 6px!important;max-width:100%!important}\n#mej-skills-overlay .images{gap:8px!important}\n#mej-skills-overlay .image-item{padding:5px!important;border-width:2px!important;min-width:0!important}\n#mej-skills-overlay img{height:clamp(92px,24vh,132px)!important}\n#mej-skills-overlay .words{gap:7px!important;padding:8px 0!important}\n#mej-skills-overlay .words button{padding:8px 10px!important;min-height:38px!important}\n#mej-skills-overlay .feedback{font-size:14px!important;margin-top:8px!important}\n@media(max-width:420px){#mej-skills-overlay .sheet{padding:10px!important}#mej-skills-overlay .head h2{font-size:18px!important}#mej-skills-overlay .passage{padding:10px!important}}\n";
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
 // MEJ_MATCH_G1_G4_CATALOG_IMAGE_FIX_V1
@@ -120,7 +121,7 @@ function makeCloze(grade){
  const options=CLOZE[grade]||[];if(!options.length)return;
  const sample=options[Math.floor(Math.random()*options.length)];
  const [sentence,...answers]=sample;
- const prompt=node('p','','أكمل الفقرة بالمفردات المناسبة، ثم تحقق من إجابتك.');
+ const prompt=node('p','','اختر الكلمات المناسبة لإكمال الفقرة.');
  const para=node('div','passage');let idx=0;const slots=[];
  sentence.split('___').forEach((str,i)=>{para.append(document.createTextNode(str));if(i<answers.length){const slot=node('span','blank','______');slot.dataset.answer=answers[i];slots.push(slot);para.append(slot)}});
  const choices=node('div','words');let position=0,done=false;
@@ -133,14 +134,14 @@ async function open(requestedGrade){
  document.getElementById('mej-skills-overlay')?.remove();
  root=node('div');root.id='mej-skills-overlay';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
  const sheet=node('div','sheet');const header=node('div','head');header.append(node('h2','','أنشطة المفردات والمهارات'));
- const close=node('button','','إغلاق ×');close.onclick=()=>root.remove();header.append(close);
- const info=node('p','','أنشطة تنويع ومراجعة داخل التطبيق، دون تغيير النجوم أو إتقان الأنشطة الأصلية حتى اعتماد التقييم.');
+ const close=node('button','','✕ رجوع');close.onclick=()=>{root.remove();if(typeof route==='function')route('skills')};header.append(close);
+ // No extra disclaimer; the activity uses the standard learner interface.
  const controls=node('div');const select=node('select');for(let g=1;g<=12;g++){const opt=node('option','', 'الصف '+g);opt.value=String(g);select.append(opt)}
  const grade=Math.min(12,Math.max(1,Number(requestedGrade)||Number(window.MEJ_ACTIVE_GRADE)||Number(localStorage.getItem('MEJ_ACTIVITY_GRADE'))||1));select.value=String(grade);
  const start=node('button','','بدء النشاط');start.onclick=()=>{const g=Number(select.value);if(g<=4)makeMatch(g).catch(err=>{console.error(err);root.querySelector('#mej-skill-content').textContent='تعذر تحميل النشاط. أعد المحاولة عند توفر الاتصال.'});else makeCloze(g)};
  controls.append(select,start);
  const content=node('div');content.id='mej-skill-content';
- sheet.append(header,info,controls,content);root.append(sheet);document.body.append(root);start.click();
+ sheet.append(header,controls,content);root.append(sheet);document.body.append(root);start.click();
 }
 
 // Replace legacy Match entries with the real vocabulary-image matching / cloze

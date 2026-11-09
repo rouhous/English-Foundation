@@ -43,6 +43,10 @@ const app=()=>document.getElementById('app');
 const E=(tag,t)=>{const node=document.createElement(tag);if(t!=null)node.textContent=t;return node};
 const shuffle=a=>{const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x};
 const goBack=()=>{if(typeof window.route==='function')window.route('skills')};
+function permittedGrade(g){
+ if(typeof window.permitted!=='function')return true;
+ try{return Boolean(window.permitted(2*g-1)||window.permitted(2*g));}catch(_){return false}
+}
 function surface(title){
  const root=app();if(!root)return null;root.replaceChildren();const box=E('section');box.id='mej-writing-practice';box.append(E('h2',title));const back=E('button','↩ عودة إلى المهارات');back.onclick=goBack;box.append(back);root.append(box);return box;
 }
@@ -51,7 +55,7 @@ function choose(){
  const box=surface('✍️ Writing — أنشطة الكتابة');if(!box)return;
  box.append(E('p','الصفوف 1–4: ترتيب كلمات. الصفوف 5–7: ترتيب كلمات وجمل. هذه تدريبات غير محتسبة في النجوم.'));
  const panel=E('div');panel.className='grids';
- for(let g=1;g<=7;g++){const b=E('button','الصف '+g);b.onclick=()=>practice(g);panel.append(b)}
+ for(let g=1;g<=7;g++){const b=E('button','الصف '+g);b.disabled=!permittedGrade(g);b.title=b.disabled?'المستوى غير مفتوح بعد':'';b.onclick=()=>practice(g);panel.append(b)}
  box.append(panel,E('h3','كتابة الصفوف 8–12'));
  const advanced=E('div');advanced.className='grids';
  const old=E('button','Writing 8–12');old.onclick=()=>{
@@ -62,6 +66,7 @@ function choose(){
  advanced.append(old,g8,g10);box.append(advanced);
 }
 function practice(g){
+ if(!permittedGrade(g))return;
  grade=g;mode='words';const box=surface('✍️ Writing — الصف '+g);if(!box)return;
  box.append(E('p',g<=4?'اضغط الكلمات لترتيبها في جملة سليمة.':'كوّن جملة بترتيب كلماتها أو رتّب الجمل لتكوين فقرة مترابطة.'));
  const bar=E('div');bar.className='controls';
@@ -99,6 +104,7 @@ function exercise(box,g,kind,next){
  actions.append(undo,clear,check,more);area.append(instructions,answer,tray,actions,message);refresh();
 }
 function chart(g,index){
+ if(!permittedGrade(g))return;
  const task=CH[g]?.[index],box=surface('📊 Writing — '+g+'A — سؤال '+(index+1)+' من 2');if(!box||!task)return;
  box.append(E('p',g===8?'Survey Report: كتابة تقرير استطلاع لا يقل عن 80 كلمة.':'Data Summary: تلخيص بيانات لا يقل عن 100 كلمة.'));
  const graph=E('div');graph.className='chart';graph.append(E('h3',task.title));

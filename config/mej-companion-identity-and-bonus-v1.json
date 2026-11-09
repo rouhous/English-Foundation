@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-11-09",
+  "reference_archive_library_path": "/My English Journey/Companion Reference/MEJ_Companion_Identity_and_Bonus_Settings_v1.zip",
+  "status": "identity_locked_bonus_disabled",
+  "references": {
+    "boy": {
+      "sheet": "boy_reference_actions_2026-11-09.png",
+      "sha256": "a4c8992ffd8a8be6645a547897a9f8f7f9b021281f844bdce25d407dee061a6b",
+      "size": [
+        1448,
+        1086
+      ],
+      "appearance": "slim slightly tall boy, white dishdasha, blue-white embroidered kumma, navy backpack, brown sandals"
+    },
+    "girl": {
+      "sheet": "girl_reference_actions_2026-11-09.png",
+      "sha256": "70f3d1f4474c9d412790bd59df60479de324032c38446272a9d28fa9b8713a14",
+      "size": [
+        1448,
+        1086
+      ],
+      "appearance": "slim slightly tall girl, magenta hijab and long gold embroidered dress, pink backpack and dark shoes"
+    }
+  },
+  "locked_rules": [
+    "Generate every new pose from the exact corresponding character reference. No mixing earlier sheets.",
+    "Preserve identical head, face, body length and slenderness, clothing, colors, bag, accessories.",
+    "Use aligned 4x2 frame sheets for eight base actions; avoid stray fragments and clipped shoes.",
+    "No change to the 100 stars per level / 200 stars per stage progression.",
+    "No animation is shipped to the student diagnostic until iPad tests pass."
+  ],
+  "base_actions": [
+    "idle",
+    "walk",
+    "run",
+    "jump",
+    "excited",
+    "sorry",
+    "pointing",
+    "thinking",
+    "football"
+  ],
+  "bonus": {
+    "enabled": false,
+    "unlock_basis": "lifetime_total_earned_stars",
+    "thresholds_approved": false,
+    "thresholds": [],
+    "progression": "cumulative_non_consumptive",
+    "per_student": true,
+    "available_actions_examples": [
+      "dance",
+      "special_cheer",
+      "football_trick",
+      "victory_pose",
+      "treasure_emote"
+    ],
+    "disabled_until": [
+      "thresholds_are_reviewed",
+      "illustrations_are_approved",
+      "ipad_safari_is_tested",
+      "offline_loading_is_tested"
+    ],
+    "persist_state_per_profile": true
+  }
+}

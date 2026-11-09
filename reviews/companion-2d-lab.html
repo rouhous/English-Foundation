@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0868aa"><title>MEJ – 2D Companion Animation Lab</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(#3da3d9,#c5e9ff 65%,#fff8da);font:16px system-ui,sans-serif;color:#123c6b;min-height:100dvh}
+main{max-width:730px;margin:auto;padding:16px 12px 35px}header{text-align:center}h1{font-size:clamp(23px,5vw,32px);margin:10px 0 6px}p{line-height:1.5}.notice{background:#fff8e8;border:1px solid #efce82;border-radius:13px;padding:10px;font-size:13px}
+.scene{position:relative;overflow:hidden;border:3px solid #79d7fb;border-radius:23px;min-height:350px;background:radial-gradient(circle at 78% 20%,#fff9c6 0 45px,transparent 46px),linear-gradient(#81d1ff 0%,#d1edff 72%,#f7dfa4 72%);box-shadow:0 10px 26px #064a7b33}
+.horizon{position:absolute;bottom:26%;width:100%;height:38px;background:#4ecac7;opacity:.55;border-radius:50% 50% 0 0}
+.shadow{position:absolute;width:92px;height:14px;border-radius:50%;background:#16486433;bottom:21%;left:calc(50% - 46px);filter:blur(6px);transition:transform .3s}
+.actor{position:absolute;width:150px;height:238px;left:calc(50% - 75px);bottom:23%;transform-origin:center bottom;filter:drop-shadow(2px 6px 5px #385b6550);will-change:transform}
+.actor svg{display:block;width:100%;height:100%;overflow:visible}.actor svg .arm-left{transform-origin:65px 102px}.actor svg .arm-right{transform-origin:135px 102px}.actor svg .leg-left{transform-origin:87px 171px}.actor svg .leg-right{transform-origin:111px 171px}
+.actor.idle{animation:breath 2s ease-in-out infinite}.actor.idle .arm-right{animation:wave 5s ease-in-out infinite}
+.actor.walk{animation:travel 1.1s ease-in-out infinite}.actor.walk .leg-left{animation:step .5s ease-in-out infinite alternate}.actor.walk .leg-right{animation:step .5s ease-in-out infinite alternate-reverse}
+.actor.run{animation:travel .42s ease-in-out infinite}.actor.run .leg-left{animation:step .19s ease-in-out infinite alternate}.actor.run .leg-right{animation:step .19s ease-in-out infinite alternate-reverse}
+.actor.jump{animation:jump .85s ease-in-out infinite}.actor.celebrate{animation:jump .7s ease-in-out infinite}.actor.celebrate .arm-left{animation:arms .4s ease-in-out infinite alternate}.actor.celebrate .arm-right{animation:arms .4s ease-in-out infinite alternate-reverse}
+.actor.encourage{animation:nod .85s ease-in-out infinite}
+.actor.wave .arm-right{animation:wave .45s ease-in-out infinite alternate}.actor.point .arm-right{animation:point .8s ease-in-out infinite}
+@keyframes breath{50%{transform:translateY(-3px)}}@keyframes travel{0%,100%{transform:translateX(-19px) translateY(0)}50%{transform:translateX(19px) translateY(-5px)}}@keyframes jump{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-38px) scale(1.035)}}@keyframes step{from{transform:rotate(-25deg)}to{transform:rotate(28deg)}}@keyframes wave{50%{transform:rotate(-42deg)}}@keyframes arms{from{transform:rotate(-18deg)}to{transform:rotate(40deg)}}@keyframes nod{50%{transform:rotate(5deg)}}@keyframes point{50%{transform:rotate(-36deg)}}
+.bubble{position:absolute;right:12px;top:15px;background:#fff;border:2px solid #f1cb66;border-radius:20px;padding:10px 14px;box-shadow:0 5px 12px #0b547c33;font-weight:800;min-width:130px;text-align:center}
+.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:12px 0}.controls button,.choices button,.row button{border:2px solid #5ca1d1;background:#fff;border-radius:12px;padding:11px 5px;font-weight:800;color:#14578b;cursor:pointer;min-height:46px}.controls button.selected,.choices button.selected{background:#0c65a9;color:white;border-color:#094574}.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}.row button{padding:10px 16px}.row .correct{background:#0fb47e;color:white;border-color:#06905f}.row .wrong{background:#f7aa67;border-color:#d87526;color:#5b2b09}
+.choices{display:flex;gap:10px;justify-content:center}.choices button{min-width:118px}.caption{text-align:center;font-size:12px;color:#38596c}
+@media(max-width:420px){.controls{grid-template-columns:repeat(3,minmax(0,1fr))}.actor{width:138px;height:219px;left:calc(50% - 69px)}.scene{min-height:330px}}
+@media(prefers-reduced-motion:reduce){.actor,.actor *{animation:none!important}}
+</style></head><body><main>
+<header><h1>⛵ My English Journey</h1><p>2D Shaded Cartoon Companion – Animation Test</p></header>
+<div class="notice"><strong>Safe testing page:</strong> This is separate from the student app. It does not load the question bank, change scores, or access student accounts. The live diagnostic remains companion-free.</div>
+<div class="choices" role="group" aria-label="Character"><button id="boy" class="selected" aria-pressed="true">👦 Omani boy</button><button id="girl" aria-pressed="false">👧 Omani girl</button></div>
+<div class="scene" id="scene"><div class="horizon"></div><div class="bubble" id="bubble" role="status">Welcome aboard! 👋</div><div class="shadow"></div><div class="actor idle" id="actor"></div></div>
+<div class="controls" id="actions">
+<button data-action="idle" class="selected">🧍 Idle</button><button data-action="wave">👋 Wave</button><button data-action="walk">🚶 Walk</button><button data-action="run">🏃 Run</button><button data-action="jump">🦘 Jump</button><button data-action="point">👉 Point</button><button data-action="celebrate">🎉 Celebrate</button><button data-action="encourage">💪 Encourage</button>
+</div>
+<div class="row"><button class="correct" id="correct">✓ Correct answer</button><button class="wrong" id="wrong">↻ Wrong answer</button><button id="mute">🔊 Voice on</button></div>
+<p class="caption">SVG 2D artwork with layered shadows and CSS animation. Works without WebGL, external libraries or internet access after caching.</p>
+</main><script>
+(function(){
+'use strict';
+const boy=document.getElementById('boy'),girl=document.getElementById('girl'),actor=document.getElementById('actor'),bubble=document.getElementById('bubble'),actions=document.getElementById('actions');
+let selected='boy',muted=true;
+function drawing(g){
+ const isGirl=g==='girl';
+ const costume=isGirl?'#92518b':'#f7fbff',trim=isGirl?'#f7ca72':'#bed7e6';
+ const headwear=isGirl?'<path d="M60 91Q39 26 97 25Q158 28 143 96L152 155L126 164L122 85L81 82L69 166L46 154Z" fill="url(#scarf)" stroke="#71417b" stroke-width="3"/><path d="M63 74Q72 34 109 37Q136 40 141 73Q118 53 96 57Q78 56 63 74" fill="#f9e7ff"/>':'<path d="M59 60Q65 24 101 22Q140 23 144 61L137 73Q96 52 64 74Z" fill="url(#kumma)" stroke="#7185a6" stroke-width="2.5"/><path d="M65 49L75 40L87 51L99 39L111 52L123 41L136 52" fill="none" stroke="#9b6796" stroke-width="5"/><path d="M68 60Q99 49 135 61" stroke="#366f9c" stroke-width="3" fill="none" stroke-dasharray="6 6"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" aria-label="'+(isGirl?'Omani girl':'Omani boy')+'"><defs><linearGradient id="robe" x2="1" y2=".5"><stop stop-color="'+costume+'"/><stop offset=".5" stop-color="'+(isGirl?'#ae6a9f':'#fff')+'"/><stop offset="1" stop-color="'+(isGirl?'#63336b':'#d7e5f1')+'"/></linearGradient><linearGradient id="skin" x2=".8" y2="1"><stop stop-color="#ffe2ba"/><stop offset=".6" stop-color="#f5c092"/><stop offset="1" stop-color="#d88f69"/></linearGradient><linearGradient id="scarf" x2=".9" y2="1"><stop stop-color="#e3b8dc"/><stop offset=".5" stop-color="#99578e"/><stop offset="1" stop-color="#68376e"/></linearGradient><linearGradient id="kumma" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#becae5"/></linearGradient></defs>'
+ +'<g class="leg-left"><path d="M86 173L77 220" stroke="'+costume+'" stroke-width="17" stroke-linecap="round"/><ellipse cx="71" cy="226" rx="19" ry="10" fill="#694e48"/></g>'
+ +'<g class="leg-right"><path d="M110 174L122 218" stroke="'+costume+'" stroke-width="17" stroke-linecap="round"/><ellipse cx="124" cy="225" rx="19" ry="10" fill="#694e48"/></g>'
+ +'<path d="M71 117Q100 105 129 118L147 200Q98 216 52 199Z" fill="url(#robe)" stroke="'+trim+'" stroke-width="3"/>'
+ +(isGirl?'<path d="M60 192Q102 207 141 190" stroke="#f7c867" stroke-width="4" fill="none"/>':'<path d="M99 119V201" stroke="#b8c9d9" stroke-width="2"/>')
+ +'<g class="arm-left"><path d="M71 127L43 165" stroke="'+costume+'" stroke-width="20" stroke-linecap="round"/><circle cx="42" cy="166" r="12" fill="url(#skin)"/></g>'
+ +'<g class="arm-right"><path d="M130 128L160 157" stroke="'+costume+'" stroke-width="20" stroke-linecap="round"/><circle cx="164" cy="160" r="12" fill="url(#skin)"/></g>'
+ +'<ellipse cx="101" cy="82" rx="42" ry="47" fill="url(#skin)" stroke="#d59d75" stroke-width="2"/>'
+ +headwear
+ +'<path d="M73 88Q82 79 91 86M111 86Q122 79 132 87" stroke="#563832" stroke-width="4" fill="none" stroke-linecap="round"/>'
+ +'<ellipse cx="83" cy="96" rx="9" ry="12" fill="#fff"/><ellipse cx="120" cy="96" rx="9" ry="12" fill="#fff"/><circle cx="85" cy="98" r="6.5" fill="#372929"/><circle cx="119" cy="98" r="6.5" fill="#372929"/><circle cx="87" cy="94" r="2.2" fill="white"/><circle cx="121" cy="94" r="2.2" fill="white"/>'
+ +'<ellipse cx="68" cy="113" rx="9" ry="5" fill="#ff9d91" opacity=".4"/><ellipse cx="133" cy="113" rx="9" ry="5" fill="#ff9d91" opacity=".4"/>'
+ +'<path d="M86 121Q101 139 117 121Q101 150 86 121" fill="#a8484c"/><path d="M91 125Q102 132 112 125" stroke="white" stroke-width="3" fill="none"/>'
+ +'<path d="M90 145Q101 153 111 145" fill="none" stroke="#d6ad60" stroke-width="3"/><circle cx="101" cy="151" r="7" fill="#ffd569" stroke="white" stroke-width="1.5"/></svg>';
+}
+function character(k){selected=k;actor.innerHTML=drawing(k);boy.classList.toggle('selected',k==='boy');girl.classList.toggle('selected',k==='girl');boy.setAttribute('aria-pressed',k==='boy');girl.setAttribute('aria-pressed',k==='girl')}
+function move(a){actor.className='actor '+a;actions.querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.action===a));}
+function say(t){bubble.textContent=t;if(!muted&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.94;try{speechSynthesis.speak(u)}catch(e){}}}
+boy.addEventListener('click',()=>character('boy'));girl.addEventListener('click',()=>character('girl'));
+actions.addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;move(b.dataset.action);say({idle:'Ready for the journey!',wave:'Hello!',walk:'Let’s go!',run:'Here we go!',jump:'Jump for joy!',point:'Look here!',celebrate:'Excellent!',encourage:'You can do it!'}[b.dataset.action])});
+document.getElementById('correct').onclick=()=>{move('celebrate');say(['Awesome!','Excellent!','Amazing!','Let’s go!'][Math.floor(Math.random()*4)])};
+document.getElementById('wrong').onclick=()=>{move('encourage');say(['Try again!','Don’t give up!','You can do it!','One more chance!'][Math.floor(Math.random()*4)])};
+document.getElementById('mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇 Voice off':'🔊 Voice on';if(muted&&'speechSynthesis'in window)speechSynthesis.cancel()};
+character('boy');move('idle');
+})();
+</script></body></html>

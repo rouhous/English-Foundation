@@ -662,3 +662,210 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* MEJ WRITING GENRES V2: keep the existing Opinion prompts, then filter by genre.
+   All evaluation below is local and heuristic; it is not presented as AI semantic grading. */
+(function installWritingGenres(){
+ 'use strict';
+ const GENRES=[
+  ['opinion','Opinion Writing — إبداء الرأي'],
+  ['story','Story Writing — كتابة قصة'],
+  ['informative','Informative Writing — كتابة معلوماتية'],
+  ['email','Email Writing — كتابة بريد إلكتروني']
+ ];
+ const NEW={
+  11:[
+   [1,'story','Communication','A surprising message from an old friend','friend message communication surprise'],
+   [1,'story','Those Teenage Things','A day when I learnt the value of friendship','friend friendship lesson event'],
+   [1,'story','Travellers and Tourists','An unexpected adventure during a trip in Oman','travel oman journey adventure'],
+   [1,'email','Communication','Write an email to a friend about safe internet use','email friend internet safety advice'],
+   [1,'email','Travellers and Tourists','Email a visitor with a two-day itinerary in Oman','email visit oman tour itinerary'],
+   [1,'informative','Innovation','Explain how virtual reality is used in education','virtual reality technology education learning'],
+   [2,'story','The Brightest and Best','The competition I will never forget','competition success challenge experience'],
+   [2,'story','Sources of Inspiration','A person who changed my life','inspiring person experience change'],
+   [2,'story','Beginnings and Endings','A memorable celebration with my family','celebration family day memory'],
+   [2,'email','Connections','Write an email inviting classmates to volunteer','email volunteer classmates community invitation'],
+   [2,'email','Beginnings and Endings','Email a friend about your plans after school','email friend future school plans'],
+   [2,'informative','Connections','Explain the benefits and risks of social networking','social networking benefits risks communication']
+  ],
+  12:[
+   [1,'story','Retail Therapy','A shopping trip that did not go as planned','shopping market surprise problem'],
+   [1,'story','Starting University','My unforgettable first day at university','university first day experience'],
+   [1,'story','Tourism and Hospitality','An unexpected encounter with a tourist in Oman','tourist oman trip encounter'],
+   [1,'email','Starting University','Email a university asking about admission requirements','email university admission requirements information'],
+   [1,'email','Tourism and Hospitality','Email a hotel to enquire about a booking','email hotel booking room enquiry'],
+   [1,'email','Travel and Transport','Email a friend giving travel advice for Oman','email friend oman travel transport advice'],
+   [1,'informative','Tourism and Hospitality','Explain how tourism supports the economy of Oman','tourism oman jobs economy visitors'],
+   [2,'story','News and the Media','The day our school appeared in the news','school news event story'],
+   [2,'story','Work and Careers','My first day at a summer job','work job first day experience'],
+   [2,'story','Health and Safety','An incident that taught me an important safety lesson','safety accident lesson incident'],
+   [2,'email','Work and Careers','Write a formal email applying for work experience','email job application experience formal'],
+   [2,'email','Citizenship','Email a community organisation offering to volunteer','email volunteer community organisation help'],
+   [2,'informative','Health and Safety','Explain practical ways to stay healthy during exams','health exams sleep exercise diet'],
+   [2,'informative','Citizenship','Describe ways that citizens can protect the environment','citizens environment responsibility protection']
+  ]
+ };
+ const META=new WeakMap();
+ const title=(s)=>(s||'').replace(/\s+/g,' ').trim();
+ const originalGenre=(option)=>{
+  const t=(option.value+' '+option.textContent).toLowerCase();
+  if(/(?:write an? (?:formal )?email|email |e-mail|write a letter|letter thanking)/.test(t))return 'email';
+  if(/(?:story|memorable|an important change in your life|describe an? (?:unforgettable|unexpected) |a day when|first day)/.test(t))return 'story';
+  if(/(?:explain|describe|what makes|how can|ways to|the role of|benefits of|importance of|why is|why are|prepare|how do)/.test(t))return 'informative';
+  return 'opinion';
+ };
+ function getContext(){
+  const area=[...document.querySelectorAll('textarea')].find(e=>e.offsetWidth>0 && e.offsetHeight>0 && /Introduction|Body|Conclusion/i.test(e.placeholder||''));
+  if(!area)return null;
+  const section=area.closest('section.card,section,.card,main,article')||area.parentElement?.parentElement;
+  if(!section||!/كتابة|writing|المسودة/i.test(section.textContent||''))return null;
+  const selects=[...section.querySelectorAll('select')];
+  const grade=selects.find(s=>[...s.options].some(o=>/^(11|12)$/.test(o.value||o.textContent.trim())));
+  const topic=selects.find(s=>s!==grade&&s.options.length>1&&!s.dataset.mejGenreSelector);
+  if(!grade||!topic||!NEW[Number(grade.value)])return null;
+  return {section,grade,topic,area};
+ }
+ function addExtra(ctx){
+  const {topic,grade}=ctx;
+  const g=String(grade.value);
+  if(topic.dataset.mejGenreAdded===g)return;
+  topic.querySelectorAll('[data-mej-genre-extra]').forEach(el=>el.remove());
+  const groups=new Map();
+  for(const [semester,genre,unit,prompt,words] of NEW[g]){
+   const key=genre+'-'+semester;
+   if(!groups.has(key)){
+    const group=document.createElement('optgroup');
+    group.dataset.mejGenreExtra='1';
+    group.label=GENRES.find(x=>x[0]===genre)[1]+' — الفصل '+(semester===1?'الأول':'الثاني');
+    topic.append(group);groups.set(key,group);
+   }
+   const opt=document.createElement('option');
+   opt.value=prompt;opt.textContent=unit+' • '+prompt;opt.dataset.mejGenre=genre;opt.dataset.mejKeywords=words;
+   groups.get(key).append(opt);
+  }
+  topic.dataset.mejGenreAdded=g;
+ }
+ function restore(ctx){
+  const {topic,grade}=ctx;
+  const previous=META.get(topic);
+  const signature=String(grade.value);
+  if(previous&&previous.grade===signature)return previous;
+  const chosen=topic.value;
+  const entries=[...topic.querySelectorAll('option')].map((opt,i)=>({
+    value:opt.value,label:opt.textContent,genre:opt.dataset.mejGenre||originalGenre(opt),
+    keywords:opt.dataset.mejKeywords||'',group:opt.parentElement?.tagName==='OPTGROUP'?opt.parentElement.label:'',
+    originalIndex:i
+  }));
+  const meta={grade:signature,entries,chosen};META.set(topic,meta);return meta;
+ }
+ function refreshOptions(ctx,genre){
+  const meta=restore(ctx);
+  const selected=ctx.topic.value;
+  ctx.topic.replaceChildren();
+  const filtered=meta.entries.filter(row=>row.genre===genre);
+  const groups=new Map();
+  for(const row of filtered){
+   const key=row.group||'موضوعات الكتابة';
+   if(!groups.has(key)){
+    const optgroup=document.createElement('optgroup');optgroup.label=key;
+    ctx.topic.append(optgroup);groups.set(key,optgroup);
+   }
+   const opt=document.createElement('option');
+   opt.value=row.value;opt.textContent=row.label;opt.dataset.mejKeywords=row.keywords;opt.dataset.mejGenre=row.genre;
+   groups.get(key).append(opt);
+  }
+  if(filtered.some(row=>row.value===selected))ctx.topic.value=selected;
+  else if(filtered.length)ctx.topic.selectedIndex=0;
+  ctx.topic.dispatchEvent(new Event('input',{bubbles:true}));
+ }
+ function checkStructure(text,genre,topic){
+  const words=(text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[]);
+  const paras=text.trim().split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  const sentences=text.split(/[.!?]+(?:\s+|$)/).map(x=>x.trim()).filter(x=>x.length>8);
+  const notices=[];
+  const add=(label,passed,advice)=>notices.push((passed?'✓ ':'△ ')+label+(passed?'':' — '+advice));
+  add('فقرات واضحة',paras.length>=3,'قسّم النص إلى مقدمة وعرض وخاتمة أو إلى مراحل مناسبة لنوع الكتابة');
+  add('جمل مكتملة ظاهريًا',sentences.length>=3,'استخدم جملاً مكتملة وعلامات نهاية الجمل');
+  const connectors=(text.match(/\b(first|next|then|after|before|finally|because|however|therefore|moreover|although|for example|in addition|as a result|in conclusion|lastly)\b/gi)||[]);
+  add('روابط وتسلسل الأفكار',connectors.length>=2,'أضف روابط مناسبة للتسلسل أو السبب والنتيجة');
+  add('تنوع طول الجمل',new Set(sentences.map(x=>Math.min(4,Math.floor(x.split(/\s+/).length/5)))).size>=2,'نوّع الجمل القصيرة والطويلة');
+  if(genre==='opinion'){
+   add('إبداء رأي واضح',/\b(i (think|believe|feel)|in my opinion|i agree|i disagree|personally)\b/i.test(text),'ابدأ برأي واضح');
+   add('حجج وأسباب',/\b(because|since|one reason|another reason|for example|for instance)\b/i.test(text),'ادعم رأيك بحجتين ومثال');
+   add('خاتمة تلخص الموقف',/\b(in conclusion|to sum up|overall|finally)\b/i.test(text),'اختم بتلخيص موقفك');
+  }else if(genre==='story'){
+   add('زمن ومكان',/\b(yesterday|last |one day|morning|evening|at school|at home|in oman|during|when)\b/i.test(text),'حدد زمن الأحداث ومكانها');
+   add('تسلسل أحداث',/\b(then|suddenly|after that|later|while|finally|eventually)\b/i.test(text),'رتّب الأحداث ثم الحل والنهاية');
+   add('أفعال سردية',/\b(was|were|went|had|saw|heard|decided|started|felt|arrived|helped)\b/i.test(text),'استخدم أفعال سرد مناسبة');
+  }else if(genre==='informative'){
+   add('تعريف أو تقديم معلومات',/\b(is|are|means|refers to|includes|there are|there is)\b/i.test(text),'قدّم الفكرة أو الموضوع بوضوح');
+   add('شرح وتفاصيل وأمثلة',/\b(for example|such as|for instance|because|according to|this means)\b/i.test(text),'أضف حقائق وشرحًا وأمثلة داعمة');
+   add('خاتمة مناسبة',/\b(in conclusion|overall|finally|to sum up|therefore)\b/i.test(text),'لخص أهم المعلومات في النهاية');
+  }else if(genre==='email'){
+   add('تحية افتتاحية',/\b(dear|hello|hi)\b/i.test(text),'ابدأ بتحية مناسبة للمستلم');
+   add('سبب الرسالة',/\b(i am writing|i'm writing|i would like|i wanted to|i hope|thank you for)\b/i.test(text),'اذكر سبب كتابة البريد');
+   add('عبارة ختامية',/\b(regards|sincerely|best wishes|yours|see you|thank you)\b/i.test(text),'اختم بتعبير مناسب وتوقيع');
+  }
+  const keyTerms=(topic.selectedOptions?.[0]?.dataset.mejKeywords||'').toLowerCase().split(/\s+/).filter(x=>x.length>3);
+  if(keyTerms.length){
+   const lower=text.toLowerCase();const matching=keyTerms.filter(k=>lower.includes(k.slice(0,Math.min(5,k.length))));
+   notices.push('ارتباط مفردات الموضوع: '+matching.length+'/'+keyTerms.length+' (قرينة تقريبية، وليست تقييمًا لفهم الأفكار)');
+  }
+  if(words.length<35)notices.push('△ النص قصير؛ تحليل الترابط والأفكار غير موثوق بهذه الكمية');
+  return notices.join('\n');
+ }
+ function makeControls(ctx){
+  const {topic,section}=ctx;
+  let wrapper=document.getElementById('mej-writing-genre-panel');
+  if(!wrapper){
+   wrapper=document.createElement('div');wrapper.id='mej-writing-genre-panel';wrapper.dir='rtl';
+   wrapper.style.cssText='margin:12px 0;padding:10px 12px;border:2px solid #9bd6e6;border-radius:12px;background:#edfaff;font:700 16px Tahoma,Arial,sans-serif;color:#164461';
+   const label=document.createElement('label');label.textContent='نوع الكتابة (اختره قبل الموضوع)';
+   const select=document.createElement('select');select.id='mej-writing-genre';select.dataset.mejGenreSelector='1';
+   select.style.cssText='display:block;width:100%;margin-top:7px;padding:10px;border:1px solid #9cc4da;border-radius:9px;background:white;font:500 16px Arial';
+   for(const [value,name] of GENRES){const opt=document.createElement('option');opt.value=value;opt.textContent=name;select.append(opt);}
+   const run=document.createElement('button');run.type='button';run.textContent='🧩 فحص ترابط الأفكار وبناء الفقرات (دون إنترنت)';
+   run.style.cssText='margin-top:8px;width:100%;background:#087ca6;color:white;border:0;border-radius:10px;padding:10px;font:700 14px Tahoma';
+   const results=document.createElement('div');results.id='mej-writing-structure-result';
+   results.setAttribute('aria-live','polite');results.style.cssText='white-space:pre-wrap;font-size:13px;font-weight:400;line-height:1.8;margin-top:8px';
+   const disclaimer=document.createElement('p');disclaimer.style.cssText='font-size:12px;font-weight:400;margin:8px 0 0';
+   disclaimer.textContent='الفحص المحلي يقدم مؤشرات على البنية والروابط فقط، ولا يستطيع التأكد من جودة الأفكار أو صحتها الدلالية. التصحيح اللغوي عبر الإنترنت منفصل.';
+   wrapper.append(label,select,run,results,disclaimer);
+   topic.before(wrapper);
+   select.addEventListener('change',()=>{
+    const active=getContext();if(!active)return;
+    const m=META.get(active.topic);if(!m||m.grade!==String(active.grade.value))refresh(active);
+    refreshOptions(active,select.value);results.textContent='';
+   });
+   run.addEventListener('click',()=>{
+    const active=getContext();if(!active)return;
+    results.textContent=checkStructure(active.area.value,select.value,active.topic);
+   });
+  }
+  return wrapper.querySelector('select');
+ }
+ let updating=false;
+ function refresh(ctx){
+  if(updating)return;
+  updating=true;
+  try{
+   addExtra(ctx);
+   const genreSelect=makeControls(ctx);
+   // New grade/option sets are registered once, then type selection filters them.
+   const meta=META.get(ctx.topic);
+   if(!meta||meta.grade!==String(ctx.grade.value)){
+    restore(ctx);
+    refreshOptions(ctx,genreSelect.value||'opinion');
+   }
+  }finally{updating=false;}
+ }
+ let scheduled=false;
+ function schedule(){if(scheduled)return;scheduled=true;setTimeout(()=>{scheduled=false;const ctx=getContext();if(ctx)refresh(ctx);else document.getElementById('mej-writing-genre-panel')?.remove();},200);}
+ function boot(){
+  schedule();
+  document.addEventListener('change',event=>{if(event.target?.tagName==='SELECT'&&event.target.id!=='mej-writing-genre')schedule();},true);
+  new MutationObserver(schedule).observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

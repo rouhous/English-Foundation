@@ -2,6 +2,8 @@
    Keep progress, stars, login and teacher relationships intact. */
 (function(){
 'use strict';
+/* Student safety: companion temporarily disabled across all devices. */
+return;
 const STYLE=`
 #mej-companion-setup{position:fixed;inset:0;z-index:110000;background:rgba(2,31,77,.83);display:grid;place-items:center;padding:12px;box-sizing:border-box;direction:rtl}
 #mej-companion-setup .mej-comp-sheet{box-sizing:border-box;width:min(100%,510px);max-height:calc(100dvh - 24px);overflow:auto;border-radius:23px;border:2px solid #9edffd;background:linear-gradient(150deg,#f5fcff,#d5efff);color:#153e6b;padding:17px;box-shadow:0 14px 38px #002c6377}

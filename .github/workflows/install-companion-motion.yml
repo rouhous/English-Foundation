@@ -1,0 +1,26 @@
+name: Install offline animated companion
+on:
+  push:
+    paths:
+      - scripts/install_companion_motion.py
+      - .github/workflows/install-companion-motion.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - run: python3 scripts/install_companion_motion.py
+      - name: Commit verified motion loader
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Load animated boy and girl companion in learner app"
+            git push
+          fi

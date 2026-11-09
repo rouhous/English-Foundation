@@ -65,6 +65,7 @@ function draw(now){
  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
  // Depth-tested 3D primitives, lit by a directional light.
  const y=hop-.10;
+ const nod=action==="nod"&&motion?Math.sin(t*10)*.035:0;
  ellipsoid(-.26,y+.05,-.34,.26,.37,.20,[.48,.29,.17,1]);
  ellipsoid(-.19+wave*.10,y-.76,.05,.15,.35,.16,dress,wave*.10);
  ellipsoid(.19-wave*.10,y-.76,.05,.15,.35,.16,dress,-wave*.10);
@@ -82,27 +83,28 @@ function draw(now){
   ellipsoid(0,y+.87,-.08,.52,.56,.42,purple);
   ellipsoid(-.39,y+.70,.03,.18,.47,.26,purple);
   ellipsoid(.39,y+.70,.03,.18,.47,.26,purple);
-  ellipsoid(0,y+.90,.24,.36,.41,.29,skin);
+  ellipsoid(0,y+.90+nod,.24,.36,.41,.29,skin);
   ellipsoid(0,y+1.23,.18,.41,.13,.32,white);
  }else{
-  ellipsoid(0,y+.89,.01,.45,.47,.39,skin);
+  ellipsoid(0,y+.89+nod,.01,.45,.47,.39,skin);
   ellipsoid(0,y+1.28,.00,.48,.17,.42,white);
   ellipsoid(0,y+1.34,.35,.40,.035,.09,purple);
   for(let i=-2;i<=2;i++)ellipsoid(i*.15,y+1.36,.39,.035,.028,.026,gold);
  }
  const z=girl?.53:.39;
  for(const x of [-.16,.16]){
-  ellipsoid(x,y+.94,z,.098,.12,.055,eye);
-  ellipsoid(x+.013,y+.94,z+.048,.054,.075,.022,dark);
-  ellipsoid(x+.026,y+.966,z+.065,.016,.017,.010,eye);
-  ellipsoid(x,y+1.10,z,.12,.03,.03,dark,x<0?.08:-.08);
+  ellipsoid(x,y+.94+nod,z,.098,.12,.055,eye);
+  ellipsoid(x+.013,y+.94+nod,z+.048,.054,.075,.022,dark);
+  ellipsoid(x+.026,y+.966+nod,z+.065,.016,.017,.010,eye);
+  ellipsoid(x,y+1.10+nod,z,.12,.03,.03,dark,x<0?.08:-.08);
   ellipsoid(x*1.48,y+.75,z-.036,.09,.05,.028,pink);
  }
- ellipsoid(0,y+.77,z+.065,.065,.051,.049,skin);
- ellipsoid(0,y+.65,z+.005,.19,.058,.043,[.60,.24,.25,1]);
- ellipsoid(0,y+.682,z+.044,.14,.020,.025,eye);
+ ellipsoid(0,y+.77+nod,z+.065,.065,.051,.049,skin);
+ ellipsoid(0,y+.65+nod,z+.005,.19,.058,.043,[.60,.24,.25,1]);
+ ellipsoid(0,y+.682+nod,z+.044,.14,.020,.025,eye);
  ellipsoid(.19,y+.07,.37,.10,.10,.05,gold);
  ellipsoid(.19,y+.07,.414,.035,.065,.025,[.13,.43,.66,1],.35);
+ if(!find("feedback")?.closest("#app")&&motion){root.style.transform="translateX("+Math.round(Math.sin(t*.65)*23)+"px)"}else root.style.transform="";
  raf=requestAnimationFrame(draw);
 }
 function stop(){if(raf)cancelAnimationFrame(raf);raf=0}
@@ -115,8 +117,10 @@ function refresh(){
  const onQuiz=!!find("feedback")?.closest("#app"),onLearner=!!app?.querySelector(".journey-dashboard,.levels,.skill-center,.quiz,.learning-page");
  if(!onLearner){if(root)root.hidden=true;stop();return}
  if(!init())return;
+ const currentPage=onQuiz?"quiz":app.querySelector(".levels")?"levels":app.querySelector(".skill-center")?"skills":app.querySelector(".journey-dashboard")?"journey":"other";
  const key=user.id+":"+c.kind;
  if(identity!==key){identity=key;action="wave";until=performance.now()+1500;clock=0}
+ if(previousPage!==currentPage){previousPage=currentPage;if(currentPage!=="quiz"){action="walk";until=performance.now()+1800}else{action="run";until=performance.now()+900}}
  root.setAttribute("aria-label","رفيق رحلتي: "+c.name);
  const saying=!!root.querySelector(".mej-companion-bubble.mej-show");
  root.hidden=onQuiz&&!saying;

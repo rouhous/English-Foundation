@@ -747,7 +747,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    const topic=cur.topic?.selectedOptions?.[0]?.textContent||'';
    const grade=Number(cur.grade?.value||0);
    const genre=cur.genre?.value||'opinion';
-   if(!topic||![5,6,7,8,9,10,11,12].includes(grade)){status.textContent='اختر الصف والموضوع أولًا.';return;}
+   if(!cur.topic?.value||!topic||![5,6,7,8,9,10,11,12].includes(grade)){status.textContent='اختر الصف والموضوع أولًا.';return;}
    busy=true;button.disabled=true;button.style.opacity='.55';results.replaceChildren();
    status.textContent='يتم تحليل الأفكار وترتيب الفقرات والتراكيب اللغوية...';
    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),27000);

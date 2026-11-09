@@ -1,0 +1,15 @@
+name: Verify iPad companion stability hotfix
+on:
+  push:
+    paths:
+      - scripts/check_ipad_companion.py
+      - .github/workflows/check-ipad-companion.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_ipad_companion.py

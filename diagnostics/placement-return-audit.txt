@@ -1,271 +1,10 @@
-
-## عودة: 6 matching lines
-
-1767: function journey(){const p=active(),g=currentIsland(p),m=countMaster(g,p),badges=islandBadges(g,p),earned=badges.filter(b=>b.earned).length;
-1768: const actions=[['🏝️','المستويات',"route('levels')"],['🎯','المهارات',"route('skills')"],['🧭','التشخيص',"route('diagnostic')"],['📊','المعاينة',"route('reports')"]];
-1769: document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-v23">
-1770: <section class="j23-head j26-head"><div class="j23-brand j26-brand"><span class="j23-avatar" aria-hidden="true">👨🏻‍🎓</span><div class="j26-brand-title"><strong lang="en" dir="ltr">My English Journey</strong><small>رحلتي مع الإنجليزية</small></div></div><div class="j34-card-toolbar"><button type="button" class="journey-home-mini" onclick="route('home')" aria-label="العودة إلى الصفحة الرئيسية">🏠 الرئيسية</button></div><div class="j23-stat
-1771: 
-1772: <section class="j23-panel j23-badges"><div class="j23-heading"><div><h2>🏆 شارات الجزيرة <span lang="en" dir="ltr">Island Badges</span></h2><p>اجمع شارة جديدة كل 20 عنصر متقن · ${earned}/10 شارات</p></div><b>🏅</b></div><div class="j23-badge-grid">${badges.map((b,i)=>`<div class="j23-medal ${b.earned?'unlocked':'locked'}" title="${b.target}/200"><div class="j24-medal-art"><img src="${J24_BADGES[i]}" alt="" loading="lazy"></div><strong>${e
-1773: <section class="j23-panel"><div class="j23-heading"><h2>⚡ الوصول السريع <span lang="en" dir="ltr">Quick Access</span></h2></div><div class="j23-links">${actions.map(([e,label,fn],i)=>`<button class="j23-link j23-link-${i}" onclick="${fn}"><span>${e}</span>${label}</button>`).join('')}</div><div class="j23-file-buttons" aria-label="إدارة تقدم الطالب"><button onclick="exportProgress()">💾 حفظ التقدّم</button><button onclick="importProgress
-
-1945:   const p=active(),cap=placementCeiling(p);
-1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
-1949: }
-1950: function startDiagnostic(){
-1951:   const p=active();
-
-2060: if(g===0){items=(part?mejStageQuestions(0,part):byGrade[0]).filter(q=>q.type==='Blend').slice(0,60)}
-2061: const phonics=g===0?`<div class="bi-guide"><div class="guide-en" lang="en">🔤 Blend the sounds: 1) Listen to the sounds. 2) Say the sounds slowly. 3) Join them: /c/ + /a/ + /t/ → cat. 4) Listen to the whole word and read aloud.</div><div class="guide-ar" lang="ar">🔤 طريقة المزج الصوتي: ١) استمع إلى الأصوات. ٢) انطق كل صوت ببطء. ٣) اجمعها لتكوين الكلمة: /c/ + /a/ + /t/ → cat. ٤) استمع للكلمة كاملة ثم اقرأها وكرر التدريب.</div></div>`:'';
-2062: const soundLab=g===0?`<h3>🔡 الحرف وصوته • Letters and sounds</h3><p class="caption">Tap a card to hear an example word. Listen to its first sound. • اضغط البطاقة لسماع كلمة نموذجية وركّز على صوت البداية.</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(105px,1fr))">${PHONICS.map(([ph,ex])=>`<button class="btn light" style="font-size:16px;line-height:1.65;direction:ltr" onclick="speak(${jsStr(ex)},.75)">/${esc(ph
-2063: document.getElementById('app').innerHTML=`<section class="card"><h2 class="section-title">📘 التعلّم • Level ${g}</h2><p>${esc(LV[g][1])}</p>${g<=6?`<div class="bi-guide"><div class="guide-en">🇬🇧 Listen to the example words, practice reading, then play the activities.</div><div class="guide-ar">🇴🇲 استمع إلى الكلمات النموذجية، وتدرّب على قراءتها، ثم انتقل إلى الأنشطة.</div></div>`:''}${phonics}${soundLab}<div class="actions"><button class
-2064: let blendTarget='',blendOrder=[],blendPicked='';
-2065: function newBlend(){let q=shuffle(byGrade[0].filter(x=>x.type==='Blend'))[0];blendTarget=q.answer;blendPicked='';blendOrder=mixedLetters(blendTarget);renderBlend()}
-2066: function renderBlend(){let el=document.getElementById('blendLab');if(!el)return;el.innerHTML=`<div class="bi-guide"><div class="guide-en">🇬🇧 Listen, then tap the shuffled letters in the correct order.</div><div class="guide-ar">🇴🇲 استمع للكلمة، ثم اضغط الحروف المبعثرة بالترتيب الصحيح.</div></div><div class="center" style="font-size:32px;letter-spacing:7px;direction:ltr;min-height:47px">${esc(blendPicked)||'· · ·'}</div><div class="actio
-
-2070: function selectSkill(type){
-2071:  if(type==='Match'){
-2072:   const grades=Array.from({length:12},(_,i)=>i+1).filter(g=>permitted(g));
-2073:   document.getElementById('app').innerHTML=`<section class="card"><h2 class="section-title">🧩 التوصيل وإكمال الفقرات • اختر المستوى</h2><div class="grid">${grades.map(g=>`<button class="btn light" onclick="window.MEJOpenSkillExpansion&&window.MEJOpenSkillExpansion(${g})">المستوى ${g} — ${g<=4?'توصيل كلمات بالصور':'إكمال فقرات بالمفردات'}</button>`).join('')}</div><button class="btn small light" onclick="route('skills')" style="margin-to
-2074:   return;
-2075:  }
-2076:  const grades=Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)&&byGrade[g].some(q=>q.type===type));
-
-2074:   return;
-2075:  }
-2076:  const grades=Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)&&byGrade[g].some(q=>q.type===type));
-2077:  document.getElementById('app').innerHTML=`<section class="card"><h2 class="section-title">${esc(type)} • اختر المستوى</h2><div class="grid">${grades.map(g=>`<button class="btn light" onclick="beginLevel(${g},${jsStr(type)})">المستوى ${g} — ${byGrade[g].filter(q=>q.type===type).length} عنصر</button>`).join('')}</div><button class="btn small light" onclick="route('skills')" style="margin-top:14px">عودة</button></section>`;
-2078: }
-2079: function speakingStudio(g){const grades=Array.from({length:13},(_,i)=>i).filter(permitted);let grade=Number.isInteger(g)&&permitted(g)?g:grades[grades.length-1];let pool=byGrade[grade].filter(q=>q.word&&q.word.length<25);let seen=new Set;pool=pool.filter(q=>{if(seen.has(q.word))return false;seen.add(q.word);return true});let target=shuffle(pool)[0]?.word||'cat';speakTarget=target;
-2080: document.getElementById('app').innerHTML=`<section class="card quiz"><h2 class="section-title">🎙️ تحدي نطق الكلمات</h2><details class="journey-general-notes"><summary>📋 ملاحظات عامة | General Notes</summary><p>مهمة اختيارية؛ التحقق تقريبي باستخدام التعرف على الكلام ولا يمثل تقييمًا لجودة الصوت. يُفضل استخدام HTTPS والسماح بالميكروفون.</p><p>استمع للكلمة أولًا ثم كررها. يمكنك تسجيل صوتك والاستماع إليه دون درجة؛ ولا تُرسل التسجيلات إلى Go
-
-2346:   const result=await window.MEJStudentCloudProgress.queue(profileRef,snapshot);
-2347:   const messages={
-2348:     synced:'✅ تم تأكيد حفظ التقدم في السحابة. يظهر لدى المعلم المرتبط.',
-2349:     offline_pending:'📴 التقدم محفوظ محلياً وسيُرسل تلقائياً عند عودة الإنترنت.',
-2350:     pending:'⏳ التقدم محفوظ محلياً، وستُعاد المزامنة تلقائياً.',
-2351:     needs_review:'⚠️ توجد نسخة سحابية مختلفة؛ لم نكتب فوقها. يلزم مراجعة الاسترجاع.',
-2352:     not_linked:'🔒 يلزم تفعيل الطالب وربطه بمعلمه أولاً.',
-
-
-## التشخيص: 12 matching lines
-
-1459: <script src="assets/approved-images-21.js?v=20261109-fifteen" defer></script>
-1460: </head>
-1461: <body><header class="head" style="display:none"><div class="container headinner"><div class="identity"><div class="brand" style="background:none;box-shadow:none"><img src="data:image/webp;base64,UklGRvw9AABXRUJQVlA4IPA9AAAQ1QCdASoYARgBPmEoj0UkIqkWu458kAYEtgBmwI5da58fzf5UflN8sdY/uv9y/xf+X/un7b/en+/7qOtPLW5z/33+J/yP7SfLj/Tf+H/Ke6v8/f9D/Ffvv9Av6l/7r/A/lP9Hv+Z64P3d9RP9Y/z37Se8h/uP2l91X9y/2369/6r5CP6t/kP+12G37v+wd+6npwfuh/4vlS/s//G/c34Gf2j/+
-1462: <nav class="navbar" id="journeyNav"><div class="container menu"><button class="navbutton active" data-route="home" onclick="route('home')">⌂ الرئيسية</button><button class="navbutton" data-route="levels" onclick="route('levels')">🗺️ المستويات</button><button class="navbutton" data-route="skills" onclick="route('skills')">🎯 المهارات</button><button class="navbutton" data-route="diagnostic" onclick="route('diagnostic')">🧭 التشخيص</button>
-1463: <main class="container" id="app" aria-live="polite"></main><div id="toast" role="status"></div>
-1464: <script>
-1465: const J24_BADGES=["data:image/webp;base64,UklGRgIoAABXRUJQVlA4IPYnAACQhgCdASrIALkAPlkijUSjoiEY7CbUOAWEtgBdmarDC+c/I38ivkiqH9W/sv99/xH9w/9/+i+T/+3+0DwM6O/4HnSc5/73++/vT/pfl7/mP2f90X5//8vuB/pj/nv7R/if2I+Lf1j/ud6i/6N/kf/b/nPeW/1X7Ge6j/C/8L9m/9H8gf9h/w3/R7Cr9xvYT/o/+u/+/s//9P9y/+78n/9d/3/7bfAp+xf/u9gD/9e2L/AP/z0o8QnmV/E8PfyP6//P/3/9xOcTEs+Zfjf+P/ifTbwj+Vmoj+Tfzz/Mfmrx0wC/z3+1/83j8/h/UF88PDpoH/pb0eNI/6B/svYV/nn9t/7yXF4eWN7JXtbL9W/Gbm4dM+FkTu
-
-1702:   <button onclick="route('home')" class="current"><b>⌂</b>الرئيسية</button>
-1703:   <button onclick="route('levels')"><b>🏝️</b>المستويات</button>
-1704:   <button onclick="route('skills')"><b>🎯</b>المهارات</button>
-1705:   <button onclick="route('diagnostic')"><b>🧭</b>التشخيص</button>
-1706:   <button onclick="route('reports')"><b>▥</b>معاينة</button>
-1707:   <button class="actual-start" onclick="letsGo()"><b>🧭</b><span>Let's Go<small>لنبدأ الرحلة</small></span></button>
-1708:  </div>
-
-1742:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
-1743:  'Sync status: '+(p.syncStatus||'Unknown'),'Last report ID: '+(p.lastReportId||'—'),
-1744:  'Last confirmed report ID: '+(p.lastConfirmedReport||'—')].join('\n');
-1745:  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(info).then(()=>toast('تم نسخ تفاصيل التشخيص'),()=>toast('تعذر النسخ: قد يحتاج المتصفح إلى HTTPS'));}
-1746:  else{const a=document.createElement('textarea');a.value=info;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('تم نسخ تفاصيل التشخيص')}catch(e){toast('النسخ غير متاح')}a.remove()}
-1747: }
-1748: function openProfile(isNew=false){let p=active();let item=isNew?{name:'',grade:'',school:'',className:'',teacherCode:''}:p;const modal=document.createElement('div');modal.className='journey-modal';modal.id='journeyModal';modal.innerHTML=`<div class="journey-modal-inner" role="dialog" aria-modal="true" aria-label="بيانات الطالب"><div class="journey-topline"><h2>👤 ${isNew?'مستخدم جديد':'تعديل بيانات الطالب'}</h2><button class="btn light s
-
-1743:  'Sync status: '+(p.syncStatus||'Unknown'),'Last report ID: '+(p.lastReportId||'—'),
-1744:  'Last confirmed report ID: '+(p.lastConfirmedReport||'—')].join('\n');
-1745:  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(info).then(()=>toast('تم نسخ تفاصيل التشخيص'),()=>toast('تعذر النسخ: قد يحتاج المتصفح إلى HTTPS'));}
-1746:  else{const a=document.createElement('textarea');a.value=info;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('تم نسخ تفاصيل التشخيص')}catch(e){toast('النسخ غير متاح')}a.remove()}
-1747: }
-1748: function openProfile(isNew=false){let p=active();let item=isNew?{name:'',grade:'',school:'',className:'',teacherCode:''}:p;const modal=document.createElement('div');modal.className='journey-modal';modal.id='journeyModal';modal.innerHTML=`<div class="journey-modal-inner" role="dialog" aria-modal="true" aria-label="بيانات الطالب"><div class="journey-topline"><h2>👤 ${isNew?'مستخدم جديد':'تعديل بيانات الطالب'}</h2><button class="btn light s
-1749: /* MEJ_VERIFIED_SCHOOL_PROFILE_20261106 */
-
-1765: async function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;mejCapture(oldId);let created=null;if(isNew){created=newProfile();db.profiles[created.id]=created;db.active=created.id;mejSwitch(created.id)}const ok=await saveStudent();if(!ok){if(created){delete db.profiles[created.id];db.active=oldId;mejSwitch(oldId)}return}closePr
-1766: function letsGo(){if(!active().name){openProfile(true);toast('سجّل بياناتك أولًا لتبدأ الرحلة');return}const scene=document.getElementById('voyageScene');scene?.classList.add('depart');setTimeout(()=>route('journey'),1550)}
-1767: function journey(){const p=active(),g=currentIsland(p),m=countMaster(g,p),badges=islandBadges(g,p),earned=badges.filter(b=>b.earned).length;
-1768: const actions=[['🏝️','المستويات',"route('levels')"],['🎯','المهارات',"route('skills')"],['🧭','التشخيص',"route('diagnostic')"],['📊','المعاينة',"route('reports')"]];
-1769: document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-v23">
-1770: <section class="j23-head j26-head"><div class="j23-brand j26-brand"><span class="j23-avatar" aria-hidden="true">👨🏻‍🎓</span><div class="j26-brand-title"><strong lang="en" dir="ltr">My English Journey</strong><small>رحلتي مع الإنجليزية</small></div></div><div class="j34-card-toolbar"><button type="button" class="journey-home-mini" onclick="route('home')" aria-label="العودة إلى الصفحة الرئيسية">🏠 الرئيسية</button></div><div class="j23-stat
-1771: 
-
-1901: function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
-1902: async function addUser(){if(!await mejPilotMayCreateStudent())return;mejCapture(db.active);let p=newProfile();db.profiles[p.id]=p;db.active=p.id;mejSwitch(p.id);activeSession=null;persist(false);home();document.getElementById('studentName')?.focus();toast('أضف اسم الطالب الجديد واحفظ بياناته')}
-1903: function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}mejCapture(db.active);db.active=id;mejSwitch(id);activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}
-1904: function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>3?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
-1905: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-1906: function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
-1907: // MEJ_STAGE1_DIAGNOSTIC_V1
-
-1917:   return first.length>0&&mejStageMastered(g,1,p)===first.length;
-1918: }
-1919: function beginStagePart(g,part){if(!checkAccess(g))return;mejQuizOrigin='levels';if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);a
-1920: function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</butto
-1921: // The school grade limits both placement questions and the suggested placement level.
-1922: // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
-1923: // An unselected grade must be saved before a placement attempt.
-
-1945:   const p=active(),cap=placementCeiling(p);
-1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
-1949: }
-1950: function startDiagnostic(){
-1951:   const p=active();
-
-1949: }
-1950: function startDiagnostic(){
-1951:   const p=active();
-1952:   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
-1953:   const cap=placementCeiling(p);
-1954:   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
-1955:   const ids=placementPlan(cap,24);
-
-1951:   const p=active();
-1952:   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
-1953:   const cap=placementCeiling(p);
-1954:   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
-1955:   const ids=placementPlan(cap,24);
-1956:   activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
-1957:   displayQuestion();
-
-2012:   grade=Math.min(ceiling,grade);
-2013:   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
-2014: }else persist();activeSession=null;
-2015: document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستو
-2016: // Preview words must also be extracted from older Grade 1-5 questions with empty word fields.
-2017: function mejLearningPreviewWord(q){
-2018:  const valid=v=>{const s=String(v||'').trim();return /^[A-Za-z][A-Za-z'’ -]{0,54}$/.test(s)?s:''};
-
-2216:  let weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+1)%7));weekStart.setHours(0,0,0,0);
-2217:  const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=weekStart),wright=weekly.filter(x=>x.ok).length;
-2218:  const g=Math.min(12,Math.max(0,maxAllowed(p)));const mastered=countMaster(g,p);
-2219:  document.getElementById('app').innerHTML=`<section class="card student-summary"><h1 class="section-title">📊 معاينة تقدّم الطالب</h1><p class="caption">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—')}</p><div class="student-summary-grid"><div class="info"><b>⭐ ${fmt(p.stars)}</b><small>النجوم</small></div><div class="info"><b>${mastered}/200</b><small>الإتقان في المستوى الحالي ${g}</small></di
-2220: }
-2221: function payload(p,event='progress',reportId=''){
-2222:  let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));
-
-
-## placement: 12 matching lines
-
-1918: }
-1919: function beginStagePart(g,part){if(!checkAccess(g))return;mejQuizOrigin='levels';if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);a
-1920: function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</butto
-1921: // The school grade limits both placement questions and the suggested placement level.
-1922: // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
-1923: // An unselected grade must be saved before a placement attempt.
-1924: function placementCeiling(p=active()){
-
-1920: function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</butto
-1921: // The school grade limits both placement questions and the suggested placement level.
-1922: // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
-1923: // An unselected grade must be saved before a placement attempt.
-1924: function placementCeiling(p=active()){
-1925:   const selected=String(p.grade??'').trim();
-1926:   if(selected==='other')return 5;
-
-1921: // The school grade limits both placement questions and the suggested placement level.
-1922: // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
-1923: // An unselected grade must be saved before a placement attempt.
-1924: function placementCeiling(p=active()){
-1925:   const selected=String(p.grade??'').trim();
-1926:   if(selected==='other')return 5;
-1927:   const g=Number(selected);
-
-1927:   const g=Number(selected);
-1928:   return selected!==''&&Number.isInteger(g)&&g>=1&&g<=12?g:null;
-1929: }
-1930: function placementPlan(ceiling,questionCount=24){
-1931:   const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
-1932:   const perLevel=Math.floor(questionCount/eligible.length);
-1933:   let remaining=questionCount%eligible.length;
-
-1936:   for(const g of eligible){
-1937:     const requested=perLevel+(g>ceiling-remaining?1:0);
-1938:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
-1939:     if(pool.length<requested)throw new Error('Insufficient placement questions for level '+g);
-1940:     ids.push(...shuffle(pool).slice(0,requested).map(q=>q.id));
-1941:   }
-1942:   return shuffle(ids);
-
-1942:   return shuffle(ids);
-1943: }
-1944: function diagnosticLanding(){
-1945:   const p=active(),cap=placementCeiling(p);
-1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
-
-1945:   const p=active(),cap=placementCeiling(p);
-1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
-1949: }
-1950: function startDiagnostic(){
-1951:   const p=active();
-
-1950: function startDiagnostic(){
-1951:   const p=active();
-1952:   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
-1953:   const cap=placementCeiling(p);
-1954:   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
-1955:   const ids=placementPlan(cap,24);
-1956:   activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
-
-1952:   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
-1953:   const cap=placementCeiling(p);
-1954:   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
-1955:   const ids=placementPlan(cap,24);
-1956:   activeSession={kind:'diagnostic',registeredGrade:p.grade,ceiling:cap,ids,index:0,score:0,mistakes:[],responses:[]};
-1957:   displayQuestion();
-1958: }
-
-2004: function stopQuiz(){const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
-2005: function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
-2006: if(s.kind==='diagnostic'){
-2007:   // approximate placement, never claims standardized grade or CEFR test.
-2008:   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
-2009:   let grade=0;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
-2010:   // Cap the placement recommendation to the registered grade used at test start.
-
-2007:   // approximate placement, never claims standardized grade or CEFR test.
-2008:   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
-2009:   let grade=0;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
-2010:   // Cap the placement recommendation to the registered grade used at test start.
-2011:   const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
-2012:   grade=Math.min(ceiling,grade);
-2013:   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
-
-2008:   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
-2009:   let grade=0;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
-2010:   // Cap the placement recommendation to the registered grade used at test start.
-2011:   const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
-2012:   grade=Math.min(ceiling,grade);
-2013:   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
-2014: }else persist();activeSession=null;
-
-
-## diagnostic: 26 matching lines
-
-1459: <script src="assets/approved-images-21.js?v=20261109-fifteen" defer></script>
-1460: </head>
-1461: <body><header class="head" style="display:none"><div class="container headinner"><div class="identity"><div class="brand" style="background:none;box-shadow:none"><img src="data:image/webp;base64,UklGRvw9AABXRUJQVlA4IPA9AAAQ1QCdASoYARgBPmEoj0UkIqkWu458kAYEtgBmwI5da58fzf5UflN8sdY/uv9y/xf+X/un7b/en+/7qOtPLW5z/33+J/yP7SfLj/Tf+H/Ke6v8/f9D/Ffvv9Av6l/7r/A/lP9Hv+Z64P3d9RP9Y/z37Se8h/uP2l91X9y/2369/6r5CP6t/kP+12G37v+wd+6npwfuh/4vlS/s//G/c34Gf2j/+
-1462: <nav class="navbar" id="journeyNav"><div class="container menu"><button class="navbutton active" data-route="home" onclick="route('home')">⌂ الرئيسية</button><button class="navbutton" data-route="levels" onclick="route('levels')">🗺️ المستويات</button><button class="navbutton" data-route="skills" onclick="route('skills')">🎯 المهارات</button><button class="navbutton" data-route="diagnostic" onclick="route('diagnostic')">🧭 التشخيص</button>
-1463: <main class="container" id="app" aria-live="polite"></main><div id="toast" role="status"></div>
-1464: <script>
-1465: const J24_BADGES=["data:image/webp;base64,UklGRgIoAABXRUJQVlA4IPYnAACQhgCdASrIALkAPlkijUSjoiEY7CbUOAWEtgBdmarDC+c/I38ivkiqH9W/sv99/xH9w/9/+i+T/+3+0DwM6O/4HnSc5/73++/vT/pfl7/mP2f90X5//8vuB/pj/nv7R/if2I+Lf1j/ud6i/6N/kf/b/nPeW/1X7Ge6j/C/8L9m/9H8gf9h/w3/R7Cr9xvYT/o/+u/+/s//9P9y/+78n/9d/3/7bfAp+xf/u9gD/9e2L/AP/z0o8QnmV/E8PfyP6//P/3/9xOcTEs+Zfjf+P/ifTbwj+Vmoj+Tfzz/Mfmrx0wC/z3+1/83j8/h/UF88PDpoH/pb0eNI/6B/svYV/nn9t/7yXF4eWN7JXtbL9W/Gbm4dM+FkTu
-
+### LINES 1490-1515
+1490: const byGrade={};for(let g=0;g<=12;g++)byGrade[g]=BANK.filter(x=>x.g===g);
 1491: let db={profiles:{},active:null,version:1};try{let v=JSON.parse(localStorage.getItem(DBKEY));if(v&&v.profiles)db=v;}catch(e){};
 1492: if(!Object.keys(db.profiles).length){
 1493:   let migrated=false;try{const old=JSON.parse(localStorage.getItem('EBO_OMAN_V4')||'null');if(old&&(old.studentName||old.studentId)){
-1494:     const id='legacy-'+Date.now().toString(36);const p={id,name:old.studentName||old.studentId||'',grade:'',school:'Wadi Al Hawasna School',correct:{},wrong:{},stars:Number(old.stars)||0,attempts:Number(old.attempts)||0,right:Number(old.right)||0,diagnosed:!!old.diagnosticDone,assigned:Number(old.assignedLevel)||0,diagnosticScore:old.diagnosticScore??null,diagnosticDate:old.diagnosticDate||'',completed:{},activity:[],writing:{},speaking
+1494:     const id='legacy-'+Date.now().toString(36);const p={id,name:old.studentName||old.studentId||'',grade:'',school:'Wadi Al Hawasna School',correct:{},wrong:{},stars:Number(old.stars)||0,attempts:Number(old.attempts)||0,right:Number(old.right)||0,diagnosed:!!old.diagnosticDone,assigned:Number(old.assignedLevel)||0,diagnosticScore:old.diagnosticScore??null,diagnosticDate:old.diagnosticDate||'',completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};
 1495:     for(const [legacyId,count] of Object.entries(old.correct||{})){const qid=LEGACY_MAP[legacyId];if(qid)p.correct[qid]=Number(count)||0}
-1496:     for(const [legacyId,count] of Object.entries(old.wrong||{})){const qid=LEGACY_MAP[legacyId];if(qid)p.wrong[qid]=Number(count)||0}
-1497:     db.profiles[id]=p;db.active=id;migrated=true;
-
 1496:     for(const [legacyId,count] of Object.entries(old.wrong||{})){const qid=LEGACY_MAP[legacyId];if(qid)p.wrong[qid]=Number(count)||0}
 1497:     db.profiles[id]=p;db.active=id;migrated=true;
 1498:   }}catch(e){}
@@ -273,63 +12,60 @@
 1500: }
 1501: if(!db.profiles[db.active])db.active=Object.keys(db.profiles)[0];
 1502: function active(){return db.profiles[db.active]};
-
+1503: 
+1504: /* Separate cloud credentials per pupil on a shared device. */
+1505: const MEJ_CREDS_KEY='MEJ_PER_PROFILE_CREDENTIALS_20261109';
+1506: const MEJ_KEYS=['MEJ_STUDENT_ACCESS_V1','MEJ_VERIFIED_SCHOOL_NAME_V1','MEJ_VERIFIED_TEACHER_LINKED_V1','MEJ_ASSIGNED_TEACHER_CODE_V1','MEJ_ASSIGNED_TEACHER_NAME_V1','MEJ_STUDENT_DEVICE_REF_V1'];
+1507: function mejCreds(){try{return JSON.parse(localStorage.getItem(MEJ_CREDS_KEY)||'{}')||{}}catch(_){return {}}}
+1508: function mejCapture(id){if(!id||window.__MEJ_ACCESS_ROLE!=='student')return;const access=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');if(!/^[a-f0-9]{64}$/.test(access||''))return;const a=mejCreds(),v={};for(const k of MEJ_KEYS)v[k]=localStorage.getItem(k)||'';a[id]=v;localStorage.setItem(MEJ_CREDS_KEY,JSON.stringify(a))}
+1509: function mejSwitch(id){if(window.__MEJ_ACCESS_ROLE==='owner')return;const d=mejCreds()[id];for(const k of MEJ_KEYS){if(d?.[k])localStorage.setItem(k,d[k]);else localStorage.removeItem(k)}window.__MEJ_ACCESS_ROLE=d?.MEJ_STUDENT_ACCESS_V1?'student':'public'}
+1510: if(window.__MEJ_ACCESS_ROLE==='student'&&!mejCreds()[db.active])mejCapture(db.active);
+1511: 
+1512: // MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1
+1513: // Browser scores are advisory: only the authenticated server can certify a ranking.
+1514: function mejReconcileLocalStars(profile){
+1515:  if(!profile)return 0;
+### LINES 1658-1675
+1658: function sentenceOrderMarkup(){return `<div class="sentence-builder"><div class="order-hint">🧩 Arrange the words to make a sentence.<span>رتّب الكلمات لتكوين جملة صحيحة.</span></div><div id="orderBuilt" class="order-built placeholder" dir="ltr"></div><div class="order-rack" id="orderRack" dir="ltr"></div><div class="actions" style="justify-content:center"><button class="btn light small" onclick="undoOrderWord()">↶ Undo • تراجع</button><button class="btn light small" onclick="clearOrderWords()">↺ Clear • امسح</button><button class="btn mint" onclick="submitSentenceOrder()">✓ Check • تحقّق</button></div></div>`;}
+1659: 
 1660: // MEJ_COMPACT_SKILLS_NAV_V2
 1661: let mejQuizOrigin='levels';
 1662: let current='home',activeSession=null,shownId=null,answerLock=false,speakTarget='';
-1663: function route(page){current=page;document.getElementById('journeyNav')?.classList.toggle('open',page!=='home'&&page!=='journey');document.querySelectorAll('.navbutton').forEach(b=>b.classList.toggle('active',b.dataset.route===page));if(page==='home')home();else if(page==='journey')journey();else if(page==='levels')levels();else if(page==='skills')skills();else if(page==='diagnostic')diagnosticLanding();else if(page==='reports')reports(
+1663: function route(page){current=page;document.getElementById('journeyNav')?.classList.toggle('open',page!=='home'&&page!=='journey');document.querySelectorAll('.navbutton').forEach(b=>b.classList.toggle('active',b.dataset.route===page));if(page==='home')home();else if(page==='journey')journey();else if(page==='levels')levels();else if(page==='skills')skills();else if(page==='diagnostic')diagnosticLanding();else if(page==='reports')reports();else if(page==='ranking')window.showClassRanking();window.scrollTo({top:0,behavior:'instant'});}
 1664: const JOURNEY_BADGES=[['🌱','الرحّالة الصغير'],['🧭','المغامر'],['📖','مكتشف الكلمات'],['⭐','صياد النجوم'],['🏝️','مرشد الجزر'],['🌊','قاهر البحار'],['⚓','ربان المعرفة'],['⛵','القبطان الصغير'],['🗺️','ابن ماجد'],['🏆','أسطورة الرحلة']];
 1665: function currentIsland(p=active()){if(Number.isInteger(Number(p.journeyIsland))&&p.journeyIsland!==undefined&&permitted(Number(p.journeyIsland)))return Number(p.journeyIsland);if(p.diagnosed)return Math.min(12,Math.max(0,Number(p.assigned)||0));return 0}
 1666: function islandBadges(g,p=active()){let m=countMaster(g,p);return JOURNEY_BADGES.map(([em,name],i)=>({em,name,earned:m>=(i+1)*20,target:(i+1)*20}))}
-
-1702:   <button onclick="route('home')" class="current"><b>⌂</b>الرئيسية</button>
-1703:   <button onclick="route('levels')"><b>🏝️</b>المستويات</button>
-1704:   <button onclick="route('skills')"><b>🎯</b>المهارات</button>
-1705:   <button onclick="route('diagnostic')"><b>🧭</b>التشخيص</button>
-1706:   <button onclick="route('reports')"><b>▥</b>معاينة</button>
-1707:   <button class="actual-start" onclick="letsGo()"><b>🧭</b><span>Let's Go<small>لنبدأ الرحلة</small></span></button>
-1708:  </div>
-
-1737: function refreshJourneySettingsStatus(){const p=active();const el=document.getElementById('journeySettingsStatus');if(el)el.textContent=mejSimpleConnectionStatus(p.syncStatus);}
-1738: async function settingsCheckConnection(){await checkSheetConnection();refreshJourneySettingsStatus()}
-1739: async function settingsSendReport(){await sendReport(true);refreshJourneySettingsStatus()}
-1740: function copyJourneyDiagnostics(){const p=active();const info=[
-1741:  'My English Journey — Official Release','Receiver version: '+RECEIVER_EXPECTED_VERSION,
-1742:  'Online: '+navigator.onLine,'Teacher code configured: '+Boolean(p.teacherCode),
-1743:  'Sync status: '+(p.syncStatus||'Unknown'),'Last report ID: '+(p.lastReportId||'—'),
-
-1765: async function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;mejCapture(oldId);let created=null;if(isNew){created=newProfile();db.profiles[created.id]=created;db.active=created.id;mejSwitch(created.id)}const ok=await saveStudent();if(!ok){if(created){delete db.profiles[created.id];db.active=oldId;mejSwitch(oldId)}return}closePr
-1766: function letsGo(){if(!active().name){openProfile(true);toast('سجّل بياناتك أولًا لتبدأ الرحلة');return}const scene=document.getElementById('voyageScene');scene?.classList.add('depart');setTimeout(()=>route('journey'),1550)}
-1767: function journey(){const p=active(),g=currentIsland(p),m=countMaster(g,p),badges=islandBadges(g,p),earned=badges.filter(b=>b.earned).length;
-1768: const actions=[['🏝️','المستويات',"route('levels')"],['🎯','المهارات',"route('skills')"],['🧭','التشخيص',"route('diagnostic')"],['📊','المعاينة',"route('reports')"]];
-1769: document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-v23">
-1770: <section class="j23-head j26-head"><div class="j23-brand j26-brand"><span class="j23-avatar" aria-hidden="true">👨🏻‍🎓</span><div class="j26-brand-title"><strong lang="en" dir="ltr">My English Journey</strong><small>رحلتي مع الإنجليزية</small></div></div><div class="j34-card-toolbar"><button type="button" class="journey-home-mini" onclick="route('home')" aria-label="العودة إلى الصفحة الرئيسية">🏠 الرئيسية</button></div><div class="j23-stat
-1771: 
-
-1898:  try{if(!await mejPilotReserveStudent(p.id,null))return false}
-1899:  finally{mejPilotSaving=false}
-1900: }p.name=name;p.grade=grade;p.school=school||'';p.className=className;p.teacherCode=teacherCode;p.syncStatus=teacherCode?'رمز المعلم مسجّل. سيتم التحقق منه عند إرسال التقرير.':'وضع التعلم العام: لا تُرسل بيانات هذا الطالب إلى المعلم.';persist(!!teacherCode);toast('تم حفظ ملف الطالب ✅');home();return true}
-1901: function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
-1902: async function addUser(){if(!await mejPilotMayCreateStudent())return;mejCapture(db.active);let p=newProfile();db.profiles[p.id]=p;db.active=p.id;mejSwitch(p.id);activeSession=null;persist(false);home();document.getElementById('studentName')?.focus();toast('أضف اسم الطالب الجديد واحفظ بياناته')}
-1903: function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}mejCapture(db.active);db.active=id;mejSwitch(id);activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}
-1904: function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>3?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
-
-1904: function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>3?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'المستوى مقفل. أكمل التشخيص وأتقن جميع أنشطة الجزيرة السابقة.');return false}return true}
-1905: function mejStageQuestions(g,part){const all=byGrade[g]||[];const half=Math.ceil(all.length/2);return part===1?all.slice(0,half):all.slice(half)}
-1906: function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).filter(q=>(p.correct||{})[q.id]>=2).length}
-1907: // MEJ_STAGE1_DIAGNOSTIC_V1
-1908: // MEJ_PRIOR_PARTS_UNLOCKED_V1
-1909: function mejPartUnlocked(g,part,p=active()){
-1910:   g=Number(g);part=Number(part);
-
-1917:   return first.length>0&&mejStageMastered(g,1,p)===first.length;
-1918: }
-1919: function beginStagePart(g,part){if(!checkAccess(g))return;mejQuizOrigin='levels';if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);a
-1920: function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</butto
+1667: function voyageArt(){return `<div class="voyage-scene" id="voyageScene" role="img" aria-label="طفل عماني يقود سفينة خشبية بعلم عمان باتجاه جزر تعليم الإنجليزية"><img src="data:image/webp;base64,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 ...[TRUNCATED]
+1668: function home(){const p=active();mejReconcileLocalStars(p);document.getElementById('journeyNav')?.classList.remove('open');document.getElementById('app').innerHTML=`
+1669: <section class="mobile-ocean-v31" aria-label="My English Journey home">
+1670:  
+1671:  <div class="m31-head">
+1672:   <img class="m31-logos" src="data:image/png;base64,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 ...[TRUNCATED]
+1673:   <div class="m31-title" dir="ltr">My English <em>Journey</em></div>
+1674:   <div class="m31-ar-title">رحلتي مع الإنجليزية</div>
+1675:   <div class="m31-dept">The English Department | قسم اللغة الإنجليزية</div>
+### LINES 1920-2020
+1920: function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
 1921: // The school grade limits both placement questions and the suggested placement level.
 1922: // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
 1923: // An unselected grade must be saved before a placement attempt.
-
+1924: function placementCeiling(p=active()){
+1925:   const selected=String(p.grade??'').trim();
+1926:   if(selected==='other')return 5;
+1927:   const g=Number(selected);
+1928:   return selected!==''&&Number.isInteger(g)&&g>=1&&g<=12?g:null;
+1929: }
+1930: function placementPlan(ceiling,questionCount=24){
+1931:   const eligible=Array.from({length:ceiling+1},(_,g)=>g); // Levels 0 through registered grade, inclusive.
+1932:   const perLevel=Math.floor(questionCount/eligible.length);
+1933:   let remaining=questionCount%eligible.length;
+1934:   const ids=[];
+1935:   // Extra questions go to the highest eligible levels, never above the saved grade.
+1936:   for(const g of eligible){
+1937:     const requested=perLevel+(g>ceiling-remaining?1:0);
+1938:     const pool=byGrade[g].filter(q=>q.mode==='mcq'&&q.type!=='Listening');
+1939:     if(pool.length<requested)throw new Error('Insufficient placement questions for level '+g);
+1940:     ids.push(...shuffle(pool).slice(0,requested).map(q=>q.id));
 1941:   }
 1942:   return shuffle(ids);
 1943: }
@@ -337,23 +73,11 @@
 1945:   const p=active(),cap=placementCeiling(p);
 1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
 1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-
-1945:   const p=active(),cap=placementCeiling(p);
-1946:   const range=cap===null?'اختر صفك الدراسي واحفظ بياناتك أولًا.':'أسئلة من المستوى 0 حتى المستوى '+cap+' فقط.';
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
-1949: }
-1950: function startDiagnostic(){
-1951:   const p=active();
-
-1947:   const profileLabel=cap===null?'الصف غير محدد':p.grade==='other'?'مرحلة التأسيس':'الصف '+p.grade;
-1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.d
+1948:   document.getElementById('app').innerHTML=`<section class="card quiz center"><div style="font-size:75px">🧭</div><h1 class="section-title">تحديد المستوى • Placement Quiz</h1><p>اختبار تشخيصي قصير من <b>24 سؤالًا</b> مناسب للصف المسجّل. <b>${esc(range)}</b> لن تُعرض أسئلة من مستويات أعلى من صفك.</p><p class="caption">Registered grade: ${esc(profileLabel)} • 24 questions, up to Level ${cap===null?'—':cap}</p><div class="notice blue">${p.diagnosed?`تشخيصك السابق: ${p.diagnosticScore}% — المستوى المقترح ${p.assigned}. يمكنك إعادته دون حذف النجوم والإجابات.`:'ابدأ التشخيص لتحديد نقطة البداية. المستوى صفر يبقى مفتوحًا للجميع.'}</div><div class="actions" style="justify-content:center"><button class="btn mint" ${cap===null?'disabled':''} onclick="startDiagnostic()">🧭 ${p.diagnosed?'إعادة الاختبار':'ابدأ اختبار المستوى'}</button>${cap===null?'<button class="btn light" onclick="route(&quot;home&quot;)">👤 اختر الصف واحفظ البيانات</button>':''}<button class="btn light" onclick="beginLevel(0)">ابدأ المستوى صفر أولًا</button><button class="btn gold" onclick="route('journey')">↩ العودة إلى رحلتي</button></div></section>`;
 1949: }
 1950: function startDiagnostic(){
 1951:   const p=active();
 1952:   if(!p.name){toast('أنشئ ملفًا باسم الطالب من الصفحة الرئيسية قبل التشخيص.');route('home');return;}
-1953:   const cap=placementCeiling(p);
-
 1953:   const cap=placementCeiling(p);
 1954:   if(cap===null){toast('اختر الصف الدراسي ثم اضغط حفظ بيانات الطالب قبل التشخيص.');route('home');return;}
 1955:   const ids=placementPlan(cap,24);
@@ -361,15 +85,49 @@
 1957:   displayQuestion();
 1958: }
 1959: // MEJ_STAGE1_ALL_PATHS_GUARDED_V3
-
-1962: function displayQuestion(){if(!activeSession){route(mejQuizOrigin||'levels');return}if(activeSession.index>=activeSession.ids.length){endSession();return}const q=questionById[activeSession.ids[activeSession.index]];shownId=q.id;answerLock=false;let step=activeSession.index+1;const pctQ=pct(step-1,activeSession.ids.length);let visual=q.pic||q.word||q.answer;let showPicture=q.type==='Match'||q.type==='Describe'||q.type==='Blend'||(q.g===0
-1963: let opts=shuffle(q.options||[]);let builder=isWordBuilder(q),ordering=isSentenceOrder(q);if(builder){builderTiles=mixedLetters(q.answer);builderPicked=[]}if(ordering)initSentenceOrder(q);let promptRaw=ordering?'Arrange the words to make a correct sentence.':builder?'Listen carefully, then build the word with the mixed-up letters.':(q.g===0&&q.type==='Blend'?'Listen to the word. Which written word matches what you hear?':q.prompt);let pr
+1960: function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;mejQuizOrigin=type?'skills':'levels';let p=active();let permittedPool=type?byGrade[g]:(mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1));let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,origin:mejQuizOrigin,skillType:type,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
+1961: function trainWrong(g){beginLevel(g,null,true)}
+1962: function displayQuestion(){if(!activeSession){route(mejQuizOrigin||'levels');return}if(activeSession.index>=activeSession.ids.length){endSession();return}const q=questionById[activeSession.ids[activeSession.index]];shownId=q.id;answerLock=false;let step=activeSession.index+1;const pctQ=pct(step-1,activeSession.ids.length);let visual=q.pic||q.word||q.answer;let showPicture=q.type==='Match'||q.type==='Describe'||q.type==='Blend'||(q.g===0&&q.type==='Phonics');let show=showPicture?imageHtml(visual):'';
+1963: let opts=shuffle(q.options||[]);let builder=isWordBuilder(q),ordering=isSentenceOrder(q);if(builder){builderTiles=mixedLetters(q.answer);builderPicked=[]}if(ordering)initSentenceOrder(q);let promptRaw=ordering?'Arrange the words to make a correct sentence.':builder?'Listen carefully, then build the word with the mixed-up letters.':(q.g===0&&q.type==='Blend'?'Listen to the word. Which written word matches what you hear?':q.prompt);let promptText=esc(promptRaw);let left=/[A-Za-z]/.test(promptRaw)&&!/[\u0600-\u06FF]/.test(promptRaw);const inp=ordering?sentenceOrderMarkup():builder?wordBuilderMarkup():(q.mode==='type'?`<div class="type-box"><input class="answer-input" id="typed" autocomplete="off" spellcheck="false" aria-label="Answer" onkeydown="if(event.key==='Enter')submitTyped()"><button class="btn mint" onclick="submitTyped()">تحقق ✓</button></div>`:
 1964: `<div class="choices">${opts.map((o,i)=>`<button class="choice" data-n="${i}" onclick="choose(${i})">${esc(o)}</button>`).join('')}</div>`);
 1965: const title=activeSession.kind==='diagnostic'?'اختبار تحديد المستوى':`Level ${q.g} • ${esc(q.type)}`;
-1966: document.getElementById('app').innerHTML=`<div class="quiz"><div class="card"><div class="quiz-top"><b>${title}</b><span class="badge">السؤال ${step} / ${activeSession.ids.length}</span></div><div class="meter" style="margin:15px 0"><i style="width:${pctQ}%"></i></div><div class="ministats"><span>⭐ ${fmt(active().stars)} نجمة</span><span>✓ ${activeSession.score} صحيحة</span><span>🎯 عنصر من 200 في المستوى</span></div>${q.passage?`<div cl
+1966: document.getElementById('app').innerHTML=`<div class="quiz"><div class="card"><div class="quiz-top"><b>${title}</b><span class="badge">السؤال ${step} / ${activeSession.ids.length}</span></div><div class="meter" style="margin:15px 0"><i style="width:${pctQ}%"></i></div><div class="ministats"><span>⭐ ${fmt(active().stars)} نجمة</span><span>✓ ${activeSession.score} صحيحة</span><span>🎯 عنصر من 200 في المستوى</span></div>${q.passage?`<div class="passage">${esc(q.passage)}</div>`:''}${show?`<div class="quiz-visual">${show}</div>`:''}<div class="question ${left?'ltr':''}" style="margin-top:12px">${promptText}</div>${beginnerGuide(q)}<div class="actions">${quizAudioButton(q)}${q.g===0&&questionAllowsAudio(q)?'<span class="badge">👄 Say, blend &amp; read • انطق، امزج واقرأ</span>':''}</div>${inp}<div id="feedback" aria-live="polite"></div><div class="actions"><button class="btn light" id="skipBtn" onclick="skipQuestion()">تخطٍّ (تُحتسب محاولة)</button><button class="btn mint" style="display:none" id="nextBtn" onclick="nextQuestion()">التالي ←</button><button class="btn light" onclick="stopQuiz()">خروج</button></div></div></div>`;
 1967: if(q.mode==='mcq')document.querySelectorAll('.choice').forEach((b,i)=>b.dataset.answer=opts[i]);if(builder)renderWordTiles();if(ordering)renderSentenceOrder();if(questionAllowsAudio(q)&&q.type==='Listening'&&'speechSynthesis' in window)setTimeout(()=>{if(shownId===q.id)speak(q.audio)},350)}
 1968: function normalize(s){return String(s??'').toLowerCase().normalize('NFKC').trim().replace(/[\u064b-\u065f]/g,'').replace(/[.,!?؛،]/g,'').replace(/\s+/g,' ')}
-
+1969: function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
+1970: function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer(e.value,e)}
+1971: /* Grammar-specific explanations appear in the existing answer-feedback panel. */
+1972: function mejGrammarCorrection(q){
+1973:  if(!q||q.type!=='Grammar')return '';
+1974:  const p=String(q.prompt||'').toLowerCase(),a=String(q.answer||'').trim().toLowerCase();
+1975:  const tests=[
+1976:   [/\b(am|is|are|was|were)\b/,()=>/was|were/.test(a)?'في الماضي نستخدم was مع I/he/she/it، وwere مع you/we/they.':'نستخدم am مع I، وis مع he/she/it والمفرد، وare مع you/we/they والجمع.'],
+1977:   [/\b(a|an|the)\b/,()=>a==='an'?'نستخدم an قبل الكلمة التي تبدأ بصوت متحرك، مثل an apple.':a==='a'?'نستخدم a قبل الاسم المفرد المعدود الذي يبدأ بصوت ساكن، مثل a book.':'نستخدم the عندما نشير إلى اسم محدد أو معروف.'],
+1978:   [/\b(he|she|it|they|we|you|i)\b/,()=>['he','she','it','they','we','you','i'].includes(a)?'اختر الضمير بحسب المعنى: he للمذكر، she للمؤنث، it لغير العاقل، they للجمع.':'طابق الفعل مع الفاعل، وفي المضارع البسيط نضيف s أو es مع he/she/it.'],
+1979:   [/\b(this|that|these|those)\b/,()=> 'This وThat للمفرد، وThese وThose للجمع؛ This وThese للقريب.'],
+1980:   [/\b(do|does|did|don.t|doesn.t)\b/,()=> 'نستخدم do مع I/you/we/they وdoes مع he/she/it، وdid للماضي. بعد الفعل المساعد يأتي الفعل في صورته الأساسية.'],
+1981:   [/\b(have|has|had)\b/,()=> 'نستخدم have مع I/you/we/they، وhas مع he/she/it، وhad للماضي.'],
+1982:   [/\b(can|could|should|must|may|might|will|would)\b/,()=> 'بعد الأفعال الناقصة مثل can وshould وmust وwill نستخدم الفعل الأساسي دون s أو to.'],
+1983:   [/\b(there is|there are|much|many|some|any)\b/,()=> 'نستخدم there is للمفرد وthere are للجمع؛ many مع الأسماء المعدودة وmuch مع غير المعدودة.'],
+1984:   [/\b(in|on|at)\b/,()=> 'في الوقت نستخدم at للساعات، وon للأيام والتواريخ، وin للشهور والسنوات.'],
+1985:   [/\b(than|most|more|better|best|bigger|biggest)\b/,()=> 'للمقارنة نستخدم الصفة + er أو more ثم than، وللتفضيل نستخدم the + est أو the most.'],
+1986:   [/\b(yesterday|ago|last week|last year|past)\b/,()=> 'عند الحديث عن حدث انتهى في الماضي نستخدم الماضي البسيط، مثل played أو went.'],
+1987:   [/\b(now|at the moment|look!)\b/,()=> 'للحدث الجاري الآن نستخدم am/is/are + الفعل مع ing.']
+1988:  ];
+1989:  let explanation='';
+1990:  for(const [re,fn] of tests){if(re.test(p)||re.test(a)){explanation=fn();break}}
+1991:  if(!explanation&&/\b\w+(ed|ing)\b/.test(a))explanation=/ing$/.test(a)?'للتعبير عن فعل مستمر نستخدم الفعل مع ing بعد فعل be المناسب.':'في الماضي البسيط للأفعال المنتظمة نضيف ed، أما الأفعال الشاذة فلها تصريف خاص.';
+1992:  if(!explanation&&/s$/.test(a)&&!/\s/.test(a))explanation='في المضارع البسيط نضيف s أو es إلى الفعل مع he/she/it.';
+1993:  if(!explanation&&q.tip&&String(q.tip).trim()!=='اقرأ الجملة كاملة قبل الاختيار.')explanation=String(q.tip);
+1994:  if(!explanation)explanation='انظر إلى الفاعل والزمن في الجملة ثم اختر الصيغة التي تطابقهما، وقارنها بالإجابة الصحيحة.';
+1995:  return '<div class="mej-grammar-rule" dir="rtl" style="margin-top:12px;padding:12px 14px;background:#edf8ff;border:2px solid #69b5e4;border-radius:12px;color:#164069;font-size:16px;line-height:1.8;text-align:right"><strong>📘 شرح القاعدة</strong><div>'+esc(explanation)+'</div><div style="margin-top:5px;font-weight:700;color:#116047">✓ '+esc(q.prompt||'').replace(/___|_{2,}/g,esc(q.answer))+'</div></div>';
+1996: }
+1997: function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
+1998:   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
+1999:   p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
+2000: if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
+2001: document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}${!ok?mejGrammarCorrection(q):''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}}
+2002: function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
 2003: function nextQuestion(){if(!activeSession)return;activeSession.index++;displayQuestion()}
 2004: function stopQuiz(){const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
 2005: function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
@@ -377,63 +135,30 @@
 2007:   // approximate placement, never claims standardized grade or CEFR test.
 2008:   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
 2009:   let grade=0;for(const [min,g] of bounds){if(pc>=min){grade=g;break}}
-
 2010:   // Cap the placement recommendation to the registered grade used at test start.
 2011:   const ceiling=Number.isInteger(s.ceiling)?s.ceiling:(placementCeiling(p)??12);
 2012:   grade=Math.min(ceiling,grade);
 2013:   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
 2014: }else persist();activeSession=null;
-2015: document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستو
-2016: // Preview words must also be extracted from older Grade 1-5 questions with empty word fields.
-
-2012:   grade=Math.min(ceiling,grade);
-2013:   p.diagnosed=true;p.assigned=grade;p.diagnosticScore=pc;p.diagnosticDate=new Date().toISOString();persist();s.placed=grade;
-2014: }else persist();activeSession=null;
-2015: document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستو
+2015: document.getElementById('app').innerHTML=`<div class="card quiz center"><div style="font-size:70px">🏆</div><h2 class="section-title">أحسنت! انتهت الجولة</h2><div class="score">${s.score} / ${s.ids.length} (${pc}%)</div><div class="stars">${'★'.repeat(Math.round(pc/20))}${'☆'.repeat(5-Math.round(pc/20))}</div>${s.kind==='diagnostic'?`<div class="notice green">🧭 المستوى المقترح: <b>${s.placed}</b> (اختبار حتى المستوى ${s.ceiling}). المستوى التأسيسي متاح دائمًا، والمراحل الأعلى تُفتح بحسب التقدم. التشخيص تقديري وليس امتحانًا رسميًا.</div>`:`<p>المستوى ${s.grade}: أتقنت <b>${countMaster(s.grade)}/200</b> عنصرًا. تبدأ رحلة جديدة بعد إتقان 200 عنصر في كل مستوى مطلوب.</p>`}<div class="actions" style="justify-content:center"><button class="btn mint" onclick="route('${returnTarget}')">${returnTarget==='skills'?'مركز المهارات':'خريطة المستويات'}</button><button class="btn light" onclick="route('reports')">معاينة تقدمي</button>${s.kind==='practice'?`<button class="btn" onclick="beginLevel(${s.grade},${s.skillType?jsStr(s.skillType):'null'})">جولة جديدة</button>`:''}</div></div>`}
 2016: // Preview words must also be extracted from older Grade 1-5 questions with empty word fields.
 2017: function mejLearningPreviewWord(q){
 2018:  const valid=v=>{const s=String(v||'').trim();return /^[A-Za-z][A-Za-z'’ -]{0,54}$/.test(s)?s:''};
-
-2222:  let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));
-2223:  const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);
-2224:  const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);
-2225:  return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diag
-2226: }
-2227: function makeReportId(){
-2228:  let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}
-
-2330:    attempts,correctAnswers:Math.min(attempts,Math.max(0,Number(profile.right)||0)),
-2331:    masteredItems:Math.max(0,Math.min(2600,totalMaster(profile))),
-2332:    weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,
-2333:    diagnosticDone:profile.diagnosed===true,
-2334:    diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,
-2335:    highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,
-2336:    /* MEJ_STUDENT_PRIVATE_CLOUD_BACKUP_V1: only learning state; never teacher code or auth secrets */
-
-2331:    masteredItems:Math.max(0,Math.min(2600,totalMaster(profile))),
-2332:    weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,
-2333:    diagnosticDone:profile.diagnosed===true,
-2334:    diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,
-2335:    highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,
-2336:    /* MEJ_STUDENT_PRIVATE_CLOUD_BACKUP_V1: only learning state; never teacher code or auth secrets */
-2337:    privateState:{
-
-2338:     correct:profile.correct||{},wrong:profile.wrong||{},
-2339:     writing:profile.writing||{},
-2340:     activity:(profile.activity||[]).slice(-1500),
-2341:     diagnosticScore:profile.diagnosticScore??null,
-2342:     diagnosticDate:profile.diagnosticDate||'',
-2343:     journeyIsland:profile.journeyIsland??null
-2344:    }
-
-2339:     writing:profile.writing||{},
-2340:     activity:(profile.activity||[]).slice(-1500),
-2341:     diagnosticScore:profile.diagnosticScore??null,
-2342:     diagnosticDate:profile.diagnosticDate||'',
-2343:     journeyIsland:profile.journeyIsland??null
-2344:    }
-2345:   };
-
+2019:  const direct=valid(q.word)||valid(q.pictureWord);
+2020:  if(direct)return direct;
+### LINES 2400-2490
+2400:   refreshJourneySettingsStatus();
+2401:   if(reportDirty){reportDirty=false;scheduleReport();}
+2402:  }
+2403: }
+2404: window.addEventListener('online',()=>{if(active().name)scheduleReport()});
+2405: // MEJ_STAGE2_PRIVACY_HARDENING_V2
+2406: function exportProgress(){let blob=new Blob([JSON.stringify({app:'wadi-english-explorer',version:1,savedAt:new Date().toISOString(),profiles:Object.fromEntries(Object.entries(db.profiles).map(([id,profile])=>[id,{...profile,teacherCode:''}])),active:db.active},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='My_English_Journey_Progress_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('✅ تم تنزيل نسخة التقدّم الاحتياطية. احتفظ بها في مكان آمن.') }
+2407: // Validate a student backup before it can replace locally saved progress.
+2408: // Keep only known fields and question IDs; an imported file must never overwrite
+2409: // healthy data with malformed values or prototype keys.
+2410: function normalizeBackupProfile(id,raw){
+2411:  if(!raw||typeof raw!=='object'||Array.isArray(raw)||typeof id!=='string'||
 2412:     !/^([a-zA-Z0-9_-]{1,90})$/.test(id)||['__proto__','constructor','prototype'].includes(id))return null;
 2413:  if(typeof raw.id!=='string'||raw.id!==id||typeof raw.name!=='string'||raw.name.length>180)return null;
 2414:  const p=newProfile();p.id=id;
@@ -441,212 +166,127 @@
 2416:   if(typeof raw[k]==='string')p[k]=raw[k].slice(0,k==='school'?180:100);
 2417:  }
 2418:  p.diagnosed=raw.diagnosed===true;
-
-
-## goBack: 0 matching lines
-
-
-## return: 206 matching lines
-
-26:        const r=await fetch(OWNER,{method:'GET',mode:'cors',cache:'no-store',
-27:          headers:{Authorization:'Bearer '+owner},signal:AbortSignal.timeout(8500)});
-28:        const d=await r.json();
-29:        if(r.ok&&d.ok===true&&d.role==='owner'&&d.email==='rouhous@gmail.com'){allowed('owner',d);return;}
-30:      }catch(_){}
-31:      sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');
-32:    }
-
-36:          headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify_student',accessToken:student}),
-37:          signal:AbortSignal.timeout(8500)});
-38:        const d=await r.json();
-39:        if(r.ok&&d.ok===true&&d.role==='student'){allowed('student',d);return;}
-40:      }catch(_){
-41:        // Offline: preserve an existing local licence without granting elevated
-42:        // access until server validation; public content stays available.
-
-785:  #app .actual-v18 .actual-nav .actual-start b{font-size:30px!important}
-786:  #app .actual-v18 .actual-nav .actual-start small{display:block!important;color:#102157!important;font-size:clamp(12px,3.7vw,19px)!important}
-787: }
-788: .journey-return-home{display:flex;justify-content:flex-start;margin:4px 0 12px}.journey-return-home button{min-height:46px;font-weight:900;background:#fff!important;color:#0653a7!important;border:2px solid #79d9ff;border-radius:15px;box-shadow:0 4px 14px #002e6b55}
-789: 
-790: 
-791: /* V34: Home belongs inside the Current Journey card, not above it. */
-
-810:  .journey-v23 .j34-progress-note{font-size:11px}
-811: }
-812: /* V33: compact home navigation and non-overlapping mobile journey header */
-813: .journey-v23 .journey-return-home{display:flex;justify-content:flex-start;margin:0 0 1px}
-814: .journey-v23 .journey-home-mini{border:1px solid #a9e4ff;border-radius:13px;background:#f1faff;color:#08477d;font-weight:850;font-size:14px;padding:8px 14px;min-height:40px;cursor:pointer;box-shadow:0 3px 9px #00367e55}
-815: .journey-v23 .journey-home-mini:focus-visible{outline:3px solid #ffe175;outline-offset:2px}
-816: .journey-v23 .j26-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:20px;align-items:center;direction:rtl}
-
-828: .journey-v23 .j26-status .j23-progress{flex:1 1 110px;min-width:65px}
-829: .journey-v23 .j26-count,.journey-v23 .j26-stars{font-weight:800;font-size:13px;white-space:nowrap}
-830: @media(max-width:640px){
-831:  .journey-v23 .journey-return-home{margin:0}
-832:  .journey-v23 .journey-home-mini{font-size:12px;min-height:35px;padding:5px 11px}
-833:  .journey-v23 .j26-head{grid-template-columns:minmax(0,1fr);padding:14px!important;gap:10px}
-834:  .journey-v23 .j26-brand{border-bottom:1px solid #81d7ff77;padding-bottom:9px}
-
-1499:   if(!migrated){let id='visitor';db.profiles[id]={id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()};db.active=id;}
-1500: }
-1501: if(!db.profiles[db.active])db.active=Object.keys(db.profiles)[0];
-1502: function active(){return db.profiles[db.active]};
-1503: 
-1504: /* Separate cloud credentials per pupil on a shared device. */
-1505: const MEJ_CREDS_KEY='MEJ_PER_PROFILE_CREDENTIALS_20261109';
-
-1504: /* Separate cloud credentials per pupil on a shared device. */
-1505: const MEJ_CREDS_KEY='MEJ_PER_PROFILE_CREDENTIALS_20261109';
-1506: const MEJ_KEYS=['MEJ_STUDENT_ACCESS_V1','MEJ_VERIFIED_SCHOOL_NAME_V1','MEJ_VERIFIED_TEACHER_LINKED_V1','MEJ_ASSIGNED_TEACHER_CODE_V1','MEJ_ASSIGNED_TEACHER_NAME_V1','MEJ_STUDENT_DEVICE_REF_V1'];
-1507: function mejCreds(){try{return JSON.parse(localStorage.getItem(MEJ_CREDS_KEY)||'{}')||{}}catch(_){return {}}}
-1508: function mejCapture(id){if(!id||window.__MEJ_ACCESS_ROLE!=='student')return;const access=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');if(!/^[a-f0-9]{64}$/.test(access||''))return;const a=mejCreds(),v={};for(const k of MEJ_KEYS)v[k]=localStorage.getItem(k)||'';a[id]=v;localStorage.setItem(MEJ_CREDS_KEY,JSON.stringify(a))}
-1509: function mejSwitch(id){if(window.__MEJ_ACCESS_ROLE==='owner')return;const d=mejCreds()[id];for(const k of MEJ_KEYS){if(d?.[k])localStorage.setItem(k,d[k]);else localStorage.removeItem(k)}window.__MEJ_ACCESS_ROLE=d?.MEJ_STUDENT_ACCESS_V1?'student':'public'}
-1510: if(window.__MEJ_ACCESS_ROLE==='student'&&!mejCreds()[db.active])mejCapture(db.active);
-
-1505: const MEJ_CREDS_KEY='MEJ_PER_PROFILE_CREDENTIALS_20261109';
-1506: const MEJ_KEYS=['MEJ_STUDENT_ACCESS_V1','MEJ_VERIFIED_SCHOOL_NAME_V1','MEJ_VERIFIED_TEACHER_LINKED_V1','MEJ_ASSIGNED_TEACHER_CODE_V1','MEJ_ASSIGNED_TEACHER_NAME_V1','MEJ_STUDENT_DEVICE_REF_V1'];
-1507: function mejCreds(){try{return JSON.parse(localStorage.getItem(MEJ_CREDS_KEY)||'{}')||{}}catch(_){return {}}}
-1508: function mejCapture(id){if(!id||window.__MEJ_ACCESS_ROLE!=='student')return;const access=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');if(!/^[a-f0-9]{64}$/.test(access||''))return;const a=mejCreds(),v={};for(const k of MEJ_KEYS)v[k]=localStorage.getItem(k)||'';a[id]=v;localStorage.setItem(MEJ_CREDS_KEY,JSON.stringify(a))}
-1509: function mejSwitch(id){if(window.__MEJ_ACCESS_ROLE==='owner')return;const d=mejCreds()[id];for(const k of MEJ_KEYS){if(d?.[k])localStorage.setItem(k,d[k]);else localStorage.removeItem(k)}window.__MEJ_ACCESS_ROLE=d?.MEJ_STUDENT_ACCESS_V1?'student':'public'}
-1510: if(window.__MEJ_ACCESS_ROLE==='student'&&!mejCreds()[db.active])mejCapture(db.active);
-1511: 
-
-1506: const MEJ_KEYS=['MEJ_STUDENT_ACCESS_V1','MEJ_VERIFIED_SCHOOL_NAME_V1','MEJ_VERIFIED_TEACHER_LINKED_V1','MEJ_ASSIGNED_TEACHER_CODE_V1','MEJ_ASSIGNED_TEACHER_NAME_V1','MEJ_STUDENT_DEVICE_REF_V1'];
-1507: function mejCreds(){try{return JSON.parse(localStorage.getItem(MEJ_CREDS_KEY)||'{}')||{}}catch(_){return {}}}
-1508: function mejCapture(id){if(!id||window.__MEJ_ACCESS_ROLE!=='student')return;const access=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');if(!/^[a-f0-9]{64}$/.test(access||''))return;const a=mejCreds(),v={};for(const k of MEJ_KEYS)v[k]=localStorage.getItem(k)||'';a[id]=v;localStorage.setItem(MEJ_CREDS_KEY,JSON.stringify(a))}
-1509: function mejSwitch(id){if(window.__MEJ_ACCESS_ROLE==='owner')return;const d=mejCreds()[id];for(const k of MEJ_KEYS){if(d?.[k])localStorage.setItem(k,d[k]);else localStorage.removeItem(k)}window.__MEJ_ACCESS_ROLE=d?.MEJ_STUDENT_ACCESS_V1?'student':'public'}
-1510: if(window.__MEJ_ACCESS_ROLE==='student'&&!mejCreds()[db.active])mejCapture(db.active);
-1511: 
-1512: // MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1
-
-1512: // MEJ_STAGE2_LOCAL_STAR_CONSISTENCY_V1
-1513: // Browser scores are advisory: only the authenticated server can certify a ranking.
-1514: function mejReconcileLocalStars(profile){
-1515:  if(!profile)return 0;
-1516:  const raw=profile.correct&&typeof profile.correct==='object'?profile.correct:{};
-1517:  let total=0;
-1518:  for(const [id,value] of Object.entries(raw)){
-
-1521:   if(Number.isFinite(n)&&n>=2)total++;
-1522:  }
-1523:  profile.stars=Math.min(2600,total);
-1524:  return profile.stars
-1525: }
-1526: function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
-1527: let reportTimer=null,reportBusy=false,reportDirty=false;
-
-1523:  profile.stars=Math.min(2600,total);
-1524:  return profile.stars
-1525: }
-1526: function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
-1527: let reportTimer=null,reportBusy=false,reportDirty=false;
-1528: function scheduleReport(){
-1529:  clearTimeout(reportTimer);
-
-1528: function scheduleReport(){
-1529:  clearTimeout(reportTimer);
-1530:  // Supabase is the only new student reporting destination. Other roles stay local.
-1531:  if(window.__MEJ_ACCESS_ROLE!=='student'||!localStorage.getItem('MEJ_STUDENT_ACCESS_V1'))return;
-1532:  reportTimer=setTimeout(()=>sendReport(),2100);
-1533: }
-1534: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
-
-1531:  if(window.__MEJ_ACCESS_ROLE!=='student'||!localStorage.getItem('MEJ_STUDENT_ACCESS_V1'))return;
-1532:  reportTimer=setTimeout(()=>sendReport(),2100);
-1533: }
-1534: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
-1535: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1536: function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
-1537: function achieved(g,p=active()){return countMaster(g,p)>=200}
-
-1532:  reportTimer=setTimeout(()=>sendReport(),2100);
-1533: }
-1534: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
-1535: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1536: function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
-1537: function achieved(g,p=active()){return countMaster(g,p)>=200}
-1538: // MEJ_STAGE1_LEVEL_UNLOCK_V2
-
-1533: }
-1534: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
-1535: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1536: function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
-1537: function achieved(g,p=active()){return countMaster(g,p)>=200}
-1538: // MEJ_STAGE1_LEVEL_UNLOCK_V2
-1539: function maxAllowed(p=active()){
-
-1534: function attemptsData(p){return Object.entries(p.correct||{}).filter(([id,n])=>n>=2&&questionById[id]).length}
-1535: function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x.id]>=2).length}
-1536: function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
-1537: function achieved(g,p=active()){return countMaster(g,p)>=200}
-1538: // MEJ_STAGE1_LEVEL_UNLOCK_V2
-1539: function maxAllowed(p=active()){
-1540:  if(!p.diagnosed)return 0;
-
-1537: function achieved(g,p=active()){return countMaster(g,p)>=200}
-1538: // MEJ_STAGE1_LEVEL_UNLOCK_V2
-1539: function maxAllowed(p=active()){
-1540:  if(!p.diagnosed)return 0;
-1541:  let cap=Math.max(0,Math.min(12,Number(p.assigned)||0));
-1542:  while(cap<12){
-1543:   if(!achieved(cap,p))break;
-
-1543:   if(!achieved(cap,p))break;
-1544:   cap++;
-1545:  }
-1546:  return cap
-1547: }
-1548: function permitted(g){
-1549:  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
-
-1547: }
-1548: function permitted(g){
-1549:  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
-1550:  return Number(g)===0 || (active().diagnosed&&Number(g)<=limit&&Number(g)<=maxAllowed());
-1551: }
-1552: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-1553: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
-
-1549:  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
-1550:  return Number(g)===0 || (active().diagnosed&&Number(g)<=limit&&Number(g)<=maxAllowed());
-1551: }
-1552: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-1553: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
-1554: function jsStr(v){return JSON.stringify(String(v)).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
-1555: function pct(x,t){return t?Math.round(x*100/t):0}
-
-1550:  return Number(g)===0 || (active().diagnosed&&Number(g)<=limit&&Number(g)<=maxAllowed());
-1551: }
-1552: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-1553: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
-1554: function jsStr(v){return JSON.stringify(String(v)).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
-1555: function pct(x,t){return t?Math.round(x*100/t):0}
-1556: function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>e.style.display='none',3300)}
-
-1551: }
-1552: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-1553: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
-1554: function jsStr(v){return JSON.stringify(String(v)).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
-1555: function pct(x,t){return t?Math.round(x*100/t):0}
-1556: function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>e.style.display='none',3300)}
-1557: function shuffle(a){let r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
-
-1552: function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-1553: function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
-1554: function jsStr(v){return JSON.stringify(String(v)).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
-1555: function pct(x,t){return t?Math.round(x*100/t):0}
-1556: function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>e.style.display='none',3300)}
-1557: function shuffle(a){let r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
-1558: function photoKey(value){let s=String(value||'').toLowerCase().trim();if(PHOTO[s])return s;
-
-
-## التالي: 1 matching lines
-
-1963: let opts=shuffle(q.options||[]);let builder=isWordBuilder(q),ordering=isSentenceOrder(q);if(builder){builderTiles=mixedLetters(q.answer);builderPicked=[]}if(ordering)initSentenceOrder(q);let promptRaw=ordering?'Arrange the words to make a correct sentence.':builder?'Listen carefully, then build the word with the mixed-up letters.':(q.g===0&&q.type==='Blend'?'Listen to the word. Which written word matches what you hear?':q.prompt);let pr
-1964: `<div class="choices">${opts.map((o,i)=>`<button class="choice" data-n="${i}" onclick="choose(${i})">${esc(o)}</button>`).join('')}</div>`);
-1965: const title=activeSession.kind==='diagnostic'?'اختبار تحديد المستوى':`Level ${q.g} • ${esc(q.type)}`;
-1966: document.getElementById('app').innerHTML=`<div class="quiz"><div class="card"><div class="quiz-top"><b>${title}</b><span class="badge">السؤال ${step} / ${activeSession.ids.length}</span></div><div class="meter" style="margin:15px 0"><i style="width:${pctQ}%"></i></div><div class="ministats"><span>⭐ ${fmt(active().stars)} نجمة</span><span>✓ ${activeSession.score} صحيحة</span><span>🎯 عنصر من 200 في المستوى</span></div>${q.passage?`<div cl
-1967: if(q.mode==='mcq')document.querySelectorAll('.choice').forEach((b,i)=>b.dataset.answer=opts[i]);if(builder)renderWordTiles();if(ordering)renderSentenceOrder();if(questionAllowsAudio(q)&&q.type==='Listening'&&'speechSynthesis' in window)setTimeout(()=>{if(shownId===q.id)speak(q.audio)},350)}
-1968: function normalize(s){return String(s??'').toLowerCase().normalize('NFKC').trim().replace(/[\u064b-\u065f]/g,'').replace(/[.,!?؛،]/g,'').replace(/\s+/g,' ')}
-1969: function choose(i){let b=document.querySelector(`.choice[data-n="${i}"]`);if(b)gradeAnswer(b.dataset.answer,b)}
+2419:  p.assigned=Number.isFinite(+raw.assigned)?Math.max(0,Math.min(12,Math.floor(+raw.assigned))):0;
+2420:  p.diagnosticScore=raw.diagnosticScore==null?null:(Number.isFinite(+raw.diagnosticScore)?Math.max(0,Math.min(100,+raw.diagnosticScore)):null);
+2421:  for(const k of ['stars','attempts','right'])p[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],100000000):0;
+2422:  for(const k of ['createdAt','lastActivity'])p[k]=Number.isFinite(raw[k])&&raw[k]>=0&&raw[k]<=Date.now()+86400000?raw[k]:Date.now();
+2423:  for(const k of ['correct','wrong']){
+2424:   p[k]=Object.create(null);
+2425:   if(raw[k]&&typeof raw[k]==='object'&&!Array.isArray(raw[k]))for(const [qid,n] of Object.entries(raw[k])){
+2426:    if(Object.hasOwn(questionById,qid)&&Number.isSafeInteger(n)&&n>=0)p[k][qid]=Math.min(n,10000);
+2427:   }
+2428:  }
+2429:  for(const k of ['completed','writing','speaking']){
+2430:   const o=raw[k];p[k]=(o&&typeof o==='object'&&!Array.isArray(o))?Object.fromEntries(Object.entries(o).filter(([name])=>name!=='__proto__'&&name!=='constructor'&&name!=='prototype').slice(0,3000)):{};
+2431:  }
+2432:  p.activity=Array.isArray(raw.activity)?raw.activity.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(-10000):[];
+2433:  if(typeof raw.syncStatus==='string')p.syncStatus=raw.syncStatus.slice(0,450);
+2434:  if(typeof raw.lastConfirmedReport==='string')p.lastConfirmedReport=raw.lastConfirmedReport.slice(0,150);
+2435:  return p;
+2436: }
+2437: function importProgress(){
+2438:  const x=document.createElement('input');x.type='file';x.accept='.json,application/json';
+2439:  x.onchange=async()=>{
+2440:   const f=x.files?.[0];if(!f)return;
+2441:   try{
+2442:    if(f.size>10*1024*1024)throw Error('oversized backup');
+2443:    const imported=JSON.parse(await f.text());
+2444:    if(!imported||imported.app!=='wadi-english-explorer'||!imported.profiles||
+2445:        typeof imported.profiles!=='object'||Array.isArray(imported.profiles))throw Error('not app data');
+2446:    const entries=Object.entries(imported.profiles);
+2447:    if(!entries.length||entries.length>200)throw Error('invalid profile count');
+2448:    let n=0;
+2449:    for(const [id,raw] of entries){
+2450:     const p=normalizeBackupProfile(id,raw);if(!p)continue;
+2451:     const previous=db.profiles[id];
+2452:     if(!previous||(p.lastActivity||0)>(previous.lastActivity||0)){db.profiles[id]=p;n++;}
+2453:    }
+2454:    if(!n){toast('لا توجد ملفات أحدث وصالحة للاستيراد. بياناتك الحالية محفوظة.');return;}
+2455:    if(typeof imported.active==='string'&&Object.hasOwn(db.profiles,imported.active)){db.active=imported.active;activeSession=null;}
+2456:    if(!persist(false))return;
+2457:    route('home');toast('تم الاستيراد: '+n+' ملف جديد أو أحدث');
+2458:   }catch(e){toast('ملف غير صالح. اختر نسخة JSON صُدرت من التطبيق.');}
+2459:  };
+2460:  x.click();
+2461: }
+2462: route('home');
+2463: 
+2464: // Keep Latin sentences and their final punctuation in left-to-right order inside RTL pages.
+2465: function enforceEnglishTextDirection(root=document.getElementById('app')){
+2466:  if(!root)return;
+2467:  const elements=root.querySelectorAll('.question,.choice,.passage,.learning,.preview-option,.guide-en,.quiz,.journey-badge,.ocean-school,.notice,.card p,.card small,.card span,.card label,.card button');
+2468:  for(const el of elements){
+2469:   if(el.children.length || el.closest('[contenteditable="true"]'))continue;
+2470:   const t=(el.textContent||'').trim();if(!t)continue;
+2471:   const letters=t.match(/[A-Za-z\u0600-\u06ff]/g)||[];
+2472:   const latin=(t.match(/[A-Za-z]/g)||[]).length;
+2473:   if(latin>=5&&latin>letters.length*.67){el.setAttribute('dir','ltr');el.style.unicodeBidi='isolate';}
+2474:  }
+2475: }
+2476: const englishDirectionObserver=new MutationObserver(()=>enforceEnglishTextDirection());
+2477: englishDirectionObserver.observe(document.getElementById('app'),{subtree:true,childList:true});
+2478: enforceEnglishTextDirection();
+2479: // Installability requires serving the complete PWA directory from HTTPS (GitHub Pages).
+2480: // Never register a service worker for a local file or a non-secure iframe.
+2481: if('serviceWorker' in navigator && (location.protocol==='https:' || ['localhost','127.0.0.1'].includes(location.hostname)) && window.top===window.self){
+2482:   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+2483: }
+2484: </script>
+2485: <!-- V37: Recovery bridge: existing export/import work now; cloud restore remains disabled until verified -->
+2486: <style>
+2487: #ee-recovery-entry{position:static;border:1px solid #90dbff;border-radius:25px;background:linear-gradient(110deg,#095c8d,#16858a);color:white;padding:11px 15px;font:700 13px system-ui;box-shadow:0 6px 24px #083d6499;cursor:pointer;max-width:75vw}
+2488: #ee-recovery-dialog{position:fixed;inset:0;z-index:9998;background:#001b31aa;display:none;align-items:center;justify-content:center;padding:16px;direction:rtl;font:15px system-ui}
+2489: #ee-recovery-dialog.open{display:flex}
+2490: #ee-recovery-dialog .ee-panel{width:min(100%,540px);max-height:90vh;overflow:auto;border:2px solid #8ed7ec;border-radius:22px;background:#f6fbff;color:#17374b;padding:20px;box-shadow:0 12px 48px #021e3877}
+### LINES 2718-2768
+2718:     // Never claim a successful connection if the underlying status says otherwise.
+2719:     // Shorten only the known successful-but-unverified diagnostic message.
+2720:     for(const box of root.querySelectorAll('div,p,span')) {
+2721:       if(box.children.length>1)continue;
+2722:       const raw=(box.textContent||'').trim();
+2723:       if(raw.length<60 || raw.length>1200)continue;
+2724:       if(/الوصول إلى خدمة الاستقبال ناجح/.test(raw) && /verified-ministry|النتائج غير موثوقة/.test(raw)) {
+2725:         box.textContent='✅ تم الاتصال بالخدمة. نتائج التقارير غير معتمدة لترتيب الطلاب.';
+2726:       }
+2727:     }
+2728:   }
+2729: 
+2730:   let busy=false;
+2731:   function update() {
+2732:     for(const heading of document.querySelectorAll(headerSelector)) {
+2733:       if(!settingsView(heading)) continue;
+2734:       const root=heading.closest('[role="dialog"],.settings-modal,.modal,.dialog') ||
+2735:         heading.closest('.card,section') || heading.parentElement;
+2736:       if(!root)continue;
+2737:       cleanUi(root);
+2738:       let gear=heading.querySelector('[data-mej-owner-gear]');
+2739:       if(!gear)gear=findOriginalGear(heading);
+2740:       if(gear)linkGear(gear);
+2741:     }
+2742:   }
+2743:   const observer=new MutationObserver(()=>{
+2744:     if(busy)return;
+2745:     busy=true;
+2746:     queueMicrotask(()=>{busy=false;update()});
+2747:   });
+2748:   function start(){update();observer.observe(document.body,{childList:true,subtree:true})}
+2749:   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+2750:   else start();
+2751: })();
+2752: </script>
+2753: <style id="mej-copyright-notice-style">
+2754: /* MEJ_HOME_RIGHTS_SIMPLIFIED_20261106 */
+2755: #mej-owner-rights-notice{position:relative;z-index:1;box-sizing:border-box;text-align:center;padding:10px 12px 12px;margin:0 auto;width:100%;font:600 clamp(12px,3.1vw,15px)/1.55 system-ui,sans-serif;color:#153961;direction:rtl;max-width:100%;background:rgba(236,247,255,.84)}
+2756: #mej-owner-rights-notice .mej-rights-statement,
+2757: #mej-owner-rights-notice .mej-rights-owner{display:block;text-wrap:balance;overflow-wrap:break-word}
+2758: #mej-owner-rights-notice .mej-rights-owner{margin-top:2px}
+2759: #mej-owner-rights-notice [dir=ltr]{unicode-bidi:isolate;display:inline-block}
+2760: @media(max-width:390px){#mej-owner-rights-notice{font-size:12px;padding:9px 9px 13px}}
+2761: </style>
+2762: <div id="mej-owner-rights-notice" data-version="MEJ_OWNER_COPYRIGHT_NOTICE_2026" aria-label="حقوق الملكية">
+2763: <span id="mej-install-help-inline-rights" style="display:block;font-size:12px;line-height:1.4;font-weight:600">للتثبيت: افتح قائمة المتصفح (⋮) واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</span>
+2764: <span class="mej-rights-statement">© 2026 — جميع الحقوق محفوظة، يمنع النسخ أو التعديل</span>
+2765: <span class="mej-rights-owner"><b>حسام لطفي الرواتبي</b> <span aria-hidden="true">|</span> <b dir="ltr" lang="en">Houssem Lotfi Rouatbi</b></span>
+2766: </div>
+2767: 
+2768: <script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script></body></html>

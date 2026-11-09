@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": {
+    "compact_grid": true,
+    "head_stylesheet": true,
+    "skill_origin": true,
+    "exit_origin": true,
+    "result_origin": true,
+    "match_modal": true,
+    "no_disclaimer": true,
+    "match_close": true,
+    "modal_js_syntax": true
+  }
+}

@@ -9,7 +9,12 @@ art=Path('assets/mej-companion-art-v1.js').read_text('utf8')
 assert html.count('mej-companion-art-v1.js?v=20261109')==1
 assert html.count('mej-companion-live-v1.js?v=20261109')==1
 assert html.index('mej-companion-art-v1.js?v=20261109')<html.index('mej-companion-live-v1.js?v=20261109')
-assert "inDiagnostic()||!enabled()" in runtime
+assert "inDiagnostic()||!canShow()" in runtime
+assert "pointerdown" in runtime and "pointermove" in runtime
+assert "MEJ_COMPANION_POSITION_V1_" in runtime
+assert "requestAnimationFrame(fall)" in runtime
+assert "roamTimer=setInterval" in runtime
+assert "y>innerHeight*.28" in runtime
 assert "current.companion={kind:chosen,name" in runtime
 assert "if(typeof persist==='function')persist(false)" in runtime
 assert ".j23-avatar" in runtime

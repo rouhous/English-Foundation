@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#124d38"><title>English Final Exam Practice | Semester 1</title><style>
 :root{--green:#124d38;--gold:#c99b44;--light:#f5f8f3;--ink:#193b2d;--edge:#d6e5da}*{box-sizing:border-box}body{margin:0;background:var(--light);font:16px/1.55 system-ui,sans-serif;color:var(--ink)}header{background:linear-gradient(120deg,#083723,#196248);color:white;border-bottom:5px solid var(--gold);padding:22px 16px}.wrap{max-width:1040px;margin:auto}h1{font-size:clamp(24px,5vw,36px);margin:4px 0}.gold{color:#ebc87c}main{padding:17px 12px 50px}.card{background:white;border:1px solid var(--edge);border-radius:16px;padding:19px;margin:0 0 15px;box-shadow:0 2px 12px #163e2311}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.activity{border:1px solid var(--edge);border-radius:13px;padding:15px}.meta{color:#668072;font-size:13px}.button{border:0;border-radius:10px;background:var(--green);color:#fff;cursor:pointer;padding:11px 15px;font:700 15px system-ui}.button.outline{background:#fff;color:var(--green);border:1px solid var(--green)}.button:disabled{opacity:.45;cursor:not-allowed}select,input,textarea{font:inherit;border:1px solid #acc7b6;border-radius:9px;padding:10px;max-width:100%}select{width:100%}label{display:block;font-weight:600}textarea{width:100%;min-height:190px}fieldset{border:1px solid #d8e5dc;border-radius:10px;margin:12px 0;padding:12px}legend{font-weight:650}fieldset label{font-weight:400;margin:7px 0;display:flex;gap:8px}.passage{white-space:pre-wrap;background:#f0f6f1;padding:16px;border-radius:12px;border-inline-start:4px solid var(--gold);margin:15px 0;max-height:360px;overflow:auto}.q{padding:13px 0;border-bottom:1px solid #e0e8e1}.q strong{display:block;margin-bottom:8px}.feedback{color:#14553d;margin:8px 0}.muted{color:#678071}.hidden{display:none!important}.tag{display:inline-block;background:#f8edcf;color:#5f491e;border-radius:20px;padding:3px 9px;font-size:12px}.notice{padding:12px;background:#fff7e5;border:1px solid #ead6a4;border-radius:10px;margin:12px 0}.stats{font-size:18px;font-weight:750}#timer{font-size:20px;font-variant-numeric:tabular-nums}nav{display:flex;gap:9px;flex-wrap:wrap}.navlink{color:#fff;text-decoration:none;border:1px solid #e3bf7c;border-radius:8px;padding:6px 10px}footer{text-align:center;color:#6d7e75;font-size:12px;padding:20px}button:focus-visible,input:focus-visible{outline:3px solid #c99b44}audio{width:100%;margin:8px 0}.rubric{padding:9px;background:#f5f8f3;border-radius:8px;margin:9px 0}
-</style></head><body><header><div class="wrap"><div class="gold">SULTANATE OF OMAN · WADI AL HAWASNA SCHOOL</div><h1>English Final Exam Practice</h1><div>Semester One · 2026–2027 · Prepared by Mr. Houssem Rouatbi</div><nav style="margin-top:12px"><a class="navlink" href="#home" id="homeLink">Home / الرئيسية</a><span class="tag">Green & Gold Edition</span></nav></div></header><main class="wrap"><div id="home"><div class="card"><h2>Choose your practice</h2><p>Train a single skill without a timer, or take a complete timed mock exam using the same activity bank.</p><div class="grid"><label>Grade<select id="grade"></select></label><label>Track<select id="track"></select></label><label>Mode<select id="mode"><option value="practice">Skill practice · No timer</option><option value="exam">Full exam · Timed</option></select></label></div><p class="meta">Only validated content appears. Randomised exams become available when enough different activity sets have been completed.</p></div><div class="card" id="selection"><h2 id="selectionTitle">Available activities</h2><div id="activities" class="grid"></div></div><div class="card"><h3>How it works</h3><p><b>Practice:</b> choose one Reading, Listening or Writing activity. No countdown; explanations and AI writing review can be requested.</p><p><b>Full exam:</b> start the official-length countdown and complete the selected model. Answers are stored on this device as you type. Writing results from AI are training estimates only; the teacher's marking takes precedence.</p></div></div><div id="session" class="hidden"><div class="card"><div class="row" style="justify-content:space-between"><div><h2 id="sessionTitle" style="margin:0"></h2><span id="sessionMeta" class="meta"></span></div><div id="timer" aria-live="polite"></div></div><div class="row" style="margin-top:12px"><button class="button outline" id="backBtn">Back to library</button><button class="button" id="finishBtn">Check answers</button></div></div><div id="exercise"></div><div id="results" class="card hidden"></div></div></main><footer>Independent educational practice — based on SAH specifications; not an official Ministry examination</footer><script id="activityData" type="application/json">{
+</style></head><body><header><div class="wrap"><div class="gold">SULTANATE OF OMAN · WADI AL HAWASNA SCHOOL</div><h1>English Final Exam Practice</h1><div>Semester One · 2026–2027 · Prepared by Mr. Houssem Rouatbi</div><nav style="margin-top:12px"><a class="navlink" href="#home" id="homeLink">Home / الرئيسية</a><span class="tag">Green & Gold Edition</span></nav></div></header><main class="wrap"><div id="home"><div class="card"><h2>Choose your practice</h2><p>Train a single skill without a timer, or take a complete timed mock exam using the same activity bank.</p><div class="grid"><label>Grade<select id="grade"></select></label><label>Track<select id="track"></select></label><label>Mode<select id="mode"><option value="practice">Skill practice · No timer</option><option value="exam">Full exam · Timed</option><option value="random">Random full exam · Timed (when available)</option></select></label></div><p class="meta">Only validated content appears. Randomised exams become available when enough different activity sets have been completed.</p></div><div class="card" id="selection"><h2 id="selectionTitle">Available activities</h2><div id="activities" class="grid"></div></div><div class="card"><h3>How it works</h3><p><b>Practice:</b> choose one Reading, Listening or Writing activity. No countdown; explanations and AI writing review can be requested.</p><p><b>Full exam:</b> start the official-length countdown and complete the selected model. Answers are stored on this device as you type. Writing results from AI are training estimates only; the teacher's marking takes precedence.</p></div></div><div id="session" class="hidden"><div class="card"><div class="row" style="justify-content:space-between"><div><h2 id="sessionTitle" style="margin:0"></h2><span id="sessionMeta" class="meta"></span></div><div id="timer" aria-live="polite"></div></div><div class="row" style="margin-top:12px"><button class="button outline" id="backBtn">Back to library</button><button class="button" id="finishBtn">Check answers</button></div></div><div id="exercise"></div><div id="results" class="card hidden"></div></div></main><footer>Independent educational practice — based on SAH specifications; not an official Ministry examination</footer><script id="activityData" type="application/json">{
   "version": 1,
   "activities": [
     {
@@ -607,8 +607,307 @@
           "15% (30 students)"
         ]
       ]
+    },
+    {
+      "id": "g12-elective-b-reading-1",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "reading",
+      "group": 1,
+      "model": "B",
+      "status": "review",
+      "title": "Reading 1 · Arts and sustainability",
+      "marks": 12,
+      "passage": "From: salma.alharthi@college.example\nTo: student.community@college.example\nSubject: Our student arts and sustainability exhibition\n\nDear Student Community Team,\n\nThank you for inviting our college to participate in the exhibition next month. I am writing to explain our proposed display and ask a few questions about the practical arrangements. Our students are studying both art and environmental change, and they would like to show how creative work can help people discuss a problem without assuming that everybody has the same opinion.\n\nOur group plans to exhibit photographs of public spaces in our town. The pictures were taken at different times of day, allowing visitors to compare the effects of shade, traffic and crowded streets. A small team has also interviewed shop owners and residents about the changes they have noticed. Instead of presenting the interviews as a single conclusion, the students want to show several perspectives and invite visitors to suggest possible improvements.\n\nWe believe visitors will appreciate hearing directly from members of our community. We will need three tables, a screen for photographs and a quiet space where visitors can listen to brief interviews. We can bring our own laptop and headphones, but we would appreciate information about the electricity supply. We also hope to organise a discussion with a town planner, although she has not yet confirmed whether she can attend.\n\nYours sincerely,\nSalma Al Harthi\nStudent Projects Coordinator\n\nFrom: omar.hassan@college.example\nTo: salma.alharthi@college.example\nSubject: Re: Our student arts and sustainability exhibition\n\nDear Salma,\n\nYour proposed exhibition sounds both imaginative and relevant. The main hall will be available on Thursday from nine in the morning until four in the afternoon. We can provide three tables, a projector and a reliable power connection. However, we cannot guarantee a completely silent room because several school groups will be visiting during the morning. You may reserve the smaller library room for audio interviews between one and three, when the school groups are expected to leave.\n\nPlease ask your students to avoid displaying people's full names without permission. A short information notice beside each interview will help visitors understand why it was recorded. Our media team can also prepare a printed summary for guests who cannot hear the recordings clearly. Rather than printing new posters, consider using the display boards left over from last year's event. We have sixteen available, and they can be collected from the storage room on Wednesday.\n\nFinally, the town planner has contacted us and agreed to join a question-and-answer session at two thirty. She would like the students to prepare questions about practical costs, not only the appearance of public places. Please send your final list of equipment and the number of students attending by Monday evening.\n\nBest wishes,\nOmar Hassan\nEvents Officer",
+      "questions": [
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "1. Who invited Salma’s college to the exhibition?",
+          "answer": [
+            "the student community team",
+            "student community team"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "2. What two subjects are the students studying?",
+          "answer": [
+            "art and environmental change",
+            "environmental change and art"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "3. Who did the students interview?",
+          "answer": [
+            "shop owners and residents",
+            "residents and shop owners"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "4. Which device will the group bring?",
+          "answer": [
+            "a laptop",
+            "laptop"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "5. When is the main hall available?",
+          "answer": [
+            "thursday"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "6. Where can audio interviews be held?",
+          "answer": [
+            "the smaller library room",
+            "library room"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "7. When will the town planner answer questions?",
+          "answer": [
+            "two thirty",
+            "2:30",
+            "2.30"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "8. Students will compare the effects of shade, traffic and ______ streets.",
+          "answer": [
+            "crowded"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "9. The group can bring their own laptop and ______.",
+          "answer": [
+            "headphones"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "10. School groups are expected to leave before ______ o’clock.",
+          "answer": [
+            "one",
+            "1"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "11. The organisers have sixteen display ______ available.",
+          "answer": [
+            "boards"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "12. Salma must send the final equipment list by ______ evening.",
+          "answer": [
+            "monday"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "g12-elective-b-reading-2",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "reading",
+      "group": 2,
+      "model": "B",
+      "status": "review",
+      "title": "Reading 2 · University community project",
+      "marks": 13,
+      "passage": "Paragraph A. When Noura started her first year at a university, she was surprised to learn that all students had to join a small research project. Her group was asked to study how people used a public square during the hottest months. She had expected to spend her time reading books, but her tutor explained that useful research also required careful observation and conversations with people outside the classroom.\n\nParagraph B. Noura's first idea was to replace the square with an indoor shopping centre. She believed this would provide shade and attract visitors. However, a survey of nearby residents showed that many people valued the open space for community celebrations. An older neighbour also described how the square had brought families together for decades. Noura realised that designing a solution required understanding what people wanted to preserve.\n\nParagraph C. The students began taking measurements at different times of day. They compared temperatures under trees, near stone walls and beside uncovered paths. At first their figures appeared inconsistent. After checking the equipment, they discovered that one thermometer had been left in direct sunlight. They repeated the measurements and clearly noted the mistake in their report, because reliable research involves explaining limitations as well as successes.\n\nParagraph D. A landscape architect suggested building a series of shaded seating areas rather than changing the entire square. The design was promising, but the first estimate was beyond the council's budget. One student proposed removing the trees to create more room for parking. After a difficult discussion, the group decided that protecting existing trees would be both less expensive and more environmentally responsible. They agreed to investigate cheaper materials for the new seating.\n\nParagraph E. At the presentation, Noura explained the findings using a simple chart. She described how shade affected temperatures, why residents preferred an open square and what improvements the group recommended. When a council officer questioned the cost of maintenance, she admitted that the team needed further information. Her tutor later praised this answer, explaining that good speakers acknowledge uncertainty rather than inventing confident explanations.\n\nParagraph F. After the presentation, Noura was invited to help younger pupils investigate the school playground. She encouraged them to make predictions, collect evidence and listen to different opinions before proposing changes. One pupil suggested painting every wall white, while another wanted more trees. They learned that a useful recommendation should consider cost, safety and how people actually use a place, not simply what looks attractive in a photograph.\n\nParagraph G. Six months later, the council installed several shaded benches and began repairing two paths. The entire plan had not been approved, but Noura was pleased that some practical changes had begun. She now understood that responsible action could be gradual. The most valuable lesson of her university project was not a single design. It was learning how to question assumptions, work respectfully with other people and revise an idea when new evidence appeared.",
+      "questions": [
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "13. What was Noura asked to investigate?",
+          "opts": [
+            "How people used a public square",
+            "How university fees were calculated",
+            "Why students preferred online lessons"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "14. Why did Noura change her first proposal?",
+          "opts": [
+            "Residents valued the open square",
+            "The architect left the project",
+            "The council refused to speak to students"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "15. Why were the first temperature figures unreliable?",
+          "opts": [
+            "A thermometer was left in direct sunlight",
+            "The students recorded the wrong date",
+            "The square was closed to visitors"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "16. What did the landscape architect recommend?",
+          "opts": [
+            "Shaded seating areas",
+            "A completely new shopping centre",
+            "Removing all trees"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "17. Why was the first design not accepted immediately?",
+          "opts": [
+            "It was too expensive",
+            "The square was too small",
+            "There were no local residents"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "18. What did Noura say when asked about maintenance costs?",
+          "opts": [
+            "More information was needed",
+            "The costs would certainly be zero",
+            "The council should cancel the project"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "19. In Paragraph E, the word “uncertainty” is closest to ...",
+          "opts": [
+            "not knowing something for sure",
+            "a final agreement",
+            "an expensive design"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "20. In Paragraph G, “gradual” means ...",
+          "opts": [
+            "happening little by little",
+            "completed in one day",
+            "impossible to achieve"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "21. Match Paragraph B to its main idea.",
+          "answer": "1"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "22. Match Paragraph C to its main idea.",
+          "answer": "2"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "23. Match Paragraph D to its main idea.",
+          "answer": "3"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "24. Match Paragraph F to its main idea.",
+          "answer": "5"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "25. Match Paragraph G to its main idea.",
+          "answer": "6"
+        }
+      ],
+      "options": [
+        "Understanding the value of local history",
+        "Correcting unreliable measurements",
+        "Finding a less costly design",
+        "Explaining results honestly",
+        "Helping younger researchers",
+        "Recognising gradual progress",
+        "International music competitions",
+        "Building a new shopping centre"
+      ]
     }
   ]
 }</script><script>
-'use strict';const DATA=JSON.parse(document.getElementById('activityData').textContent);const $=id=>document.getElementById(id);const GROUP=DATA.activities;const EXAM_MINUTES={5:90,6:120,7:120,8:120,9:120,10:150,11:150,12:180};let current=null,ticker=null;const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const normalize=s=>String(s??'').toLowerCase().trim().replace(/[’']/g,'').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ');function savedKey(){return 'exampractice-v2-'+current?.id}function persist(){if(!current)return;try{localStorage.setItem(savedKey(),JSON.stringify({answers:current.answers,writings:current.writings,started:current.started,audioPlays:current.audioPlays}))}catch(e){}}function available(){return GROUP.filter(a=>a.status==='review'||a.status==='ready')}function selection(){const g=Number($('grade').value),t=$('track').value,mode=$('mode').value;const arr=available().filter(a=>a.grade===g&&a.track===t);$('selectionTitle').textContent=mode==='exam'?'Full exam models':'Choose a single activity (untimed)';if(mode==='practice'){$('activities').innerHTML=arr.length?arr.map(a=>`<div class="activity"><div class="tag">${safe(a.skill.toUpperCase())}</div><h3>${safe(a.title)}</h3><p class="meta">${a.marks} marks · ${a.questions?.length||'Writing'} items · Model ${safe(a.model)}</p><button class="button" data-activity="${safe(a.id)}">Start practice</button></div>`).join(''):'<p>No completed activities for this grade yet.</p>'}else{const models=[...new Set(arr.map(a=>a.model))];$('activities').innerHTML=models.map(m=>{const pack=arr.filter(a=>a.model===m);const needed=(g===12&&t==='Elective')?['listening:1','listening:2','reading:1','reading:2','writing:1','writing:2']:[];const complete=needed.length>0&&needed.every(v=>pack.some(a=>a.skill+':'+a.group===v))&&pack.reduce((s,a)=>s+a.marks,0)===70;return `<div class="activity"><h3>Model ${safe(m)}</h3><p>${pack.length} activities · ${pack.reduce((s,a)=>s+a.marks,0)} marks</p><p class="meta">${complete?'180 minutes, full SAH structure':'Incomplete — not yet available'}</p><button class="button" data-model="${safe(m)}" ${complete?'':'disabled'}>Start full exam</button></div>`}).join('')||'<p>No complete exam models available yet.</p>'}document.querySelectorAll('[data-activity]').forEach(el=>el.onclick=()=>start([GROUP.find(a=>a.id===el.dataset.activity)],false));document.querySelectorAll('[data-model]').forEach(el=>el.onclick=()=>start(arr.filter(a=>a.model===el.dataset.model),true))}function updateTracks(){const g=Number($('grade').value);const tracks=[...new Set(GROUP.filter(a=>a.grade===g).map(a=>a.track))];$('track').innerHTML=tracks.map(t=>`<option value="${safe(t)}">${safe(t)}</option>`).join('')||'<option>Standard</option>';selection()}const grades=[5,6,7,8,9,10,11,12];$('grade').innerHTML=grades.map(g=>`<option value="${g}">Grade ${g}</option>`).join('');$('grade').value='12';$('grade').onchange=updateTracks;$('track').onchange=selection;$('mode').onchange=selection;updateTracks();function start(acts,timed){if(!acts?.length)return;clearInterval(ticker);const id=(timed?'exam:':'practice:')+acts.map(a=>a.id).join('|');current={id,acts,timed,answers:{},writings:{},started:timed?Date.now():null,audioPlays:{},done:false};try{const obj=JSON.parse(localStorage.getItem(savedKey())||'null');if(obj){current.answers=obj.answers||{};current.writings=obj.writings||{};current.audioPlays=obj.audioPlays||{};if(timed)current.started=obj.started||Date.now()}}catch(e){}$('home').classList.add('hidden');$('session').classList.remove('hidden');$('sessionTitle').textContent=timed?'Full mock exam — Model '+acts[0].model:acts[0].title;$('sessionMeta').textContent=`Grade ${acts[0].grade} · ${acts[0].track} · ${acts.reduce((s,a)=>s+a.marks,0)} marks · ${timed?'Timed':'Untimed'}`;$('results').classList.add('hidden');$('finishBtn').disabled=false;renderActivities();refreshTimer();if(timed)ticker=setInterval(refreshTimer,1000);location.hash='session';scrollTo(0,0)}function refreshTimer(){if(!current)return;if(!current.timed){$('timer').textContent='∞ Untimed';return}const remaining=Math.max(0,EXAM_MINUTES[current.acts[0].grade]*60-Math.floor((Date.now()-current.started)/1000));$('timer').textContent='⏱ '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0');if(remaining===0){clearInterval(ticker);$('finishBtn').disabled=true;finish(true)}}function renderActivities(){const out=[];for(const a of current.acts){out.push(`<section class="card" id="${safe(a.id)}"><h2>${safe(a.title)} <span class="meta">${a.marks} marks</span></h2>`);if(a.skill==='listening'){out.push(`<p class="notice">Listen carefully. Recording can be played twice. Audio must be downloaded with the offline package.</p><audio controls preload="none" src="${safe(a.audio)}" data-audio="${safe(a.id)}"></audio><p class="meta" id="audioCount-${safe(a.id)}"></p>`);if(!current.timed)out.push(`<details><summary>Show practice transcript</summary><div class="passage">${safe(a.passage)}</div></details>`)}if(a.skill==='reading')out.push(`<div class="passage">${safe(a.passage)}</div>`);if(a.skill==='writing'){out.push(`<p>${safe(a.topic)}</p>${a.data?'<div class="passage">'+a.data.map(x=>safe(x[0])+': '+safe(x[1])).join('\n')+'</div>':''}<p>Write at least ${a.minWords} words.</p><textarea data-write="${safe(a.id)}" placeholder="Write your answer..."></textarea><div class="meta" id="words-${safe(a.id)}"></div><div class="row"><button class="button outline" data-ai="${safe(a.id)}">Review with AI</button><span class="meta">Online only · estimated practice score</span></div><div id="ai-${safe(a.id)}" aria-live="polite"></div>`)}else for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i;out.push(`<div class="q"><strong>${safe(q.stem)}</strong>`);let options=q.type==='mc'?q.opts:q.type==='tf'?['True','False']:q.type==='match'?a.options:null;if(options){options.forEach((o,j)=>{const v=q.type==='mc'?String(j):q.type==='tf'?o.toLowerCase():String(j+1);out.push(`<label><input type="radio" name="${safe(key)}" value="${safe(v)}" data-answer="${safe(key)}" ${String(current.answers[key])===v?'checked':''}> ${safe(o)}</label>`)})}else out.push(`<input type="text" data-answer="${safe(key)}" value="${safe(current.answers[key]||'')}" placeholder="Short answer" autocomplete="off">`);out.push(`<div class="feedback hidden" id="fb-${safe(key)}"></div></div>`)}out.push('</section>')}$('exercise').innerHTML=out.join('');document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener(el.type==='radio'?'change':'input',()=>{current.answers[el.dataset.answer]=el.value;persist()}));document.querySelectorAll('[data-write]').forEach(el=>{el.value=current.writings[el.dataset.write]||'';const upd=()=>{current.writings[el.dataset.write]=el.value;const n=el.value.trim()?el.value.trim().split(/\s+/).length:0;$('words-'+el.dataset.write).textContent=n+' words';persist()};el.oninput=upd;upd()});document.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>reviewAI(el.dataset.ai,el));document.querySelectorAll('[data-audio]').forEach(el=>{const id=el.dataset.audio;const count=()=>{$('audioCount-'+id).textContent=`Plays: ${current.audioPlays[id]||0} / 2`};count();el.onplay=()=>{if((current.audioPlays[id]||0)>=2){el.pause();return}current.audioPlays[id]=(current.audioPlays[id]||0)+1;count();persist()};el.onerror=()=>{$('audioCount-'+id).textContent='Audio not available. Download the offline ZIP including the MP3 recordings.'}})}function correct(q,value){if(value===undefined||String(value).trim()==='')return false;return q.type==='mc'?Number(value)===q.answer:q.type==='tf'||q.type==='match'?normalize(value)===normalize(q.answer):q.answer.some(v=>normalize(value)===normalize(v))}function finish(auto=false){if(!current)return;clearInterval(ticker);let score=0,total=0;for(const a of current.acts){if(a.skill==='writing')continue;for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i,ok=correct(q,current.answers[key]);score+=Number(ok);total++;const f=$('fb-'+key);f.classList.remove('hidden');f.textContent=(ok?'✓ Correct':'✗ Check answer')+' · '+(q.type==='mc'?q.opts[q.answer]:q.type==='match'?a.options[Number(q.answer)-1]:Array.isArray(q.answer)?q.answer[0]:q.answer)}}$('results').classList.remove('hidden');$('results').innerHTML=`<h2>${auto?'Time is up':'Practice results'}</h2><p class="stats">Automatically marked: ${score} / ${total}</p><p>Writing: ${current.acts.filter(a=>a.skill==='writing').reduce((s,a)=>s+a.marks,0)} marks, assessed separately. AI feedback is a training estimate and not an official score.</p><p class="meta">You can review all objective answers above.</p>`;$('finishBtn').disabled=true;current.done=true;$('results').scrollIntoView({behavior:'smooth',block:'start'})}async function reviewAI(id,button){const a=current.acts.find(x=>x.id===id),text=current.writings[id]||'',target=$('ai-'+id);if(text.trim().length<50){target.textContent='Please write at least 50 characters before requesting feedback.';return}button.disabled=true;target.textContent='Checking writing...';try{const res=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-writing-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:a.grade,genre:a.genre,topic:a.topic,text,maxScore:10})});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.message||'AI service unavailable');const f=data.feedback,s=a.marks===15?Math.round((f.score5/5)*15):Math.round((f.score5/5)*a.marks);target.innerHTML=`<div class="notice"><b>Estimated practice score: ${s}/${a.marks}</b><p>${safe(f.summary)}</p><p>${safe(f.score_reason)}</p>${(f.five_points||[]).map(p=>`<div class="rubric"><b>${safe(p.category)}</b><p>${safe(p.what_works)}</p><p>${safe(p.what_to_improve)}</p></div>`).join('')}<p><b>Next step:</b> ${safe(f.next_step)}</p><small>AI estimate, not the official examiner mark.</small></div>`}catch(e){target.textContent='AI review unavailable: '+String(e.message||e)}finally{button.disabled=false}}$('backBtn').onclick=()=>{clearInterval(ticker);persist();current=null;$('session').classList.add('hidden');$('home').classList.remove('hidden');location.hash='home';selection()};$('homeLink').onclick=e=>{if(current){e.preventDefault();$('backBtn').click()}};$('finishBtn').onclick=()=>finish(false);
+'use strict';const DATA=JSON.parse(document.getElementById('activityData').textContent);const $=id=>document.getElementById(id);const GROUP=DATA.activities;const EXAM_MINUTES={5:90,6:120,7:120,8:120,9:120,10:150,11:150,12:180};let current=null,ticker=null;const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const normalize=s=>String(s??'').toLowerCase().trim().replace(/[’']/g,'').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ');function savedKey(){return 'exampractice-v2-'+current?.id}function persist(){if(!current)return;try{localStorage.setItem(savedKey(),JSON.stringify({answers:current.answers,writings:current.writings,started:current.started,audioPlays:current.audioPlays}))}catch(e){}}function available(){return GROUP.filter(a=>a.status==='review'||a.status==='ready')}function selection(){const g=Number($('grade').value),t=$('track').value,mode=$('mode').value;const arr=available().filter(a=>a.grade===g&&a.track===t);$('selectionTitle').textContent=mode==='exam'?'Full exam models':'Choose a single activity (untimed)';if(mode==='practice'){$('activities').innerHTML=arr.length?arr.map(a=>`<div class="activity"><div class="tag">${safe(a.skill.toUpperCase())}</div><h3>${safe(a.title)}</h3><p class="meta">${a.marks} marks · ${a.questions?.length||'Writing'} items · Model ${safe(a.model)}</p><button class="button" data-activity="${safe(a.id)}">Start practice</button></div>`).join(''):'<p>No completed activities for this grade yet.</p>'}else if(mode==='random'){const required=['listening:1','listening:2','reading:1','reading:2','writing:1','writing:2'];const pools=required.map(v=>arr.filter(a=>a.skill+':'+a.group===v));const enough=pools.every(pool=>pool.length>=2);$('activities').innerHTML=`<div class="activity"><h3>Random complete exam</h3><p>New combination of independent SAH-matched activities.</p><p class="meta">${enough?'All six activity pools have alternatives.':'Not available until there are at least two alternatives in every required activity pool.'}</p><button class="button" id="randomStart" ${enough?'':'disabled'}>Generate and start timed exam</button></div>`;if(enough)$('randomStart').onclick=()=>{let selection=pools.map(pool=>pool[Math.floor(Math.random()*pool.length)]);start(selection,true)}}else{const models=[...new Set(arr.map(a=>a.model))];$('activities').innerHTML=models.map(m=>{const pack=arr.filter(a=>a.model===m);const needed=(g===12&&t==='Elective')?['listening:1','listening:2','reading:1','reading:2','writing:1','writing:2']:[];const complete=needed.length>0&&needed.every(v=>pack.some(a=>a.skill+':'+a.group===v))&&pack.reduce((s,a)=>s+a.marks,0)===70;return `<div class="activity"><h3>Model ${safe(m)}</h3><p>${pack.length} activities · ${pack.reduce((s,a)=>s+a.marks,0)} marks</p><p class="meta">${complete?'180 minutes, full SAH structure':'Incomplete — not yet available'}</p><button class="button" data-model="${safe(m)}" ${complete?'':'disabled'}>Start full exam</button></div>`}).join('')||'<p>No complete exam models available yet.</p>'}document.querySelectorAll('[data-activity]').forEach(el=>el.onclick=()=>start([GROUP.find(a=>a.id===el.dataset.activity)],false));document.querySelectorAll('[data-model]').forEach(el=>el.onclick=()=>start(arr.filter(a=>a.model===el.dataset.model),true))}function updateTracks(){const g=Number($('grade').value);const tracks=[...new Set(GROUP.filter(a=>a.grade===g).map(a=>a.track))];$('track').innerHTML=tracks.map(t=>`<option value="${safe(t)}">${safe(t)}</option>`).join('')||'<option>Standard</option>';selection()}const grades=[5,6,7,8,9,10,11,12];$('grade').innerHTML=grades.map(g=>`<option value="${g}">Grade ${g}</option>`).join('');$('grade').value='12';$('grade').onchange=updateTracks;$('track').onchange=selection;$('mode').onchange=selection;updateTracks();function start(acts,timed){if(!acts?.length)return;clearInterval(ticker);const id=(timed?'exam:':'practice:')+acts.map(a=>a.id).join('|');current={id,acts,timed,answers:{},writings:{},started:timed?Date.now():null,audioPlays:{},done:false};try{const obj=JSON.parse(localStorage.getItem(savedKey())||'null');if(obj){current.answers=obj.answers||{};current.writings=obj.writings||{};current.audioPlays=obj.audioPlays||{};if(timed)current.started=obj.started||Date.now()}}catch(e){}$('home').classList.add('hidden');$('session').classList.remove('hidden');$('sessionTitle').textContent=timed?'Full mock exam — Model '+acts[0].model:acts[0].title;$('sessionMeta').textContent=`Grade ${acts[0].grade} · ${acts[0].track} · ${acts.reduce((s,a)=>s+a.marks,0)} marks · ${timed?'Timed':'Untimed'}`;$('results').classList.add('hidden');$('finishBtn').disabled=false;renderActivities();refreshTimer();if(timed)ticker=setInterval(refreshTimer,1000);location.hash='session';scrollTo(0,0)}function refreshTimer(){if(!current)return;if(!current.timed){$('timer').textContent='∞ Untimed';return}const remaining=Math.max(0,EXAM_MINUTES[current.acts[0].grade]*60-Math.floor((Date.now()-current.started)/1000));$('timer').textContent='⏱ '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0');if(remaining===0){clearInterval(ticker);$('finishBtn').disabled=true;finish(true)}}function renderActivities(){const out=[];for(const a of current.acts){out.push(`<section class="card" id="${safe(a.id)}"><h2>${safe(a.title)} <span class="meta">${a.marks} marks</span></h2>`);if(a.skill==='listening'){out.push(`<p class="notice">Listen carefully. Recording can be played twice. Audio must be downloaded with the offline package.</p><audio controls preload="none" src="${safe(a.audio)}" data-audio="${safe(a.id)}"></audio><p class="meta" id="audioCount-${safe(a.id)}"></p>`);if(!current.timed)out.push(`<details><summary>Show practice transcript</summary><div class="passage">${safe(a.passage)}</div></details>`)}if(a.skill==='reading')out.push(`<div class="passage">${safe(a.passage)}</div>`);if(a.skill==='writing'){out.push(`<p>${safe(a.topic)}</p>${a.data?'<div class="passage">'+a.data.map(x=>safe(x[0])+': '+safe(x[1])).join('\n')+'</div>':''}<p>Write at least ${a.minWords} words.</p><textarea data-write="${safe(a.id)}" placeholder="Write your answer..."></textarea><div class="meta" id="words-${safe(a.id)}"></div><div class="row"><button class="button outline" data-ai="${safe(a.id)}">Review with AI</button><span class="meta">Online only · estimated practice score</span></div><div id="ai-${safe(a.id)}" aria-live="polite"></div>`)}else for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i;out.push(`<div class="q"><strong>${safe(q.stem)}</strong>`);let options=q.type==='mc'?q.opts:q.type==='tf'?['True','False']:q.type==='match'?a.options:null;if(options){options.forEach((o,j)=>{const v=q.type==='mc'?String(j):q.type==='tf'?o.toLowerCase():String(j+1);out.push(`<label><input type="radio" name="${safe(key)}" value="${safe(v)}" data-answer="${safe(key)}" ${String(current.answers[key])===v?'checked':''}> ${safe(o)}</label>`)})}else out.push(`<input type="text" data-answer="${safe(key)}" value="${safe(current.answers[key]||'')}" placeholder="Short answer" autocomplete="off">`);out.push(`<div class="feedback hidden" id="fb-${safe(key)}"></div></div>`)}out.push('</section>')}$('exercise').innerHTML=out.join('');document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener(el.type==='radio'?'change':'input',()=>{current.answers[el.dataset.answer]=el.value;persist()}));document.querySelectorAll('[data-write]').forEach(el=>{el.value=current.writings[el.dataset.write]||'';const upd=()=>{current.writings[el.dataset.write]=el.value;const n=el.value.trim()?el.value.trim().split(/\s+/).length:0;$('words-'+el.dataset.write).textContent=n+' words';persist()};el.oninput=upd;upd()});document.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>reviewAI(el.dataset.ai,el));document.querySelectorAll('[data-audio]').forEach(el=>{const id=el.dataset.audio;const count=()=>{$('audioCount-'+id).textContent=`Plays: ${current.audioPlays[id]||0} / 2`};count();el.onplay=()=>{if((current.audioPlays[id]||0)>=2){el.pause();return}current.audioPlays[id]=(current.audioPlays[id]||0)+1;count();persist()};el.onerror=()=>{$('audioCount-'+id).textContent='Audio not available. Download the offline ZIP including the MP3 recordings.'}})}function correct(q,value){if(value===undefined||String(value).trim()==='')return false;return q.type==='mc'?Number(value)===q.answer:q.type==='tf'||q.type==='match'?normalize(value)===normalize(q.answer):q.answer.some(v=>normalize(value)===normalize(v))}function finish(auto=false){if(!current)return;clearInterval(ticker);let score=0,total=0;for(const a of current.acts){if(a.skill==='writing')continue;for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i,ok=correct(q,current.answers[key]);score+=Number(ok);total++;const f=$('fb-'+key);f.classList.remove('hidden');f.textContent=(ok?'✓ Correct':'✗ Check answer')+' · '+(q.type==='mc'?q.opts[q.answer]:q.type==='match'?a.options[Number(q.answer)-1]:Array.isArray(q.answer)?q.answer[0]:q.answer)}}$('results').classList.remove('hidden');$('results').innerHTML=`<h2>${auto?'Time is up':'Practice results'}</h2><p class="stats">Automatically marked: ${score} / ${total}</p><p>Writing: ${current.acts.filter(a=>a.skill==='writing').reduce((s,a)=>s+a.marks,0)} marks, assessed separately. AI feedback is a training estimate and not an official score.</p><p class="meta">You can review all objective answers above.</p>`;$('finishBtn').disabled=true;current.done=true;$('results').scrollIntoView({behavior:'smooth',block:'start'})}async function reviewAI(id,button){const a=current.acts.find(x=>x.id===id),text=current.writings[id]||'',target=$('ai-'+id);if(text.trim().length<50){target.textContent='Please write at least 50 characters before requesting feedback.';return}button.disabled=true;target.textContent='Checking writing...';try{const res=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-writing-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:a.grade,genre:a.genre,topic:a.topic,text,maxScore:10})});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.message||'AI service unavailable');const f=data.feedback,s=a.marks===15?Math.round((f.score5/5)*15):Math.round((f.score5/5)*a.marks);target.innerHTML=`<div class="notice"><b>Estimated practice score: ${s}/${a.marks}</b><p>${safe(f.summary)}</p><p>${safe(f.score_reason)}</p>${(f.five_points||[]).map(p=>`<div class="rubric"><b>${safe(p.category)}</b><p>${safe(p.what_works)}</p><p>${safe(p.what_to_improve)}</p></div>`).join('')}<p><b>Next step:</b> ${safe(f.next_step)}</p><small>AI estimate, not the official examiner mark.</small></div>`}catch(e){target.textContent='AI review unavailable: '+String(e.message||e)}finally{button.disabled=false}}$('backBtn').onclick=()=>{clearInterval(ticker);persist();current=null;$('session').classList.add('hidden');$('home').classList.remove('hidden');location.hash='home';selection()};$('homeLink').onclick=e=>{if(current){e.preventDefault();$('backBtn').click()}};$('finishBtn').onclick=()=>finish(false);
 </script></body></html>

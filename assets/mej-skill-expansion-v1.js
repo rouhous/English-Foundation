@@ -84,6 +84,11 @@ async function ensureMatchingImages(grade){
   matched=vocabulary(grade).filter(word=>imgFor(word)).length;
  }
 }
+// Explicit answer event: never scan or observe the exercise DOM.
+function reinforce(correct){
+ try{window.dispatchEvent(new CustomEvent('mej-answer-evaluated',{detail:{correct:!!correct,source:'skill-expansion'}}));}
+ catch(error){console.warn('Optional companion feedback unavailable',error)}
+}
 function renderMatch(){
  const target=root.querySelector('#mej-skill-content');target.replaceChildren();
  const cards=session.words;
@@ -97,9 +102,9 @@ function renderMatch(){
  });
  shuffle(cards.map(x=>x.word)).forEach(word=>{const b=node('button','',word);b.onclick=()=>{
   if(chosen<0||b.disabled)return;
-  const item=cards[chosen];if(item.word!==word){feedback.textContent='حاول مجددًا: اختر الكلمة التي تصف الصورة المحددة.';return}
+  const item=cards[chosen];if(item.word!==word){feedback.textContent='حاول مجددًا: اختر الكلمة التي تصف الصورة المحددة.';reinforce(false);return}
   matched.add(chosen);b.disabled=true;images.querySelectorAll('button').forEach(button=>{if(button.querySelector('img')?.src.endsWith(item.img))button.disabled=true});
-  chosen=-1;feedback.textContent='إجابة صحيحة! '+matched.size+' / '+cards.length;
+  chosen=-1;feedback.textContent='إجابة صحيحة! '+matched.size+' / '+cards.length;reinforce(true);
   if(matched.size===cards.length){const next=node('button','','مجموعة جديدة');next.onclick=()=>makeMatch(session.grade);target.append(next)}
  };words.append(b)});
  target.append(images,words,feedback);
@@ -127,7 +132,7 @@ function makeCloze(grade){
  const choices=node('div','words');let position=0,done=false;
  shuffle(answers.slice()).forEach(word=>{const btn=node('button','',word);btn.onclick=()=>{if(done)return;if(position>=slots.length)return;slots[position].textContent=word;slots[position].dataset.choice=word;position++;btn.disabled=true};choices.append(btn)});
  const feedback=node('div','feedback');
- const check=node('button','','تحقق من الإجابات');check.onclick=()=>{if(position!==slots.length)return;done=true;const good=slots.filter((s,i)=>s.dataset.choice===answers[i]).length;feedback.textContent=good===slots.length?'✅ ممتاز! جميع الكلمات في مواضعها الصحيحة.':'الإجابات الصحيحة: '+answers.join(' • ');const next=node('button','','فقرة أخرى');next.onclick=()=>makeCloze(grade);target.append(next)};
+ const check=node('button','','تحقق من الإجابات');check.onclick=()=>{if(position!==slots.length)return;done=true;const good=slots.filter((s,i)=>s.dataset.choice===answers[i]).length;feedback.textContent=good===slots.length?'✅ ممتاز! جميع الكلمات في مواضعها الصحيحة.':'الإجابات الصحيحة: '+answers.join(' • ');reinforce(good===slots.length);const next=node('button','','فقرة أخرى');next.onclick=()=>makeCloze(grade);target.append(next)};
  target.append(prompt,para,choices,check,feedback);
 }
 async function open(requestedGrade){

@@ -35,7 +35,7 @@
  #mej-companion-avatar-button img{display:block;width:66px;height:66px;border-radius:50%;object-fit:contain;background:radial-gradient(circle,#eaffff,#74c8f1);border:2px solid #d5f7ff;box-shadow:0 3px 9px #001b4770}
  #mej-companion-actor{position:fixed;z-index:9300;left:8px;top:80px;width:112px;pointer-events:none;display:none;contain:layout style;transition:left 1.1s ease-in-out;}
  #mej-companion-actor.mej-c-dragging,#mej-companion-actor.mej-c-parachuting{transition:none!important}
- #mej-companion-actor .mej-c-canopy{position:absolute;left:-18px;top:-150px;width:142px;height:230px;display:none;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 3px #06335b55);transform-origin:58px 212px}
+ #mej-companion-actor .mej-c-canopy{position:absolute;left:-18px;top:-105px;width:142px;height:180px;display:none;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 3px #06335b55);transform-origin:56px 168px}
  #mej-companion-actor .mej-c-canopy svg{width:100%;height:100%;display:block}
  #mej-companion-actor.mej-c-parachuting .mej-c-canopy{display:block;animation:mej-open-canopy .42s ease-out both}
  #mej-companion-actor .mej-c-bag-flap{display:none;position:absolute;left:30%;top:41%;width:27px;height:16px;border-radius:60% 10% 45% 35%;background:#3365b5;border:2px solid #eabf65;transform:rotate(-45deg);transform-origin:6px 14px;pointer-events:none;z-index:4}
@@ -55,7 +55,7 @@
  #mej-companion-actor.mej-c-bounce .mej-c-sprite{animation:mej-companion-pop .65s ease-in-out 2}
  @keyframes mej-companion-pop{0%,100%{transform:translateY(0)}46%{transform:translateY(-14px)}}
  @media(max-width:600px){#mej-companion-actor{width:78px;top:85px}#mej-companion-actor .mej-c-sprite{width:77px;height:103px}#mej-companion-actor .mej-c-bubble{right:70px;font-size:11px;max-width:125px;min-width:80px}}
- @media(max-width:600px){#mej-companion-actor .mej-c-canopy{width:105px;height:170px;top:-113px;left:-14px;transform-origin:43px 158px}#mej-companion-actor .mej-c-bag-flap{width:21px;height:12px;left:29%;top:41%}}
+ @media(max-width:600px){#mej-companion-actor .mej-c-canopy{width:100px;height:130px;top:-80px;left:-15px;transform-origin:40px 122px}#mej-companion-actor .mej-c-bag-flap{width:21px;height:12px;left:29%;top:41%}}
  @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-sprite,#mej-companion-actor .mej-c-canopy{animation:none!important}}
  `;document.head.append(style);
  function avatar(g,size=66){const img=document.createElement('img');img.src=ART[g==='girl'?'girl':'boy'].avatar;img.alt=g==='girl'?'رفيقة عمانية':'رفيق عماني';img.width=size;img.height=size;img.decoding='async';return img}
@@ -151,35 +151,70 @@
    if(!host){
      host=document.createElement('div');host.id='mej-companion-actor';
      host.setAttribute('aria-label','اسحب الرفيق لتغيير موقعه ثم أفلته');
-     host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 230" xmlns="http://www.w3.org/2000/svg"><path d="M7 51Q17 6 71 4Q125 6 135 51Q112 41 92 51Q71 39 49 51Q28 42 7 51Z" fill="#ffcb46" stroke="#a96b24" stroke-width="3"/><path d="M71 4Q43 22 49 51M71 4Q99 22 92 51" stroke="#fff3bb" stroke-width="4" fill="none"/><path d="M7 51L56 212M49 51L56 212M92 51L56 212M135 51L56 212" stroke="#7d654e" stroke-width="2.3" fill="none" stroke-linecap="round"/><path d="M49 205L56 216L63 205" stroke="#315a8b" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="56" cy="212" r="4.5" fill="#ffdd80" stroke="#7d654e" stroke-width="1.5"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
+     host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 180" xmlns="http://www.w3.org/2000/svg"><path d="M7 51Q17 6 71 4Q125 6 135 51Q112 41 92 51Q71 39 49 51Q28 42 7 51Z" fill="#ffcb46" stroke="#a96b24" stroke-width="3"/><path d="M71 4Q43 22 49 51M71 4Q99 22 92 51" stroke="#fff3bb" stroke-width="4" fill="none"/><path d="M7 51L56 168M49 51L56 168M92 51L56 168M135 51L56 168" stroke="#7d654e" stroke-width="2.3" fill="none" stroke-linecap="round"/><path d="M49 161L56 173L63 161" stroke="#315a8b" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="56" cy="168" r="4.5" fill="#ffdd80" stroke="#7d654e" stroke-width="1.5"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
      document.body.append(host);wireDrag(host);
    }
    return host;
+ }
+
+ function greet(){
+   if(!canShow()||inDiagnostic())return;
+   const host=actor(),sprite=host.querySelector('.mej-c-sprite');
+   const messages=["Hi!","Hello!","I'm here!","What's up?","Hey, let's go!"];
+   const phrase=messages[Math.floor(Math.random()*messages.length)];
+   const token=++animationNo;
+   clearInterval(frameTimer);clearTimeout(hideTimer);
+   host.dataset.reacting='1';
+   host.classList.remove('mej-c-parachuting','mej-c-bounce');
+   showPhrase(host,phrase);speak(phrase);
+   let i=0;frame(sprite,5);
+   if(motion&&!reduced())frameTimer=setInterval(()=>{
+     if(token!==animationNo){clearInterval(frameTimer);frameTimer=0;return}
+     frame(sprite,(i++%2)?0:5);
+   },330);
+   hideTimer=setTimeout(()=>{
+     if(token!==animationNo)return;
+     clearInterval(frameTimer);frameTimer=0;frame(sprite,0);
+     host.dataset.reacting='0';
+   },1850);
  }
  function wireDrag(host){
    const sprite=host.querySelector('.mej-c-sprite');
    sprite.addEventListener('pointerdown',e=>{
      if(!canShow()||e.button!==0)return;
-     drag={id:e.pointerId,dx:e.clientX-(actorX||0),dy:e.clientY-(actorY||0)};
-     host.classList.add('mej-c-dragging');host.classList.remove('mej-c-parachuting','mej-c-climbing');
+     drag={
+       id:e.pointerId,dx:e.clientX-(actorX||0),dy:e.clientY-(actorY||0),
+       startX:e.clientX,startY:e.clientY,started:performance.now(),moved:false
+     };
      if(dropRAF)cancelAnimationFrame(dropRAF);dropRAF=0;
+     host.classList.remove('mej-c-parachuting','mej-c-climbing');
      try{sprite.setPointerCapture(e.pointerId)}catch(_){}
      e.preventDefault();
    });
    sprite.addEventListener('pointermove',e=>{
      if(!drag||drag.id!==e.pointerId)return;
+     const distance=Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY);
+     if(distance>10)drag.moved=true;
+     if(!drag.moved)return;
+     host.classList.add('mej-c-dragging');
      place(host,e.clientX-drag.dx,e.clientY-drag.dy);
      e.preventDefault();
    });
    const release=e=>{
      if(!drag||drag.id!==e.pointerId)return;
-     const y=actorY;
+     const gesture=drag;
      drag=null;host.classList.remove('mej-c-dragging');
      try{sprite.releasePointerCapture(e.pointerId)}catch(_){}
+     // A short tap means greeting. It must NEVER deploy the parachute.
+     if(!gesture.moved){greet();return}
+     // Dropping from an ordinary drag means repositioning, not automatic parachuting.
+     const raised=gesture.startY-e.clientY>48;
+     if(!raised||!motion||reduced()||document.hidden){
+       place(host,actorX,actorY,true);return;
+     }
+     // The backpack opens ONLY after a deliberate upward lift and release.
      const band=roamingFloor(host),target=Math.max(band.minY,band.maxY-10);
-     if(!motion||reduced()||document.hidden){place(host,actorX,target,true);return}
-     // Open the backpack and parachute on every release. Slow descent with bounded duration.
-     const from=Math.max(limits(host).minY,Math.min(y,target-36)),to=target,startX=actorX;
+     const from=Math.max(limits(host).minY,Math.min(actorY,target-20)),to=target,startX=actorX;
      const token=++animationNo;
      host.classList.add('mej-c-parachuting');
      host.classList.remove('mej-c-climbing');
@@ -191,8 +226,7 @@
        if(t-previous<30){dropRAF=requestAnimationFrame(descend);return}
        previous=t;
        const k=Math.min(1,(t-first)/2300);
-       // Ease-out horizontal drift; no full-screen physics loop after landing.
-       const sway=Math.sin(k*Math.PI*4)*8*(1-k);
+       const sway=Math.sin(k*Math.PI*4)*5*(1-k);
        place(host,startX+sway,from+(to-from)*(k*k*(3-2*k)));
        if(k<1){dropRAF=requestAnimationFrame(descend)}
        else{dropRAF=0;host.classList.remove('mej-c-parachuting');place(host,startX,to,true)}
@@ -200,7 +234,11 @@
      dropRAF=requestAnimationFrame(descend);
    };
    sprite.addEventListener('pointerup',release);
-   sprite.addEventListener('pointercancel',release);
+   sprite.addEventListener('pointercancel',e=>{
+     if(!drag||drag.id!==e.pointerId)return;
+     drag=null;host.classList.remove('mej-c-dragging');
+     place(host,actorX,actorY,true);
+   });
  }
  function stop(hide=true){
    clearInterval(frameTimer);frameTimer=0;clearTimeout(hideTimer);hideTimer=0;

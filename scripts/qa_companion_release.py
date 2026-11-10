@@ -17,6 +17,10 @@ assert "roamTimer=setInterval" in runtime
 assert "function roamingFloor(host)" in runtime
 assert "mej-c-parachuting" in runtime and "mej-c-canopy" in runtime
 assert "mej-c-climbing" in runtime
+assert "if(!gesture.moved){greet();return}" in runtime
+assert "gesture.startY-e.clientY>48" in runtime
+assert "M7 51L56 168" in runtime
+assert "Hi!" in runtime and "Hello!" in runtime and "I\'m here!" in runtime
 assert "t-first)/2300" in runtime
 assert "pointermove" in runtime and "pointerup" in runtime
 assert "inDiagnostic()" in runtime

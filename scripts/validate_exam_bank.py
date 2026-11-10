@@ -113,6 +113,10 @@ for a in activities:
             check(file_exists(pic), aid + ": missing activity picture " + pic)
     if a.get("chart"):
         check(file_exists(a["chart"]), aid + ": missing chart")
+    if a.get("scenePicture"):
+        check(file_exists(a["scenePicture"]), aid + ": missing writing picture")
+    for pic in a.get("storyPictures", []):
+        check(file_exists(pic), aid + ": missing story picture " + pic)
     if a.get("audioReady") is True:
         check(file_exists(a.get("audio")), aid + ": audio marked ready but file missing")
     if a.get("status") == "ready":

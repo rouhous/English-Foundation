@@ -18,6 +18,7 @@
  const emergencyAnimationPause=false; // Home-only, event-driven animation.
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
+ let lastTapAction='',actionTimer=0;
  let motion=true,sound=true;
  try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound!==false}catch(_){}
  const style=document.createElement('style');style.textContent=`
@@ -50,6 +51,17 @@
  @keyframes mej-open-canopy{0%{opacity:0;transform:scale(.08)}50%{opacity:1;transform:scale(.75)}100%{opacity:1;transform:scale(1)}}
  @keyframes mej-open-backpack{0%{transform:rotate(0)}100%{transform:rotate(-65deg)}}
  #mej-companion-actor .mej-c-sprite{pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+ #mej-companion-actor.mej-c-jumping .mej-c-sprite{animation:mej-tap-jump .9s ease-in-out 2}
+ #mej-companion-actor.mej-c-running .mej-c-sprite{animation:mej-tap-run 1.5s ease-in-out both}
+ #mej-companion-actor.mej-c-edge-climb .mej-c-sprite{animation:mej-tap-edge-climb 1.8s ease-in-out both}
+ #mej-companion-actor.mej-c-football .mej-c-sprite{animation:mej-tap-kick 1.1s ease-in-out both}
+ #mej-companion-actor.mej-c-football .mej-c-sprite:after{content:'⚽';position:absolute;bottom:2px;left:45%;font-size:28px;animation:mej-tap-ball 1.5s ease-out both;pointer-events:none}
+ @keyframes mej-tap-jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-35px)}}
+ @keyframes mej-tap-run{0%,100%{transform:translateX(0)}15%{transform:translateX(-17px) rotate(-6deg)}35%{transform:translateX(16px) rotate(6deg)}55%{transform:translateX(-17px) rotate(-6deg)}75%{transform:translateX(16px) rotate(6deg)}}
+ @keyframes mej-tap-edge-climb{0%,100%{transform:translateY(0)}30%{transform:translateY(-34px) rotate(-9deg)}50%{transform:translateY(-55px) rotate(5deg)}70%{transform:translateY(-37px)}}
+ @keyframes mej-tap-kick{0%,100%{transform:rotate(0)}35%{transform:rotate(-11deg)}50%{transform:rotate(14deg)}65%{transform:rotate(0)}}
+ @keyframes mej-tap-ball{0%{opacity:1;transform:translate(0,0) scale(.8)}40%{opacity:1;transform:translate(35px,-17px) scale(1)}100%{opacity:0;transform:translate(120px,8px) scale(.65)}}
+ @media(prefers-reduced-motion:reduce){#mej-companion-actor.mej-c-jumping .mej-c-sprite,#mej-companion-actor.mej-c-running .mej-c-sprite,#mej-companion-actor.mej-c-edge-climb .mej-c-sprite,#mej-companion-actor.mej-c-football .mej-c-sprite{animation:none!important}}
  #mej-companion-actor.mej-c-dragging .mej-c-sprite{cursor:grabbing}
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
  #mej-companion-actor[hidden]{display:none!important}
@@ -208,6 +220,25 @@
      host.dataset.reacting='0';
    },1850);
  }
+ const tapClasses=['mej-c-jumping','mej-c-running','mej-c-edge-climb','mej-c-football'];
+ function clearTap(host){clearTimeout(actionTimer);actionTimer=0;host.classList.remove(...tapClasses)}
+ function randomTap(){
+   if(!canShow()||drag)return;
+   const choices=['jump','run','climb','football','greet'].filter(a=>a!==lastTapAction);
+   const choice=choices[Math.floor(Math.random()*choices.length)];
+   lastTapAction=choice;
+   if(choice==='greet'||!motion||reduced()){greet();return}
+   const host=actor(),sprite=host.querySelector('.mej-c-sprite');
+   clearTap(host);clearInterval(frameTimer);frameTimer=0;clearTimeout(hideTimer);
+   const token=++animationNo;host.dataset.reacting='1';
+   const map={jump:['mej-c-jumping',3,1800,'Jump!'],
+    run:['mej-c-running',2,1600,"Let's run!"],
+    climb:['mej-c-edge-climb',5,1800,'Up we go!'],
+    football:['mej-c-football',7,1600,"Let's play football!"]};
+   const [cls,pose,duration,phrase]=map[choice];
+   frame(sprite,pose);host.classList.add(cls);showPhrase(host,phrase);speak(phrase);
+   actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(host);host.dataset.reacting='0';frame(sprite,0)},duration);
+ }
  function wireDrag(host){
    const sprite=host.querySelector('.mej-c-sprite');
    sprite.addEventListener('pointerdown',e=>{
@@ -217,7 +248,7 @@
        startX:e.clientX,startY:e.clientY,started:performance.now(),moved:false
      };
      if(dropRAF)cancelAnimationFrame(dropRAF);dropRAF=0;
-     host.classList.remove('mej-c-parachuting','mej-c-climbing');
+     clearTap(host);host.classList.remove('mej-c-parachuting','mej-c-climbing');
      try{sprite.setPointerCapture(e.pointerId)}catch(_){}
      e.preventDefault();
    });
@@ -236,7 +267,7 @@
      drag=null;host.classList.remove('mej-c-dragging');
      try{sprite.releasePointerCapture(e.pointerId)}catch(_){}
      // A short tap means greeting. It must NEVER deploy the parachute.
-     if(!gesture.moved){greet();return}
+     if(!gesture.moved){randomTap();return}
      // Dropping from an ordinary drag means repositioning, not automatic parachuting.
      const raised=gesture.startY-e.clientY>48;
      if(!raised||!motion||reduced()||document.hidden){
@@ -272,7 +303,8 @@
  }
  function stop(hide=true){
    clearInterval(frameTimer);frameTimer=0;clearTimeout(hideTimer);hideTimer=0;
-   if(hide){const el=$('mej-companion-actor');if(el)el.hidden=true}
+   const el=$('mej-companion-actor');if(el)clearTap(el);
+   if(hide&&el)el.hidden=true
  }
  function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
  function speechStatus(text){
@@ -350,6 +382,7 @@
  }
  function play(name,duration=1900){
    if(!(name in POSES)||!canShow())return false;
+   clearTap(actor());
    refreshActor();const h=actor(),sp=h.querySelector('.mej-c-sprite');
    frame(sp,POSES[name]);h.dataset.reacting='1';
    h.classList.toggle('mej-c-bounce',name==='excited');
@@ -365,7 +398,7 @@
    // The diagnostic remains entirely animation-free for iPad stability.
    if(inDiagnostic()||!canShow())return;
    const choices=ok?positives:retries,word=choices[Math.floor(Math.random()*choices.length)];
-   const h=actor();refreshActor();const sprite=h.querySelector('.mej-c-sprite');
+   const h=actor();clearTap(h);refreshActor();const sprite=h.querySelector('.mej-c-sprite');
    frame(sprite,ok?3:4);h.dataset.reacting='1';
    h.classList.toggle('mej-c-bounce',!!ok);
    showPhrase(h,word);speak(word);

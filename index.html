@@ -1994,6 +1994,9 @@ function mejGrammarCorrection(q){
  if(!q||q.type!=='Grammar')return '';
  const p=String(q.prompt||'').toLowerCase(),a=String(q.answer||'').trim().toLowerCase();
  const tests=[
+  // Context first: going to takes the bare infinitive, not past/simple-present forms.
+  [/\b(?:am|is|are|was|were)\s+going\s+to\s+(?:_{2,}|\b[a-z]+\b)/,()=> 'للتعبير عن النية أو الخطة المستقبلية نستخدم am/is/are + going to + الفعل في صورته الأساسية (المجرّد) دون ed أو s أو ing. مثال: I am going to finish my project.'],
+  [/\b(?:want|wants|wanted|need|needs|needed|plan|plans|planned|hope|hopes|decide|decides|decided|would like)\s+to\s+_{2,}/,()=> 'بعد to المصدرية نستخدم الفعل في صورته الأساسية دون s أو ed أو ing، مثل: I want to learn English.'],
   [/\b(am|is|are|was|were)\b/,()=>/was|were/.test(a)?'في الماضي نستخدم was مع I/he/she/it، وwere مع you/we/they.':'نستخدم am مع I، وis مع he/she/it والمفرد، وare مع you/we/they والجمع.'],
   [/\b(a|an|the)\b/,()=>a==='an'?'نستخدم an قبل الكلمة التي تبدأ بصوت متحرك، مثل an apple.':a==='a'?'نستخدم a قبل الاسم المفرد المعدود الذي يبدأ بصوت ساكن، مثل a book.':'نستخدم the عندما نشير إلى اسم محدد أو معروف.'],
   [/\b(he|she|it|they|we|you|i)\b/,()=>['he','she','it','they','we','you','i'].includes(a)?'اختر الضمير بحسب المعنى: he للمذكر، she للمؤنث، it لغير العاقل، they للجمع.':'طابق الفعل مع الفاعل، وفي المضارع البسيط نضيف s أو es مع he/she/it.'],

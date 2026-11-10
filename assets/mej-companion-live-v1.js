@@ -34,17 +34,26 @@
  #mej-companion-avatar-button{padding:0!important;border:0!important;background:transparent!important;display:inline-grid;place-items:center;cursor:pointer;flex:0 0 auto}
  #mej-companion-avatar-button img{display:block;width:66px;height:66px;border-radius:50%;object-fit:contain;background:radial-gradient(circle,#eaffff,#74c8f1);border:2px solid #d5f7ff;box-shadow:0 3px 9px #001b4770}
  #mej-companion-actor{position:fixed;z-index:9300;left:8px;top:80px;width:112px;pointer-events:none;display:none;contain:layout style;transition:left 1.1s ease-in-out;}
- #mej-companion-actor.mej-c-dragging{transition:none!important}
+ #mej-companion-actor.mej-c-dragging,#mej-companion-actor.mej-c-parachuting{transition:none!important}
+ #mej-companion-actor .mej-c-canopy{position:absolute;left:-20px;bottom:calc(100% + 8px);width:142px;height:88px;display:none;pointer-events:none;filter:drop-shadow(0 3px 3px #06335b55)}
+ #mej-companion-actor .mej-c-canopy svg{width:100%;height:100%;display:block}
+ #mej-companion-actor.mej-c-parachuting .mej-c-canopy{display:block;animation:mej-open-canopy .42s ease-out both}
+ #mej-companion-actor .mej-c-bag-flap{display:none;position:absolute;left:36%;top:51%;width:26px;height:14px;border-radius:65% 15% 50% 50%;background:#e4b665;border:2px solid #936c40;transform:rotate(-25deg);pointer-events:none}
+ #mej-companion-actor.mej-c-parachuting .mej-c-bag-flap{display:block}
+ #mej-companion-actor.mej-c-climbing:not(.mej-c-dragging) .mej-c-sprite{animation:mej-companion-climb .95s ease-in-out 1}
+ @keyframes mej-companion-climb{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-21px) rotate(-7deg)}55%{transform:translateY(-30px) rotate(6deg)}80%{transform:translateY(-7px)}}
+ @keyframes mej-open-canopy{0%{opacity:0;transform:scale(.35) translateY(30px)}100%{opacity:1;transform:scale(1) translateY(0)}}
  #mej-companion-actor .mej-c-sprite{pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
  #mej-companion-actor.mej-c-dragging .mej-c-sprite{cursor:grabbing}
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
  #mej-companion-actor[hidden]{display:none!important}
- #mej-companion-actor .mej-c-sprite{width:108px;height:142px;background-repeat:no-repeat;background-size:400% 200%;will-change:transform;filter:drop-shadow(0 3px 4px #012f5666)}
+ #mej-companion-actor .mej-c-sprite{width:108px;height:142px;background-repeat:no-repeat;background-size:400% 200%;filter:drop-shadow(0 3px 4px #012f5666)}
  #mej-companion-actor .mej-c-bubble{display:inline-block;pointer-events:none;position:absolute;top:0;right:93px;min-width:95px;max-width:185px;padding:6px 8px;border-radius:14px;background:#fff;border:2px solid #edc456;color:#1a4a71;font:800 13px/1.25 system-ui;text-align:center;box-shadow:0 2px 8px #001f4450}
  #mej-companion-actor.mej-c-bounce .mej-c-sprite{animation:mej-companion-pop .65s ease-in-out 2}
  @keyframes mej-companion-pop{0%,100%{transform:translateY(0)}46%{transform:translateY(-14px)}}
  @media(max-width:600px){#mej-companion-actor{width:78px;top:85px}#mej-companion-actor .mej-c-sprite{width:77px;height:103px}#mej-companion-actor .mej-c-bubble{right:70px;font-size:11px;max-width:125px;min-width:80px}}
- @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-sprite{animation:none!important}}
+ @media(max-width:600px){#mej-companion-actor .mej-c-canopy{width:110px;height:70px;left:-17px}}
+ @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-sprite,#mej-companion-actor .mej-c-canopy{animation:none!important}}
  `;document.head.append(style);
  function avatar(g,size=66){const img=document.createElement('img');img.src=ART[g==='girl'?'girl':'boy'].avatar;img.alt=g==='girl'?'رفيقة عمانية':'رفيق عماني';img.width=size;img.height=size;img.decoding='async';return img}
  function close(){modal?.remove();modal=null}
@@ -104,6 +113,9 @@
    const r=host.getBoundingClientRect(),w=r.width||80,h=r.height||120;
    return {minX:3,maxX:Math.max(3,innerWidth-w-3),minY:60,maxY:Math.max(60,innerHeight-h-12)};
  }
+ function roamingFloor(host){
+   const l=limits(host);return {minY:Math.min(l.maxY,Math.max(l.minY,innerHeight*.63)),maxY:l.maxY};
+ }
  function place(host,x,y,save=false){
    const lim=limits(host);
    actorX=Math.max(lim.minX,Math.min(lim.maxX,Number(x)||0));
@@ -117,7 +129,8 @@
    lastIdentity=who;actorX=null;actorY=null;
    let position=null;try{position=JSON.parse(localStorage.getItem(actorKey())||'null')}catch(_){}
    const l=limits(host);
-   place(host,position?position.x*l.maxX:l.maxX*.79,position?position.y*l.maxY:l.maxY*.74);
+   const band=roamingFloor(host);
+   place(host,position?position.x*l.maxX:l.maxX*.79,position?Math.max(band.minY,position.y*l.maxY):band.maxY-12);
  }
  function showPhrase(host,text){
    const b=host.querySelector('.mej-c-bubble');if(!b)return;
@@ -135,7 +148,7 @@
    if(!host){
      host=document.createElement('div');host.id='mej-companion-actor';
      host.setAttribute('aria-label','اسحب الرفيق لتغيير موقعه ثم أفلته');
-     host.innerHTML='<div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
+     host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 88" xmlns="http://www.w3.org/2000/svg"><path d="M7 46Q19 3 71 3Q123 3 135 46Q112 37 92 46Q70 35 49 46Q28 38 7 46Z" fill="#ffcb46" stroke="#bb6b27" stroke-width="3"/><path d="M71 3Q41 22 49 46M71 3Q101 22 92 46" stroke="#fff1ab" stroke-width="4" fill="none"/><path d="M8 46L52 83M49 46L61 83M92 46L82 83M135 46L94 83" stroke="#806249" stroke-width="2.5" fill="none"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
      document.body.append(host);wireDrag(host);
    }
    return host;
@@ -157,23 +170,31 @@
    });
    const release=e=>{
      if(!drag||drag.id!==e.pointerId)return;
-     const y=actorY,ground=limits(host).maxY;
+     const y=actorY;
      drag=null;host.classList.remove('mej-c-dragging');
      try{sprite.releasePointerCapture(e.pointerId)}catch(_){}
-     // Only a short, bounded falling animation. Never a continuous GPU loop.
-     const from=y,to=ground;
-     // A normal drag places the character exactly where released; a release near the top drops it.
-     if(!motion||reduced()||to-from<8||y>innerHeight*.28){place(host,actorX,y,true);return}
-     let first=0;
-     function fall(t){
-       if(!canShow()){dropRAF=0;return}
+     const band=roamingFloor(host),target=Math.max(band.minY,band.maxY-10);
+     if(!motion||reduced()||document.hidden){place(host,actorX,target,true);return}
+     // Open the backpack and parachute on every release. Slow descent with bounded duration.
+     const from=Math.min(y,target-36),to=target,startX=actorX;
+     const token=++animationNo;
+     host.classList.add('mej-c-parachuting');
+     host.classList.remove('mej-c-climbing');
+     frame(sprite,0);
+     let first=0,previous=0;
+     function descend(t){
+       if(token!==animationNo||!canShow()){dropRAF=0;host.classList.remove('mej-c-parachuting');return}
        if(!first)first=t;
-       const k=Math.min(1,(t-first)/540),gravity=k*k*(3-2*k);
-       place(host,actorX,from+(to-from)*gravity);
-       if(k<1)dropRAF=requestAnimationFrame(fall);
-       else{dropRAF=0;place(host,actorX,to,true);host.classList.add('mej-c-bounce');setTimeout(()=>host.classList.remove('mej-c-bounce'),750)}
+       if(t-previous<30){dropRAF=requestAnimationFrame(descend);return}
+       previous=t;
+       const k=Math.min(1,(t-first)/2300);
+       // Ease-out horizontal drift; no full-screen physics loop after landing.
+       const sway=Math.sin(k*Math.PI*4)*8*(1-k);
+       place(host,startX+sway,from+(to-from)*(k*k*(3-2*k)));
+       if(k<1){dropRAF=requestAnimationFrame(descend)}
+       else{dropRAF=0;host.classList.remove('mej-c-parachuting');place(host,startX,to,true)}
      }
-     dropRAF=requestAnimationFrame(fall);
+     dropRAF=requestAnimationFrame(descend);
    };
    sprite.addEventListener('pointerup',release);
    sprite.addEventListener('pointercancel',release);
@@ -188,7 +209,10 @@
  function refreshActor(){
    const host=$('mej-companion-actor');
    if(!canShow()){
-     clearInterval(roamTimer);roamTimer=0;if(host)host.hidden=true;return;
+     clearInterval(roamTimer);roamTimer=0;
+     if(dropRAF)cancelAnimationFrame(dropRAF);dropRAF=0;
+     if(host){host.hidden=true;host.classList.remove('mej-c-parachuting','mej-c-climbing')}
+     return;
    }
    const h=actor(),p=profile(),kind=p.companion.kind,sp=h.querySelector('.mej-c-sprite');
    if(h.dataset.kind!==kind){h.dataset.kind=kind;sp.style.backgroundImage='url("'+ART[kind].sheet+'")'}
@@ -202,7 +226,22 @@
        if(h.dataset.reacting==='1')return;
        const step=++roamStep;
        frame(sp,step%6===0?2:step%2===0?1:2);
-       if(step%5===0){const l=limits(h);const delta=(step%10===0?-1:1)*Math.min(45,innerWidth*.09);place(h,actorX+delta,actorY)}
+       if(step%5===0){
+         const band=roamingFloor(h),delta=(step%10===0?-1:1)*Math.min(45,innerWidth*.09);
+         place(h,actorX+delta,Math.max(band.minY,Math.min(band.maxY,actorY)));
+       }
+       // Occasionally jump towards a nearby button visually, without triggering any click.
+       if(step%11===0&&!inSession()){
+         const rect=h.getBoundingClientRect();
+         const candidates=[...$('app').querySelectorAll('button')].filter(b=>{
+           const r=b.getBoundingClientRect();
+           return r.width>30&&r.height>24&&r.bottom>0&&r.top<innerHeight&&Math.abs(r.left-rect.left)<150;
+         });
+         if(candidates.length){
+           h.classList.remove('mej-c-climbing');void h.offsetWidth;h.classList.add('mej-c-climbing');
+           setTimeout(()=>h.classList.remove('mej-c-climbing'),1050);
+         }
+       }
      },850);
    }
  }

@@ -378,10 +378,11 @@
    hideTimer=setTimeout(()=>{if(token===animationNo){h.dataset.reacting='0';h.classList.remove('mej-c-bounce')}},2100);
  }
  function check(){updateAvatar();homeCheck();refreshActor();}
- function queue(){if(tickQueued)return;tickQueued=true;queueMicrotask(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
+ function queue(){if(tickQueued)return;tickQueued=true;requestAnimationFrame(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
  function boot(){
   const app=$('app');if(!app)return;
-  observer=new MutationObserver(queue);observer.observe(app,{childList:true,subtree:false});
+  // Completely detach the companion DOM observer during emergency isolation.
+  if(!emergencyAnimationPause){observer=new MutationObserver(queue);observer.observe(app,{childList:true,subtree:false});}
   // Settings modal is attached to body, but only inspect it on a user click.
   document.addEventListener('click',e=>{if(e.target?.closest?.('button'))setTimeout(settings,0)},false);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(roamTimer);roamTimer=0;stop()}else queue()});

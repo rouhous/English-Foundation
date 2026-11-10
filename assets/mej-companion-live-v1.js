@@ -158,7 +158,7 @@
    sprite.addEventListener('pointerdown',e=>{
      if(!canShow()||e.button!==0)return;
      drag={id:e.pointerId,dx:e.clientX-(actorX||0),dy:e.clientY-(actorY||0)};
-     host.classList.add('mej-c-dragging');
+     host.classList.add('mej-c-dragging');host.classList.remove('mej-c-parachuting','mej-c-climbing');
      if(dropRAF)cancelAnimationFrame(dropRAF);dropRAF=0;
      try{sprite.setPointerCapture(e.pointerId)}catch(_){}
      e.preventDefault();
@@ -176,7 +176,7 @@
      const band=roamingFloor(host),target=Math.max(band.minY,band.maxY-10);
      if(!motion||reduced()||document.hidden){place(host,actorX,target,true);return}
      // Open the backpack and parachute on every release. Slow descent with bounded duration.
-     const from=Math.min(y,target-36),to=target,startX=actorX;
+     const from=Math.max(limits(host).minY,Math.min(y,target-36)),to=target,startX=actorX;
      const token=++animationNo;
      host.classList.add('mej-c-parachuting');
      host.classList.remove('mej-c-climbing');

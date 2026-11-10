@@ -1,0 +1,17 @@
+name: Validate Grade 12 exam activity bank
+on:
+  push:
+    paths:
+      - 'exam-practice/index.html'
+      - 'scripts/validate_exam_bank.py'
+  workflow_dispatch:
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate mark totals, question keys and passage lengths
+        run: python scripts/validate_exam_bank.py

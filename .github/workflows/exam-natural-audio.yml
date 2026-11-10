@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scripts/generate_exam_natural_audio.py'
+      - 'exam-practice/index.html'
       - '.github/workflows/exam-natural-audio.yml'
   workflow_dispatch:
 
@@ -16,6 +17,7 @@ concurrency:
 
 jobs:
   generate:
+    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message != 'Generate natural multi-voice listening MP3s for exam library'
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:

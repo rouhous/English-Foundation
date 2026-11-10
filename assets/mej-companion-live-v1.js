@@ -36,7 +36,7 @@
  #mej-companion-choice .mej-c-error{min-height:18px;color:#b92231;text-align:center;font-size:13px;margin-top:4px}
  #mej-companion-avatar-button{padding:0!important;border:0!important;background:transparent!important;display:inline-grid;place-items:center;cursor:pointer;flex:0 0 auto}
  #mej-companion-avatar-button img{display:block;width:66px;height:66px;border-radius:50%;object-fit:contain;background:radial-gradient(circle,#eaffff,#74c8f1);border:2px solid #d5f7ff;box-shadow:0 3px 9px #001b4770}
- #mej-companion-actor{position:fixed;z-index:9300;left:8px;top:80px;width:112px;pointer-events:none;display:none;contain:layout style;transition:left 1.1s ease-in-out;}
+ #mej-companion-actor{position:fixed;z-index:100001;left:8px;top:80px;width:112px;pointer-events:none;display:none;contain:layout style;transition:left 1.1s ease-in-out;}
  #mej-companion-actor.mej-c-dragging,#mej-companion-actor.mej-c-parachuting{transition:none!important}
  #mej-companion-actor .mej-c-canopy{position:absolute;left:-18px;top:-105px;width:142px;height:180px;display:none;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 3px #06335b55);transform-origin:56px 168px}
  #mej-companion-actor .mej-c-canopy svg{width:100%;height:100%;display:block}
@@ -168,9 +168,9 @@
  }
  function canShow(){
    if(emergencyAnimationPause)return false;
-   // Keep all question/skills screens isolated from companion animation.
-   if(!$('app')?.querySelector('#mej-companion-avatar-button, .j23-avatar')||inSession())return false;
-   if($('mej-skills-overlay')||$('mej-writing-practice'))return false;
+   // Show a lightweight companion across learning and skills, without observing their DOM.
+   // The placement diagnostic remains excluded for stability.
+   if(!$('app')?.children.length)return false;
    const p=profile();
    if(!p||!['boy','girl'].includes(p.companion?.kind)||!p.companion?.name||!enabled()||document.hidden||inDiagnostic())return false;
    if($('mej-companion-choice')||$('journeyModal'))return false;
@@ -329,6 +329,9 @@
    if(h.dataset.kind!==kind){h.dataset.kind=kind;sp.style.backgroundImage='url("'+ART[kind].sheet+'")'}
    h.hidden=false;h.style.display='block';
    restore(h);
+   // Continuous roaming is reserved for the journey screen, never exercises.
+   const home=!!$('app')?.querySelector('#mej-companion-avatar-button, .j23-avatar') && !inSession() && !$('mej-skills-overlay') && !$('mej-writing-practice');
+   if(!home){clearInterval(roamTimer);roamTimer=0;if(!drag&&!dropRAF&&h.dataset.reacting!=='1')frame(sp,0);return;}
    if(!roamTimer){
      frame(sp,1);
      roamTimer=setInterval(()=>{

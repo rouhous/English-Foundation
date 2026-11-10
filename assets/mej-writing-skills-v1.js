@@ -143,7 +143,7 @@ function boot(){
  if(typeof native==='function'&&!native.__mejWritingWrapped){
   const patched=function(...args){const v=native.apply(this,args);queueMicrotask(tidy);return v};patched.__mejWritingWrapped=true;window.skills=patched;
  }
- const root=app();if(root){let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;tidy()})}).observe(root,{childList:true,subtree:true})}
+ const root=app();if(root){let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;try{if(root.querySelector('.skill-cards'))tidy()}catch(e){console.warn('Writing skill card refresh:',e)}})}).observe(root,{childList:true,subtree:false})}
  tidy();
 }
 window.MEJWritingSkillV1={choose,practice,chart};

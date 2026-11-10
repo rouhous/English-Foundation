@@ -48,7 +48,36 @@ for track in ("Core","Elective"):
                     check(len(parts)==7,a["id"]+": needs seven independent texts")
                     for n,part in enumerate(parts,1): check(35<=len(part.split())<=45,f"{a['id']} text {n}: length")
                 if a["skill"]=="listening": check(350<=wc<=450,a["id"]+": listening length")
-print(f"Validated {len(items)} activities across two Grade 12 tracks.")
+# Cross-grade structural audit for the complete Grade 5–12 bank.
+required = {
+    5: {("listening",1):5,("listening",2):5,("vocabulary",1):5,("grammar",1):5,("reading",1):5,("reading",2):5,("writing",1):5,("writing",2):5},
+    6: {("listening",1):5,("listening",2):5,("vocabulary",1):5,("grammar",1):5,("reading",1):5,("reading",2):5,("writing",1):5,("writing",2):5},
+    7: {("listening",1):5,("listening",2):5,("grammar-vocabulary",1):10,("reading",1):5,("reading",2):5,("writing",1):5,("writing",2):5},
+    8: {("listening",1):5,("listening",2):5,("grammar-vocabulary",1):10,("reading",1):5,("reading",2):5,("writing",1):5,("writing",2):5},
+    9: {("listening",1):5,("listening",2):5,("grammar-vocabulary",1):10,("reading",1):4,("reading",2):6,("writing",1):5,("writing",2):5},
+    10: {("listening",1):7,("listening",2):8,("vocabulary",1):5,("grammar",1):5,("reading",1):10,("reading",2):10,("writing",1):5,("writing",2):10},
+    11: {("listening",1):7,("listening",2):8,("vocabulary",1):5,("grammar",1):5,("reading",1):5,("reading",2):7,("reading",3):8,("writing",1):5,("writing",2):10},
+    12: {("listening",1):7,("listening",2):8,("vocabulary",1):5,("grammar",1):5,("reading",1):7,("reading",2):8,("reading",3):10,("writing",1):10,("writing",2):10},
+}
+elective11={("listening",1):10,("listening",2):10,("reading",1):10,("reading",2):10,("writing",1):10,("writing",2):10}
+elective12={("listening",1):10,("listening",2):10,("reading",1):12,("reading",2):13,("writing",1):15,("writing",2):10}
+for grade in range(5,13):
+    tracks=("Core","Elective") if grade>=11 else ("Standard",)
+    for track in tracks:
+        for model in ("A","B"):
+            a=[x for x in items if (x["grade"],x["track"],x["model"])==(grade,track,model)]
+            blueprint= elective12 if grade==12 and track=="Elective" else elective11 if grade==11 and track=="Elective" else required[grade]
+            keyed={(x["skill"],x["group"]):x for x in a}
+            check(len(keyed)==len(a),f"G{grade} {track} {model}: duplicate section")
+            check(set(keyed)==set(blueprint),f"G{grade} {track} {model}: wrong section list")
+            for k,marks in blueprint.items():
+                if k in keyed: check(keyed[k]["marks"]==marks,f"G{grade} {track} {model}: {k} wrong marks")
+            check(sum(x["marks"] for x in a)==(70 if grade==12 else 60 if grade>=10 else 40),f"G{grade} {track} {model}: total marks")
+            for x in a:
+                if x["status"]=="ready":
+                    check(not x.get("mediaPending"),x["id"]+": media required")
+                    if x["skill"]=="listening":check(x.get("audioReady") is True,x["id"]+": audio not ready")
+print(f"Validated {len(items)} activities across Grades 5–12 and both Grade 11/12 tracks.")
 if errors:
     print("\n".join("ERROR: "+e for e in errors))
     sys.exit(1)

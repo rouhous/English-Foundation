@@ -31,6 +31,9 @@ ROLE_VOICE = {
     "Dr Salma Rashid": "af_bella", "Dr Salma": "af_bella",
     "Fatma": "bf_emma", "Yousuf": "am_michael",
     "Maha": "bf_emma", "Ali": "am_michael",
+    "Noor": "bf_emma", "Hamad": "am_michael",
+    "Dr Laila Al Balushi": "af_bella", "Dr Laila": "af_bella",
+    "Noura": "bf_emma", "Salim": "bm_george",
 }
 default_voice = "af_bella"
 if default_voice not in available:
@@ -55,6 +58,8 @@ def chunk_sentences(text, max_chars=260):
 def segments(script, activity):
     if activity["id"] == "g12-elective-a-listening-2":
         return [("Dr Salma", script)]
+    if activity["id"] == "g12-elective-b-listening-2":
+        return [("Dr Laila", script)]
     lines = [x.strip() for x in script.splitlines() if x.strip()]
     if len(lines) > 1 and all(":" in line[:28] for line in lines):
         result = []

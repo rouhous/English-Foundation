@@ -1,0 +1,614 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#124d38"><title>English Final Exam Practice | Semester 1</title><style>
+:root{--green:#124d38;--gold:#c99b44;--light:#f5f8f3;--ink:#193b2d;--edge:#d6e5da}*{box-sizing:border-box}body{margin:0;background:var(--light);font:16px/1.55 system-ui,sans-serif;color:var(--ink)}header{background:linear-gradient(120deg,#083723,#196248);color:white;border-bottom:5px solid var(--gold);padding:22px 16px}.wrap{max-width:1040px;margin:auto}h1{font-size:clamp(24px,5vw,36px);margin:4px 0}.gold{color:#ebc87c}main{padding:17px 12px 50px}.card{background:white;border:1px solid var(--edge);border-radius:16px;padding:19px;margin:0 0 15px;box-shadow:0 2px 12px #163e2311}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.activity{border:1px solid var(--edge);border-radius:13px;padding:15px}.meta{color:#668072;font-size:13px}.button{border:0;border-radius:10px;background:var(--green);color:#fff;cursor:pointer;padding:11px 15px;font:700 15px system-ui}.button.outline{background:#fff;color:var(--green);border:1px solid var(--green)}.button:disabled{opacity:.45;cursor:not-allowed}select,input,textarea{font:inherit;border:1px solid #acc7b6;border-radius:9px;padding:10px;max-width:100%}select{width:100%}label{display:block;font-weight:600}textarea{width:100%;min-height:190px}fieldset{border:1px solid #d8e5dc;border-radius:10px;margin:12px 0;padding:12px}legend{font-weight:650}fieldset label{font-weight:400;margin:7px 0;display:flex;gap:8px}.passage{white-space:pre-wrap;background:#f0f6f1;padding:16px;border-radius:12px;border-inline-start:4px solid var(--gold);margin:15px 0;max-height:360px;overflow:auto}.q{padding:13px 0;border-bottom:1px solid #e0e8e1}.q strong{display:block;margin-bottom:8px}.feedback{color:#14553d;margin:8px 0}.muted{color:#678071}.hidden{display:none!important}.tag{display:inline-block;background:#f8edcf;color:#5f491e;border-radius:20px;padding:3px 9px;font-size:12px}.notice{padding:12px;background:#fff7e5;border:1px solid #ead6a4;border-radius:10px;margin:12px 0}.stats{font-size:18px;font-weight:750}#timer{font-size:20px;font-variant-numeric:tabular-nums}nav{display:flex;gap:9px;flex-wrap:wrap}.navlink{color:#fff;text-decoration:none;border:1px solid #e3bf7c;border-radius:8px;padding:6px 10px}footer{text-align:center;color:#6d7e75;font-size:12px;padding:20px}button:focus-visible,input:focus-visible{outline:3px solid #c99b44}audio{width:100%;margin:8px 0}.rubric{padding:9px;background:#f5f8f3;border-radius:8px;margin:9px 0}
+</style></head><body><header><div class="wrap"><div class="gold">SULTANATE OF OMAN · WADI AL HAWASNA SCHOOL</div><h1>English Final Exam Practice</h1><div>Semester One · 2026–2027 · Prepared by Mr. Houssem Rouatbi</div><nav style="margin-top:12px"><a class="navlink" href="#home" id="homeLink">Home / الرئيسية</a><span class="tag">Green & Gold Edition</span></nav></div></header><main class="wrap"><div id="home"><div class="card"><h2>Choose your practice</h2><p>Train a single skill without a timer, or take a complete timed mock exam using the same activity bank.</p><div class="grid"><label>Grade<select id="grade"></select></label><label>Track<select id="track"></select></label><label>Mode<select id="mode"><option value="practice">Skill practice · No timer</option><option value="exam">Full exam · Timed</option></select></label></div><p class="meta">Only validated content appears. Randomised exams become available when enough different activity sets have been completed.</p></div><div class="card" id="selection"><h2 id="selectionTitle">Available activities</h2><div id="activities" class="grid"></div></div><div class="card"><h3>How it works</h3><p><b>Practice:</b> choose one Reading, Listening or Writing activity. No countdown; explanations and AI writing review can be requested.</p><p><b>Full exam:</b> start the official-length countdown and complete the selected model. Answers are stored on this device as you type. Writing results from AI are training estimates only; the teacher's marking takes precedence.</p></div></div><div id="session" class="hidden"><div class="card"><div class="row" style="justify-content:space-between"><div><h2 id="sessionTitle" style="margin:0"></h2><span id="sessionMeta" class="meta"></span></div><div id="timer" aria-live="polite"></div></div><div class="row" style="margin-top:12px"><button class="button outline" id="backBtn">Back to library</button><button class="button" id="finishBtn">Check answers</button></div></div><div id="exercise"></div><div id="results" class="card hidden"></div></div></main><footer>Independent educational practice — based on SAH specifications; not an official Ministry examination</footer><script id="activityData" type="application/json">{
+  "version": 1,
+  "activities": [
+    {
+      "id": "g12-elective-a-listening-1",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "listening",
+      "group": 1,
+      "model": "A",
+      "status": "review",
+      "title": "Listening 1",
+      "marks": 10,
+      "questions": [
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "1. The public art programme aims mainly to ...",
+          "opts": [
+            "sell artwork to tourists",
+            "make art accessible in everyday spaces",
+            "replace every city gallery"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "2. Why were the first fabric panels replaced?",
+          "opts": [
+            "They were damaged by wind.",
+            "They cost too much.",
+            "Visitors disliked the colours."
+          ],
+          "answer": 0
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "3. Kareem’s photographs compared ...",
+          "opts": [
+            "old and new buildings",
+            "traditional skills and modern jobs",
+            "school life in three countries"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "4. Who helped Kareem learn about lighting?",
+          "opts": [
+            "An engineer",
+            "A local photographer",
+            "A boat builder"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "5. Visitors suggested adding ...",
+          "opts": [
+            "audio descriptions",
+            "longer opening hours",
+            "a larger entrance fee"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "mc",
+          "stem": "6. Volunteers received ...",
+          "opts": [
+            "monthly wages",
+            "training and certificates",
+            "free travel tickets"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "tf",
+          "stem": "7. The displays were intended to be permanent from the start.",
+          "answer": "false"
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "tf",
+          "stem": "8. Almost two hundred visitors gave feedback in the first weekend.",
+          "answer": "true"
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "tf",
+          "stem": "9. Workshops are planned at three schools next month.",
+          "answer": "true"
+        },
+        {
+          "section": "listening",
+          "group": 1,
+          "type": "tf",
+          "stem": "10. Aisha advises students never to change their first idea.",
+          "answer": "false"
+        }
+      ],
+      "passage": "Interviewer: Welcome to Community Voices. Today we are talking about a new public art programme in Muscat. With me is Aisha, who coordinates the programme, and Kareem, a student volunteer. Aisha, what is the main idea behind the project?\nAisha: We want young people to feel that art belongs to everyone. A painting in a gallery can be wonderful, but we also believe that art can make everyday public places more welcoming. So we invited students to create temporary displays for the waterfront walk and several community centres.\nInterviewer: Why temporary displays rather than permanent ones?\nAisha: We wanted to test different ideas before making long-term decisions. Temporary installations are also easier to adapt. For example, the first outdoor display used fabric panels, but the wind damaged some of them. We replaced them with strong recycled boards, and the result was much better.\nInterviewer: Kareem, what did your team create?\nKareem: We designed a series of photographs showing traditional skills alongside modern jobs. We interviewed a boat builder, a digital designer and a young engineer. Each person explained how patience and creativity matter in their work. The photographs are accompanied by short captions in Arabic and English.\nInterviewer: Did you have previous experience of photography?\nKareem: Not much. I had taken photos on my phone, but I had never organised an exhibition. A local photographer taught us how lighting changes the mood of an image. We have been improving our pictures for three months, and I can see a real difference.\nInterviewer: How did visitors respond?\nAisha: We collected feedback from nearly two hundred visitors during the first weekend. Most appreciated the chance to learn about local occupations. Some suggested that we add audio descriptions for people who cannot see the photographs easily. We have already started preparing those descriptions.\nInterviewer: Was the project expensive?\nAisha: We had a small grant, but our main resources were people's time and donated materials. Several shops provided boards and printing at a reduced price. The volunteers did not receive payment; they received training and certificates instead.\nInterviewer: What happens next?\nKareem: We are planning workshops at three schools next month. Students will make their own mini-exhibitions. We hope the project encourages them to ask questions about their communities rather than simply copy images they see online.\nInterviewer: Finally, what is your advice for a student who wants to help?\nAisha: Begin with a question that matters to your community. Listen to different opinions, test an idea on a small scale and be willing to change it. Great projects rarely succeed perfectly on the first attempt.",
+      "audio": "audio/g12-elective-a-listening-1.mp3"
+    },
+    {
+      "id": "g12-elective-a-listening-2",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "listening",
+      "group": 2,
+      "model": "A",
+      "status": "review",
+      "title": "Listening 2",
+      "marks": 10,
+      "questions": [
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "11. WATER: The pilot project installed collection ______ beside public buildings.",
+          "answer": [
+            "tanks",
+            "collection tanks"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "12. BUILDINGS: Shaded windows and better ______ reduced energy use.",
+          "answer": [
+            "insulation",
+            "improved insulation"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "13. TRANSPORT: More than ______ residents answered the questionnaire.",
+          "answer": [
+            "six hundred",
+            "600"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "14. EDUCATION: Pupils measured the temperature of shaded and ______ surfaces.",
+          "answer": [
+            "unshaded"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "15. PLANNING: Good decisions combine measurements with local people’s ______.",
+          "answer": [
+            "experience"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "16. What were the collected water supplies used for?",
+          "answer": [
+            "trees and gardens",
+            "gardens and trees",
+            "watering trees and gardens"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "17. What did architecture students measure instead of trusting predictions alone?",
+          "answer": [
+            "actual performance",
+            "building performance"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "18. Where will the transport trial begin?",
+          "answer": [
+            "near the university",
+            "the university"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "19. In which month will the next university report be published?",
+          "answer": [
+            "december"
+          ]
+        },
+        {
+          "section": "listening",
+          "group": 2,
+          "type": "text",
+          "stem": "20. Which office accepts volunteer registrations?",
+          "answer": [
+            "community office",
+            "university community office"
+          ]
+        }
+      ],
+      "passage": "Good morning. My name is Dr Salma Rashid, and today I will describe how a university team is helping our town prepare for a changing climate. I will focus on four areas: water, buildings, transport and education. Our purpose is not to predict every detail of the future. Instead, we want to make choices that will protect people under a range of possible conditions.\nFirst, let us consider water. Five years ago, the university began collecting temperature and rainfall information from different parts of the region. The researchers noticed that rainfall was becoming less predictable, even though some individual storms were unusually heavy. Rather than planning only for average rainfall, the team suggested systems that could store water safely after sudden storms. Last year, a pilot project installed collection tanks beside two public buildings. The water is used for trees and gardens, not for drinking.\nSecond, we looked at buildings. During the hottest months, cooling can consume a large amount of electricity. Architecture students compared the performance of several designs. Buildings with shaded windows and improved insulation required less energy to maintain comfortable indoor temperatures. The students also learned an important lesson: a solution that works in one building may not work in another. They therefore measured actual performance instead of relying only on computer predictions.\nThird, our transport study asked how people travel to school, work and shops. More than six hundred residents completed an online questionnaire. Many said that they would walk more often if streets had reliable shade and safer crossings. Others wanted buses with clearer schedules. The researchers recommended improving existing routes before investing in a completely new transport system. A small trial will begin near the university in September.\nFinally, we explored education. Technology is useful, but it cannot replace informed decisions. School students joined a series of practical workshops. They measured the temperature of shaded and unshaded surfaces, compared household water use and designed posters explaining their findings. Their most successful posters used clear numbers and avoided frightening claims that could not be supported by evidence.\nWhat can we learn from these projects? Good planning combines scientific measurements with the experience of local people. It also requires patience. The university will publish its next report in December, but the work will continue after that date. Students who wish to participate can register through the university's community office. Volunteers do not need advanced scientific knowledge; curiosity, careful observation and willingness to work with others are enough. Applications close on the final Friday of August. After registration, volunteers attend a short introduction where staff describe safety rules, explain the project goals and answer questions. Everyone receives a clear schedule, and participants can choose activities that match their available time. Thank you for listening.",
+      "audio": "audio/g12-elective-a-listening-2.mp3"
+    },
+    {
+      "id": "g12-elective-a-reading-1",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "reading",
+      "group": 1,
+      "model": "A",
+      "status": "review",
+      "title": "Reading 1",
+      "marks": 12,
+      "questions": [
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "21. What kind of festival invited Mariam?",
+          "answer": [
+            "student arts festival",
+            "international student arts festival",
+            "arts festival"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "22. Whose workshop inspired her project?",
+          "answer": [
+            "her grandfather",
+            "grandfather",
+            "her grandfather’s"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "23. How many objects did Mariam photograph?",
+          "answer": [
+            "three",
+            "3"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "24. What did the old wooden box contain?",
+          "answer": [
+            "letters",
+            "saved letters"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "25. Who challenged Mariam to show the scratches?",
+          "answer": [
+            "her art teacher",
+            "art teacher",
+            "teacher"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "26. What did the sponsor supply instead of new panels?",
+          "answer": [
+            "leftover displays",
+            "twelve leftover panels",
+            "old panels",
+            "leftover panels"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "27. What did Mariam ask younger students to interview?",
+          "answer": [
+            "relatives",
+            "their relatives"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "28. The project investigated the choices people make when ______ old objects.",
+          "answer": [
+            "repairing"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "29. The photographs appeared ______ by side.",
+          "answer": [
+            "side"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "30. The sponsor found twelve panels in ______.",
+          "answer": [
+            "storage"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "31. Mariam explained that repair was not ______ best.",
+          "answer": [
+            "always"
+          ]
+        },
+        {
+          "section": "reading",
+          "group": 1,
+          "type": "text",
+          "stem": "32. Art could be a way of asking useful ______.",
+          "answer": [
+            "questions"
+          ]
+        }
+      ],
+      "passage": "When Mariam received an invitation to join an international student arts festival, she felt both excited and uncertain. She loved drawing, but she had never exhibited her work outside her school. The festival organisers wanted each participant to create a project about the meaning of responsibility. Some students planned paintings about the environment, while others chose photography or short films. Mariam decided to explore something close to home: the choices people make when repairing old objects instead of throwing them away.\nHer idea came from visiting her grandfather's workshop. He repaired chairs, lamps and small wooden boxes for neighbours. He said that an object could carry memories even when it was no longer fashionable. Mariam photographed three objects before and after repair and wrote brief accounts of the people who owned them. The first was a wooden chair that had belonged to a teacher's mother. The second was a lamp that a family used during evening gatherings. The third was a box containing letters saved by a grandfather for decades.\nAt first, Mariam wanted to present only beautiful finished photographs. Her art teacher challenged her. 'If you hide all the scratches,' she asked, 'how will visitors understand what has changed?' Mariam realised that the marks were evidence of each object's history. She decided to show the damaged and repaired versions side by side, including the owners' memories beneath the pictures.\nThe project became more complicated when an exhibition sponsor offered to print the photographs on expensive new panels. Mariam appreciated the offer, yet she worried that buying unnecessary materials would contradict her message about reuse. Instead of refusing immediately, she explained her concern and asked whether the sponsor had any suitable leftover displays. The sponsor found twelve panels in storage, which the team cleaned and used again.\nAt the festival, visitors reacted differently. Some admired the photography, while others asked difficult questions about the cost of repairs. A visitor argued that replacing a broken object could sometimes be cheaper and safer. Mariam agreed and explained that the project was not a rule for every situation. Her aim was to encourage thoughtful decisions, not to claim that repair was always best. This openness made the discussion more interesting.\nAfter returning home, Mariam presented her work to younger students. She encouraged them to interview relatives and document the stories behind ordinary objects. She also shared a simple planning guide: decide what you want to communicate, collect reliable evidence, listen to criticism and consider how your methods affect your message. The project did not make Mariam a famous artist, but it changed her understanding of creativity. Art could be a way of asking useful questions, rather than merely decorating a wall. She later explained that the most important lesson was not a new camera technique, but learning how to respond respectfully when another person questioned her assumptions about the world."
+    },
+    {
+      "id": "g12-elective-a-reading-2",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "reading",
+      "group": 2,
+      "model": "A",
+      "status": "review",
+      "title": "Reading 2",
+      "marks": 13,
+      "questions": [
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "33. What unexpected activity did Salim do in his first month?",
+          "opts": [
+            "Interview visitors in a public park.",
+            "Teach classes at a local school.",
+            "Join an international arts festival."
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "34. What did residents want most?",
+          "opts": [
+            "People wanted more concerts.",
+            "Poor shade and pathways mattered most.",
+            "Park users preferred private transport."
+          ],
+          "answer": 1
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "35. How did the tutor help the group resolve disagreements?",
+          "opts": [
+            "Avoid every disagreement.",
+            "Let one person do the work.",
+            "Assign roles and document contributions."
+          ],
+          "answer": 2
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "36. What was wrong with the online cost estimate?",
+          "opts": [
+            "It used outdated building prices.",
+            "It included too many pathways.",
+            "It was written in the wrong language."
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "37. What did the students include in their portfolios?",
+          "opts": [
+            "Only a final test score",
+            "Sketches, revisions and reflections",
+            "A list of holiday destinations"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "38. The word “outdated” in Paragraph D means ...",
+          "opts": [
+            "very expensive",
+            "no longer current",
+            "carefully checked"
+          ],
+          "answer": 1
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "39. The word “proposal” in Paragraph E is closest to ...",
+          "opts": [
+            "suggested plan",
+            "written complaint",
+            "final examination"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "mc",
+          "stem": "40. The word “gradual” in Paragraph G means ...",
+          "opts": [
+            "happening little by little",
+            "happening suddenly",
+            "never happening"
+          ],
+          "answer": 0
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "41. Match Paragraph B with its main idea.",
+          "answer": "1"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "42. Match Paragraph C with its main idea.",
+          "answer": "2"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "43. Match Paragraph D with its main idea.",
+          "answer": "3"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "44. Match Paragraph F with its main idea.",
+          "answer": "4"
+        },
+        {
+          "section": "reading",
+          "group": 2,
+          "type": "match",
+          "stem": "45. Match Paragraph G with its main idea.",
+          "answer": "5"
+        }
+      ],
+      "passage": "Paragraph A. When Salim arrived at university, he expected lectures and examinations. On the first day, his tutor announced a community research challenge: teams of students from different departments would propose an affordable improvement to an underused coastal park. Salim was studying engineering, but his teammates came from business and environmental science. None of them had worked together before.\n\nParagraph B. The team initially wanted to build a large sports area. Embarrassed, the students arranged interviews with residents, including older visitors and parents with young children. They discovered that shade and safer pathways mattered much more than expensive entertainment facilities. Salim realised that a clever solution is useless if it ignores the problem people really face.\n\nParagraph C. Working in a group was harder than Salim imagined. One student missed two meetings because of a family commitment, while another insisted that her idea should be chosen without discussion. Their tutor suggested assigning clear roles and recording each person's contribution. Salim became responsible for checking measurements; another student organised interviews, and the third managed the budget. They learned that teamwork required honest conversations, not the absence of conflict.\n\nParagraph D. During their research, the students used an online system to generate a cost estimate for the new shaded pathways. The figures looked professional, but Salim noticed that the quoted price of building materials was unrealistically low. He called two local suppliers and compared the answers. The team discovered that the online estimate had used outdated prices. They corrected their report and added a note explaining why digital information must be checked against reliable evidence. Their tutor praised the decision more than the original attractive chart.\n\nParagraph E. At the end of the semester, the students presented their proposal to a panel of university staff and community representatives. Instead of submitting only a final report, each student included a portfolio containing early sketches, interview summaries, revisions and a short reflection. Salim's group proposed shaded seating and improvements to an existing pathway, with the work completed in stages to reduce costs. The proposal did not win the main prize, but the local council agreed to study it.\n\nParagraph F. After the presentation, Salim met a school student who wanted to apply to the university but worried about tuition costs and accommodation. Salim remembered how confused he had felt before arriving. He showed the visitor where to find guidance about scholarships, application deadlines and transport. He explained that financial help was only useful if students understood how to apply for it. The conversation reminded him that university education involves choices made long before the first lecture begins.\n\nParagraph G. A year later, Salim visited the park again. Only one section of the pathway had been improved, and some of the team's ideas were still waiting for funding. Salim understood that progress could be gradual. he could ask better questions, check uncertain evidence and communicate with people whose priorities differed from his own. Those skills, he believed, would be useful long after graduation.",
+      "options": [
+        "1 · Listening to community needs",
+        "2 · Solving disagreements through roles",
+        "3 · Checking online information",
+        "4 · Helping future applicants",
+        "5 · Learning from gradual progress",
+        "6 · Sporting success abroad",
+        "7 · The history of modern art",
+        "8 · Traditional fishing methods"
+      ]
+    },
+    {
+      "id": "g12-elective-a-writing-1",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "writing",
+      "group": 1,
+      "model": "A",
+      "status": "review",
+      "title": "Writing 1 · Evaluative essay",
+      "marks": 15,
+      "minWords": 150,
+      "genre": "opinion",
+      "topic": "Some people believe universities should require every student to complete a community project before graduating. Others think students should choose whether to volunteer. Discuss both views and justify your opinion with examples."
+    },
+    {
+      "id": "g12-elective-a-writing-2",
+      "grade": 12,
+      "track": "Elective",
+      "semester": 1,
+      "unitScope": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "skill": "writing",
+      "group": 2,
+      "model": "A",
+      "status": "review",
+      "title": "Writing 2 · Description of data",
+      "marks": 10,
+      "minWords": 150,
+      "genre": "informative",
+      "topic": "The figures show how 200 Grade 12 students preferred to prepare for university. Write a summary of the data, including comparisons and an overall summary.",
+      "data": [
+        [
+          "Career guidance talks",
+          "35% (70 students)"
+        ],
+        [
+          "University websites",
+          "30% (60 students)"
+        ],
+        [
+          "Campus visits",
+          "20% (40 students)"
+        ],
+        [
+          "Advice from graduates",
+          "15% (30 students)"
+        ]
+      ]
+    }
+  ]
+}</script><script>
+'use strict';const DATA=JSON.parse(document.getElementById('activityData').textContent);const $=id=>document.getElementById(id);const GROUP=DATA.activities;const EXAM_MINUTES={5:90,6:120,7:120,8:120,9:120,10:150,11:150,12:180};let current=null,ticker=null;const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const normalize=s=>String(s??'').toLowerCase().trim().replace(/[’']/g,'').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ');function savedKey(){return 'exampractice-v2-'+current?.id}function persist(){if(!current)return;try{localStorage.setItem(savedKey(),JSON.stringify({answers:current.answers,writings:current.writings,started:current.started,audioPlays:current.audioPlays}))}catch(e){}}function available(){return GROUP.filter(a=>a.status==='review'||a.status==='ready')}function selection(){const g=Number($('grade').value),t=$('track').value,mode=$('mode').value;const arr=available().filter(a=>a.grade===g&&a.track===t);$('selectionTitle').textContent=mode==='exam'?'Full exam models':'Choose a single activity (untimed)';if(mode==='practice'){$('activities').innerHTML=arr.length?arr.map(a=>`<div class="activity"><div class="tag">${safe(a.skill.toUpperCase())}</div><h3>${safe(a.title)}</h3><p class="meta">${a.marks} marks · ${a.questions?.length||'Writing'} items · Model ${safe(a.model)}</p><button class="button" data-activity="${safe(a.id)}">Start practice</button></div>`).join(''):'<p>No completed activities for this grade yet.</p>'}else{const models=[...new Set(arr.map(a=>a.model))];$('activities').innerHTML=models.map(m=>{const pack=arr.filter(a=>a.model===m);const needed=(g===12&&t==='Elective')?['listening:1','listening:2','reading:1','reading:2','writing:1','writing:2']:[];const complete=needed.length>0&&needed.every(v=>pack.some(a=>a.skill+':'+a.group===v))&&pack.reduce((s,a)=>s+a.marks,0)===70;return `<div class="activity"><h3>Model ${safe(m)}</h3><p>${pack.length} activities · ${pack.reduce((s,a)=>s+a.marks,0)} marks</p><p class="meta">${complete?'180 minutes, full SAH structure':'Incomplete — not yet available'}</p><button class="button" data-model="${safe(m)}" ${complete?'':'disabled'}>Start full exam</button></div>`}).join('')||'<p>No complete exam models available yet.</p>'}document.querySelectorAll('[data-activity]').forEach(el=>el.onclick=()=>start([GROUP.find(a=>a.id===el.dataset.activity)],false));document.querySelectorAll('[data-model]').forEach(el=>el.onclick=()=>start(arr.filter(a=>a.model===el.dataset.model),true))}function updateTracks(){const g=Number($('grade').value);const tracks=[...new Set(GROUP.filter(a=>a.grade===g).map(a=>a.track))];$('track').innerHTML=tracks.map(t=>`<option value="${safe(t)}">${safe(t)}</option>`).join('')||'<option>Standard</option>';selection()}const grades=[5,6,7,8,9,10,11,12];$('grade').innerHTML=grades.map(g=>`<option value="${g}">Grade ${g}</option>`).join('');$('grade').value='12';$('grade').onchange=updateTracks;$('track').onchange=selection;$('mode').onchange=selection;updateTracks();function start(acts,timed){if(!acts?.length)return;clearInterval(ticker);const id=(timed?'exam:':'practice:')+acts.map(a=>a.id).join('|');current={id,acts,timed,answers:{},writings:{},started:timed?Date.now():null,audioPlays:{},done:false};try{const obj=JSON.parse(localStorage.getItem(savedKey())||'null');if(obj){current.answers=obj.answers||{};current.writings=obj.writings||{};current.audioPlays=obj.audioPlays||{};if(timed)current.started=obj.started||Date.now()}}catch(e){}$('home').classList.add('hidden');$('session').classList.remove('hidden');$('sessionTitle').textContent=timed?'Full mock exam — Model '+acts[0].model:acts[0].title;$('sessionMeta').textContent=`Grade ${acts[0].grade} · ${acts[0].track} · ${acts.reduce((s,a)=>s+a.marks,0)} marks · ${timed?'Timed':'Untimed'}`;$('results').classList.add('hidden');$('finishBtn').disabled=false;renderActivities();refreshTimer();if(timed)ticker=setInterval(refreshTimer,1000);location.hash='session';scrollTo(0,0)}function refreshTimer(){if(!current)return;if(!current.timed){$('timer').textContent='∞ Untimed';return}const remaining=Math.max(0,EXAM_MINUTES[current.acts[0].grade]*60-Math.floor((Date.now()-current.started)/1000));$('timer').textContent='⏱ '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0');if(remaining===0){clearInterval(ticker);$('finishBtn').disabled=true;finish(true)}}function renderActivities(){const out=[];for(const a of current.acts){out.push(`<section class="card" id="${safe(a.id)}"><h2>${safe(a.title)} <span class="meta">${a.marks} marks</span></h2>`);if(a.skill==='listening'){out.push(`<p class="notice">Listen carefully. Recording can be played twice. Audio must be downloaded with the offline package.</p><audio controls preload="none" src="${safe(a.audio)}" data-audio="${safe(a.id)}"></audio><p class="meta" id="audioCount-${safe(a.id)}"></p>`);if(!current.timed)out.push(`<details><summary>Show practice transcript</summary><div class="passage">${safe(a.passage)}</div></details>`)}if(a.skill==='reading')out.push(`<div class="passage">${safe(a.passage)}</div>`);if(a.skill==='writing'){out.push(`<p>${safe(a.topic)}</p>${a.data?'<div class="passage">'+a.data.map(x=>safe(x[0])+': '+safe(x[1])).join('\n')+'</div>':''}<p>Write at least ${a.minWords} words.</p><textarea data-write="${safe(a.id)}" placeholder="Write your answer..."></textarea><div class="meta" id="words-${safe(a.id)}"></div><div class="row"><button class="button outline" data-ai="${safe(a.id)}">Review with AI</button><span class="meta">Online only · estimated practice score</span></div><div id="ai-${safe(a.id)}" aria-live="polite"></div>`)}else for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i;out.push(`<div class="q"><strong>${safe(q.stem)}</strong>`);let options=q.type==='mc'?q.opts:q.type==='tf'?['True','False']:q.type==='match'?a.options:null;if(options){options.forEach((o,j)=>{const v=q.type==='mc'?String(j):q.type==='tf'?o.toLowerCase():String(j+1);out.push(`<label><input type="radio" name="${safe(key)}" value="${safe(v)}" data-answer="${safe(key)}" ${String(current.answers[key])===v?'checked':''}> ${safe(o)}</label>`)})}else out.push(`<input type="text" data-answer="${safe(key)}" value="${safe(current.answers[key]||'')}" placeholder="Short answer" autocomplete="off">`);out.push(`<div class="feedback hidden" id="fb-${safe(key)}"></div></div>`)}out.push('</section>')}$('exercise').innerHTML=out.join('');document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener(el.type==='radio'?'change':'input',()=>{current.answers[el.dataset.answer]=el.value;persist()}));document.querySelectorAll('[data-write]').forEach(el=>{el.value=current.writings[el.dataset.write]||'';const upd=()=>{current.writings[el.dataset.write]=el.value;const n=el.value.trim()?el.value.trim().split(/\s+/).length:0;$('words-'+el.dataset.write).textContent=n+' words';persist()};el.oninput=upd;upd()});document.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>reviewAI(el.dataset.ai,el));document.querySelectorAll('[data-audio]').forEach(el=>{const id=el.dataset.audio;const count=()=>{$('audioCount-'+id).textContent=`Plays: ${current.audioPlays[id]||0} / 2`};count();el.onplay=()=>{if((current.audioPlays[id]||0)>=2){el.pause();return}current.audioPlays[id]=(current.audioPlays[id]||0)+1;count();persist()};el.onerror=()=>{$('audioCount-'+id).textContent='Audio not available. Download the offline ZIP including the MP3 recordings.'}})}function correct(q,value){if(value===undefined||String(value).trim()==='')return false;return q.type==='mc'?Number(value)===q.answer:q.type==='tf'||q.type==='match'?normalize(value)===normalize(q.answer):q.answer.some(v=>normalize(value)===normalize(v))}function finish(auto=false){if(!current)return;clearInterval(ticker);let score=0,total=0;for(const a of current.acts){if(a.skill==='writing')continue;for(let i=0;i<a.questions.length;i++){const q=a.questions[i],key=a.id+'-'+i,ok=correct(q,current.answers[key]);score+=Number(ok);total++;const f=$('fb-'+key);f.classList.remove('hidden');f.textContent=(ok?'✓ Correct':'✗ Check answer')+' · '+(q.type==='mc'?q.opts[q.answer]:q.type==='match'?a.options[Number(q.answer)-1]:Array.isArray(q.answer)?q.answer[0]:q.answer)}}$('results').classList.remove('hidden');$('results').innerHTML=`<h2>${auto?'Time is up':'Practice results'}</h2><p class="stats">Automatically marked: ${score} / ${total}</p><p>Writing: ${current.acts.filter(a=>a.skill==='writing').reduce((s,a)=>s+a.marks,0)} marks, assessed separately. AI feedback is a training estimate and not an official score.</p><p class="meta">You can review all objective answers above.</p>`;$('finishBtn').disabled=true;current.done=true;$('results').scrollIntoView({behavior:'smooth',block:'start'})}async function reviewAI(id,button){const a=current.acts.find(x=>x.id===id),text=current.writings[id]||'',target=$('ai-'+id);if(text.trim().length<50){target.textContent='Please write at least 50 characters before requesting feedback.';return}button.disabled=true;target.textContent='Checking writing...';try{const res=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-writing-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:a.grade,genre:a.genre,topic:a.topic,text,maxScore:10})});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.message||'AI service unavailable');const f=data.feedback,s=a.marks===15?Math.round((f.score5/5)*15):Math.round((f.score5/5)*a.marks);target.innerHTML=`<div class="notice"><b>Estimated practice score: ${s}/${a.marks}</b><p>${safe(f.summary)}</p><p>${safe(f.score_reason)}</p>${(f.five_points||[]).map(p=>`<div class="rubric"><b>${safe(p.category)}</b><p>${safe(p.what_works)}</p><p>${safe(p.what_to_improve)}</p></div>`).join('')}<p><b>Next step:</b> ${safe(f.next_step)}</p><small>AI estimate, not the official examiner mark.</small></div>`}catch(e){target.textContent='AI review unavailable: '+String(e.message||e)}finally{button.disabled=false}}$('backBtn').onclick=()=>{clearInterval(ticker);persist();current=null;$('session').classList.add('hidden');$('home').classList.remove('hidden');location.hash='home';selection()};$('homeLink').onclick=e=>{if(current){e.preventDefault();$('backBtn').click()}};$('finishBtn').onclick=()=>finish(false);
+</script></body></html>

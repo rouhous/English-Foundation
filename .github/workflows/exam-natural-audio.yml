@@ -1,11 +1,6 @@
 name: Generate natural exam listening audio (Kokoro)
 
 on:
-  push:
-    paths:
-      - 'scripts/generate_exam_natural_audio.py'
-      - 'exam-practice/index.html'
-      - '.github/workflows/exam-natural-audio.yml'
   workflow_dispatch:
 
 permissions:

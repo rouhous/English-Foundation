@@ -1,0 +1,27 @@
+name: Verify exam page JavaScript syntax
+on:
+  push:
+    paths:
+      - 'exam-practice/index.html'
+      - '.github/workflows/check-exam-page.yml'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON activity bank and inline JavaScript
+        run: |
+          python3 - <<'PY'
+          import json,re,pathlib
+          html=pathlib.Path('exam-practice/index.html').read_text(encoding='utf-8')
+          data=re.search(r'<script id="activityData" type="application/json">([\s\S]*?)</script>',html)
+          if not data: raise SystemExit("Missing activity bank")
+          bank=json.loads(data.group(1))
+          if not bank.get("activities"): raise SystemExit("Empty activity bank")
+          scripts=re.findall(r'<script>([\s\S]*?)</script>',html)
+          if not scripts: raise SystemExit("Missing application JavaScript")
+          pathlib.Path('/tmp/exam-page.js').write_text('\n'.join(scripts),encoding='utf-8')
+          print(f'Found {len(bank["activities"])} activities')
+          PY
+          node --check /tmp/exam-page.js

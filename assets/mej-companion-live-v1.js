@@ -35,14 +35,17 @@
  #mej-companion-avatar-button img{display:block;width:66px;height:66px;border-radius:50%;object-fit:contain;background:radial-gradient(circle,#eaffff,#74c8f1);border:2px solid #d5f7ff;box-shadow:0 3px 9px #001b4770}
  #mej-companion-actor{position:fixed;z-index:9300;left:8px;top:80px;width:112px;pointer-events:none;display:none;contain:layout style;transition:left 1.1s ease-in-out;}
  #mej-companion-actor.mej-c-dragging,#mej-companion-actor.mej-c-parachuting{transition:none!important}
- #mej-companion-actor .mej-c-canopy{position:absolute;left:-20px;bottom:calc(100% + 8px);width:142px;height:88px;display:none;pointer-events:none;filter:drop-shadow(0 3px 3px #06335b55)}
+ #mej-companion-actor .mej-c-canopy{position:absolute;left:-18px;top:-150px;width:142px;height:230px;display:none;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 3px #06335b55);transform-origin:58px 212px}
  #mej-companion-actor .mej-c-canopy svg{width:100%;height:100%;display:block}
  #mej-companion-actor.mej-c-parachuting .mej-c-canopy{display:block;animation:mej-open-canopy .42s ease-out both}
- #mej-companion-actor .mej-c-bag-flap{display:none;position:absolute;left:36%;top:51%;width:26px;height:14px;border-radius:65% 15% 50% 50%;background:#e4b665;border:2px solid #936c40;transform:rotate(-25deg);pointer-events:none}
- #mej-companion-actor.mej-c-parachuting .mej-c-bag-flap{display:block}
+ #mej-companion-actor .mej-c-bag-flap{display:none;position:absolute;left:30%;top:41%;width:27px;height:16px;border-radius:60% 10% 45% 35%;background:#3365b5;border:2px solid #eabf65;transform:rotate(-45deg);transform-origin:6px 14px;pointer-events:none;z-index:4}
+ #mej-companion-actor[data-kind="girl"] .mej-c-bag-flap{background:#ee71af;border-color:#f7c5dc}
+ #mej-companion-actor .mej-c-sprite{position:relative;z-index:1}
+ #mej-companion-actor.mej-c-parachuting .mej-c-bag-flap{display:block;animation:mej-open-backpack .38s ease-out both}
  #mej-companion-actor.mej-c-climbing:not(.mej-c-dragging) .mej-c-sprite{animation:mej-companion-climb .95s ease-in-out 1}
  @keyframes mej-companion-climb{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-21px) rotate(-7deg)}55%{transform:translateY(-30px) rotate(6deg)}80%{transform:translateY(-7px)}}
- @keyframes mej-open-canopy{0%{opacity:0;transform:scale(.35) translateY(30px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+ @keyframes mej-open-canopy{0%{opacity:0;transform:scale(.08)}50%{opacity:1;transform:scale(.75)}100%{opacity:1;transform:scale(1)}}
+ @keyframes mej-open-backpack{0%{transform:rotate(0)}100%{transform:rotate(-65deg)}}
  #mej-companion-actor .mej-c-sprite{pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
  #mej-companion-actor.mej-c-dragging .mej-c-sprite{cursor:grabbing}
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
@@ -52,7 +55,7 @@
  #mej-companion-actor.mej-c-bounce .mej-c-sprite{animation:mej-companion-pop .65s ease-in-out 2}
  @keyframes mej-companion-pop{0%,100%{transform:translateY(0)}46%{transform:translateY(-14px)}}
  @media(max-width:600px){#mej-companion-actor{width:78px;top:85px}#mej-companion-actor .mej-c-sprite{width:77px;height:103px}#mej-companion-actor .mej-c-bubble{right:70px;font-size:11px;max-width:125px;min-width:80px}}
- @media(max-width:600px){#mej-companion-actor .mej-c-canopy{width:110px;height:70px;left:-17px}}
+ @media(max-width:600px){#mej-companion-actor .mej-c-canopy{width:105px;height:170px;top:-113px;left:-14px;transform-origin:43px 158px}#mej-companion-actor .mej-c-bag-flap{width:21px;height:12px;left:29%;top:41%}}
  @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-sprite,#mej-companion-actor .mej-c-canopy{animation:none!important}}
  `;document.head.append(style);
  function avatar(g,size=66){const img=document.createElement('img');img.src=ART[g==='girl'?'girl':'boy'].avatar;img.alt=g==='girl'?'رفيقة عمانية':'رفيق عماني';img.width=size;img.height=size;img.decoding='async';return img}
@@ -148,7 +151,7 @@
    if(!host){
      host=document.createElement('div');host.id='mej-companion-actor';
      host.setAttribute('aria-label','اسحب الرفيق لتغيير موقعه ثم أفلته');
-     host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 88" xmlns="http://www.w3.org/2000/svg"><path d="M7 46Q19 3 71 3Q123 3 135 46Q112 37 92 46Q70 35 49 46Q28 38 7 46Z" fill="#ffcb46" stroke="#bb6b27" stroke-width="3"/><path d="M71 3Q41 22 49 46M71 3Q101 22 92 46" stroke="#fff1ab" stroke-width="4" fill="none"/><path d="M8 46L52 83M49 46L61 83M92 46L82 83M135 46L94 83" stroke="#806249" stroke-width="2.5" fill="none"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
+     host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 230" xmlns="http://www.w3.org/2000/svg"><path d="M7 51Q17 6 71 4Q125 6 135 51Q112 41 92 51Q71 39 49 51Q28 42 7 51Z" fill="#ffcb46" stroke="#a96b24" stroke-width="3"/><path d="M71 4Q43 22 49 51M71 4Q99 22 92 51" stroke="#fff3bb" stroke-width="4" fill="none"/><path d="M7 51L56 212M49 51L56 212M92 51L56 212M135 51L56 212" stroke="#7d654e" stroke-width="2.3" fill="none" stroke-linecap="round"/><path d="M49 205L56 216L63 205" stroke="#315a8b" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="56" cy="212" r="4.5" fill="#ffdd80" stroke="#7d654e" stroke-width="1.5"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
      document.body.append(host);wireDrag(host);
    }
    return host;

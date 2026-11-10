@@ -205,7 +205,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(en){const ex=document.createElement('div');ex.dir='ltr';ex.style.cssText='margin-top:6px;color:#176b52;font-weight:700;text-align:left';ex.textContent='Example: '+en;card.append(ex);}
   feedback.appendChild(card);
  }
- function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(refresh);}
+ function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(refresh);}
  function start(){
   const app=document.getElementById('app');if(!app)return;
   new MutationObserver(schedule).observe(app,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
@@ -261,7 +261,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     }
    });
   }
-  function schedule(){if(pending)return;pending=true;queueMicrotask(refresh);}
+  function schedule(){if(pending)return;pending=true;requestAnimationFrame(refresh);}
   new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
   refresh();
  }
@@ -338,7 +338,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
   root.querySelectorAll('.passage,.reading-passage,.mej-question-passage').forEach(e=>e.classList.add('mej-v2-passage'));
  }
- function schedule(){if(busy)return;busy=true;queueMicrotask(refresh)}
+ function schedule(){if(busy)return;busy=true;requestAnimationFrame(refresh)}
  function boot(){
   if(!document.getElementById(css.id))document.head.appendChild(css);
   const app=document.getElementById('app');if(!app)return;
@@ -383,7 +383,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function boot(){
   const app=document.getElementById('app');if(!app)return;
   let pending=false;
-  const schedule=()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;update()})};
+  const schedule=()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;update()})};
   new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
   document.addEventListener('click',click,true);
   schedule();
@@ -415,7 +415,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function start(){
   const app=document.getElementById('app');if(!app)return;
   let scheduled=false;
-  const queue=()=>{if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;correct()})};
+  const queue=()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;correct()})};
   new MutationObserver(queue).observe(app,{childList:true,subtree:true,characterData:true});
   queue();
  }
@@ -451,7 +451,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function boot(){
   const app=root();if(!app)return;
   let queued=false;
-  const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;refresh()})};
+  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;refresh()})};
   new MutationObserver(schedule).observe(app,{subtree:true,childList:true});
   schedule();
  }

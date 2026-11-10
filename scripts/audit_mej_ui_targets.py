@@ -3,7 +3,7 @@ from pathlib import Path
 import re, json
 s=Path("index.html").read_text(encoding="utf-8")
 patterns=[
- "function levels(", "function skills(", "function beginLevel(", "function beginStagePart(",
+ "function permitted(", "function maxAllowed(", "function active(", "function skills(", "function levels(", "function beginLevel(", "function beginStagePart(",
  "function route(", "function displayQuestion(", "function endSession(", "function finish",
  "function back(", "function skill", "function practice", "function exit",
  "class=\"levels\"", "class=\"level\"", ".levels", ".level{",

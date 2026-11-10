@@ -15,7 +15,7 @@
  const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
- let motion=true,sound=false;
+ let motion=true,sound=true;
  try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound===true}catch(_){}
  const style=document.createElement('style');style.textContent=`
  #mej-companion-choice{position:fixed;inset:0;z-index:100000;background:#001e4dca;display:grid;place-items:center;padding:12px;direction:rtl;box-sizing:border-box}
@@ -99,7 +99,22 @@
   const g=p.companion?.kind==='girl'?'girl':'boy',name=p.companion?.name||'اختر رفيقك';
   if(b.dataset.id!==String(p.id)||b.dataset.kind!==g||b.dataset.name!==name){b.dataset.id=String(p.id);b.dataset.kind=g;b.dataset.name=name;b.replaceChildren(avatar(g));b.title='تغيير رفيق الرحلة: '+name;b.setAttribute('aria-label',b.title)}
  }
- function settings(){const m=$('journeySettingsModal');if(!m||m.querySelector('#mej-companion-settings'))return;const dest=m.querySelector('.journey-modal-inner');if(!dest)return;const b=document.createElement('button');b.id='mej-companion-settings';b.type='button';b.className='btn light';b.textContent='🎒 تغيير الرفيق واسمه';b.onclick=()=>{m.remove();open(true)};dest.append(b)}
+ function settings(){
+   const m=$('journeySettingsModal');if(!m)return;
+   const dest=m.querySelector('.journey-modal-inner');if(!dest)return;
+   if(!m.querySelector('#mej-companion-settings')){
+     const b=document.createElement('button');b.id='mej-companion-settings';b.type='button';
+     b.className='btn light';b.textContent='🎒 تغيير الرفيق واسمه';
+     b.onclick=()=>{m.remove();open(true)};dest.append(b);
+   }
+   if(!m.querySelector('#mej-companion-sound')){
+     const b=document.createElement('button');b.id='mej-companion-sound';b.type='button';
+     b.className='btn light';b.setAttribute('aria-pressed',String(sound));
+     b.textContent=sound?'🔊 صوت الرفيق: مفعّل':'🔇 صوت الرفيق: متوقف';
+     b.onclick=()=>{setSound(!sound);if(sound)speak('Hello!')};
+     dest.append(b);
+   }
+ }
  function homeCheck(){
   if(inSession())return;
   const p=profile();if(!p||p.id==null){close();return}
@@ -245,7 +260,30 @@
    if(hide){const el=$('mej-companion-actor');if(el)el.hidden=true}
  }
  function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
- function speak(message){if(!sound||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang='en-GB';u.rate=.94;speechSynthesis.speak(u)}catch(_){}}
+ function speak(message){
+   if(!sound||!('speechSynthesis' in window))return;
+   try{
+     const synth=window.speechSynthesis;
+     synth.cancel();
+     if(synth.paused)synth.resume();
+     const u=new SpeechSynthesisUtterance(message);
+     u.lang='en-GB';u.rate=.92;u.pitch=1.1;u.volume=1;
+     const voices=synth.getVoices?.()||[];
+     const voice=voices.find(v=>/^en[-_]GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+     if(voice)u.voice=voice;
+     synth.speak(u);
+   }catch(e){console.warn('Companion speech unavailable',e)}
+ }
+ function setSound(on){
+   sound=!!on;
+   try{
+     const existing=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');
+     localStorage.setItem('MEJ_COMPANION_SETTINGS_V1',JSON.stringify({...existing,sound}));
+   }catch(_){}
+   const button=$('mej-companion-sound');
+   if(button){button.textContent=sound?'🔊 صوت الرفيق: مفعّل':'🔇 صوت الرفيق: متوقف';button.setAttribute('aria-pressed',String(sound))}
+   if(!sound)try{window.speechSynthesis?.cancel()}catch(_){}
+ }
  const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7};
  function refreshActor(){
    const host=$('mej-companion-actor');
@@ -324,6 +362,6 @@
   queue();
  }
  window.MEJCompanion={react};
- window.MEJCompanionLive={open:()=>open(true),refresh:queue,react,play,stop,availableActions:Object.keys(POSES),moveTo:(x,y)=>{const h=actor();place(h,x,y,true)}};
+ window.MEJCompanionLive={open:()=>open(true),refresh:queue,react,play,stop,setSound,availableActions:Object.keys(POSES),moveTo:(x,y)=>{const h=actor();place(h,x,y,true)}};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

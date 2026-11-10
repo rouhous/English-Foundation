@@ -16,7 +16,7 @@
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
  let motion=true,sound=true;
- try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound===true}catch(_){}
+ try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound!==false}catch(_){}
  const style=document.createElement('style');style.textContent=`
  #mej-companion-choice{position:fixed;inset:0;z-index:100000;background:#001e4dca;display:grid;place-items:center;padding:12px;direction:rtl;box-sizing:border-box}
  #mej-companion-choice .mej-c-sheet{box-sizing:border-box;width:min(100%,480px);max-height:calc(100dvh - 24px);overflow:auto;border-radius:23px;padding:16px;background:linear-gradient(145deg,#fff,#d9f1ff);color:#143f69;border:2px solid #a1dbf6;box-shadow:0 16px 35px #00194766}
@@ -113,6 +113,14 @@
      b.textContent=sound?'🔊 صوت الرفيق: مفعّل':'🔇 صوت الرفيق: متوقف';
      b.onclick=()=>{setSound(!sound);if(sound)speak('Hello!')};
      dest.append(b);
+     const test=document.createElement('button');test.type='button';test.className='btn light';
+     test.id='mej-companion-voice-test';test.textContent='🎤 اختبار صوت الرفيق';
+     test.onclick=()=>{if(!sound)setSound(true);speak('Hello! Welcome aboard!')};
+     dest.append(test);
+     const status=document.createElement('p');status.id='mej-companion-voice-status';
+     status.setAttribute('role','status');status.style.cssText='font-size:12px;margin:7px;text-align:center;color:#22547b';
+     status.textContent='اضغط اختبار الصوت للتحقق من دعم الجهاز للنطق.';
+     dest.append(status);
    }
  }
  function homeCheck(){
@@ -260,19 +268,36 @@
    if(hide){const el=$('mej-companion-actor');if(el)el.hidden=true}
  }
  function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
+ function speechStatus(text){
+   const node=$('mej-companion-voice-status');
+   if(node)node.textContent=text;
+ }
  function speak(message){
-   if(!sound||!('speechSynthesis' in window))return;
+   if(!sound){speechStatus('الصوت متوقف في الإعدادات');return false}
+   if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
+     speechStatus('هذا المتصفح لا يوفر النطق الآلي');return false;
+   }
    try{
      const synth=window.speechSynthesis;
+     // The call is made synchronously inside the user's pointer/click event,
+     // so iOS and Android browsers can grant user-gesture audio permission.
      synth.cancel();
      if(synth.paused)synth.resume();
      const u=new SpeechSynthesisUtterance(message);
-     u.lang='en-GB';u.rate=.92;u.pitch=1.1;u.volume=1;
+     u.lang='en-US';u.rate=.94;u.pitch=1.08;u.volume=1;
      const voices=synth.getVoices?.()||[];
-     const voice=voices.find(v=>/^en[-_]GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+     const voice=voices.find(v=>/^en[-_]US/i.test(v.lang)&&v.localService)||
+       voices.find(v=>/^en/i.test(v.lang)&&v.localService)||
+       voices.find(v=>/^en/i.test(v.lang));
      if(voice)u.voice=voice;
+     let started=false;
+     u.onstart=()=>{started=true;speechStatus('الصوت يعمل 🔊')};
+     u.onerror=e=>{speechStatus('تعذر النطق: '+(e.error||'تحقق من إعدادات الجهاز'));console.warn('Companion TTS error',e.error)};
+     u.onend=()=>{if(started)speechStatus('تم تشغيل العبارة بنجاح')};
      synth.speak(u);
-   }catch(e){console.warn('Companion speech unavailable',e)}
+     speechStatus('جارٍ محاولة نطق: '+message);
+     return true;
+   }catch(e){speechStatus('تعذر تشغيل النطق في هذا المتصفح');console.warn('Companion speech unavailable',e);return false}
  }
  function setSound(on){
    sound=!!on;

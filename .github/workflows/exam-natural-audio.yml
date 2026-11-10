@@ -50,7 +50,7 @@ jobs:
           import json,re,subprocess
           from pathlib import Path
           p=Path('exam-practice/index.html')
-          data=json.loads(re.search(r'<script id="activityData" type="application/json">([\\s\\S]*?)</script>',p.read_text()).group(1))
+          data=json.loads(re.search(r'<script id="activityData" type="application/json">([\s\S]*?)</script>',p.read_text()).group(1))
           for a in data['activities']:
               if a.get('skill')!='listening': continue
               f=p.parent/a['audio']

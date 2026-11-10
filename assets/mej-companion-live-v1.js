@@ -169,7 +169,7 @@
  function canShow(){
    if(emergencyAnimationPause)return false;
    // Keep all question/skills screens isolated from companion animation.
-   if(!$('app')?.querySelector('#mej-companion-avatar-button')||inSession())return false;
+   if(!$('app')?.querySelector('#mej-companion-avatar-button, .j23-avatar')||inSession())return false;
    if($('mej-skills-overlay')||$('mej-writing-practice'))return false;
    const p=profile();
    if(!p||!['boy','girl'].includes(p.companion?.kind)||!p.companion?.name||!enabled()||document.hidden||inDiagnostic())return false;
@@ -375,7 +375,10 @@
   const app=$('app');if(!app)return;
   // No DOM observer: route clicks and explicit events drive companion refresh.
   // Settings modal is attached to body, but only inspect it on a user click.
-  document.addEventListener('click',e=>{if(e.target?.closest?.('button'))setTimeout(()=>{settings();queue()},80)},false);
+  document.addEventListener('click',e=>{if(e.target?.closest?.('button')){
+   setTimeout(()=>{settings();queue()},100);
+   setTimeout(queue,450); // Handle route transitions that render asynchronously.
+  }},false);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(roamTimer);roamTimer=0;stop()}else queue()});
   window.addEventListener('resize',()=>{const h=$('mej-companion-actor');if(h&&actorX!==null)place(h,actorX,actorY)});
   window.addEventListener('pagehide',()=>{clearInterval(roamTimer);roamTimer=0;stop()});
@@ -383,6 +386,10 @@
   window.addEventListener('pageshow',queue);
   window.addEventListener('popstate',queue);
   queue();
+  // Bounded startup retries for profile hydration, never a perpetual polling loop.
+  setTimeout(queue,350);
+  setTimeout(queue,1400);
+  setTimeout(queue,3500);
  }
  window.MEJCompanion={react};
  window.MEJCompanionLive={open:()=>open(true),refresh:queue,react,play,stop,setSound,availableActions:Object.keys(POSES),moveTo:(x,y)=>{const h=actor();place(h,x,y,true)}};

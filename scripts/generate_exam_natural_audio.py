@@ -8,6 +8,7 @@ import json
 import re
 import subprocess
 import tempfile
+import os
 from pathlib import Path
 import numpy as np
 import soundfile as sf
@@ -36,6 +37,7 @@ ROLE_VOICE = {
     "Noura": "bf_emma", "Salim": "bm_george",
 }
 default_voice = "af_bella"
+print(f"Kokoro loaded: {len(available)} available voices; model bytes={MODEL.stat().st_size}", flush=True)
 if default_voice not in available:
     raise RuntimeError("Expected Kokoro voices not present")
 
@@ -77,10 +79,12 @@ def synthesize(activity, force=False):
     destination.parent.mkdir(parents=True, exist_ok=True)
     samples_list = []
     rate = None
+    print(f"Rendering {activity['id']} with {len(activity['passage'].split())} words", flush=True)
     for speaker, speech in segments(activity["passage"], activity):
         voice = ROLE_VOICE.get(speaker, default_voice)
         if voice not in available:
             raise ValueError(f"Missing voice: {voice}")
+        print(f"  voice={voice} role={speaker} length={len(speech)}", flush=True)
         for block in chunk_sentences(speech):
             pcm, rate = tts.create(block, voice=voice, speed=1.0,
                                    lang="en-gb" if voice.startswith("b") else "en-us")
@@ -97,7 +101,7 @@ def synthesize(activity, force=False):
                         str(destination)], check=True)
     if destination.stat().st_size < 10000:
         raise ValueError(f"Audio too short/empty: {destination}")
-    print("Created", destination, "bytes:", destination.stat().st_size)
+    print("Created", destination, "bytes:", destination.stat().st_size, flush=True)
 
 if __name__ == "__main__":
     import argparse

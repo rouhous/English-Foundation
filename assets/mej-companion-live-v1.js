@@ -385,6 +385,13 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(roamTimer);roamTimer=0;stop()}else queue()});
   window.addEventListener('resize',()=>{const h=$('mej-companion-actor');if(h&&actorX!==null)place(h,actorX,actorY)});
   window.addEventListener('pagehide',()=>{clearInterval(roamTimer);roamTimer=0;stop()});
+  window.addEventListener('mej-answer-evaluated',event=>{
+   // Explicit answer signal, not a mutation observer or polling loop.
+   if(inDiagnostic())return;
+   const correct=event?.detail?.correct;
+   if(typeof correct!=='boolean')return;
+   react(correct);
+  });
   window.addEventListener('mej-companion-change',queue);
   window.addEventListener('pageshow',queue);
   window.addEventListener('popstate',queue);

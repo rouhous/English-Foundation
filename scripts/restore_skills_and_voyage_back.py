@@ -45,4 +45,4 @@ with tempfile.TemporaryDirectory() as d:
   r=subprocess.run(['node','--check',str(f)],capture_output=True,text=True)
   if r.returncode:raise RuntimeError("Script "+str(i)+": "+r.stderr[:1000])
 p.write_text(s,encoding='utf8')
-print('PASS — skills renderer replaced; return-to-journey button installed')
+print('PASS — safe skills and journey navigation repair confirmed')

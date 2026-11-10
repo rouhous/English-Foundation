@@ -162,7 +162,8 @@
      try{sprite.releasePointerCapture(e.pointerId)}catch(_){}
      // Only a short, bounded falling animation. Never a continuous GPU loop.
      const from=y,to=ground;
-     if(!motion||reduced()||to-from<8){place(host,actorX,y,true);return}
+     // A normal drag places the character exactly where released; a release near the top drops it.
+     if(!motion||reduced()||to-from<8||y>innerHeight*.28){place(host,actorX,y,true);return}
      let first=0;
      function fall(t){
        if(!canShow()){dropRAF=0;return}

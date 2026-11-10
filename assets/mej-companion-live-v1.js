@@ -15,7 +15,7 @@
  const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
  // Emergency stability switch: disable floating animated companion while investigating cross-device skills freeze.
  // Keep avatar, chooser, student profile, saved progress and teacher link unchanged.
- const emergencyAnimationPause=true;
+ const emergencyAnimationPause=false; // Home-only, event-driven animation.
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
  let motion=true,sound=true;
@@ -168,6 +168,9 @@
  }
  function canShow(){
    if(emergencyAnimationPause)return false;
+   // Keep all question/skills screens isolated from companion animation.
+   if(!$('app')?.querySelector('#mej-companion-avatar-button')||inSession())return false;
+   if($('mej-skills-overlay')||$('mej-writing-practice'))return false;
    const p=profile();
    if(!p||!['boy','girl'].includes(p.companion?.kind)||!p.companion?.name||!enabled()||document.hidden||inDiagnostic())return false;
    if($('mej-companion-choice')||$('journeyModal'))return false;
@@ -338,19 +341,8 @@
          const band=roamingFloor(h),delta=(step%10===0?-1:1)*Math.min(45,innerWidth*.09);
          place(h,actorX+delta,Math.max(band.minY,Math.min(band.maxY,actorY)));
        }
-       // Occasionally jump towards a nearby button visually, without triggering any click.
-       if(step%11===0&&!inSession()){
-         const rect=h.getBoundingClientRect();
-         const candidates=[...$('app').querySelectorAll('button')].filter(b=>{
-           const r=b.getBoundingClientRect();
-           return r.width>30&&r.height>24&&r.bottom>0&&r.top<innerHeight&&Math.abs(r.left-rect.left)<150;
-         });
-         if(candidates.length){
-           h.classList.remove('mej-c-climbing');void h.offsetWidth;h.classList.add('mej-c-climbing');
-           setTimeout(()=>h.classList.remove('mej-c-climbing'),1050);
-         }
-       }
-     },850);
+       // Never scan buttons or exercises during animation.
+},1800);
    }
  }
  function play(name,duration=1900){
@@ -381,14 +373,15 @@
  function queue(){if(tickQueued)return;tickQueued=true;requestAnimationFrame(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
  function boot(){
   const app=$('app');if(!app)return;
-  // Completely detach the companion DOM observer during emergency isolation.
-  if(!emergencyAnimationPause){observer=new MutationObserver(queue);observer.observe(app,{childList:true,subtree:false});}
+  // No DOM observer: route clicks and explicit events drive companion refresh.
   // Settings modal is attached to body, but only inspect it on a user click.
-  document.addEventListener('click',e=>{if(e.target?.closest?.('button'))setTimeout(settings,0)},false);
+  document.addEventListener('click',e=>{if(e.target?.closest?.('button'))setTimeout(()=>{settings();queue()},80)},false);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(roamTimer);roamTimer=0;stop()}else queue()});
   window.addEventListener('resize',()=>{const h=$('mej-companion-actor');if(h&&actorX!==null)place(h,actorX,actorY)});
   window.addEventListener('pagehide',()=>{clearInterval(roamTimer);roamTimer=0;stop()});
   window.addEventListener('mej-companion-change',queue);
+  window.addEventListener('pageshow',queue);
+  window.addEventListener('popstate',queue);
   queue();
  }
  window.MEJCompanion={react};

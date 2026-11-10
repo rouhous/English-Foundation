@@ -12,7 +12,7 @@ assert html.index('mej-companion-art-v1.js?v=20261109')<html.index('mej-companio
 assert "inDiagnostic()||!canShow()" in runtime
 assert "pointerdown" in runtime and "pointermove" in runtime
 assert "MEJ_COMPANION_POSITION_V1_" in runtime
-assert "requestAnimationFrame(fall)" in runtime
+assert "requestAnimationFrame(descend)" in runtime
 assert "roamTimer=setInterval" in runtime
 assert "function roamingFloor(host)" in runtime
 assert "mej-c-parachuting" in runtime and "mej-c-canopy" in runtime
@@ -24,9 +24,11 @@ assert "Hi!" in runtime and "Hello!" in runtime and "I\'m here!" in runtime
 assert "t-first)/2300" in runtime
 assert "pointermove" in runtime and "pointerup" in runtime
 assert "inDiagnostic()" in runtime
-assert "save=true" not in runtime or "save=true" in runtime
+assert "sound=saved.sound!==false" in runtime
+assert "mej-companion-voice-test" in runtime
+assert "u.onstart=" in runtime and "u.onerror=" in runtime
 
-assert "y>innerHeight*.28" in runtime
+assert "if(!gesture.moved){greet();return}" in runtime
 assert "current.companion={kind:chosen,name" in runtime
 assert "if(typeof persist==='function')persist(false)" in runtime
 assert ".j23-avatar" in runtime

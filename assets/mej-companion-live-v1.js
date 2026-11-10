@@ -13,6 +13,9 @@
  const inSession=()=>{try{return typeof activeSession!=='undefined'&&!!activeSession}catch(_){return false}};
  const enabled=()=>{try{return window.localStorage.getItem('MEJ_COMPANION_HIDE')!=='1'}catch(_){return true}};
  const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
+ // Emergency stability switch: disable floating animated companion while investigating cross-device skills freeze.
+ // Keep avatar, chooser, student profile, saved progress and teacher link unchanged.
+ const emergencyAnimationPause=true;
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
  let motion=true,sound=true;
@@ -164,6 +167,7 @@
    bubbleTimer=setTimeout(()=>{b.hidden=true},2300);
  }
  function canShow(){
+   if(emergencyAnimationPause)return false;
    const p=profile();
    if(!p||!['boy','girl'].includes(p.companion?.kind)||!p.companion?.name||!enabled()||document.hidden||inDiagnostic())return false;
    if($('mej-companion-choice')||$('journeyModal'))return false;

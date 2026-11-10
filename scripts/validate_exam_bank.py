@@ -77,6 +77,30 @@ for grade in range(5,13):
                 if x["status"]=="ready":
                     check(not x.get("mediaPending"),x["id"]+": media required")
                     if x["skill"]=="listening":check(x.get("audioReady") is True,x["id"]+": audio not ready")
+# Additional content checks for Grades 10–11 against SAH September 2026.
+for a in items:
+    g, track, skill, group = a["grade"],a["track"],a["skill"],a["group"]
+    if g not in (10,11): continue
+    bounds = None
+    if g==10:
+        if skill=="listening": bounds=(250,300)
+        elif skill=="reading": bounds=(350,400) if group==1 else (400,450)
+        elif skill in ("grammar","vocabulary"): bounds=(80,90)
+    elif track=="Core":
+        if skill=="listening": bounds=(300,350) if group==1 else (350,400)
+        elif skill=="reading": bounds=(300,350) if group==2 else (350,400) if group==3 else None
+        elif skill=="grammar": bounds=(50,60)
+        elif skill=="vocabulary": bounds=(70,80)
+    else:
+        if skill in ("listening","reading"): bounds=(400,450)
+    if bounds:
+        words=len(a.get("passage","").split())
+        check(bounds[0]<=words<=bounds[1],
+              f"{a['id']}: expected {bounds[0]}-{bounds[1]} words, got {words}")
+    if a.get("passage") and not a["passage"].strip().endswith((".", "!", "?", ":", "\\")):
+        check(False, a["id"]+": text ends in an incomplete sentence")
+    if skill in ("grammar","vocabulary") and g==10:
+        check(a.get("passage","").count("______")>=5,a["id"]+": missing contextual gaps")
 print(f"Validated {len(items)} activities across Grades 5–12 and both Grade 11/12 tracks.")
 if errors:
     print("\n".join("ERROR: "+e for e in errors))

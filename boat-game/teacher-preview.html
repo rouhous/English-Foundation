@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>معاينة المعلم | مكافآت رحلتي مع الإنجليزية</title>
+<style>
+body{font-family:system-ui;background:#edf5f8;color:#17364c;margin:0;padding:18px}main{max-width:640px;margin:auto}
+section{background:white;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 3px 14px #13456716}
+h1{font-size:1.4rem}label{display:block;margin:12px 0}input,button{font:inherit;border-radius:9px;padding:9px;border:1px solid #7eabbc}
+input{max-width:125px}button{background:#146b83;color:white;border:0;font-weight:700;cursor:pointer}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.metric{font-size:1.4rem;font-weight:700;color:#0c6b78}
+small{color:#5b6671}.error{color:#a22}table{width:100%;border-collapse:collapse}td,th{padding:9px;border-bottom:1px solid #dde7eb;text-align:right}
+</style></head><body><main>
+<h1>👩‍🏫 معاينة المعلم — رصيد مكافآت الطالب</h1>
+<section><strong>عرض تجريبي فقط</strong><p>لا توجد هنا بيانات طلاب حقيقية، ولا يُسجّل صرف مالي فعلي. عند الدمج لا يظهر إجراء التسليم إلا للمعلم المرتبط بالطالب.</p></section>
+<section>
+<label>نجوم المرحلة الأولى <input id="stars" type="number" min="0" max="200" value="120"></label>
+<label>مكافآت كنوز المرحلة الأولى <input id="treasure" type="number" min="0" max="50" step="5" value="35"></label>
+<div class="row"><span>مكافآت الشارات: <b id="badges"></b></span><span>مكافآت الكنوز: <b id="treasures"></b></span></div>
+<p>إجمالي المكافآت المكتسبة: <span class="metric" id="earned"></span></p>
+<p>إجمالي ما سُلّم للطالب: <strong id="delivered"></strong></p>
+<p>المبلغ المستحق حاليًا: <span class="metric" id="outstanding"></span></p>
+</section>
+<section>
+<h2>تسجيل تسليم مبلغ</h2>
+<p><small>حدد المبلغ الذي سُلّم فعليًا، أو اختر «تسليم كامل المستحق». لا تُحذف المكافآت المكتسبة، بل يُخصم المبلغ المسلّم من المستحق.</small></p>
+<div class="row"><label>المبلغ (بيسة) <input id="amount" type="number" min="1" step="1" value="10"></label><button id="record">تسجيل التسليم</button><button id="all">تسليم كامل المستحق</button></div>
+<p id="message" role="status"></p>
+</section>
+<section><h2>سجل التسليم التجريبي</h2><table><thead><tr><th>التاريخ</th><th>المبلغ (بيسة)</th></tr></thead><tbody id="history"></tbody></table></section>
+<p><a href="./index.html">عودة للعبة</a></p>
+<script type="module">
+import {studentWallet,validateSettlement} from './rewards.js';
+const $=id=>document.getElementById(id);
+let settlements=[];
+function stages(){return [{stars:Number($('stars').value),treasureEarned:Number($('treasure').value)}];}
+function wallet(){return studentWallet({stages:stages(),settlements});}
+function render(){const w=wallet();$('badges').textContent=w.badgeEarned+' بيسة';$('treasures').textContent=w.treasureEarned+' بيسة';$('earned').textContent=w.lifetimeEarned+' بيسة';$('delivered').textContent=w.totalDelivered+' بيسة';$('outstanding').textContent=w.outstanding+' بيسة';$('history').replaceChildren();for(const s of settlements){const tr=document.createElement('tr');for(const v of [s.at,s.amount]){const td=document.createElement('td');td.textContent=v;tr.append(td);}$('history').append(tr);}}
+function record(amount){try{const validated=validateSettlement(amount,wallet());settlements.push({amount:validated,at:new Date().toLocaleString('ar-OM')});$('message').textContent='تم تسجيل '+validated+' بيسة في المعاينة فقط.';render();}catch(e){$('message').textContent='المبلغ غير صحيح أو يتجاوز الرصيد المستحق.';}}
+$('record').onclick=()=>record(Number($('amount').value));
+$('all').onclick=()=>record(wallet().outstanding);
+['stars','treasure'].forEach(id=>$(id).addEventListener('input',render));
+render();
+</script></main></body></html>

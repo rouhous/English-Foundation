@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>رحلتي مع الإنجليزية | لعبة القارب</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Segoe UI",sans-serif}*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:linear-gradient(#103b66,#051c37);color:white;display:grid;place-items:center}
+main{width:min(100%,560px);padding:12px}header{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
+h1{font-size:1.2rem;margin:0}.chip{border:1px solid #8abfd7;border-radius:30px;padding:6px 10px;background:#183d5c}
+.board{position:relative;border:2px solid #72c4e4;border-radius:22px;overflow:hidden;box-shadow:0 12px 34px #0007;touch-action:none}
+canvas{display:block;width:100%;height:auto;aspect-ratio:9/13;touch-action:none}
+.tip{line-height:1.6;font-size:.9rem;color:#d4eaf5;margin:8px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}button,input{font:inherit}button{border:0;border-radius:14px;background:#f1c96e;color:#15314b;padding:10px 16px;font-weight:800;cursor:pointer}button.secondary{background:#bddfe9}
+#notice{min-height:2.2em;font-weight:700;color:#f9e7a0}label{display:inline-flex;gap:8px;align-items:center}
+input{width:75px;padding:7px;border-radius:8px;border:1px solid #aad;color:#102d4c;background:white}
+small{color:#b9d3dc}
+</style></head>
+<body><main>
+<header><h1>⛵ رحلة القارب والكنز</h1><span class="chip" id="starsBadge">⭐ 0</span><span class="chip" id="rewardBadge">🪙 0 بيسة</span></header>
+<div class="board"><canvas id="game" width="450" height="650" aria-label="لعبة القارب: اسحب القارب يمينًا ويسارًا لتجنب العوائق وجمع الكنوز"></canvas></div>
+<p class="tip">اسحب القارب بإصبعك أو حرّكه بالأسهم. اجمع الجواهر وتجنب الصخور. يمكنك مواصلة اللعب حتى بعد انتهاء الجوائز.</p>
+<div class="actions"><button id="start">ابدأ / أعد اللعب</button><button id="back" class="secondary">عودة</button><label>نجوم المرحلة (تجربة): <input id="stars" type="number" min="0" max="200" step="1" value="40"></label></div>
+<div class="chip" id="walletSummary" aria-live="polite">مكافآت الشارات: 0 | الكنوز: 0 | الإجمالي: 0 بيسة</div><p id="notice" aria-live="polite"></p>
+<small>نسخة اختبارية مستقلة: العملات المعروضة محاكاة فقط، ولا تُعد رصيدًا ماليًا. الربط الحقيقي يتطلب تحققًا وحفظًا من الخادم.</small>
+<script type="module">
+import {stageStatus,calculateTreasure,chooseTreasure} from './rewards.js';
+const el=id=>document.getElementById(id),cv=el('game'),ctx=cv.getContext('2d');
+const W=cv.width,H=cv.height, lanes=[100,225,350], boat={x:225,y:550,w:48,h:62};
+let stars=40,treasureEarned=0,objects=[],running=false,last=0,spawn=0,score=0,frames=0;
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+function update(){const s=stageStatus({stars,treasureEarned});el('starsBadge').textContent='⭐ '+stars;el('rewardBadge').textContent='🪙 '+s.earned+' بيسة';el('walletSummary').textContent='الشارات: '+s.badge+' | الكنوز: '+s.treasure+' / 50 | الإجمالي: '+s.earned+' / 150 بيسة';el('notice').textContent=s.treasureRemaining?'متبقٍ من مكافآت الكنز: '+s.treasureRemaining+' بيسة. الشارة القادمة عند '+(s.nextBadgeStars??'اكتمال المرحلة')+' نجمة.':'اكتملت مكافآت الكنز (50 بيسة). يمكنك الاستمرار باللعب وجمع الشارات.';}
+function drawBoat(){ctx.save();ctx.translate(boat.x,boat.y);ctx.font='49px system-ui';ctx.textAlign='center';ctx.fillText('⛵',0,17);ctx.restore();}
+function draw(){ctx.fillStyle='#0c5986';ctx.fillRect(0,0,W,H);ctx.fillStyle='#1881ab';for(let i=0;i<3;i++){ctx.fillRect(i*150+4,0,142,H);}ctx.strokeStyle='#bde4e977';ctx.lineWidth=3;ctx.setLineDash([22,22]);[150,300].forEach(x=>{ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();});ctx.setLineDash([]);
+ctx.textAlign='center';ctx.font='31px system-ui';for(const o of objects)ctx.fillText(o.type==='rock'?'🪨':o.type==='gem'?'💎':'🎁',o.x,o.y);drawBoat();ctx.fillStyle='#fff';ctx.textAlign='left';ctx.font='bold 17px system-ui';ctx.fillText('💎 '+score,14,30);
+if(!running){ctx.fillStyle='#001b2d99';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 24px system-ui';ctx.fillText('اضغط «ابدأ» للانطلاق',W/2,H/2);}}
+function spawnObject(){const type=Math.random()<.25?'rock':Math.random()<.69?'gem':'chest';objects.push({x:lanes[Math.floor(Math.random()*lanes.length)],y:-40,type,hit:false});}
+function step(t){if(!running){draw();return;}const dt=Math.min(36,t-last||16)/16.67;last=t;spawn+=dt;frames+=dt;if(spawn>38){spawn=0;spawnObject();}
+for(const o of objects){o.y+=3.1*dt;if(!o.hit&&Math.abs(o.x-boat.x)<39&&Math.abs(o.y-boat.y)<41){o.hit=true;if(o.type==='rock'){running=false;el('notice').textContent='اصطدمت بصخرة! يمكنك إعادة اللعب.';}else if(o.type==='gem'){score++;}else{const proposed=chooseTreasure();const r=calculateTreasure({treasureEarned,proposed});treasureEarned=r.treasureEarned;score+=2;update();if(r.award)el('notice').textContent='🎁 حصلت على '+r.award+' بيسة إضافية (محاكاة)!';}}}
+objects=objects.filter(o=>!o.hit&&o.y<H+40);draw();if(running)requestAnimationFrame(step);}
+function setBoat(x){boat.x=clamp(x,35,W-35);}
+function pointerX(ev){const r=cv.getBoundingClientRect();return (ev.clientX-r.left)*W/r.width;}
+let dragging=false;
+cv.addEventListener('pointerdown',ev=>{if(Math.abs(pointerX(ev)-boat.x)<90){dragging=true;cv.setPointerCapture(ev.pointerId);setBoat(pointerX(ev));draw();}});
+cv.addEventListener('pointermove',ev=>{if(dragging){setBoat(pointerX(ev));if(!running)draw();}});
+cv.addEventListener('pointerup',()=>{dragging=false;});cv.addEventListener('pointercancel',()=>{dragging=false;});
+document.addEventListener('keydown',ev=>{if(ev.key==='ArrowLeft'||ev.key==='ArrowRight'){ev.preventDefault();setBoat(boat.x+(ev.key==='ArrowLeft'?-35:35));if(!running)draw();}});
+el('stars').addEventListener('input',ev=>{stars=clamp(Number(ev.target.value)||0,0,200);update();});
+el('start').addEventListener('click',()=>{running=true;objects=[];score=0;boat.x=225;last=performance.now();spawn=0;requestAnimationFrame(step);});
+el('back').addEventListener('click',()=>{if(history.length>1)history.back();else location.href='../';});
+const p=new URLSearchParams(location.search);if(p.has('stars')){stars=clamp(Number(p.get('stars'))||0,0,200);el('stars').value=stars;}
+update();draw();
+</script></main></body></html>

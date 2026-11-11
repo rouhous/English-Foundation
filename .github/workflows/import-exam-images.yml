@@ -30,7 +30,7 @@ jobs:
           urls=json.loads(os.environ['IMAGE_MANIFEST'])
           out=Path('exam-practice/pictures');out.mkdir(exist_ok=True)
           for name,url in urls.items():
-              candidates=[url.replace('height:200','height:900').replace('width:200','width:900').replace('x-canva-quality=thumbnail','x-canva-quality=normal'),url]
+              candidates=[url.replace('height:200','height:1254').replace('width:200','width:1254'),url.replace('height:200','height:900').replace('width:200','width:900'),url.replace('height:200','height:512').replace('width:200','width:512'),url]
               data=None
               for candidate in candidates:
                   try:

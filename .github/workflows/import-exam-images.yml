@@ -1,0 +1,66 @@
+name: Import approved 3D exam illustrations
+on:
+  push:
+    paths:
+      - '.github/workflows/import-exam-images.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: exam-image-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pillow requests
+      - name: Download approved illustrations and update exam references
+        env:
+          IMAGE_MANIFEST: '{"school":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F58510ca4-0ae2-465d-a470-4de7d4ec7013/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAI_Wix4kNR_8CbsFfh7MqemYOzzD1SO84ePSTuV5xERL&exp=1794417487&osig=AAAAAAAAAAAAAAAAAAAAAN1lWKpOGeI77M_U0_3f5uUZJGsJgI_146ulgSgKMtc5&signer=media-rpc&token=AAIAAU0AJDU4NTEwY2E0LTBhZTItNDY1ZC1hNDcwLTRkZTdkNGVjNzAxMwAAAAABocud7JgWFFMLK3s6KQT4pWXy9yscAJkELlBHaGiE3QujCcl7FA&x-canva-quality=thumbnail","bus":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F8675cfbf-c988-4978-9683-2a9f0991ad9a/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAMYaGVqb5PrzpFBOtutEbRQkcDgd1Of-KMUWAFzgpVmq&exp=1794417345&osig=AAAAAAAAAAAAAAAAAAAAABiMqc_BF3F1vJSgbbexVlTJpgSWl6L3J7AnaVLQbDHR&signer=media-rpc&token=AAIAAU0AJDg2NzVjZmJmLWM5ODgtNDk3OC05NjgzLTJhOWYwOTkxYWQ5YQAAAAABocubweiKfTLlgn8r8Jglv2uC5WQiPnPvE2mQp2PAK0fKXLoqyQ&x-canva-quality=thumbnail","beach":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Ff68e4f1a-b024-42f4-9508-f6aa7e78b601/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAEV_ICLGT5Jk6_e5zTazwd3QqvAnXf81YXNoC1ikL9qe&exp=1794417089&osig=AAAAAAAAAAAAAAAAAAAAAGJTz2J5CHO402TzqlMUl7DSKft4z31cSHkF_gU56zMX&signer=media-rpc&token=AAIAAU0AJGY2OGU0ZjFhLWIwMjQtNDJmNC05NTA4LWY2YWE3ZTc4YjYwMQAAAAABocuX2eiTrX8JiEsJRjIiguxwedHrZgRKSZ0e5acjwLiAegl8GQ&x-canva-quality=thumbnail","garden":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F02a96522-a23d-4376-8711-24cb80c7f7f1/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAJAnS6WEiDmkShQbBLX5gKv9c2F0u7yUfyYbxzZ1Xdby&exp=1794416178&osig=AAAAAAAAAAAAAAAAAAAAACViziII07UDF5FBjnT2LvgdvfaCosAnTSW3Rx6h0wq0&signer=media-rpc&token=AAIAAU0AJDAyYTk2NTIyLWEyM2QtNDM3Ni04NzExLTI0Y2I4MGM3ZjdmMQAAAAABocuJ81DpRMh8fHXiX4rX3HXeSjy1SLmZrwi8T5h_mDUrVjnxVw&x-canva-quality=thumbnail","football":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fb8bbbd57-0637-4f78-9656-39cc65848b93/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAABx3-DmUrX_IYWHHSn1aHAEHbUWhKFe7UGr68ZD044P&exp=1794416294&osig=AAAAAAAAAAAAAAAAAAAAAMJYyUqs2yg8Fcn5YAbGKVpH7z9XUBRe3fWtz4LCcPc6&signer=media-rpc&token=AAIAAU0AJGI4YmJiZDU3LTA2MzctNGY3OC05NjU2LTM5Y2M2NTg0OGI5MwAAAAABocuLuHDFDI-Y5Aq0l1_G0uXyhQs5tO4MpJmVeIx4eOohC2kcGw&x-canva-quality=thumbnail","science":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F54f228f2-0af9-41e4-88bf-396be66a7ef4/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAKR0-An2gdFuDGGn85hjSzjTxUqT4waxhvIOmMnGwIC7&exp=1794416353&osig=AAAAAAAAAAAAAAAAAAAAAI-Akx3SZs5M7GLcXsQmsEZAlKt-KOTC-RkPSwzSbCTZ&signer=media-rpc&token=AAIAAU0AJDU0ZjIyOGYyLTBhZjktNDFlNC04OGJmLTM5NmJlNjZhN2VmNAAAAAABocuMnug_PogN3zllJSxZ_5s8minGIa8JnaaPvqinqyaGzrCXjg&x-canva-quality=thumbnail","art":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F5d670a99-19a9-4a72-bb8c-694d4f10505b/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAN0smjD4wlI0Hwqt-gAaTSp_MHDt5GI8x0GT4Vl1PPvG&exp=1794416068&osig=AAAAAAAAAAAAAAAAAAAAAK-Oyz_pUqKZ98e-PCdy6X8SbTn4lC-olvFhkE81EdVL&signer=media-rpc&token=AAIAAU0AJDVkNjcwYTk5LTE5YTktNGE3Mi1iYjhjLTY5NGQ0ZjEwNTA1YgAAAAABocuIRaB5FxfS060mVuvul-_kMI-Yq3dEUIwnGS6uKw7l2ymshA&x-canva-quality=thumbnail","music":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fb741d4cb-4efb-4a14-9756-b7ffe2750ced/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAACYphf3kXuQ7p9HdvEGBBszOXYVhsd-b0hJU8QWD5vmL&exp=1794417386&osig=AAAAAAAAAAAAAAAAAAAAAF6kaXgtdiwC0M3nKPCuDK8f1QkgsqJd4YE3K_hDErbo&signer=media-rpc&token=AAIAAU0AJGI3NDFkNGNiLTRlZmItNGExNC05NzU2LWI3ZmZlMjc1MGNlZAAAAAABocucYhDyQF4Iau-lLyDeQHwNctqrvaGX7-EuzvNPGDL0u37OMA&x-canva-quality=thumbnail","book":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fe2de032e-68bc-487f-b483-ca0ec8ae54c3/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAFh2Gq0Msl1wtDDFa6dt5FxgKs40rZms61TUu850t4E8&exp=1794418961&osig=AAAAAAAAAAAAAAAAAAAAAAxbhNrpBEdN5-fBkamMwdNiHxVBfT0LAwWc1kl-HI3p&signer=media-rpc&token=AAIAAU0AJGUyZGUwMzJlLTY4YmMtNDg3Zi1iNDgzLWNhMGVjOGFlNTRjMwAAAAABocu0amiqfE6ke5Gx8LiwG7QK0ujrmrgG-_GC8Av9fezRX83v7A&x-canva-quality=thumbnail","bird":"https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F6ead4cfc-e239-494c-87e2-13766d74d0af/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAABBgnkzZBVxIvpJCKFhzFfT-GqxSGUBejoQY3OShOOUP&exp=1794416843&osig=AAAAAAAAAAAAAAAAAAAAAEb9_74yjFw46aewpeieWDfAz78KfG7x3s34boM1_TTM&signer=media-rpc&token=AAIAAU0AJDZlYWQ0Y2ZjLWUyMzktNDk0Yy04N2UyLTEzNzY2ZDc0ZDBhZgAAAAABocuUGPhyi0OeB3ZaAxDFzMSHC15QS2zR5sqsx22ID-NDuJmNsA&x-canva-quality=thumbnail"}'
+        run: |
+          python - <<'PY'
+          import os,re,json,requests,io
+          from pathlib import Path
+          from PIL import Image,ImageOps
+          urls=json.loads(os.environ['IMAGE_MANIFEST'])
+          out=Path('exam-practice/pictures');out.mkdir(exist_ok=True)
+          for name,url in urls.items():
+              candidates=[url.replace('height:200','height:900').replace('width:200','width:900').replace('x-canva-quality=thumbnail','x-canva-quality=normal'),url]
+              data=None
+              for candidate in candidates:
+                  try:
+                      resp=requests.get(candidate,timeout=35)
+                      resp.raise_for_status()
+                      pic=Image.open(io.BytesIO(resp.content));pic.load()
+                      if pic.width>=200 and pic.height>=200:
+                          data=pic;print(name,'source',pic.size,'enhanced URL:',candidate!=url);break
+                  except Exception as e:print(name,'candidate failed:',str(e)[:120])
+              if data is None:raise RuntimeError('No usable illustration for '+name)
+              # Save locally for reliable offline/PWA use, keeping aspect ratio.
+              data=ImageOps.fit(data.convert('RGB'),(512,512),method=Image.Resampling.LANCZOS)
+              data.save(out/(name+'.webp'),'WEBP',quality=87,method=6)
+          html=Path('exam-practice/index.html')
+          s=html.read_text(encoding='utf8')
+          changed={}
+          for name in urls:
+              old='pictures/'+name+'.svg';new='pictures/'+name+'.webp'
+              changed[name]=s.count(old)
+              s=s.replace(old,new)
+          if not any(changed.values()):raise RuntimeError('Exam bank had no matching picture paths')
+          html.write_text(s,encoding='utf8')
+          print('Picture references updated',changed)
+          PY
+      - name: Commit exam illustrations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add exam-practice/pictures/*.webp exam-practice/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Import approved 3D exam illustrations and replace pictograms"
+            git push
+          fi

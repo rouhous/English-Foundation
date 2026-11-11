@@ -74,9 +74,8 @@ def segments(script, activity):
     # The five short texts in Grades 7–9 are independent speakers.
     # Alternate a young feminine and masculine voice rather than reading all texts in one voice.
     if activity.get("grade") in (7, 8, 9) and activity.get("group") == 1:
-        parts = [p.strip() for p in re.split(r"\\n\\s*\\n", script.strip()) if p.strip()]
+        parts = [p.strip() for p in re.split(r"\n\s*\n", script.strip()) if p.strip()]
         if len(parts) == 5:
-            voices = ["af_bella", "am_michael", "bf_emma", "bm_george", "af_bella"]
             return [("Voice "+str(i+1), p) for i,p in enumerate(parts)]
     lines = [x.strip() for x in script.splitlines() if x.strip()]
     if len(lines) > 1 and all(":" in line[:28] for line in lines):

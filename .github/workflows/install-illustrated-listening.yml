@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/install-illustrated-listening.yml'
+      - 'scripts/rebuild_illustrated_listening.py'
   workflow_dispatch:
 
 permissions:

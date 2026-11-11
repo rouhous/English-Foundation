@@ -1,0 +1,87 @@
+name: Install distinct illustrated Listening banks (Grades 5-9)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/install-illustrated-listening.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: illustrated-listening-install
+  cancel-in-progress: false
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image tools
+        run: python -m pip install requests pillow
+      - name: Fetch five approved educational illustration sheets and crop to 80 square visuals
+        env:
+          ILLUSTRATION_SHEETS: '{"5":"https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/dedf9b8b-a3be-4501-a9bf-bb845ae04f4b/2d087f43-727c-4521-a48c-05ba24f219d2/An_EXACT_4x4_grid_of_16_square__equal_sized__individually_fr.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMDU1ZjczM2NmMDNhNTQwOSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDU1NDMwMH0.1Bq7ecLQNH2m8oJWtl-paVLtyZivu5NlwzyZg3AUYBI","6":"https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/1b3e157e-69ef-4e35-b493-34e71ddc120b/eacf8134-7525-4447-aed2-ebfc02f64b7d/One_square_4_by_4_strict_grid_of_sixteen_equal_square_3D_car.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNTAxMzk3MTkwOTk5NDU1MCIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDU1NTU0NX0.D0d3enDBGuon375UX_s1VmNf9i3wyi-56IYA3RI_DUE","7":"https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/9c5883f4-9de0-4dae-aacc-a5f8987798a8/28f94922-b05d-421f-af61-ea19a54de605/Create_one_high_resolution_square_image_divided_into_EXACTLY.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiY2RlZGM2ZTVjNWIwYjk4YiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDU2MzQyOX0.fjmppU35X6iQpgjk1_0vZG-GNJ3Q3nLfOY1Ivr2Z3Ro","8":"https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/dab213f5-c225-48a8-9299-1963aed9c9a0/a28b6686-ebf5-4377-8c69-5a8959929421/One_2048_by_2048_square_perfectly_aligned_4x4_contact_sheet_.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMjNmNTJmNzA5ZmExNGNjMCIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDU1NDIyNH0.9GrkiWi1MMlU0tRP22uwZjAiSW86gtCz_40BtXd5xXU","9":"https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/43b2b5a6-fb89-4fda-ad8f-1be6ef0e829d/d8e52b1c-a2a5-4abd-b7f5-a5325f1a7a86/A_precisely_aligned_4_by_4_CONTACT_SHEET_of_sixteen_separate.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZWRiN2E2ZWU3MTg3NzU4ZiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDU0MDAxNH0._bTqpdTH3V5aO3Jr87k9kKXNdzuznsJRvb0TlUaOOFQ"}'
+        run: |
+          python - <<'PY'
+          import io,json,os,time
+          from pathlib import Path
+          import requests
+          from PIL import Image,ImageStat,ImageChops
+          urls=json.loads(os.environ['ILLUSTRATION_SHEETS'])
+          assert set(urls)=={'5','6','7','8','9'}
+          for grade,url in sorted(urls.items()):
+              res=requests.get(url,timeout=90)
+              res.raise_for_status()
+              img=Image.open(io.BytesIO(res.content)).convert('RGB')
+              width,height=img.size
+              if min(width,height)<1000 or abs(width-height)>min(width,height)*0.02:
+                  raise RuntimeError('Unexpected square illustration sheet for grade '+grade+': '+str(img.size))
+              target=Path('exam-practice/pictures/listening')/('g'+grade)
+              target.mkdir(parents=True,exist_ok=True)
+              for index in range(16):
+                  row,col=divmod(index,4)
+                  x0=round(col*width/4);x1=round((col+1)*width/4)
+                  y0=round(row*height/4);y1=round((row+1)*height/4)
+                  picture=img.crop((x0,y0,x1,y1))
+                  if picture.width<256 or picture.height<256:
+                      raise RuntimeError('Listening image source too small '+grade+' '+str(index))
+                  picture=picture.resize((512,512),Image.Resampling.LANCZOS)
+                  picture.save(target/('%02d.webp'%index),format='WEBP',quality=90,method=6)
+              print('Grade',grade,'source',img.size,'saved 16 visuals')
+          PY
+      - name: Rebuild visual answer choices and fresh listening texts
+        run: python scripts/rebuild_illustrated_listening.py
+      - name: Check JavaScript and verify image references
+        run: |
+          python scripts/audit_expanded_exam_bank.py || true
+          node - <<'JS'
+          const fs=require('fs');
+          const s=fs.readFileSync('exam-practice/index.html','utf8');
+          const script=s.slice(s.lastIndexOf('<script>')+8,s.lastIndexOf('</script>'));
+          new Function(script);
+          const m=s.match(/<script id="activityData" type="application\/json">([\s\S]*?)<\/script>/);
+          const bank=JSON.parse(m[1]);
+          const x=bank.activities.filter(a=>a.grade>=5&&a.grade<=9&&a.skill==='listening'&&a.group===1);
+          if(x.length!==20)throw Error('Wrong activity count '+x.length);
+          for(const a of x){
+            if(!a.imageBankVersion||a.questions.length!==5)throw Error('Unconverted '+a.id);
+          }
+          console.log('Verified '+x.length+' new listening tasks');
+          JS
+      - name: Publish 80 local pictures plus corrected questions and transcripts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add exam-practice/index.html exam-practice/pictures/listening/
+          if ! git diff --cached --quiet; then
+            git commit -m "Install 80 grade-specific listening visuals and rewrite 20 listening tasks"
+            git push
+          fi

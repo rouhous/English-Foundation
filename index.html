@@ -2012,7 +2012,29 @@ function mejGrammarCorrection(q){
   [/\b(now|at the moment|look!)\b/,()=> 'للحدث الجاري الآن نستخدم am/is/are + الفعل مع ing.']
  ];
  let explanation='';
- for(const [re,fn] of tests){if(re.test(p)||re.test(a)){explanation=fn();break}}
+ const options=(Array.isArray(q.options)?q.options:[]).map(v=>String(v).toLowerCase().trim());
+ const stateVerbs=/^(?:know|knows|knew|like|likes|love|loves|hate|hates|want|wants|need|needs|believe|believes|understand|understands|remember|remembers|prefer|prefers|own|owns|seem|seems)$/;
+ // Match the grammar target (the missing answer), never incidental words in the sentence.
+ if(stateVerbs.test(a) && (options.some(v=>/^(?:am|is|are)\s+\w+ing$/.test(v)) || /\b(?:now|right now|at the moment)\b/.test(p))){
+  explanation='هذه من أفعال الحالة (Stative Verbs) التي لا تُستخدم عادةً في المضارع المستمر. نستخدم المضارع البسيط حتى مع right now؛ ومع he/she/it نضيف s أو es للفعل عند الحاجة. مثال: He knows the answer.';
+ }
+ for(let i=0;!explanation && i<tests.length;i++){
+  const [re,fn]=tests[i];
+  if(!(re.test(p)||re.test(a)))continue;
+  if(i===2 && !/^(?:am|is|are|was|were)$/.test(a))continue;
+  if(i===3 && !/^(?:a|an|the)$/.test(a))continue;
+  if(i===4 && !/^(?:he|she|it|they|we|you|i)$/.test(a) && !/^(?:he|she|it)\s+_{2,}/.test(p))continue;
+  if(i===5 && !/^(?:this|that|these|those)$/.test(a))continue;
+  if(i===6 && !/^(?:do|does|did|don't|doesn't)$/.test(a) && !/\b(?:do|does|did)\s+_{2,}/.test(p))continue;
+  if(i===7 && !/^(?:have|has|had)$/.test(a))continue;
+  if(i===8 && !/^(?:can|could|should|must|may|might|will|would)$/.test(a) && !/\b(?:can|could|should|must|may|might|will|would)\s+_{2,}/.test(p))continue;
+  if(i===9 && !/^(?:much|many|some|any|there is|there are)$/.test(a))continue;
+  if(i===10 && !/^(?:in|on|at)$/.test(a))continue;
+  if(i===11 && !/(?:er|est)$|^(?:more|most|better|best|worse|worst)$/.test(a))continue;
+  if(i===12 && !/(?:ed)$|^(?:went|saw|ate|did|had|was|were|wrote|bought|took|made|came|got|gave)$/.test(a))continue;
+  if(i===13 && !/(?:ing)$|^(?:am|is|are)\s+\w+ing$/.test(a))continue;
+  explanation=fn();
+ }
  if(!explanation&&/\b\w+(ed|ing)\b/.test(a))explanation=/ing$/.test(a)?'للتعبير عن فعل مستمر نستخدم الفعل مع ing بعد فعل be المناسب.':'في الماضي البسيط للأفعال المنتظمة نضيف ed، أما الأفعال الشاذة فلها تصريف خاص.';
  if(!explanation&&/s$/.test(a)&&!/\s/.test(a))explanation='في المضارع البسيط نضيف s أو es إلى الفعل مع he/she/it.';
  if(!explanation&&q.tip&&String(q.tip).trim()!=='اقرأ الجملة كاملة قبل الاختيار.')explanation=String(q.tip);

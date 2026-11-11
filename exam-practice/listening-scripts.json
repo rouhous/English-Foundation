@@ -1,6 +1,6 @@
 {
-  "status": "review-scripts-for-multi-voice-recording",
-  "updated": "2026-11-11",
+  "status": "review-and-audio-generation",
+  "revision": "2026-11-11: Grades 5-9 listening rebuilt",
   "count": 80,
   "activities": [
     {
@@ -114,7 +114,8 @@
         }
       ],
       "audio": "audio/g12-elective-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-a-listening-2",
@@ -225,7 +226,8 @@
         }
       ],
       "audio": "audio/g12-elective-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-a-listening-1",
@@ -308,7 +310,8 @@
         }
       ],
       "audio": "audio/g12-core-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-a-listening-2",
@@ -395,7 +398,8 @@
         }
       ],
       "audio": "audio/g12-core-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-b-listening-1",
@@ -488,7 +492,8 @@
         }
       ],
       "audio": "audio/g12-elective-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-b-listening-2",
@@ -580,7 +585,8 @@
         }
       ],
       "audio": "audio/g12-elective-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-b-listening-1",
@@ -663,7 +669,8 @@
         }
       ],
       "audio": "audio/g12-core-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-b-listening-2",
@@ -750,7 +757,8 @@
         }
       ],
       "audio": "audio/g12-core-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-a-listening-1",
@@ -833,7 +841,8 @@
         }
       ],
       "audio": "audio/g11-core-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-a-listening-2",
@@ -917,7 +926,8 @@
         }
       ],
       "audio": "audio/g11-core-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-a-listening-1",
@@ -1010,7 +1020,8 @@
         }
       ],
       "audio": "audio/g11-elective-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-a-listening-2",
@@ -1097,7 +1108,8 @@
         }
       ],
       "audio": "audio/g11-elective-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-b-listening-1",
@@ -1180,7 +1192,8 @@
         }
       ],
       "audio": "audio/g11-core-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-b-listening-2",
@@ -1264,7 +1277,8 @@
         }
       ],
       "audio": "audio/g11-core-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-b-listening-1",
@@ -1357,7 +1371,8 @@
         }
       ],
       "audio": "audio/g11-elective-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-b-listening-2",
@@ -1444,7 +1459,8 @@
         }
       ],
       "audio": "audio/g11-elective-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-a-listening-1",
@@ -1527,7 +1543,8 @@
         }
       ],
       "audio": "audio/g10-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-a-listening-2",
@@ -1589,7 +1606,8 @@
         }
       ],
       "audio": "audio/g10-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-b-listening-1",
@@ -1672,7 +1690,8 @@
         }
       ],
       "audio": "audio/g10-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-b-listening-2",
@@ -1734,7 +1753,8 @@
         }
       ],
       "audio": "audio/g10-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g9-standard-a-listening-1",
@@ -1822,7 +1842,8 @@
         }
       ],
       "audio": "audio/g9-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g9-standard-a-listening-2",
@@ -1830,62 +1851,63 @@
       "track": "Standard",
       "model": "A",
       "group": 2,
-      "title": "Listening 2 · Interview",
-      "script": "Interviewer: Why did you join the school media club?\nSalma: I wanted to learn about online identity and friendship and help with a communication workshop.\nInterviewer: When is the event?\nSalma: It is on Wednesday. We will use digital posters and work together.\nInterviewer: How did you prepare?\nSalma: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nSalma: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nSalma: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSalma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · Recording family stories",
+      "script": "Interviewer: Welcome to Connections Today. Alya, your class is collecting stories from older relatives. Why?\nAlya: We want to understand how family traditions and everyday life have changed, while remembering the experiences of earlier generations.\nInterviewer: How did your group begin?\nAlya: We wrote open questions, tested them with classmates and asked permission before recording anyone's voice.\nInterviewer: What surprised you?\nAlya: My grandmother told us how neighbours shared useful skills and helped one another during celebrations. She also described travelling to school on foot when she was younger.\nInterviewer: Did you publish the entire interview online?\nAlya: No. We selected short sections and checked that she was happy for us to share them. We did not include private family details.\nInterviewer: How did technology help?\nAlya: We used a tablet to record the conversation, and an editing program helped us remove background noise.\nInterviewer: What was the greatest challenge?\nAlya: Listening carefully rather than interrupting. Sometimes we needed to ask a follow-up question instead of moving to the next one.\nInterviewer: What will the class create?\nAlya: A small exhibition with photographs, quotations and audio clips that families have agreed to share.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. What event is being prepared?",
+          "stem": "1. Why are students collecting family stories?",
           "opts": [
-            "A camping trip",
-            "a communication workshop",
-            "A train journey"
+            "To sell recordings",
+            "To preserve experiences and traditions",
+            "To practise typing only"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "2. What helped the students plan?",
+          "stem": "2. What did students do before recording?",
           "opts": [
-            "Working in silence",
-            "Avoiding questions",
-            "Sharing ideas"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "3. What did teachers remind them about?",
-          "opts": [
-            "Safety",
-            "A new uniform",
-            "Buying prizes"
+            "Asked permission",
+            "Shared the interview online",
+            "Bought new microphones"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "4. What did visitors give?",
+          "stem": "3. What did Alya's grandmother describe?",
           "opts": [
-            "Money",
-            "Feedback",
-            "Gifts"
+            "A flight to another country",
+            "Learning to drive a car",
+            "Walking to school when young"
+          ],
+          "answer": 2
+        },
+        {
+          "type": "mc",
+          "stem": "4. How was the published material selected?",
+          "opts": [
+            "The class shared everything",
+            "Only approved extracts were used",
+            "A computer selected details automatically"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "5. What did students hope to improve?",
+          "stem": "5. What did Alya find most challenging?",
           "opts": [
-            "Bus speed",
-            "School holidays",
-            "The next event"
+            "Listening without interrupting",
+            "Taking photographs of buildings",
+            "Choosing a school uniform"
           ],
-          "answer": 2
+          "answer": 0
         }
       ],
       "audio": "audio/g9-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g9-standard-b-listening-1",
@@ -1973,7 +1995,8 @@
         }
       ],
       "audio": "audio/g9-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g9-standard-b-listening-2",
@@ -1981,62 +2004,63 @@
       "track": "Standard",
       "model": "B",
       "group": 2,
-      "title": "Listening 2 · Interview",
-      "script": "Interviewer: Why did you join the community heritage centre?\nKhalid: I wanted to learn about family stories and cultural traditions and help with a heritage exhibition.\nInterviewer: When is the event?\nKhalid: It is on Monday. We will use recorded interviews and work together.\nInterviewer: How did you prepare?\nKhalid: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nKhalid: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nKhalid: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nKhalid: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · A digital exchange between schools",
+      "script": "Interviewer: Yousuf, your school has started an online exchange with students abroad. How does it work?\nYousuf: Each class prepares a short presentation about daily life. We meet by video call once a month and send carefully checked messages between sessions.\nInterviewer: What did your group discuss first?\nYousuf: We compared school routines and traditional meals. We were surprised to discover that our timetables were different, but many of our hobbies were similar.\nInterviewer: Did everyone feel confident speaking immediately?\nYousuf: No. Some students were nervous, so our teacher allowed them to prepare notes and practise with a partner.\nInterviewer: How do you protect personal information?\nYousuf: We use school accounts, not our private social-media profiles. We also avoid sharing home addresses or personal phone numbers.\nInterviewer: Was there a misunderstanding?\nYousuf: Once a short message sounded impolite because it had no greeting. We discussed how tone can be misunderstood in writing and added a friendly opening.\nInterviewer: What have you learned?\nYousuf: Successful communication depends on respect and clear explanations, not just fast internet.\nInterviewer: What happens next?\nYousuf: The groups will work together on a digital poster about their communities.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. What event is being prepared?",
+          "stem": "1. How often do classes meet on video?",
           "opts": [
-            "a heritage exhibition",
-            "A train journey",
-            "A camping trip"
-          ],
-          "answer": 0
-        },
-        {
-          "type": "mc",
-          "stem": "2. What helped the students plan?",
-          "opts": [
-            "Avoiding questions",
-            "Sharing ideas",
-            "Working in silence"
+            "Every day",
+            "Once a month",
+            "Only once a year"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "3. What did teachers remind them about?",
+          "stem": "2. Why did some students practise with partners?",
           "opts": [
-            "A new uniform",
-            "Buying prizes",
-            "Safety"
+            "They were nervous about speaking",
+            "They missed the exchange",
+            "They did not own devices"
+          ],
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "3. Which information do students avoid sharing?",
+          "opts": [
+            "School project topics",
+            "Traditional meal names",
+            "Personal addresses and phone numbers"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "4. What did visitors give?",
+          "stem": "4. What caused a misunderstanding?",
           "opts": [
-            "Feedback",
-            "Gifts",
-            "Money"
+            "A damaged poster",
+            "A message without a greeting",
+            "An incorrect timetable"
           ],
-          "answer": 0
+          "answer": 1
         },
         {
           "type": "mc",
-          "stem": "5. What did students hope to improve?",
+          "stem": "5. What is the next shared project?",
           "opts": [
-            "School holidays",
-            "The next event",
-            "Bus speed"
+            "A digital community poster",
+            "A sports competition",
+            "A school uniform design"
           ],
-          "answer": 1
+          "answer": 0
         }
       ],
       "audio": "audio/g9-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g8-standard-a-listening-1",
@@ -2124,7 +2148,8 @@
         }
       ],
       "audio": "audio/g8-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g8-standard-a-listening-2",
@@ -2162,7 +2187,8 @@
         }
       ],
       "audio": "audio/g8-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g8-standard-b-listening-1",
@@ -2250,7 +2276,8 @@
         }
       ],
       "audio": "audio/g8-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g8-standard-b-listening-2",
@@ -2288,7 +2315,8 @@
         }
       ],
       "audio": "audio/g8-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g7-standard-a-listening-1",
@@ -2376,7 +2404,8 @@
         }
       ],
       "audio": "audio/g7-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g7-standard-a-listening-2",
@@ -2384,37 +2413,38 @@
       "track": "Standard",
       "model": "A",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the school library?\nNoura: I wanted to learn about reading for pleasure and help with a reading festival.\nInterviewer: When is the event?\nNoura: It is on Monday. We will use short story books and work together.\nInterviewer: How did you prepare?\nNoura: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nNoura: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nNoura: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nNoura: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nNoura: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nNoura: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nNoura: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · A mountain trip and a weather forecast",
+      "script": "Interviewer: Noura, your class visited the mountains last month. What happened before the trip?\nNoura: We planned a morning walk along a marked trail, but the weather forecast predicted strong winds in the afternoon.\nInterviewer: Did you ignore the warning?\nNoura: Certainly not. Our teacher checked the forecast again and changed our schedule. We started early so that we could return before the wind became stronger.\nInterviewer: What did you take with you?\nNoura: We carried water, hats, a small first-aid kit and a map. We also stayed together rather than walking ahead alone.\nInterviewer: Did the weather remain sunny?\nNoura: It was sunny when we began, but clouds appeared near the end. We had already reached the meeting point before any rain started.\nInterviewer: What was the best part?\nNoura: Looking at the mountain views and learning to identify safe paths. We also enjoyed listening to our guide explain the plants.\nInterviewer: What advice would you give other students?\nNoura: Prepare carefully and always listen to an adult guide when the weather changes.",
       "questions": [
         {
           "type": "tf",
-          "stem": "1. The speaker joined the group to learn new skills.",
+          "stem": "1. The class planned to walk on a marked mountain trail.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "2. The students decided to work without a plan.",
+          "stem": "2. The teacher continued with the original afternoon timetable.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "3. Participants used materials provided by the school.",
+          "stem": "3. Students carried drinking water and a map.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "4. The group ignored visitors' opinions.",
+          "stem": "4. The students were caught in heavy rain on the trail.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "5. Students would like to improve the next event.",
+          "stem": "5. Noura recommends listening to the guide's advice.",
           "answer": "true"
         }
       ],
       "audio": "audio/g7-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g7-standard-b-listening-1",
@@ -2502,7 +2532,8 @@
         }
       ],
       "audio": "audio/g7-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g7-standard-b-listening-2",
@@ -2510,37 +2541,38 @@
       "track": "Standard",
       "model": "B",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the community garden?\nAli: I wanted to learn about growing vegetables sustainably and help with a gardening day.\nInterviewer: When is the event?\nAli: It is on Wednesday. We will use seed packets and work together.\nInterviewer: How did you prepare?\nAli: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nAli: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nAli: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nAli: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nAli: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nAli: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nAli: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · Planning a class journey",
+      "script": "Interviewer: Ali, tell us about your class trip to the transport museum.\nAli: We were excited because we were going to compare the ways people travelled in the past and today.\nInterviewer: How did you get there?\nAli: We used a school bus. Some students suggested taking the train, but there was no suitable railway service for our route.\nInterviewer: Did the journey go exactly as planned?\nAli: Not quite. Roadworks delayed us, so our teacher phoned the museum and asked to move the guided tour to a later time.\nInterviewer: What did you see first?\nAli: We studied old maps and photographs showing how people travelled by boat between coastal towns.\nInterviewer: Was there a practical activity?\nAli: Yes. In groups, we planned a journey and chose between different types of transport. We considered time, cost and the environment.\nInterviewer: Which transport did your team choose?\nAli: We suggested a bus for a large group because everyone could travel together. However, we explained that different journeys need different solutions.\nInterviewer: What did you learn?\nAli: Good travellers need flexible plans and should not assume that the fastest choice is always the best.",
       "questions": [
         {
           "type": "tf",
-          "stem": "1. The speaker joined the group to learn new skills.",
-          "answer": "true"
-        },
-        {
-          "type": "tf",
-          "stem": "2. The students decided to work without a plan.",
+          "stem": "1. The students travelled to the museum by train.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "3. Participants used materials provided by the school.",
+          "stem": "2. Roadworks caused a delay on the journey.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "4. The group ignored visitors' opinions.",
+          "stem": "3. The teacher cancelled the museum visit completely.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "5. Students would like to improve the next event.",
+          "stem": "4. Students compared travel time, cost and environmental effects.",
+          "answer": "true"
+        },
+        {
+          "type": "tf",
+          "stem": "5. Ali's group believed the bus could suit a large group.",
           "answer": "true"
         }
       ],
       "audio": "audio/g7-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g6-standard-a-listening-1",
@@ -2578,7 +2610,8 @@
         }
       ],
       "audio": "audio/g6-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g6-standard-a-listening-2",
@@ -2586,62 +2619,63 @@
       "track": "Standard",
       "model": "A",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the school art room?\nFatma: I wanted to learn about making colourful animal posters and help with an art display.\nInterviewer: When is the event?\nFatma: It is on Thursday. We will use recycled paper and work together.\nInterviewer: How did you prepare?\nFatma: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nFatma: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nFatma: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nFatma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nFatma: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · Choosing a healthy lunch",
+      "script": "Interviewer: Fatma, your class visited a food market. What were you learning about?\nFatma: We wanted to choose ingredients for a healthy lunch and compare different foods.\nInterviewer: Where did you begin?\nFatma: At the vegetable stall. We bought tomatoes and carrots for a colourful salad.\nInterviewer: Did you buy anything for protein?\nFatma: Yes. We chose grilled chicken instead of fried snacks.\nInterviewer: What did you drink?\nFatma: Water. Our teacher explained that many soft drinks contain a lot of sugar.\nInterviewer: What was difficult?\nFatma: We had to follow a small budget. We compared prices before deciding what to buy.\nInterviewer: Did everyone prepare the lunch?\nFatma: Yes. We washed the vegetables and worked in teams. Later we wrote down the cost.\nInterviewer: What did you learn?\nFatma: A balanced meal can be tasty and affordable if we plan before shopping.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Which event will students join?",
+          "stem": "1. What was the class planning?",
           "opts": [
-            "A concert",
-            "A school exam",
-            "an art display"
+            "A healthy lunch",
+            "A birthday cake",
+            "A fast-food advertisement"
+          ],
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "2. Which vegetables did they buy?",
+          "opts": [
+            "Potatoes and onions",
+            "Tomatoes and carrots",
+            "Cabbage and corn"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "3. Which protein did they choose?",
+          "opts": [
+            "Fried fish",
+            "Chocolate",
+            "Grilled chicken"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "2. Where will students meet?",
+          "stem": "4. Why did they compare prices?",
           "opts": [
-            "school art room",
-            "A supermarket",
-            "An airport"
+            "They had a budget",
+            "They wanted the largest bag",
+            "They had forgotten the recipe"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "3. Which day is the event?",
+          "stem": "5. What did they drink?",
           "opts": [
-            "Sunday",
-            "Saturday",
-            "Thursday"
+            "A fizzy drink",
+            "Water",
+            "Fruit-flavoured syrup"
           ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "4. Which resource is available?",
-          "opts": [
-            "recycled paper",
-            "A bicycle",
-            "A bus"
-          ],
-          "answer": 0
-        },
-        {
-          "type": "mc",
-          "stem": "5. Who is preparing the activity?",
-          "opts": [
-            "Fatma",
-            "A television reporter",
-            "A doctor"
-          ],
-          "answer": 0
+          "answer": 1
         }
       ],
       "audio": "audio/g6-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g6-standard-b-listening-1",
@@ -2679,7 +2713,8 @@
         }
       ],
       "audio": "audio/g6-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g6-standard-b-listening-2",
@@ -2687,62 +2722,63 @@
       "track": "Standard",
       "model": "B",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the school sports hall?\nSaeed: I wanted to learn about learning new team games and help with a sports day.\nInterviewer: When is the event?\nSaeed: It is on Tuesday. We will use soft balls and work together.\nInterviewer: How did you prepare?\nSaeed: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nSaeed: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nSaeed: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nSaeed: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.\nInterviewer: What was important during the project?\nSaeed: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · A week of healthy activities",
+      "script": "Interviewer: Saeed, your school has organised a healthy-lifestyle week. What did you try?\nSaeed: We began with a short walk each morning before lessons. On Wednesday we tried a jogging activity in the park.\nInterviewer: Did you run very fast?\nSaeed: No. Our coach told us to begin slowly and warm up first.\nInterviewer: Was exercise the only topic?\nSaeed: Not at all. A nurse talked about sleep, water and healthy food. She reminded us that children need enough rest.\nInterviewer: What was your group's challenge?\nSaeed: We recorded how many hours we slept for five nights. We did not share private details, just whether we reached our goal.\nInterviewer: What changed for you?\nSaeed: I started putting my phone away before bedtime. It helped me sleep more comfortably.\nInterviewer: What advice would you give classmates?\nSaeed: Choose activities you enjoy and develop habits slowly rather than trying everything in one day.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Which event will students join?",
+          "stem": "1. Which activity did students try on Wednesday?",
           "opts": [
-            "A concert",
-            "A school exam",
-            "a sports day"
+            "Jogging",
+            "Swimming",
+            "Cycling"
+          ],
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "2. What did the coach advise?",
+          "opts": [
+            "Run as fast as possible",
+            "Warm up and begin slowly",
+            "Avoid drinking water"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "3. Who talked about sleep and food?",
+          "opts": [
+            "A bus driver",
+            "A musician",
+            "A nurse"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "2. Where will students meet?",
+          "stem": "4. For how many nights was sleep recorded?",
           "opts": [
-            "school sports hall",
-            "A supermarket",
-            "An airport"
+            "Five",
+            "Two",
+            "Seven"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "3. Which day is the event?",
+          "stem": "5. What did Saeed change before bedtime?",
           "opts": [
-            "Sunday",
-            "Saturday",
-            "Tuesday"
+            "He ate more sweets",
+            "He put away his phone",
+            "He watched more videos"
           ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "4. Which resource is available?",
-          "opts": [
-            "soft balls",
-            "A bicycle",
-            "A bus"
-          ],
-          "answer": 0
-        },
-        {
-          "type": "mc",
-          "stem": "5. Who is preparing the activity?",
-          "opts": [
-            "Saeed",
-            "A television reporter",
-            "A doctor"
-          ],
-          "answer": 0
+          "answer": 1
         }
       ],
       "audio": "audio/g6-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g5-standard-a-listening-1",
@@ -2780,7 +2816,8 @@
         }
       ],
       "audio": "audio/g5-standard-a-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g5-standard-a-listening-2",
@@ -2788,62 +2825,63 @@
       "track": "Standard",
       "model": "A",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the school library?\nHuda: I wanted to learn about reading stories about animals and help with a story day.\nInterviewer: When is the event?\nHuda: It is on Monday. We will use picture books and work together.\nInterviewer: How did you prepare?\nHuda: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nHuda: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nHuda: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nHuda: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · The school story morning",
+      "script": "Interviewer: Hello, Huda! How was the story morning at your school?\nHuda: It was wonderful. Our class met in the library on Monday.\nInterviewer: What did you do first?\nHuda: Our teacher read the beginning of an animal adventure. We tried to guess what happened next.\nInterviewer: Did you read any books?\nHuda: Yes. My partner and I chose a story about a little rabbit looking for its home.\nInterviewer: How did you share your ideas?\nHuda: We drew a picture of our favourite scene and explained it to our friends.\nInterviewer: Was anything difficult?\nHuda: It was hard to agree on one picture, but we listened to each other.\nInterviewer: Will you have another story morning?\nHuda: Yes, next month. We will invite students from another class.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Which event will students join?",
+          "stem": "1. Where was the class activity?",
           "opts": [
-            "a story day",
-            "A school exam",
-            "A concert"
+            "In the library",
+            "In the sports hall",
+            "In the art room"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "2. Where will students meet?",
+          "stem": "2. When did it happen?",
           "opts": [
-            "A supermarket",
-            "school library",
-            "An airport"
+            "On Friday",
+            "On Monday",
+            "On Wednesday"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "3. Which day is the event?",
+          "stem": "3. Which animal was in Huda's story?",
           "opts": [
-            "Sunday",
-            "Monday",
-            "Saturday"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "4. Which resource is available?",
-          "opts": [
-            "A bus",
-            "A bicycle",
-            "picture books"
+            "A tiger",
+            "A dolphin",
+            "A rabbit"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "5. Who is preparing the activity?",
+          "stem": "4. How did students share their favourite scene?",
           "opts": [
-            "A television reporter",
-            "Huda",
-            "A doctor"
+            "By drawing a picture",
+            "By singing a song",
+            "By playing a game"
+          ],
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "5. Who will be invited next month?",
+          "opts": [
+            "Local shopkeepers",
+            "Another class",
+            "A football team"
           ],
           "answer": 1
         }
       ],
       "audio": "audio/g5-standard-a-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g5-standard-b-listening-1",
@@ -2881,7 +2919,8 @@
         }
       ],
       "audio": "audio/g5-standard-b-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g5-standard-b-listening-2",
@@ -2889,62 +2928,63 @@
       "track": "Standard",
       "model": "B",
       "group": 2,
-      "title": "Listening 2 · School interview",
-      "script": "Interviewer: Why did you join the school garden?\nAhmed: I wanted to learn about planting colourful flowers and help with a garden day.\nInterviewer: When is the event?\nAhmed: It is on Wednesday. We will use small watering cans and work together.\nInterviewer: How did you prepare?\nAhmed: We asked students for ideas, checked materials and practised explaining the activities.\nInterviewer: What did you learn?\nAhmed: I learned that teamwork and careful planning can solve problems.\nInterviewer: Would you do it again?\nAhmed: Yes. We collected feedback and want to make the next event better.\nInterviewer: What was important during the project?\nAhmed: We listened to visitors, checked safety and made the instructions easier to understand. Everyone helped.",
+      "title": "Listening 2 · A garden planting day",
+      "script": "Interviewer: Ahmed, tell us about the planting day at school.\nAhmed: On Tuesday our class went to the school garden with our teacher.\nInterviewer: What did you bring?\nAhmed: I carried a small watering can. My friend brought a spade, and the teacher gave us flower seeds.\nInterviewer: What did you do first?\nAhmed: We made small holes in the soil and carefully placed the seeds inside.\nInterviewer: Was the weather good?\nAhmed: It was sunny and warm, so we worked in the morning rather than at midday.\nInterviewer: How will you look after the plants?\nAhmed: We will water them carefully and check their growth every week.\nInterviewer: What did you enjoy most?\nAhmed: Working with my friends. We want our school to look colourful.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Which event will students join?",
+          "stem": "1. Where did students work?",
           "opts": [
-            "a garden day",
-            "A school exam",
-            "A concert"
+            "In the kitchen",
+            "In the garden",
+            "In the library"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "2. What did Ahmed bring?",
+          "opts": [
+            "A watering can",
+            "A paintbrush",
+            "A football"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "2. Where will students meet?",
+          "stem": "3. What did the teacher give them?",
           "opts": [
-            "A supermarket",
-            "school garden",
-            "An airport"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which day is the event?",
-          "opts": [
-            "Sunday",
-            "Wednesday",
-            "Saturday"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "4. Which resource is available?",
-          "opts": [
-            "A bus",
-            "A bicycle",
-            "small watering cans"
+            "New books",
+            "Small flags",
+            "Flower seeds"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "5. Who is preparing the activity?",
+          "stem": "4. When did they work?",
           "opts": [
-            "A television reporter",
-            "Ahmed",
-            "A doctor"
+            "In the evening",
+            "In the morning",
+            "At midnight"
           ],
           "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "5. How often will they check plant growth?",
+          "opts": [
+            "Every week",
+            "Once a year",
+            "Every hour"
+          ],
+          "answer": 0
         }
       ],
       "audio": "audio/g5-standard-b-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-c-listening-1",
@@ -3027,7 +3067,8 @@
         }
       ],
       "audio": "audio/g12-core-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-c-listening-2",
@@ -3108,7 +3149,8 @@
         }
       ],
       "audio": "audio/g12-core-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-d-listening-1",
@@ -3191,7 +3233,8 @@
         }
       ],
       "audio": "audio/g12-core-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-core-d-listening-2",
@@ -3272,7 +3315,8 @@
         }
       ],
       "audio": "audio/g12-core-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-c-listening-1",
@@ -3365,7 +3409,8 @@
         }
       ],
       "audio": "audio/g12-elective-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-c-listening-2",
@@ -3455,7 +3500,8 @@
         }
       ],
       "audio": "audio/g12-elective-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-d-listening-1",
@@ -3548,7 +3594,8 @@
         }
       ],
       "audio": "audio/g12-elective-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g12-elective-d-listening-2",
@@ -3638,7 +3685,8 @@
         }
       ],
       "audio": "audio/g12-elective-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-c-listening-1",
@@ -3721,7 +3769,8 @@
         }
       ],
       "audio": "audio/g11-core-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-c-listening-2",
@@ -3802,7 +3851,8 @@
         }
       ],
       "audio": "audio/g11-core-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-d-listening-1",
@@ -3885,7 +3935,8 @@
         }
       ],
       "audio": "audio/g11-core-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-core-d-listening-2",
@@ -3966,7 +4017,8 @@
         }
       ],
       "audio": "audio/g11-core-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-c-listening-1",
@@ -4059,7 +4111,8 @@
         }
       ],
       "audio": "audio/g11-elective-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-c-listening-2",
@@ -4149,7 +4202,8 @@
         }
       ],
       "audio": "audio/g11-elective-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-d-listening-1",
@@ -4242,7 +4296,8 @@
         }
       ],
       "audio": "audio/g11-elective-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g11-elective-d-listening-2",
@@ -4332,7 +4387,8 @@
         }
       ],
       "audio": "audio/g11-elective-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-c-listening-1",
@@ -4415,7 +4471,8 @@
         }
       ],
       "audio": "audio/g10-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-c-listening-2",
@@ -4476,7 +4533,8 @@
         }
       ],
       "audio": "audio/g10-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-d-listening-1",
@@ -4559,7 +4617,8 @@
         }
       ],
       "audio": "audio/g10-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g10-standard-d-listening-2",
@@ -4620,7 +4679,8 @@
         }
       ],
       "audio": "audio/g10-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g9-standard-c-listening-1",
@@ -4708,7 +4768,8 @@
         }
       ],
       "audio": "audio/g9-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g9-standard-c-listening-2",
@@ -4716,62 +4777,63 @@
       "track": "Standard",
       "model": "C",
       "group": 2,
-      "title": "listening 2 · cultural storytelling festival",
-      "script": "Interviewer: Hello, Aisha. Can you tell us about the storytelling festival?\nAisha: Yes. Our group at the identity club organised it for students and families.\nInterviewer: When did it take place?\nAisha: On Thursday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nAisha: We used recorded interviews. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nAisha: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nAisha: They asked for a quieter recording room. We will consider this idea next time.\nInterviewer: What did you learn?\nAisha: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nAisha: You're welcome. I hope we can organise another event soon.\nInterviewer: How did you prepare before the event?\nAisha: We made a timetable, checked our supplies and practised explaining the different activities.\nInterviewer: What advice would you give other students?\nAisha: Listen to teachers, ask questions and help your group when problems happen.\nInterviewer: Was the event useful for the whole community?\nAisha: Yes, because parents and younger students learned alongside us. I believe these projects encourage stronger connections and useful communication skills.",
+      "title": "Listening 2 · Heritage in a modern exhibition",
+      "script": "Interviewer: Mariam, you helped organise an exhibition about Omani heritage. What made it different?\nMariam: We displayed traditional crafts beside photographs of people using related skills in modern jobs. We wanted visitors to see that creativity connects the past with the present.\nInterviewer: What did your group contribute?\nMariam: I interviewed a basket weaver, while my friend recorded a potter explaining how she prepares clay.\nInterviewer: Were the interviews easy?\nMariam: Not entirely. Our first recording had too much background noise because the workshop was busy. We asked the potter whether we could record again in a quieter room.\nInterviewer: How did you present the information?\nMariam: Each display had a short paragraph in English and Arabic. We also placed approved audio descriptions beside some objects to help visitors.\nInterviewer: Who attended the exhibition?\nMariam: Students, parents and several local craftspeople. Some visitors asked questions about how materials were obtained.\nInterviewer: Did you change anything after opening?\nMariam: Yes. We added clearer directions because younger visitors were unsure where the exhibition began.\nInterviewer: What did you learn?\nMariam: Culture is not just about old objects. It is also about people sharing skills and ideas across generations.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. What idea connected the displays?",
           "opts": [
-            "identity club",
-            "the airport",
-            "a shopping centre"
+            "Traditional and modern creativity",
+            "International sports",
+            "Computer security"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "2. When did the event take place?",
+          "stem": "2. Who did Mariam interview?",
           "opts": [
-            "Friday",
-            "Sunday",
-            "Thursday"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "school uniforms",
-            "recorded interviews",
-            "wooden boats"
+            "A train driver",
+            "A traditional basket weaver",
+            "A football coach"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "3. Why was part of the interview recorded again?",
           "opts": [
-            "a quieter recording room",
-            "a different school name",
-            "higher entrance fees"
+            "The questions were too short",
+            "The potter was travelling",
+            "There was too much background noise"
           ],
-          "answer": 0
+          "answer": 2
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "4. What was added to support visitors?",
           "opts": [
-            "how to drive a bus",
-            "how to play a musical instrument",
-            "teamwork and planning"
+            "New admission fees",
+            "Approved audio descriptions",
+            "A restaurant"
           ],
-          "answer": 2
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "5. Why were directions improved?",
+          "opts": [
+            "Younger visitors were confused",
+            "The museum had closed",
+            "The exhibits were moved abroad"
+          ],
+          "answer": 0
         }
       ],
       "audio": "audio/g9-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g9-standard-d-listening-1",
@@ -4859,7 +4921,8 @@
         }
       ],
       "audio": "audio/g9-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g9-standard-d-listening-2",
@@ -4867,62 +4930,63 @@
       "track": "Standard",
       "model": "D",
       "group": 2,
-      "title": "listening 2 · online collaboration challenge",
-      "script": "Interviewer: Hello, Yousuf. Can you tell us about the digital teamwork challenge?\nYousuf: Yes. Our group at the technology club organised it for students and families.\nInterviewer: When did it take place?\nYousuf: On Tuesday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nYousuf: We used computers. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nYousuf: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nYousuf: They asked for clearer group messages. We will consider this idea next time.\nInterviewer: What did you learn?\nYousuf: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nYousuf: You're welcome. I hope we can organise another event soon.\nInterviewer: How did you prepare before the event?\nYousuf: We made a timetable, checked our supplies and practised explaining the different activities.\nInterviewer: What advice would you give other students?\nYousuf: Listen to teachers, ask questions and help your group when problems happen.\nInterviewer: Was the event useful for the whole community?\nYousuf: Yes, because parents and younger students learned alongside us. I believe these projects encourage stronger connections and useful communication skills.",
+      "title": "Listening 2 · Connecting volunteers through technology",
+      "script": "Interviewer: Hamad, your class created a digital noticeboard for volunteers. Why was it needed?\nHamad: Students wanted to support community projects, but the information was spread across different message groups. People often missed important dates.\nInterviewer: What does the noticeboard show?\nHamad: It lists approved activities with locations, contact details for organisers and clear times. Volunteers can see whether an activity involves planting trees, reading to children or cleaning a public space.\nInterviewer: Did you collect students' home addresses?\nHamad: No. We deliberately avoided unnecessary personal details. Students register through a teacher, who checks that each activity is suitable.\nInterviewer: Was the first design successful?\nHamad: Not completely. Some users found the text too small on a phone, so we increased the font size and made the buttons clearer.\nInterviewer: How did you test the improved version?\nHamad: We asked a small group of students and teachers to complete sample tasks and tell us where they got confused.\nInterviewer: What was the biggest lesson?\nHamad: Technology helps only when information is accurate, safe and easy to understand.\nInterviewer: What will happen next?\nHamad: We will add a simple feedback form so organisers can improve future activities.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. Why was the digital noticeboard created?",
           "opts": [
-            "the airport",
-            "a shopping centre",
-            "technology club"
+            "To replace teachers",
+            "To sell devices",
+            "To organise scattered volunteer information"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "2. When did the event take place?",
+          "stem": "2. What information appears on approved activities?",
           "opts": [
-            "Sunday",
-            "Tuesday",
-            "Friday"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "computers",
-            "wooden boats",
-            "school uniforms"
+            "Times and organiser contacts",
+            "Students' home addresses",
+            "School examination grades"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "3. How do students register?",
           "opts": [
-            "a different school name",
-            "higher entrance fees",
-            "clearer group messages"
+            "Through public social-media comments",
+            "Through a supervising teacher",
+            "By sharing private passwords"
           ],
-          "answer": 2
+          "answer": 1
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "4. What problem did users notice?",
           "opts": [
-            "how to play a musical instrument",
-            "teamwork and planning",
-            "how to drive a bus"
+            "The display was too small on phones",
+            "The noticeboard was printed on paper",
+            "All activities had the same date"
           ],
-          "answer": 1
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "5. What feature will be added next?",
+          "opts": [
+            "A game leaderboard",
+            "An online shop",
+            "A feedback form"
+          ],
+          "answer": 2
         }
       ],
       "audio": "audio/g9-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g8-standard-c-listening-1",
@@ -5010,7 +5074,8 @@
         }
       ],
       "audio": "audio/g8-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g8-standard-c-listening-2",
@@ -5048,7 +5113,8 @@
         }
       ],
       "audio": "audio/g8-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g8-standard-d-listening-1",
@@ -5136,7 +5202,8 @@
         }
       ],
       "audio": "audio/g8-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g8-standard-d-listening-2",
@@ -5174,7 +5241,8 @@
         }
       ],
       "audio": "audio/g8-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g7-standard-c-listening-1",
@@ -5262,7 +5330,8 @@
         }
       ],
       "audio": "audio/g7-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g7-standard-c-listening-2",
@@ -5270,37 +5339,38 @@
       "track": "Standard",
       "model": "C",
       "group": 2,
-      "title": "listening 2 · reading-around-the-world week",
-      "script": "Interviewer: Hello, Huda. Can you tell us about the reading week?\nHuda: Yes. Our group at the book club organised it for students and families.\nInterviewer: When did it take place?\nHuda: On Tuesday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nHuda: We used story books. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nHuda: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nHuda: They asked for easier reading materials. We will consider this idea next time.\nInterviewer: What did you learn?\nHuda: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nHuda: You're welcome. I hope we can organise another event soon.\nInterviewer: How did you prepare before the event?\nHuda: We made a timetable, checked our supplies and practised explaining the different activities.\nInterviewer: What advice would you give other students?\nHuda: Listen to teachers, ask questions and help your group when problems happen.",
+      "title": "Listening 2 · Discovering maritime heritage",
+      "script": "Interviewer: Huda, why did your history club visit the maritime museum?\nHuda: We wanted to understand how Omani sailors travelled and traded before modern engines became common.\nInterviewer: What attracted your attention?\nHuda: There was a large wooden dhow model. The guide explained how craftsmen joined wooden parts and how sailors used the wind.\nInterviewer: Did you visit a real boat?\nHuda: Not on that day. We remained inside the museum, where we could examine old navigation tools and photographs.\nInterviewer: Were you allowed to touch the objects?\nHuda: We could handle a special copy of a rope knot, but the original historical objects were protected behind glass.\nInterviewer: Did the visit include writing?\nHuda: Yes. We took notes and later wrote short descriptions for a classroom exhibition.\nInterviewer: How did the guide make the lesson interesting?\nHuda: He asked us questions instead of giving all the answers. We worked together to compare a sailing boat with a modern ship.\nInterviewer: What do you want to do next?\nHuda: I would like to interview a boat builder and learn more about traditional skills.",
       "questions": [
         {
           "type": "tf",
-          "stem": "1. The event was organised at the book club.",
+          "stem": "1. The club wanted to learn about Omani seafaring history.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "2. The group did not use any materials.",
+          "stem": "2. Students travelled in a real dhow during the visit.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "3. The teacher explained safety rules.",
+          "stem": "3. The museum protected original objects behind glass.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "4. Visitors had no suggestions for improvement.",
+          "stem": "4. Students were told not to write anything after the visit.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "5. The students learned about teamwork.",
+          "stem": "5. Huda hopes to talk to a traditional boat builder.",
           "answer": "true"
         }
       ],
       "audio": "audio/g7-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g7-standard-d-listening-1",
@@ -5388,7 +5458,8 @@
         }
       ],
       "audio": "audio/g7-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g7-standard-d-listening-2",
@@ -5396,37 +5467,38 @@
       "track": "Standard",
       "model": "D",
       "group": 2,
-      "title": "listening 2 · herb and vegetable planting day",
-      "script": "Interviewer: Hello, Ali. Can you tell us about the planting day?\nAli: Yes. Our group at the school garden organised it for students and families.\nInterviewer: When did it take place?\nAli: On Thursday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nAli: We used seed packets. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nAli: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nAli: They asked for extra shade. We will consider this idea next time.\nInterviewer: What did you learn?\nAli: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nAli: You're welcome. I hope we can organise another event soon.\nInterviewer: How did you prepare before the event?\nAli: We made a timetable, checked our supplies and practised explaining the different activities.\nInterviewer: What advice would you give other students?\nAli: Listen to teachers, ask questions and help your group when problems happen.",
+      "title": "Listening 2 · A safer beach clean-up",
+      "script": "Interviewer: Salim, your class helped clean a beach recently. Who organised the activity?\nSalim: Our environment club worked with local volunteers and a teacher. We asked permission before choosing the area.\nInterviewer: What was the first safety rule?\nSalim: We stayed away from sharp objects and did not enter the sea. Adults handled anything dangerous.\nInterviewer: What did students collect?\nSalim: We picked up plastic bottles, paper and food packaging. We separated the recyclable items from the other waste.\nInterviewer: How did you know whether the activity was useful?\nSalim: We counted the filled bags and took photos of the beach before and afterwards. Our teacher said this showed the immediate difference, not the long-term result.\nInterviewer: Was there anything you could not remove?\nSalim: Yes. Some heavy objects were left for the local workers with suitable equipment.\nInterviewer: How did you share your experience?\nSalim: We made a short presentation to encourage other students to reduce single-use plastic.\nInterviewer: What will you change next time?\nSalim: We will provide clearer instructions at the start and invite more community volunteers.",
       "questions": [
         {
           "type": "tf",
-          "stem": "1. The event was organised at the school garden.",
+          "stem": "1. Adults helped supervise the beach clean-up.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "2. The group did not use any materials.",
+          "stem": "2. Students were instructed to swim into the sea to collect rubbish.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "3. The teacher explained safety rules.",
+          "stem": "3. The group separated materials that could be recycled.",
           "answer": "true"
         },
         {
           "type": "tf",
-          "stem": "4. Visitors had no suggestions for improvement.",
+          "stem": "4. Students removed every heavy object themselves.",
           "answer": "false"
         },
         {
           "type": "tf",
-          "stem": "5. The students learned about teamwork.",
+          "stem": "5. The class plans to give clearer instructions next time.",
           "answer": "true"
         }
       ],
       "audio": "audio/g7-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g6-standard-c-listening-1",
@@ -5464,7 +5536,8 @@
         }
       ],
       "audio": "audio/g6-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g6-standard-c-listening-2",
@@ -5472,62 +5545,63 @@
       "track": "Standard",
       "model": "C",
       "group": 2,
-      "title": "listening 2 · animal habitats display",
-      "script": "Interviewer: Hello, Sara. Can you tell us about the animal habitats display?\nSara: Yes. Our group at the science room organised it for students and families.\nInterviewer: When did it take place?\nSara: On Monday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nSara: We used animal pictures. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nSara: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nSara: They asked for clearer labels. We will consider this idea next time.\nInterviewer: What did you learn?\nSara: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nSara: You're welcome. I hope we can organise another event soon.",
+      "title": "Listening 2 · Exploring animal habitats",
+      "script": "Interviewer: Sara, you made a display about animal habitats. What did your group choose?\nSara: We compared a desert habitat with a coastal wetland. Both can support wildlife, but the animals are different.\nInterviewer: How did you research the desert?\nSara: We studied photographs of foxes and lizards and read about how they survive with little water.\nInterviewer: What about the wetland?\nSara: We visited a viewing area with our teacher and used binoculars to watch birds from far away.\nInterviewer: Did you collect any animals?\nSara: No. We observed them without touching or disturbing them.\nInterviewer: What did you use for the display?\nSara: Maps, labelled drawings and a small model made from reused cardboard.\nInterviewer: What question did visitors ask most?\nSara: They wanted to know why wetlands should be protected. We explained that many birds need safe places to rest during migration.\nInterviewer: What will you improve?\nSara: We will add clearer pictures showing how animals adapt to each habitat.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. Which two habitats were compared?",
           "opts": [
-            "science room",
-            "the airport",
-            "a shopping centre"
+            "Desert and coastal wetland",
+            "Mountains and cities",
+            "Grassland and rainforest"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "2. When did the event take place?",
+          "stem": "2. Which desert animals were researched?",
           "opts": [
-            "Friday",
-            "Sunday",
-            "Monday"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "school uniforms",
-            "animal pictures",
-            "wooden boats"
+            "Bears and monkeys",
+            "Foxes and lizards",
+            "Dolphins and whales"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "3. What did students use to observe birds?",
           "opts": [
-            "clearer labels",
-            "a different school name",
-            "higher entrance fees"
+            "A fishing net",
+            "A camera drone",
+            "Binoculars"
+          ],
+          "answer": 2
+        },
+        {
+          "type": "mc",
+          "stem": "4. What was the display model made from?",
+          "opts": [
+            "Reused cardboard",
+            "New plastic toys",
+            "Metal wires"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "5. Why are wetlands important to birds?",
           "opts": [
-            "how to drive a bus",
-            "how to play a musical instrument",
-            "teamwork and planning"
+            "They provide safe resting places",
+            "They have deep caves",
+            "They offer warm classrooms"
           ],
-          "answer": 2
+          "answer": 0
         }
       ],
       "audio": "audio/g6-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g6-standard-d-listening-1",
@@ -5565,7 +5639,8 @@
         }
       ],
       "audio": "audio/g6-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g6-standard-d-listening-2",
@@ -5573,62 +5648,63 @@
       "track": "Standard",
       "model": "D",
       "group": 2,
-      "title": "listening 2 · team-games festival",
-      "script": "Interviewer: Hello, Khalid. Can you tell us about the team-games festival?\nKhalid: Yes. Our group at the school sports hall organised it for students and families.\nInterviewer: When did it take place?\nKhalid: On Wednesday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nKhalid: We used soft balls. The teacher explained how to use the materials safely.\nInterviewer: Did students enjoy the activities?\nKhalid: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nKhalid: They asked for a bigger playing space. We will consider this idea next time.\nInterviewer: What did you learn?\nKhalid: I learned that good planning and teamwork make school events more enjoyable.\nInterviewer: Thank you for your time.\nKhalid: You're welcome. I hope we can organise another event soon.",
+      "title": "Listening 2 · Visiting a heritage workshop",
+      "script": "Interviewer: Khalid, your class visited a traditional crafts workshop. Which activity did you see?\nKhalid: We watched an artisan weave palm leaves into a basket. She explained how the leaves are dried and prepared.\nInterviewer: Did students make anything themselves?\nKhalid: We tried a simple paper-weaving activity. The original palm-leaf work was too difficult for beginners.\nInterviewer: What did you learn about the craft?\nKhalid: The patterns often tell us about local traditions, and skilled people learn through many years of practice.\nInterviewer: Did you use a camera?\nKhalid: We photographed our own paper work. The artisan asked us not to photograph one special design, so we respected her request.\nInterviewer: What was the main difficulty?\nKhalid: Keeping the strips straight. We had to try again when they became loose.\nInterviewer: How did you thank the workshop?\nKhalid: Our class wrote a thank-you message and prepared a small exhibition at school.\nInterviewer: What was the best lesson?\nKhalid: Traditional skills need patience and respect.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. What craft did the students observe?",
           "opts": [
-            "the airport",
-            "a shopping centre",
-            "school sports hall"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "2. When did the event take place?",
-          "opts": [
-            "Sunday",
-            "Wednesday",
-            "Friday"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "soft balls",
-            "wooden boats",
-            "school uniforms"
+            "Palm-leaf basket weaving",
+            "Painting on glass",
+            "Making toy cars"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "2. What did beginners practise?",
           "opts": [
-            "a different school name",
-            "higher entrance fees",
-            "a bigger playing space"
+            "Wood carving",
+            "Paper weaving",
+            "Silver jewellery making"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "3. Why did students avoid one photograph?",
+          "opts": [
+            "The camera broke",
+            "The room was dark",
+            "The artisan asked them not to"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "4. What was difficult about the task?",
           "opts": [
-            "how to play a musical instrument",
-            "teamwork and planning",
-            "how to drive a bus"
+            "Keeping paper strips straight",
+            "Finding a bus",
+            "Making a phone call"
           ],
-          "answer": 1
+          "answer": 0
+        },
+        {
+          "type": "mc",
+          "stem": "5. How did the class thank the workshop?",
+          "opts": [
+            "They sent a thank-you message",
+            "They organised a race",
+            "They bought a television"
+          ],
+          "answer": 0
         }
       ],
       "audio": "audio/g6-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g5-standard-c-listening-1",
@@ -5666,7 +5742,8 @@
         }
       ],
       "audio": "audio/g5-standard-c-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g5-standard-c-listening-2",
@@ -5674,62 +5751,63 @@
       "track": "Standard",
       "model": "C",
       "group": 2,
-      "title": "listening 2 · favourite story day",
-      "script": "Interviewer: Hello, Muna. Can you tell us about the story day?\nMuna: Yes. Our group at the school library organised it for students and families.\nInterviewer: When did it take place?\nMuna: On Tuesday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nMuna: We used books. The teacher explained the safety rules.\nInterviewer: Did students enjoy the activities?\nMuna: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nMuna: They asked for more reading spaces. We will consider this idea next time.\nInterviewer: What did you learn?\nMuna: I learned to work with friends.\nInterviewer: Thank you for your time.\nMuna: You're welcome. I hope so too.",
+      "title": "Listening 2 · Our classroom art show",
+      "script": "Interviewer: Good morning, Muna. Your class held an art show yesterday. What was its theme?\nMuna: We made pictures of places in Oman. I painted the sea and a fishing boat.\nInterviewer: Where did you put the pictures?\nMuna: We displayed them on the classroom wall. Every picture had the student's name below it.\nInterviewer: What did you use for your painting?\nMuna: Blue and green paints and a small brush. I worked carefully so the colours would not mix too much.\nInterviewer: Who came to see the show?\nMuna: Our parents and another class visited after lunch.\nInterviewer: Did visitors have a favourite picture?\nMuna: Many liked a painting of a mountain village. It was made by my friend.\nInterviewer: What will you make next time?\nMuna: I want to draw a picture of a garden in the rain.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. What did Muna paint?",
           "opts": [
-            "school library",
-            "the airport",
-            "a shopping centre"
-          ],
-          "answer": 0
-        },
-        {
-          "type": "mc",
-          "stem": "2. When did the event take place?",
-          "opts": [
-            "Friday",
-            "Sunday",
-            "Tuesday"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "school uniforms",
-            "books",
-            "wooden boats"
+            "A football match",
+            "A sea and fishing boat",
+            "A desert road"
           ],
           "answer": 1
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "2. Where were the pictures displayed?",
           "opts": [
-            "more reading spaces",
-            "a different school name",
-            "higher entrance fees"
+            "On the classroom wall",
+            "On the school bus",
+            "In the playground"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "3. Which paints did Muna use?",
           "opts": [
-            "how to drive a bus",
-            "how to play a musical instrument",
-            "teamwork and planning"
+            "Red and yellow",
+            "Orange and purple",
+            "Blue and green"
           ],
           "answer": 2
+        },
+        {
+          "type": "mc",
+          "stem": "4. Who visited after lunch?",
+          "opts": [
+            "Only teachers",
+            "Parents and another class",
+            "The football team"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "5. What does Muna want to draw next?",
+          "opts": [
+            "A rainy garden",
+            "An airport",
+            "A classroom clock"
+          ],
+          "answer": 0
         }
       ],
       "audio": "audio/g5-standard-c-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     },
     {
       "id": "g5-standard-d-listening-1",
@@ -5767,7 +5845,8 @@
         }
       ],
       "audio": "audio/g5-standard-d-listening-1.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": "grade-specific-3d-v1"
     },
     {
       "id": "g5-standard-d-listening-2",
@@ -5775,62 +5854,63 @@
       "track": "Standard",
       "model": "D",
       "group": 2,
-      "title": "listening 2 · flower planting morning",
-      "script": "Interviewer: Hello, Rashid. Can you tell us about the flower day?\nRashid: Yes. Our group at the school garden organised it for students and families.\nInterviewer: When did it take place?\nRashid: On Thursday. We started in the morning and welcomed everyone at the entrance.\nInterviewer: What materials did you use?\nRashid: We used flowers. The teacher explained the safety rules.\nInterviewer: Did students enjoy the activities?\nRashid: Yes. They worked together, listened carefully and asked interesting questions.\nInterviewer: Did visitors suggest any changes?\nRashid: They asked for more watering cans. We will consider this idea next time.\nInterviewer: What did you learn?\nRashid: I learned to work with friends.\nInterviewer: Thank you for your time.\nRashid: You're welcome. I hope so too.",
+      "title": "Listening 2 · A visit to the animal park",
+      "script": "Interviewer: Rashid, where did your class go on Thursday?\nRashid: We visited a small animal park with our teacher.\nInterviewer: What did you see first?\nRashid: We watched some colourful birds in a large enclosure. Our guide asked us to stay quiet.\nInterviewer: What was your favourite animal?\nRashid: A slow tortoise! It was eating green leaves beside a rock.\nInterviewer: Did you feed the animals?\nRashid: No. Visitors must not give them food. The park workers know what each animal needs.\nInterviewer: What did you take with you?\nRashid: I had a bottle of water, a notebook and a pencil.\nInterviewer: Why did you need the notebook?\nRashid: I wrote three facts about the animals so I could tell my family at home.",
       "questions": [
         {
           "type": "mc",
-          "stem": "1. Where was the event organised?",
+          "stem": "1. Where did the class go?",
           "opts": [
-            "the airport",
-            "a shopping centre",
-            "school garden"
-          ],
-          "answer": 2
-        },
-        {
-          "type": "mc",
-          "stem": "2. When did the event take place?",
-          "opts": [
-            "Sunday",
-            "Thursday",
-            "Friday"
-          ],
-          "answer": 1
-        },
-        {
-          "type": "mc",
-          "stem": "3. Which materials did the group use?",
-          "opts": [
-            "flowers",
-            "wooden boats",
-            "school uniforms"
+            "To an animal park",
+            "To a library",
+            "To a swimming pool"
           ],
           "answer": 0
         },
         {
           "type": "mc",
-          "stem": "4. What change did some visitors suggest?",
+          "stem": "2. Which animals did they see first?",
           "opts": [
-            "a different school name",
-            "higher entrance fees",
-            "more watering cans"
+            "Fish",
+            "Colourful birds",
+            "Rabbits"
+          ],
+          "answer": 1
+        },
+        {
+          "type": "mc",
+          "stem": "3. What was Rashid's favourite animal?",
+          "opts": [
+            "A lion",
+            "A horse",
+            "A tortoise"
           ],
           "answer": 2
         },
         {
           "type": "mc",
-          "stem": "5. What did the student learn?",
+          "stem": "4. Could visitors feed the animals?",
           "opts": [
-            "how to play a musical instrument",
-            "teamwork and planning",
-            "how to drive a bus"
+            "Yes, with bread",
+            "Only in the morning",
+            "No, feeding was not allowed"
           ],
-          "answer": 1
+          "answer": 2
+        },
+        {
+          "type": "mc",
+          "stem": "5. Why did Rashid take a notebook?",
+          "opts": [
+            "To write animal facts",
+            "To do maths homework",
+            "To draw a map"
+          ],
+          "answer": 0
         }
       ],
       "audio": "audio/g5-standard-d-listening-2.mp3",
-      "audioReady": false
+      "audioReady": false,
+      "mediaVersion": null
     }
   ]
 }

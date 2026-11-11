@@ -51,7 +51,7 @@ jobs:
               old='pictures/'+name+'.svg';new='pictures/'+name+'.webp'
               changed[name]=s.count(old)
               s=s.replace(old,new)
-          if not any(changed.values()):raise RuntimeError('Exam bank had no matching picture paths')
+          if not any(changed.values()) and not all('pictures/'+name+'.webp' in s for name in urls):raise RuntimeError('Exam bank had no matching picture paths')
           html.write_text(s,encoding='utf8')
           print('Picture references updated',changed)
           PY

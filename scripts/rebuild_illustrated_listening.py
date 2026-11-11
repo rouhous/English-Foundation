@@ -123,7 +123,8 @@ for grade in range(5,10):
             # The five recordings cover five different scenes; the remaining picture is the extra option.
             target=pool[:5]
             # Deterministic shuffle of display options, without changing identity of their source image.
-            disp=[pool[j] for j in [2,5,0,4,1,3]]
+            permutations={'A':[2,5,0,4,1,3],'B':[4,2,5,1,3,0],'C':[1,3,5,0,2,4],'D':[5,0,3,2,4,1]}
+            disp=[pool[j] for j in permutations[model]]
             activity["options"]=[cells[k]["label"] for k in disp]
             activity["optionPictures"]=[picture(grade,k) for k in disp]
             activity["questions"]=[{"type":"match","stem":str(i+1)+". Listen to dialogue "+str(i+1)+". Match it to the correct picture. One picture is extra.","answer":str(disp.index(k)+1)} for i,k in enumerate(target)]
@@ -147,7 +148,7 @@ for grade in range(5,10):
                 other_cols=[c for c in range(4) if c!=target_col]
                 # Distractors are ALWAYS from the same visual/semantic category.
                 chosen=[correct_id,row*4+other_cols[(i+grade)%3],row*4+other_cols[(i+grade+1)%3]]
-                order=([0,1,2],[1,2,0],[2,0,1])[(i+"ABCD".index(model))%3]
+                order=([0,1,2],[1,2,0],[2,0,1])[(i+grade+"ABCD".index(model))%3]
                 display=[chosen[n] for n in order]
                 assert len(set(display))==3
                 clips.append("Text "+str(i+1)+". "+["On our recent school project, ","During a class activity, ","I learned something interesting yesterday. ","Our teacher asked us to describe what we saw. ","I want to tell you about an important experience. "][i]+cells[correct_id]["detail"]+" It helped me understand this topic and explain it clearly to my classmates.")

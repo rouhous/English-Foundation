@@ -19,6 +19,7 @@
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
  let direction=-1,lastInteraction=Date.now(),lastIdleAction=0; // MEJ_COMPANION_ROAM_EXPLAIN_V2
+ // MEJ_COMPANION_FACING_20261112_V3: use one consistent walking image and rotate only an inner image layer.
  let lastTapAction='',actionTimer=0;
  let motion=true,sound=true;
  try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound!==false}catch(_){}
@@ -70,6 +71,10 @@
  #mej-companion-actor .mej-c-bubble{display:inline-block;pointer-events:none;position:absolute;top:0;right:93px;min-width:95px;max-width:min(230px,62vw);padding:8px 10px;border-radius:14px;background:#fff;border:2px solid #edc456;color:#1a4a71;font:800 13px/1.4 system-ui;text-align:center;box-shadow:0 2px 8px #001f4450;white-space:pre-line;overflow-wrap:anywhere;max-height:200px;overflow-y:auto}
  #mej-companion-actor.mej-c-near-left .mej-c-bubble{left:90px;right:auto}
  #mej-companion-actor.mej-c-roaming{transition:none!important}
+ #mej-companion-actor .mej-c-facing-art{position:absolute;inset:0;width:100%;height:100%;background-size:400% 200%;background-repeat:no-repeat;pointer-events:none;backface-visibility:visible;transform-origin:50% 50%;transform:rotateY(0deg);transition:transform .28s ease-in-out;will-change:transform}
+ #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:rotateY(180deg)}
+ #mej-companion-actor .mej-c-sprite{background-image:none!important;background-position:initial!important}
+ @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-facing-art{transition:none!important}}
  #mej-companion-actor.mej-c-explaining .mej-c-bubble{background:#eaf7ff;border-color:#65b4e8}
  #mej-companion-actor.mej-c-bounce .mej-c-sprite{animation:mej-companion-pop .65s ease-in-out 2}
  @keyframes mej-companion-pop{0%,100%{transform:translateY(0)}46%{transform:translateY(-14px)}}
@@ -201,7 +206,17 @@
      host.innerHTML='<div class="mej-c-canopy" aria-hidden="true"><svg viewBox="0 0 142 180" xmlns="http://www.w3.org/2000/svg"><path d="M7 51Q17 6 71 4Q125 6 135 51Q112 41 92 51Q71 39 49 51Q28 42 7 51Z" fill="#ffcb46" stroke="#a96b24" stroke-width="3"/><path d="M71 4Q43 22 49 51M71 4Q99 22 92 51" stroke="#fff3bb" stroke-width="4" fill="none"/><path d="M7 51L56 168M49 51L56 168M92 51L56 168M135 51L56 168" stroke="#7d654e" stroke-width="2.3" fill="none" stroke-linecap="round"/><path d="M49 161L56 173L63 161" stroke="#315a8b" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="56" cy="168" r="4.5" fill="#ffdd80" stroke="#7d654e" stroke-width="1.5"/></svg></div><div class="mej-c-bag-flap" aria-hidden="true"></div><div class="mej-c-sprite" role="img" aria-label="رفيق الرحلة المتحرك"></div><div class="mej-c-bubble" hidden></div>';
      document.body.append(host);wireDrag(host);
    }
+   const sprite=host.querySelector('.mej-c-sprite');
+   if(sprite&&!sprite.querySelector('.mej-c-facing-art')){
+     const face=document.createElement('span');
+     face.className='mej-c-facing-art';face.setAttribute('aria-hidden','true');
+     sprite.appendChild(face);
+   }
    return host;
+ }
+ function setFacing(host,value){
+   const next=value<0?'left':'right';
+   if(host.dataset.facing!==next)host.dataset.facing=next;
  }
 
  function greet(){
@@ -276,7 +291,7 @@
      // Dropping from an ordinary drag means repositioning, not automatic parachuting.
      const raised=gesture.startY-e.clientY>48;
      if(!raised||!motion||reduced()||document.hidden){
-       place(host,actorX,actorY,true);direction=actorX>=limits(host).maxX-25?-1:actorX<=25?1:direction;lastInteraction=Date.now();return;
+       place(host,actorX,actorY,true);direction=actorX>=limits(host).maxX-25?-1:actorX<=25?1:direction;setFacing(host,direction);lastInteraction=Date.now();return;
      }
      // The backpack opens ONLY after a deliberate upward lift and release.
      const band=roamingFloor(host),target=Math.max(band.minY,band.maxY-10);
@@ -312,7 +327,7 @@
    clearInterval(roamTimer);roamTimer=0;
    if(hide&&el)el.hidden=true
  }
- function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
+ function frame(el,idx){const img=el?.querySelector?.('.mej-c-facing-art')||el;if(img)img.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
  function speechStatus(text){
    const node=$('mej-companion-voice-status');
    if(node)node.textContent=text;
@@ -367,7 +382,11 @@
    if(nx<=lim.minX){nx=lim.minX;direction=1}
    if(nx>=lim.maxX){nx=lim.maxX;direction=-1}
    place(h,nx,actorY??lim.maxY-10);
-   frame(sp,run?2:(++roamStep%2?1:2));
+   // Keep a single consistent body orientation in both walking and running.
+   // Switching sheet frames 1/2 previously alternated the girl's front/back artwork.
+   roamStep++;
+   frame(sp,1);
+   setFacing(h,direction);
    if(idle&&now-lastIdleAction>14500){
      lastIdleAction=now;clearTap(h);
      const kind=['jump','football','climb'][Math.floor(now/14500)%3];
@@ -386,11 +405,16 @@
      return;
    }
    const h=actor(),p=profile(),kind=p.companion.kind,sp=h.querySelector('.mej-c-sprite');
-   if(h.dataset.kind!==kind){h.dataset.kind=kind;sp.style.backgroundImage='url("'+ART[kind].sheet+'")'}
+   if(h.dataset.kind!==kind){
+     h.dataset.kind=kind;
+     sp.style.backgroundImage='none';
+     const art=sp.querySelector('.mej-c-facing-art');
+     if(art)art.style.backgroundImage='url("'+ART[kind].sheet+'")';
+   }
    h.hidden=false;h.style.display='block';restore(h);
    const moving=motion&&!reduced();h.classList.toggle('mej-c-roaming',moving);
    if(!moving){clearInterval(roamTimer);roamTimer=0;if(!drag&&!dropRAF&&h.dataset.reacting!=='1')frame(sp,0);return}
-   if(!roamTimer){direction=(actorX??0)>innerWidth*.55?-1:1;roamTimer=setInterval(roamTick,145)}
+   if(!roamTimer){direction=(actorX??0)>innerWidth*.55?-1:1;setFacing(h,direction);frame(sp,1);roamTimer=setInterval(roamTick,145)}
  }
  function play(name,duration=1900){
    if(!(name in POSES)||!canShow())return false;

@@ -27,6 +27,25 @@
    const finished=e.status==='finished'&&(found.length===10||misses===3||remaining===0);
    return {status:finished?'finished':'pending',found,misses,remaining,award:finished?Math.floor(found.length/2):0};
  }
+ // Student-specific mastery derives only from this student's actual question results.
+ // Two correct answers to the same item are required for a learned word.
+ function stageWordEvidence(stage,p){
+   const learned=new Set(),curriculum=new Set(),questions=typeof byGrade!=='undefined'?byGrade[stage]||[]:[];
+   const correct=p?.correct||{};
+   for(const q of questions){
+     if(!['Vocabulary','Spelling','Match','Describe','Phonics','Blend'].includes(q.type))continue;
+     let raw=String(q.word||q.targetWord||'').trim().toLowerCase();
+     if(!raw&&['Spelling','Vocabulary'].includes(q.type)){
+       const match=String(q.prompt||'').match(/[“'«"]([A-Za-z][A-Za-z '-]{1,35})[”'»"]/);
+       if(match)raw=match[1].toLowerCase();
+     }
+     if(!/^[a-z][a-z '-]{1,35}$/.test(raw))continue;
+     curriculum.add(raw);
+     if(Number(correct[q.id])>=2)learned.add(raw);
+   }
+   return {masteredWords:[...learned],levelWords:[...curriculum]};
+ }
+ window.mejHiddenWordEvidence=stageWordEvidence;
  function gradeItems(stage,badge){
    const pool=[],seen=new Set();
    try{
@@ -90,7 +109,7 @@
      back.type='button';back.textContent='↩ العودة إلى رحلتي';
      back.style.cssText='height:42px;width:100%;font:bold 16px system-ui;background:#064859;color:white;border:none';
      const send=()=>{if(dialog.open&&frame.contentWindow&&active()?.id===owner)frame.contentWindow.postMessage({
-       type:'mej:hidden-init',stage,badge,scene:(stage*10+badge)%4,items:gradeItems(stage,badge),saved:existing?.status==='pending'?existing:null
+       type:'mej:hidden-init',stage,badge,scene:(stage*10+badge)%4,items:gradeItems(stage,badge),...stageWordEvidence(stage,active()),saved:existing?.status==='pending'?existing:null
      },location.origin)};
      const receive=e=>{
        if(e.origin!==location.origin||e.source!==frame.contentWindow||active()?.id!==owner)return;

@@ -18,3 +18,16 @@
 .journey-v23 .mej-gate-reward{font-size:11px;font-weight:850;color:#a5ffd7}
 .journey-v23 .j23-medal.mej-gate .j23-locked,.journey-v23 .j23-medal.mej-gate .j23-earned{display:none!important}
 @media(max-width:560px){.journey-v23 .j23-medal.mej-gate{min-height:111px!important}.journey-v23 .mej-gate-inner{height:53px;width:94%;border-width:2px}.journey-v23 .mej-gate-symbol{font-size:23px}.journey-v23 .mej-gate-reward{font-size:8px}}
+
+/* MEJ_METALLIC_BADGES_V2 — original separate emblems, lock remains on the door */
+.journey-v23 .mej-gate-symbol{display:block;width:min(94%,76px);height:70px;font-size:0!important;background-size:contain;background-position:center;background-repeat:no-repeat;filter:drop-shadow(0 3px 4px #081b3666)}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(1) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-01.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(2) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-02.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(3) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-03.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(4) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-04.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(5) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-05.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(6) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-06.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(7) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-07.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(8) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-08.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(9) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-09.svg")}
+.journey-v23 .j23-badge-grid .mej-gate:nth-child(10) .mej-gate-symbol{background-image:url("./mej-badges-20261112/badge-10.svg")}

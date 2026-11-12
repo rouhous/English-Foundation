@@ -27,6 +27,29 @@
    const finished=e.status==='finished'&&(found.length===10||misses===3||remaining===0);
    return {status:finished?'finished':'pending',found,misses,remaining,award:finished?Math.floor(found.length/2):0};
  }
+ function gradeItems(stage,badge){
+   const pool=[],seen=new Set();
+   try{
+     const qs=typeof byGrade!=='undefined'?(byGrade[stage]||[]):[];
+     for(const q of qs){
+       if(!['Vocabulary','Spelling','Match','Describe'].includes(q.type))continue;
+       const raw=String(q.prompt||'');
+       const quoted=raw.match(/[“'«"]([A-Za-z][A-Za-z '-]{1,40})[”'»"]/);
+       const word=String(q.word||quoted?.[1]||'').trim().toLowerCase();
+       if(!/^[a-z][a-z '-]{1,35}$/.test(word)||seen.has(word))continue;
+       let src='';
+       try{src=typeof mejApprovedPhoto==='function'?mejApprovedPhoto(word):''}catch(_){}
+       if(!src)try{src=typeof realPhoto==='function'?realPhoto(word):''}catch(_){}
+       if(typeof src!=='string'||!(/^(data:image\/(?:webp|png|jpeg);base64,|\.\.?\/assets\/)/i.test(src)))continue;
+       if(src.length>180000)continue; // avoid freezing iOS with oversized base64 sprites
+       seen.add(word);pool.push({word,src});
+     }
+   }catch(_){}
+   const selected=shuffle(pool,stage*197+badge*173).slice(0,15);
+   const items=Array.from({length:16},()=>null);
+   allIDs.forEach((id,i)=>{if(selected[i])items[id]=selected[i]});
+   return items;
+ }
  window.mejHiddenStageBonus=function(g,p){
    g=Number(g);if(!Number.isInteger(g)||g<0||g>12)return 0;
    let sum=0;
@@ -59,7 +82,7 @@
      back.type='button';back.textContent='↩ العودة إلى رحلتي';
      back.style.cssText='height:42px;width:100%;font:bold 16px system-ui;background:#064859;color:white;border:none';
      const send=()=>{if(dialog.open&&frame.contentWindow&&active()?.id===owner)frame.contentWindow.postMessage({
-       type:'mej:hidden-init',stage,badge,scene:(stage*10+badge)%4,saved:existing?.status==='pending'?existing:null
+       type:'mej:hidden-init',stage,badge,scene:(stage*10+badge)%4,items:gradeItems(stage,badge),saved:existing?.status==='pending'?existing:null
      },location.origin)};
      const receive=e=>{
        if(e.origin!==location.origin||e.source!==frame.contentWindow||active()?.id!==owner)return;

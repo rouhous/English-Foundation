@@ -1,0 +1,10 @@
+{
+  "marker": "MEJ_SPELLING_PROMPT_FIX_V3",
+  "spellingQuestionsChecked": 632,
+  "highlighted": 572,
+  "phonicsExcluded": 60,
+  "unmatched": 0,
+  "scriptBlocksChecked": 4,
+  "questionBankUnchanged": true,
+  "rootCause": "Word-builder quiz replaced the original Spelling prompt before invoking the vocabulary-style display helper"
+}

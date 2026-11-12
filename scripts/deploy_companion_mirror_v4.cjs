@@ -1,0 +1,24 @@
+'use strict';
+const fs=require('fs'),vm=require('vm'),crypto=require('crypto');
+const companion=fs.readFileSync('assets/mej-companion-live-v1.js','utf8');
+new vm.Script(companion,{filename:'companion.js'});
+const required=['MEJ_COMPANION_MIRROR_FIX_V4',"art.style.setProperty('transform',next==='left'?'scaleX(-1)':'scaleX(1)','important')","setFacing(h,direction);"];
+for(const s of required)if(!companion.includes(s))throw Error('Missing behavior '+s);
+const imageRe=/function setFacing\(host,value\)\{[\s\S]*?art\.style\.setProperty\('transform',next==='left'\?'scaleX\(-1\)':'scaleX\(1\)','important'\)/;
+if(!imageRe.test(companion))throw Error('No actual sprite flip');
+const root='index.html';const before=fs.readFileSync(root,'utf8');let html=before;
+let hits=0;
+html=html.replace(/(<script\b[^>]*src=["'][^"']*mej-companion-live-v1\.js)(\?[^"']*)?(["'][^>]*><\/script>)/gi,(full,start,query,end)=>{hits++;return start+'?v=20261112mirror4'+end});
+if(hits!==1)throw Error('Expected one companion include: '+hits);
+const bankHash=x=>{let i=x.indexOf('const BANK='),j=x.indexOf('const byGrade=');if(i<0||j<i)throw Error('Question bank not found');return crypto.createHash('sha256').update(x.slice(i,j)).digest('hex');};
+if(bankHash(before)!==bankHash(html))throw Error('Question bank changed');
+for(const [n,m] of [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].entries()){if(!m[2].trim()||/application\/json/.test(m[1]))continue;new vm.Script(m[2],{filename:'index-script-'+n})}
+let sw=fs.readFileSync('sw.js','utf8');
+const swOriginal=sw;
+sw=sw.replace(/const CACHE='mej-public-[^']+';/,"const CACHE='mej-public-20261112-mirror-v14';");
+if(sw===swOriginal)throw Error('Service worker cache version unchanged');
+new vm.Script(sw,{filename:'sw.js'});
+fs.writeFileSync(root,html);
+fs.writeFileSync('sw.js',sw);
+const report={version:'MEJ_COMPANION_MIRROR_FIX_V4',spriteMirrorsOnEveryStep:true,left:'scaleX(-1)',right:'scaleX(1)',sourceSpriteInspection:'Both boy and girl move right in the supplied sprite art',gameplayDataUnchanged:true,pwaCache:'mej-public-20261112-mirror-v14',runtimeDeviceValidation:'pending'};
+fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/companion-mirror-v4.json',JSON.stringify(report,null,2));console.log(report);

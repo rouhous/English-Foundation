@@ -1,0 +1,15 @@
+'use strict';
+const fs=require('fs'),vm=require('vm');
+const s=fs.readFileSync('omani-sailor/index.html','utf8');
+const get=(name,open,close)=>{const start=s.indexOf('const '+name+'='+open);if(start<0)throw Error('Missing '+name);const begin=start+('const '+name+'=').length;const end=s.indexOf(close,begin);if(end<0)throw Error('Missing close '+name);return vm.runInNewContext('('+s.slice(begin,end+1)+')',{},{timeout:2000})};
+const coast=get('coastArt','{','}');
+const images=get('huntImages','[',']');
+const words=['apple','book','pencil','banana','shell','rope','key','orange','compass','lantern','bottle','map','bell','telescope','oar','pouch'];
+if(!coast.island2?.startsWith('data:image/')||images.length!==words.length||images.some(x=>!String(x).startsWith('data:image/')))throw Error('Art asset inventory failed '+images.length);
+const art={version:1,background:coast.island2,words,images};
+fs.mkdirSync('hidden-objects',{recursive:true});
+fs.writeFileSync('hidden-objects/assets.js','window.MEJHiddenArt='+JSON.stringify(art)+';\n');
+const report={imageCount:images.length,searchableObjects:images.length-1,background:'coastArt.island2',source:'omani-sailor/index.html',newArtCreated:false,oldSailorGameplayLoaded:false};
+fs.mkdirSync('reviews/quality-audit',{recursive:true});
+fs.writeFileSync('reviews/quality-audit/hidden-assets-20261112.json',JSON.stringify(report,null,2));
+console.log(report);

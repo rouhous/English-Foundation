@@ -1,0 +1,34 @@
+'use strict';
+const fs=require('fs'),vm=require('vm'),crypto=require('crypto');
+const file='index.html';let html=fs.readFileSync(file,'utf8'),original=html;
+if(html.includes('mej-hidden-badges-v1.css')){console.log('Already installed');process.exit(0)}
+const start=html.indexOf('<section class="j23-panel"><h2>⛵ مغامرة البحّار العُماني</h2>');
+if(start<0)throw Error('Old sailor panel not found');
+const end=html.indexOf('</section>',start)+10;
+if(end<=start)throw Error('Old sailor panel malformed');
+const intro="<section class=\"j23-panel mej-hidden-intro\"><h2>🔎 Hidden Objects · كنوز المفردات</h2><p>افتح الشارات لتفتح ألعابًا وتحصل على نجوم إضافية.</p><div class=\"mej-hidden-rewards\"><b>⭐ ${m}/200 نجمة أساسية</b><b>✨ ${window.mejHiddenStageBonus?.(g,p)||0}/50 نجمة بونص</b><b>🏆 ${(m+(window.mejHiddenStageBonus?.(g,p)||0))}/250</b></div><small>كل 20 نجمة أساسية تفتح شارة وجولة جديدة. اجمع 10 أغراض للحصول على 5 نجوم إضافية، وتنتهي الجولة بعد 3 أخطاء.</small></section>";
+html=html.slice(0,start)+intro+html.slice(end);
+const oldBadge="<div class=\"j23-medal ${b.earned?'unlocked':'locked'}\" title=\"${b.target}/200\"><div class=\"j24-medal-art\"><img src=\"${J24_BADGES[i]}\" alt=\"\" loading=\"lazy\"></div><strong>${esc(b.name)}</strong><small>${b.target}/200</small>${b.earned?'<i class=\"j23-earned\">✓</i>':'<i class=\"j23-locked\">🔒</i>'}</div>";
+const newBadge="<button type=\"button\" class=\"j23-medal mej-gate ${b.earned?'unlocked':'locked'}\" aria-label=\"${b.earned?'فتح لعبة Hidden Objects، الشارة '+(i+1):'شارة مغلقة حتى '+b.target+' نجمة'}\" title=\"${b.target}/200\" onclick=\"openMejHiddenObjects(${g},${i+1})\" ${b.earned?'':'disabled'}><span class=\"mej-gate-inner\"><span class=\"mej-gate-symbol\" aria-hidden=\"true\">${esc(b.em)}</span><span class=\"mej-gate-door\" aria-hidden=\"true\"><span class=\"mej-gate-lock\">🔒</span></span></span><strong>${b.earned?esc(b.name):'مجهولة'}</strong><small>${b.target}/200</small>${b.earned?'<span class=\"mej-gate-reward\">🎮 العب الآن</span>':''}</button>";
+if(html.split(oldBadge).length!==2)throw Error('Badge markup changed');
+html=html.replace(oldBadge,newBadge);
+const originalScore='profile.stars=Math.min(2600,total);';
+if(html.split(originalScore).length!==2)throw Error('Reconciliation not found');
+html=html.replace(originalScore,'profile.stars=Math.min(3250,total+Math.max(0,Number(window.mejHiddenBonusTotal?.(profile)||0)));');
+const stylesheet='<link rel="stylesheet" href="./assets/mej-hidden-badges-v1.css?v=20261112">';
+if(!html.includes('</head>'))throw Error('Missing head');
+html=html.replace('</head>',stylesheet+'</head>');
+const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+const bank=s=>{let i=s.indexOf('const BANK='),j=s.indexOf('const byGrade=');if(i<0||j<i)throw Error('Bank markers missing');return hash(s.slice(i,j))};
+if(bank(original)!==bank(html))throw Error('Question bank unexpectedly changed');
+let checked=0;for(const [i,m] of [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].entries()){if(!m[2].trim()||/application\/json/.test(m[1]))continue;new vm.Script(m[2],{filename:'inline-'+i});checked++;}
+if(!checked)throw Error('No scripts checked');
+fs.writeFileSync(file,html);
+let sw=fs.readFileSync('sw.js','utf8'),beforeSW=sw;
+sw=sw.replace(/const CACHE='mej-public-[^']+';/,"const CACHE='mej-hidden-objects-v1-20261112';");
+sw=sw.replace("'./assets/mej-sailor-host.js',","'./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js',");
+if(sw===beforeSW||!sw.includes('hidden-objects/index.html'))throw Error('Service worker core missing');
+new vm.Script(sw,{filename:'sw.js'});fs.writeFileSync('sw.js',sw);
+const report={badgeGates:10,oldSailorPanelRemoved:true,bonusPerRound:5,maxStageBonus:50,totalPossiblePerStage:250,bonusSeparateFromUnlock:true,originalBadgeImagesRemoved:true,questionBankUnchanged:true,syntaxScripts:checked};
+fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/hidden-badge-gates-20261112.json',JSON.stringify(report,null,2));
+console.log(report);

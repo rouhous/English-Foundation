@@ -1,0 +1,280 @@
+{
+  "version": "2026-11-12-first-realistic-scenes",
+  "state": "artwork_approved_for_visual_review_not_activated",
+  "coordinateSystem": "relative_to_full_uncropped_16_by_9_image",
+  "assets": "MEJ_Hidden_Objects_Realistic_Scenes_Batch_01.zip",
+  "scenes": [
+    {
+      "id": 1,
+      "file": "01_harbour_market.webp",
+      "name": "سوق الميناء",
+      "difficulty": "intro",
+      "targets": [
+        {
+          "word": "lantern",
+          "x": 0.06,
+          "y": 0.2,
+          "radius": 0.055
+        },
+        {
+          "word": "bicycle",
+          "x": 0.37,
+          "y": 0.43,
+          "radius": 0.055
+        },
+        {
+          "word": "apple",
+          "x": 0.17,
+          "y": 0.6,
+          "radius": 0.055
+        },
+        {
+          "word": "binoculars",
+          "x": 0.25,
+          "y": 0.77,
+          "radius": 0.055
+        },
+        {
+          "word": "compass",
+          "x": 0.42,
+          "y": 0.85,
+          "radius": 0.055
+        },
+        {
+          "word": "cat",
+          "x": 0.79,
+          "y": 0.72,
+          "radius": 0.055
+        },
+        {
+          "word": "rope",
+          "x": 0.78,
+          "y": 0.54,
+          "radius": 0.055
+        },
+        {
+          "word": "backpack",
+          "x": 0.59,
+          "y": 0.56,
+          "radius": 0.055
+        },
+        {
+          "word": "football",
+          "x": 0.44,
+          "y": 0.53,
+          "radius": 0.055
+        },
+        {
+          "word": "map",
+          "x": 0.15,
+          "y": 0.87,
+          "radius": 0.055
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "file": "02_oasis_fortress.webp",
+      "name": "واحة القلعة",
+      "difficulty": "intro",
+      "targets": [
+        {
+          "word": "lantern",
+          "x": 0.24,
+          "y": 0.21,
+          "radius": 0.055
+        },
+        {
+          "word": "cat",
+          "x": 0.1,
+          "y": 0.84,
+          "radius": 0.055
+        },
+        {
+          "word": "dates",
+          "x": 0.4,
+          "y": 0.68,
+          "radius": 0.055
+        },
+        {
+          "word": "dallah",
+          "x": 0.15,
+          "y": 0.65,
+          "radius": 0.055
+        },
+        {
+          "word": "oranges",
+          "x": 0.94,
+          "y": 0.86,
+          "radius": 0.055
+        },
+        {
+          "word": "donkey",
+          "x": 0.68,
+          "y": 0.52,
+          "radius": 0.055
+        },
+        {
+          "word": "bridge",
+          "x": 0.56,
+          "y": 0.44,
+          "radius": 0.055
+        },
+        {
+          "word": "basket",
+          "x": 0.88,
+          "y": 0.78,
+          "radius": 0.055
+        },
+        {
+          "word": "waterfall",
+          "x": 0.34,
+          "y": 0.55,
+          "radius": 0.055
+        },
+        {
+          "word": "barrel",
+          "x": 0.67,
+          "y": 0.65,
+          "radius": 0.055
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "file": "03_fishing_harbour.webp",
+      "name": "ميناء الصيادين",
+      "difficulty": "intermediate",
+      "targets": [
+        {
+          "word": "hat",
+          "x": 0.09,
+          "y": 0.53,
+          "radius": 0.055
+        },
+        {
+          "word": "dallah",
+          "x": 0.17,
+          "y": 0.69,
+          "radius": 0.055
+        },
+        {
+          "word": "book",
+          "x": 0.26,
+          "y": 0.75,
+          "radius": 0.055
+        },
+        {
+          "word": "cup",
+          "x": 0.23,
+          "y": 0.67,
+          "radius": 0.055
+        },
+        {
+          "word": "shoes",
+          "x": 0.45,
+          "y": 0.75,
+          "radius": 0.055
+        },
+        {
+          "word": "rope",
+          "x": 0.7,
+          "y": 0.8,
+          "radius": 0.055
+        },
+        {
+          "word": "chest",
+          "x": 0.78,
+          "y": 0.79,
+          "radius": 0.055
+        },
+        {
+          "word": "net",
+          "x": 0.35,
+          "y": 0.7,
+          "radius": 0.055
+        },
+        {
+          "word": "seagull",
+          "x": 0.96,
+          "y": 0.33,
+          "radius": 0.055
+        },
+        {
+          "word": "lifebuoy",
+          "x": 0.76,
+          "y": 0.56,
+          "radius": 0.055
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "file": "04_traditional_souq.webp",
+      "name": "السوق العُماني",
+      "difficulty": "intermediate",
+      "targets": [
+        {
+          "word": "clock",
+          "x": 0.19,
+          "y": 0.34,
+          "radius": 0.055
+        },
+        {
+          "word": "camera",
+          "x": 0.22,
+          "y": 0.48,
+          "radius": 0.055
+        },
+        {
+          "word": "book",
+          "x": 0.2,
+          "y": 0.71,
+          "radius": 0.055
+        },
+        {
+          "word": "apples",
+          "x": 0.37,
+          "y": 0.81,
+          "radius": 0.055
+        },
+        {
+          "word": "dates",
+          "x": 0.49,
+          "y": 0.82,
+          "radius": 0.055
+        },
+        {
+          "word": "lantern",
+          "x": 0.45,
+          "y": 0.73,
+          "radius": 0.055
+        },
+        {
+          "word": "backpack",
+          "x": 0.35,
+          "y": 0.59,
+          "radius": 0.055
+        },
+        {
+          "word": "ship model",
+          "x": 0.91,
+          "y": 0.58,
+          "radius": 0.055
+        },
+        {
+          "word": "basket",
+          "x": 0.75,
+          "y": 0.76,
+          "radius": 0.055
+        },
+        {
+          "word": "hat",
+          "x": 0.17,
+          "y": 0.67,
+          "radius": 0.055
+        }
+      ]
+    }
+  ]
+}

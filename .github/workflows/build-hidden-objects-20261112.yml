@@ -1,0 +1,22 @@
+name: Build Hidden Objects from existing sailor artwork
+on:
+  push:
+    paths: ['scripts/build_hidden_objects_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract approved artwork and verify 10-item rounds
+        run: node scripts/build_hidden_objects_20261112.cjs
+      - name: Commit game assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hidden-objects/assets.js reviews/quality-audit/hidden-assets-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Reuse original Hidden Objects images independently of sailor"
+            git push
+          fi

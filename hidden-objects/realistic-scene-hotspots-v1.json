@@ -1,6 +1,6 @@
 {
   "version": "2026-11-12-first-realistic-scenes",
-  "state": "artwork_approved_for_visual_review_not_activated",
+  "state": "generated_for_visual_review_not_activated",
   "coordinateSystem": "relative_to_full_uncropped_16_by_9_image",
   "assets": "MEJ_Hidden_Objects_Realistic_Scenes_Batch_01.zip",
   "scenes": [
@@ -276,5 +276,6 @@
         }
       ]
     }
-  ]
+  ],
+  "notes": "Coordinates are first-pass visual estimates that require manual review against original uncropped scene images before activation."
 }

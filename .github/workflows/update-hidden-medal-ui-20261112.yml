@@ -1,0 +1,23 @@
+name: Publish Hidden Objects medal labels and cache version
+on:
+  push:
+    paths:
+      - 'scripts/update_hidden_medal_ui_20261112.cjs'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update badge labels and validate unchanged question bank
+        run: node scripts/update_hidden_medal_ui_20261112.cjs
+      - name: Commit interface
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/hidden-medal-status-v2.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Show collected bonus stars on open Hidden Objects medals"
+            git push
+          fi

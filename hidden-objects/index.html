@@ -49,13 +49,36 @@ const ART=window.MEJHiddenArt;const el=id=>document.getElementById(id);
 let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null;
 let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
+// An independent symbol must match the *current word*; IDs can be rebound
+// to curriculum vocabulary, so the old fixed-index emojis were misleading.
+const GUIDE_ICONS={
+apple:'🍎',book:'📖',pencil:'✏️',banana:'🍌',shell:'🐚',rope:'🪢',key:'🗝️',orange:'🍊',compass:'🧭',lantern:'🏮',bottle:'🍼',map:'🗺️',bell:'🔔',telescope:'🔭',oar:'🛶',pouch:'👝',
+pen:'🖊️',school:'🏫',teacher:'🧑‍🏫',student:'🎒',bag:'👜',backpack:'🎒',table:'🪑',chair:'🪑',desk:'🪑',door:'🚪',window:'🪟',clock:'🕰️',watch:'⌚',camera:'📷',phone:'📱',computer:'💻',laptop:'💻',tablet:'📱',keyboard:'⌨️',mouse:'🖱️',headphones:'🎧',
+ball:'⚽','football':'⚽','soccer ball':'⚽',basketball:'🏀',bike:'🚲',bicycle:'🚲',car:'🚗',bus:'🚌',train:'🚆',plane:'✈️',airplane:'✈️',boat:'⛵',ship:'🚢',dhow:'⛵',
+cat:'🐈',dog:'🐕',bird:'🐦',fish:'🐟',horse:'🐎',cow:'🐄',camel:'🐪',turtle:'🐢',butterfly:'🦋',bee:'🐝',
+sun:'☀️',moon:'🌙',star:'⭐',cloud:'☁️',tree:'🌳',flower:'🌼',leaf:'🍃',mountain:'⛰️',river:'🏞️',beach:'🏖️',island:'🏝️',sand:'🏜️',sea:'🌊',
+house:'🏠',home:'🏠',building:'🏢',hospital:'🏥',market:'🏬',shop:'🏪',castle:'🏰',fort:'🏰',bridge:'🌉',mosque:'🕌',library:'📚',
+orange:'🍊',pear:'🍐',grape:'🍇',grapes:'🍇',strawberry:'🍓',watermelon:'🍉',lemon:'🍋',carrot:'🥕',tomato:'🍅',potato:'🥔',bread:'🍞',egg:'🥚',milk:'🥛',water:'💧',juice:'🧃',rice:'🍚',cheese:'🧀',cake:'🎂',pizza:'🍕',
+spoon:'🥄',fork:'🍴',knife:'🍽️',plate:'🍽️',cup:'☕',mug:'☕',glass:'🥛',pot:'🍲',basket:'🧺',box:'📦',gift:'🎁',toy:'🧸','teddy bear':'🧸',doll:'🪆',
+hat:'🧢',cap:'🧢',shirt:'👕',shoe:'👞',shoes:'👞',socks:'🧦',dress:'👗',coat:'🧥',umbrella:'☂️',glasses:'👓',
+brush:'🖌️','toothbrush':'🪥',toothpaste:'🪥',soap:'🧼',towel:'🧻',bed:'🛏️',lamp:'💡',light:'💡',flag:'🚩',coin:'🪙',money:'💰',wallet:'👛',
+paper:'📄',newspaper:'📰',magazine:'📖',letter:'✉️',envelope:'✉️',picture:'🖼️',photo:'📷',painting:'🖼️',globe:'🌐',ruler:'📏',eraser:'🧽',scissors:'✂️',
+doctor:'🩺',nurse:'🧑‍⚕️',scientist:'🧑‍🔬',farmer:'🧑‍🌾',pilot:'🧑‍✈️',firefighter:'🧑‍🚒',chef:'🧑‍🍳',
+'trash can':'🗑️',bin:'🗑️',robot:'🤖',battery:'🔋',charger:'🔌',microphone:'🎤',radio:'📻',television:'📺',tv:'📺',remote:'📱'
+};
+function visualCue(word,id){
+ const name=String(word||'').trim().toLowerCase().replace(/\s+/g,' ');
+ return GUIDE_ICONS[name]||(name===ART.words[id]?GUIDE_EMOJI[id]:null);
+}
 let guideMode='word';
 function guideFor(id){
  if(guideMode==='word')return null;
  const art=document.createElement('span');art.className='guide-art';art.setAttribute('aria-hidden','true');
  if(guideMode==='picture'){
    // Independent illustrated hints, never the same photograph/sprite in the scene.
-   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=GUIDE_EMOJI[id]||'🔎';art.append(icon);
+   const cue=visualCue(words[id],id);
+   if(!cue)return null; // Never show a misleading icon for a replaced curriculum word.
+   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=cue;art.append(icon);
  }else{
    const img=document.createElement('img');img.src=images[id];img.alt='';art.append(img);
  }

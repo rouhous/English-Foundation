@@ -33,10 +33,11 @@ for(const level of catalog.levels)for(const part of level.parts)for(const q of p
 }
 if(problems.length)throw Error('Spelling word not highlighted: '+JSON.stringify(problems.slice(0,12)));
 if(checked!==632||visible!==572||phonics!==60)throw Error('Unexpected coverage '+JSON.stringify({checked,visible,phonics}));
-let jsBlocks=0;for(const [i,m] of [...source.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)].entries()){
- if(!m[2].trim()||/application\\/json/.test(m[1]))continue;
+let jsBlocks=0;for(const [i,m] of [...source.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].entries()){
+ if(!m[2].trim()||/application\/json/.test(m[1]))continue;
  new vm.Script(m[2],{filename:'inline-'+i+'.js'});jsBlocks++;
 }
+if(jsBlocks<1)throw Error('No script blocks checked');
 source=source.replace('</head>','<!-- '+marker+' -->\n</head>');
 fs.writeFileSync(file,source,'utf8');
 const report={marker,spellingQuestionsChecked:checked,highlighted:visible,phonicsExcluded:phonics,unmatched:problems.length,scriptBlocksChecked:jsBlocks,questionBankUnchanged:true,rootCause:'Word-builder quiz replaced the original Spelling prompt before invoking the vocabulary-style display helper'};

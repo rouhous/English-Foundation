@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hidden Objects — رحلتي مع الإنجليزية</title>
+<style>
+:root{font:16px system-ui,"Segoe UI",sans-serif;color:#fff;background:#062c43}*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:linear-gradient(150deg,#0d6e8f,#04233d);overflow-x:hidden}
+.shell{max-width:1240px;margin:auto;padding:12px;display:grid;grid-template-rows:auto auto minmax(330px,1fr) auto;gap:10px;min-height:100dvh}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#033d5bb8;border:1px solid #66b9d7;border-radius:16px;padding:10px 14px}
+h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:800;display:flex;gap:9px;flex-wrap:wrap}.chip{padding:6px 10px;border-radius:99px;background:#0c6a83;border:1px solid #8cdbe4}
+.instruction{margin:0;background:#073d59bd;padding:10px 14px;border-radius:12px;line-height:1.7}
+.play{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,240px);gap:10px;direction:ltr;min-height:360px}
+.scene{position:relative;aspect-ratio:1.65;min-height:330px;border:3px solid #b4d4bb;border-radius:18px;overflow:hidden;background:#8cb5ab center/cover;box-shadow:0 9px 30px #001e29aa;touch-action:manipulation}
+.scene::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#07262340,transparent 27%,#f0e7bd12);z-index:0}
+.spot{position:absolute;border:0;background:none;padding:0;width:clamp(31px,5.8vw,62px);height:clamp(31px,5.8vw,64px);transform:translate(-50%,-50%);cursor:pointer;filter:drop-shadow(1px 2px 2px #2c342887) saturate(.88);opacity:.93;mix-blend-mode:normal;border-radius:12px;transition:filter .15s,opacity .15s}
+.spot img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+.spot:focus-visible{outline:3px solid #ffe36d;outline-offset:2px}.spot:active{filter:brightness(1.5)}.spot.found{opacity:0;pointer-events:none}
+.words{direction:ltr;text-align:left;border:1px solid #7bb9d1;background:#082f4aef;border-radius:17px;padding:12px;max-height:100%;overflow:auto}
+.words h2{font-size:17px;margin:0 0 10px}.words ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}.words li{font-size:clamp(14px,2vw,18px);padding:7px 10px;border-radius:9px;background:#12516a;font-weight:750}.words li.found{color:#89d9af;text-decoration:line-through;opacity:.72}
+.foot{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#073c58b5;border:1px solid #78c5d8;border-radius:13px;padding:11px;min-height:50px}
+button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-ui;padding:10px 15px;color:#173b4d;cursor:pointer}
+#notice{font-weight:800;color:#f4efbd;line-height:1.6;text-align:center}.end{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:#07293cdd;padding:16px}.end-card{width:min(96%,420px);background:#f0fbfc;color:#173f59;border-radius:20px;border:4px solid #d6ad61;padding:23px;text-align:center;box-shadow:0 12px 35px #001f2788}.end-card h2{font-size:27px;color:#0b697c}.end-card strong{font-size:38px;color:#ad7a12}
+@media(max-width:710px){.shell{padding:7px;gap:7px}.play{grid-template-columns:1fr;grid-template-rows:minmax(280px,auto) auto}.scene{min-height:285px;aspect-ratio:1.15}.words{max-height:170px;padding:8px}.words ul{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.words li{font-size:11px;text-align:center;padding:5px 2px;overflow-wrap:anywhere}.words h2{font-size:13px}.spot{width:clamp(28px,8vw,46px);height:clamp(30px,9vw,49px)}}
+</style></head><body>
+<main class="shell">
+<header class="head"><h1>🔎 Hidden Objects</h1><div class="status"><span class="chip" id="stage">الجزيرة</span><span class="chip" id="found">0 / 10</span><span class="chip" id="mistakes">❤️❤️❤️</span><span class="chip" id="timer">⏱️ —</span></div></header>
+<p class="instruction" id="instruction">ابحث عن الأغراض الإنجليزية في المشهد. ثلاث نقرات خاطئة تنهي الجولة. كل غرضين صحيحين = ⭐ واحدة.</p>
+<div class="play"><div id="scene" class="scene" aria-label="مشهد البحث عن الأغراض" role="group"></div><aside class="words"><h2>Find these objects:</h2><ul id="words"></ul></aside></div>
+<footer class="foot"><span id="notice" role="status">اختر الغرض الذي يطابق كلمة في القائمة.</span><button class="back" id="back">↩ العودة إلى الرحلة</button></footer>
+</main>
+<script src="./assets.js"></script>
+<script>
+(()=>{'use strict';
+const ART=window.MEJHiddenArt;const el=id=>document.getElementById(id);
+let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null;
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function board(){
+ const field=el('scene');field.replaceChildren();
+ const backgrounds=ART.scenes||[ART.background],view=backgrounds[session.scene%backgrounds.length];
+ field.style.backgroundImage='linear-gradient(0deg,#2943341c,#d3bc8a0d),url("'+view+'")';
+ const choices=shuffle(ART.words.map((_,i)=>i).filter(i=>i!==6),session.seed);
+ const positions=shuffle(Array.from({length:15},(_,i)=>({
+  x:9+(i%5)*20+(i%3)*2.1,y:15+Math.floor(i/5)*32+(i%4)*1.8
+ })),session.seed+91);
+ choices.forEach((id,i)=>{if(session.found.includes(id))return;
+  const item=document.createElement('button');item.type='button';item.className='spot';
+  item.style.left=positions[i].x+'%';item.style.top=positions[i].y+'%';
+  item.style.transform='translate(-50%,-50%) rotate('+(((i*7+session.seed)%29)-14)+'deg) scale('+(.82+(i%5)*.06)+')';
+  item.setAttribute('aria-label','Object '+(i+1));item.dataset.item=id;
+  const img=document.createElement('img');img.src=ART.images[id];img.alt='';item.append(img);
+  item.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});field.append(item);
+ });
+ field.addEventListener('click',()=>wrong(),{once:false});
+ const list=el('words');list.replaceChildren();
+ for(const id of session.targets){const li=document.createElement('li');li.textContent=(session.found.includes(id)?'✓ ':'')+ART.words[id];li.className=session.found.includes(id)?'found':'';list.append(li)}
+ el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
+ el('found').textContent=session.found.length+' / 10';
+ el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
+}
+function send(done){parent.postMessage({type:'mej:hidden-progress',stage:session.stage,badge:session.badge,found:[...session.found],misses:session.misses,remaining:session.remaining,ended:!!done},location.origin)}
+function tap(id){if(completed)return;const now=Date.now();if(now-lastClick<330)return;lastClick=now;
+ if(!session.targets.includes(id)){wrong(true);return}
+ if(session.found.includes(id))return;
+ session.found.push(id);el('notice').textContent='Excellent! '+ART.words[id]+' ✓';
+ if(session.found.length===10){finish('all');return}
+ send(false);board();
+}
+function wrong(item){if(completed)return;const now=Date.now();if(now-lastClick<330&&!item)return;lastClick=now;
+ session.misses=Math.min(3,session.misses+1);
+ el('notice').textContent='Try again! خطأ '+session.misses+' من 3';
+ if(session.misses>=3){finish('mistakes');return}send(false);board();
+}
+function finish(reason){if(completed)return;completed=true;clearInterval(timerHandle);session.ended=true;send(true);board();
+ const award=Math.floor(session.found.length/2);
+ const box=document.createElement('div');box.className='end';box.innerHTML='<div class="end-card"><h2>'+(reason==='all'?'أحسنت! اكتملت الجولة 🎉':reason==='mistakes'?'انتهت المحاولات الثلاث':'انتهى الوقت')+'</h2><p>جمعت '+session.found.length+' من 10 أغراض</p><strong>+'+award+' ⭐</strong><p>نجمة لكل غرضين صحيحين</p><button class="back" id="closeGame">العودة إلى رحلتي</button></div>';
+ el('scene').append(box);el('closeGame').onclick=()=>parent.postMessage({type:'mej:hidden-close'},location.origin);
+}
+function tick(){if(!session||completed||session.remaining==null)return;const now=Date.now();const diff=clamp(Math.floor((now-lastTime)/1000),0,8);if(diff){lastTime=now;session.remaining=Math.max(0,session.remaining-diff);const sec=session.remaining;el('timer').textContent='⏱️ '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec<=0){finish('timeout');return}if(sec%10===0)send(false)}}
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='mej:hidden-init'||session)return;
+ const d=e.data;const all=ART.words.map((_,i)=>i).filter(i=>i!==6);
+ const seed=Number(d.stage)*7919+Number(d.badge)*1013;
+ const proposed=shuffle(all,seed).slice(0,10);const saved=d.saved||{};
+ session={stage:d.stage,badge:d.badge,seed,scene:d.scene||0,targets:proposed,
+  found:Array.isArray(saved.found)?saved.found.filter(x=>proposed.includes(x)).slice(0,10):[],
+  misses:clamp(Number(saved.misses)||0,0,3),remaining:saved.remaining??(d.stage<5?null:Math.max(180,360-Number(d.stage)*12)),ended:false};
+ if(session.remaining==null)el('timer').textContent='⏱️ بدون مؤقت';
+ board();if(session.misses>=3||session.found.length===10){finish('all');return}
+ lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
+});
+el('back').onclick=()=>parent.postMessage({type:'mej:hidden-close'},location.origin);
+parent.postMessage({type:'mej:hidden-ready'},location.origin);
+})();
+</script></body></html>

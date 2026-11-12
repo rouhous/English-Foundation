@@ -1,0 +1,22 @@
+name: Check Hidden Objects scene curriculum and polygons
+on:
+  push:
+    paths: ['scripts/verify_hidden_scene_candidates_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate word bank, polygon shapes, image links and scripts
+        run: node scripts/verify_hidden_scene_candidates_20261112.cjs
+      - name: Commit review report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/hidden-five-scene-candidates-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Hidden Objects five-scene candidate validation"
+            git push
+          fi

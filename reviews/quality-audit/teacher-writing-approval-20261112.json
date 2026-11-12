@@ -1,0 +1,218 @@
+{
+  "date": "2026-11-12",
+  "teacherReview": {
+    "approvedUnchanged": 38,
+    "rejectedReplaced": 21,
+    "revised": 2
+  },
+  "note": "All 38 approved entries remain unchanged; 21 rejected and two revisions updated in application and review catalog. Replacements need teacher review before acceptance.",
+  "changed": [
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L6-196",
+      "grade": 6,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Your class is writing an email to invite another class to a school event. Which greeting fits?",
+      "newPrompt": "We stayed inside during the break ___ it was raining heavily.",
+      "correctAnswer": "because"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L6-197",
+      "grade": 6,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence gives a personal opinion about reading?",
+      "newPrompt": "___ I finished my homework, I went outside to play.",
+      "correctAnswer": "After"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L6-198",
+      "grade": 6,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence is the best ending for an email inviting a friend to a school event?",
+      "newPrompt": "I took a bottle of water ___ I would not feel thirsty during the trip.",
+      "correctAnswer": "so that"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L7-196",
+      "grade": 7,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are emailing your teacher to ask for advice about a project. Which greeting is appropriate?",
+      "newPrompt": "___ the weather was very hot, the students completed their walk.",
+      "correctAnswer": "Although"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L7-197",
+      "grade": 7,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence expresses an opinion about protecting endangered animals?",
+      "newPrompt": "Maha was checking the map ___ her brother was packing the bags.",
+      "correctAnswer": "while"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L7-198",
+      "grade": 7,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which is the most suitable final sentence for an email asking your teacher for advice?",
+      "newPrompt": "We waited at the bus stop ___ our teacher arrived.",
+      "correctAnswer": "until"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-196",
+      "grade": 8,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are writing to the school principal to suggest a recycling programme. Which opening suits the audience?",
+      "newPrompt": "You will not finish the science project on time ___ you share the tasks fairly.",
+      "correctAnswer": "unless"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-197",
+      "grade": 8,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence clearly gives a reasoned opinion about reducing waste?",
+      "newPrompt": "The first island has sandy beaches, ___ the second has steep rocky cliffs.",
+      "correctAnswer": "whereas"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-198",
+      "grade": 8,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which closing best fits a formal suggestion to the school principal?",
+      "newPrompt": "The team checked every source carefully. ___, their report contained fewer errors.",
+      "correctAnswer": "As a result"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-199",
+      "grade": 8,
+      "reason": "teacher_requested_rewording",
+      "oldPrompt": "The project costs more at first. ___, it will save money over time.",
+      "newPrompt": "The project costs more at first. ___, it will save money over time.",
+      "correctAnswer": "However,"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L9-196",
+      "grade": 9,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are emailing a new exchange partner whom you have not met. Which greeting is most suitable?",
+      "newPrompt": "___ the journey was difficult, the volunteers continued helping the villagers.",
+      "correctAnswer": "Even though"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L9-197",
+      "grade": 9,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence presents a personal viewpoint about online identity?",
+      "newPrompt": "___ online messages can be misunderstood, it is important to use clear and respectful language.",
+      "correctAnswer": "Since"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L9-198",
+      "grade": 9,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence best closes a friendly email to an exchange partner?",
+      "newPrompt": "The beach looked clean from a distance. ___, the students found plastic under the rocks.",
+      "correctAnswer": "Nevertheless"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L10-196",
+      "grade": 10,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are emailing an environmental organisation to request data for a climate project. Which greeting is appropriate?",
+      "newPrompt": "The research team can use the survey results ___ the participants have agreed to share their answers.",
+      "correctAnswer": "provided that"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L10-197",
+      "grade": 10,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which is an evidence-based opinion about renewable energy?",
+      "newPrompt": "Wind turbines need moving air, ___ solar panels depend on sunlight.",
+      "correctAnswer": "whereas"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L10-198",
+      "grade": 10,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence best closes a formal email requesting climate data?",
+      "newPrompt": "The neighbourhood installed more recycling bins. ___, less paper was thrown away with general waste.",
+      "correctAnswer": "Consequently"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L11-196",
+      "grade": 11,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are writing a formal email to request details about an educational exchange programme. Choose the appropriate greeting.",
+      "newPrompt": "___ the exchange programme was expensive, several students applied for a place.",
+      "correctAnswer": "Although"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L11-197",
+      "grade": 11,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence expresses a supported opinion about cultural exchange?",
+      "newPrompt": "The school organised a reading campaign. ___, library visits increased during the term.",
+      "correctAnswer": "As a result"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L11-198",
+      "grade": 11,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which is the strongest ending for a formal request for programme details?",
+      "newPrompt": "The application will not be considered ___ the required documents are submitted before the deadline.",
+      "correctAnswer": "unless"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L11-199",
+      "grade": 11,
+      "reason": "teacher_requested_rewording",
+      "oldPrompt": "The trip offers valuable experiences. ___, the cost may prevent some students from taking part.",
+      "newPrompt": "The trip offers valuable experiences. ___, the cost may prevent some students from taking part.",
+      "correctAnswer": "However,"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L12-196",
+      "grade": 12,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You are writing a formal email asking about a university scholarship. Which greeting best suits the recipient?",
+      "newPrompt": "___ the evidence was limited, the writer presented the conclusion as certain.",
+      "correctAnswer": "Although"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L12-197",
+      "grade": 12,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "Which sentence expresses a qualified opinion rather than a fact or a prediction?",
+      "newPrompt": "The first proposal focuses on short-term costs, ___ the second examines long-term benefits.",
+      "correctAnswer": "whereas"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L12-198",
+      "grade": 12,
+      "reason": "teacher_rejected_replacement",
+      "oldPrompt": "You have requested a refund in a formal email. Which closing sentence is most appropriate?",
+      "newPrompt": "The figures were collected from only one school. ___, the report should avoid generalising to all students.",
+      "correctAnswer": "Therefore"
+    }
+  ]
+}

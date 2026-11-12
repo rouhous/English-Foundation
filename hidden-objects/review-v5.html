@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مراجعة Hidden Objects v5 — رحلتي مع الإنجليزية</title>
+<style>
+:root{font-family:system-ui,'Segoe UI',sans-serif;color:#fff;background:#06354a}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(160deg,#086b80,#052d43);overflow-x:hidden}
+main{width:min(100%,1040px);margin:auto;padding:8px 10px 22px}header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}h1{margin:0;font-size:clamp(19px,4vw,26px)}
+small{font-size:12px;color:#d5eced}a{color:#fff;border:1px solid #8cc6d1;border-radius:10px;padding:8px;text-decoration:none;white-space:nowrap;font-weight:750}
+.controls,.stats{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:7px 0}
+select,button{border:1px solid #8ac8d2;border-radius:11px;min-height:40px;background:#0c5068;color:#fff;font-weight:750;font-size:14px;padding:6px 10px;cursor:pointer}
+label{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:13px}input{accent-color:#ffe396;width:18px;height:18px}
+.chip{background:#0a506c;border:1px solid #7fc1d0;border-radius:20px;padding:8px 11px;font-weight:800}
+.note{font-size:13px;line-height:1.45;background:#073b5d;padding:8px 12px;border-radius:10px;margin:8px 0}
+.board{position:relative;width:100%;aspect-ratio:1599/900;background:#11364b;border:2px solid #c8bb7a;border-radius:16px;overflow:hidden;touch-action:manipulation}
+.scene-layer{width:100%;height:100%;position:relative;cursor:crosshair}
+.scene-image{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
+.board.zoom{height:min(57dvh,560px);aspect-ratio:auto;overflow:auto;touch-action:pan-x pan-y}
+.board.zoom .scene-layer{width:210%;height:auto;aspect-ratio:1599/900}
+.board.finished::after{content:'اكتملت الجولة';position:absolute;inset:0;background:#082d47c9;display:grid;place-items:center;font-size:25px;font-weight:800;pointer-events:none}
+.words-wrap{background:#06324b;border:1px solid #77b7c2;border-radius:14px;padding:8px;margin-top:9px}
+.words-wrap h2{font-size:15px;margin:0 0 7px}
+.words{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;direction:ltr}
+.word{border-radius:10px;padding:7px 2px;text-align:center;background:#16546c;min-height:53px;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow-wrap:anywhere}
+.word.hit{background:#175e4a;color:#c8f6d8;text-decoration:line-through}
+.cue{font-size:27px;display:block;margin-bottom:2px;line-height:1.1}
+.word.silhouette .cue{filter:grayscale(1) brightness(0)}
+.word strong{font:750 clamp(10px,2.1vw,15px) system-ui}
+#result{font-size:14px;min-height:28px;padding:7px 2px;color:#ffe8ae;text-align:center;font-weight:800}
+@media(max-width:600px){main{padding:7px 7px 18px}.chip{font-size:13px;padding:7px 9px}.words{gap:4px}.word{min-height:55px}.cue{font-size:22px}h1{font-size:20px}}
+</style></head><body><main>
+<header><h1>🔎 Hidden Objects — مراجعة v5</h1><a href="../">↩ رحلتي</a></header>
+<small>تجربة مستقلة للمراجعة؛ النجوم لا تُضاف إلى أي حساب</small>
+<div class="controls">
+<label>المشهد <select id="scene"></select></label>
+<label>مساعدة <select id="mode"><option value="picture">1–4: كلمة وصورة</option><option value="silhouette">5–8: كلمة وظل</option><option value="word">9–12: كلمة فقط</option></select></label>
+<button id="zoom">🔍 تكبير</button><button id="reset">↻ إعادة</button>
+<label><input type="checkbox" id="regions">إظهار حدود الأغراض (للمراجعة)</label>
+</div>
+<div class="stats"><span class="chip" id="progress">0/10</span><span class="chip" id="hearts">❤️❤️❤️</span><span class="chip" id="stars">⭐ 0/5</span><span class="chip" id="time">⏱️ بلا مؤقت</span><button id="timer">⏱️ تحدي 3 دقائق</button></div>
+<p class="note">اضغط على أي جزء من الغرض الموجود في الصورة • كل غرضين نجمة • ثلاث أخطاء تنهي الجولة</p>
+<div id="board" class="board" aria-label="مشهد البحث"><div id="layer" class="scene-layer"></div></div>
+<div class="words-wrap"><h2>Find these objects</h2><div id="words" class="words"></div><div role="status" id="result"></div></div>
+</main><script src="./photo-scenes.js"></script><script>
+(function(){'use strict';
+const $=id=>document.getElementById(id),CAT=window.MEJRealPhotoScenes,WIDTH=1599,HEIGHT=900;
+const cues={lantern:'🏮',bicycle:'🚲',apple:'🍎',binoculars:'🔭',compass:'🧭',cat:'🐈',rope:'🪢',backpack:'🎒',football:'⚽',map:'🗺️',dates:'🌴',dallah:'☕','clay pot':'🏺',donkey:'🐴',bridge:'🌉',basket:'🧺',waterfall:'💦',barrel:'🛢️',hat:'👒',book:'📚',cup:'☕',shoes:'👟',chest:'🧰',net:'🥅',seagull:'🐦',lifebuoy:'🛟',clock:'🕒',camera:'📷',apples:'🍎','ship model':'⛵'};
+let index=0,found=new Set(),misses=0,ended=false,zoomed=false,seconds=null,timerHandle=null,lastTick=0,lastMiss=null;
+function inside(x,y,p){let yes=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])yes=!yes}return yes}
+function regionDistance(x,y,p){if(inside(x,y,p))return 0;let d=Infinity;for(let i=0;i<p.length;i++){const a=p[i],b=p[(i+1)%p.length],dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/Math.max(1,dx*dx+dy*dy)));d=Math.min(d,Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy))}return d}
+function hitAt(x,y,rect){const tolerance=Math.min(17,Math.max(6,10/Math.max(.3,rect.width/WIDTH)));
+ const all=[];CAT.scenes[index].targets.forEach((t,i)=>{let d=Math.min(...t.regions.map(p=>regionDistance(x,y,p)));if(d<=tolerance)all.push({i,d,found:found.has(i)})});
+ all.sort((a,b)=>Number(a.found)-Number(b.found)||a.d-b.d);return all[0]?.i??-1;
+}
+function refresh(){const sc=CAT.scenes[index];$('progress').textContent=found.size+'/10';$('hearts').textContent='❤️'.repeat(3-misses)+'🖤'.repeat(misses);$('stars').textContent='⭐ '+Math.floor(found.size/2)+'/5';$('time').textContent=seconds===null?'⏱️ بلا مؤقت':'⏱️ '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+ const w=$('words');w.replaceChildren();for(let i=0;i<10;i++){let t=sc.targets[i],b=document.createElement('div');b.className='word'+(found.has(i)?' hit':'')+($('mode').value==='silhouette'?' silhouette':'');if($('mode').value!=='word'&&cues[t.word]){let e=document.createElement('span');e.className='cue';e.textContent=cues[t.word];b.append(e)}let label=document.createElement('strong');label.textContent=t.word;b.append(label);w.append(b)}
+}
+function draw(){const sc=CAT.scenes[index],board=$('board');board.className='board'+(zoomed?' zoom':'')+(ended?' finished':'');const layer=$('layer');layer.replaceChildren();const img=document.createElement('img');img.src=CAT.root+sc.file;img.className='scene-image';img.alt=sc.name;img.onerror=()=>$('result').textContent='تعذر تحميل صورة المشهد';layer.append(img);
+ if($('regions').checked){const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1599 900');svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';sc.targets.forEach((t,i)=>t.regions.forEach(points=>{let p=document.createElementNS('http://www.w3.org/2000/svg','polygon');p.setAttribute('points',points.map(x=>x.join(',')).join(' '));p.setAttribute('fill',found.has(i)?'#40edaa26':'#e6be3126');p.setAttribute('stroke',found.has(i)?'#40edaa':'#ffdf4c');p.setAttribute('stroke-width','3');svg.append(p)}));layer.append(svg)}
+ refresh();
+}
+function done(msg){ended=true;clearInterval(timerHandle);timerHandle=null;draw();$('result').textContent=msg+' • المكافأة: '+Math.floor(found.size/2)+' ⭐ (معاينة فقط)'}
+function miss(x,y){const now=Date.now();if(lastMiss&&now-lastMiss.time<4000&&Math.hypot(x-lastMiss.x,y-lastMiss.y)<42){$('result').textContent='حاول لمس جزء آخر من الغرض';return}lastMiss={time:now,x,y};misses=Math.min(3,misses+1);if(misses===3)done('انتهت المحاولات');else{$('result').textContent='خطأ '+misses+' من 3';refresh()}}
+function reset(){clearInterval(timerHandle);timerHandle=null;seconds=null;found=new Set();misses=0;ended=false;lastMiss=null;zoomed=false;$('timer').disabled=false;$('zoom').textContent='🔍 تكبير';$('result').textContent='اضغط على الغرض الظاهر في الصورة';draw()}
+$('layer').addEventListener('click',e=>{if(ended)return;const rect=$('layer').getBoundingClientRect(),x=(e.clientX-rect.left)/rect.width*WIDTH,y=(e.clientY-rect.top)/rect.height*HEIGHT;if(x<0||y<0||x>WIDTH||y>HEIGHT)return;const i=hitAt(x,y,rect);if(i>=0){lastMiss=null;if(found.has(i))return;found.add(i);if(found.size===10)done('أحسنت! اكتملت الجولة');else{$('result').textContent='✓ '+CAT.scenes[index].targets[i].word;refresh()}}else miss(x,y)});
+CAT.scenes.forEach((s,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=(i+1)+' · '+s.name;$('scene').append(o)});
+$('scene').onchange=()=>{index=Number($('scene').value);reset()};$('reset').onclick=reset;$('mode').onchange=refresh;$('regions').onchange=draw;
+$('zoom').onclick=()=>{zoomed=!zoomed;$('zoom').textContent=zoomed?'↘ تصغير':'🔍 تكبير';draw()};
+$('timer').onclick=()=>{if(ended||seconds!==null)return;seconds=180;lastTick=Date.now();$('timer').disabled=true;timerHandle=setInterval(()=>{if(ended)return;const now=Date.now(),passed=Math.floor((now-lastTick)/1000);if(passed){seconds=Math.max(0,seconds-passed);lastTick+=passed*1000;refresh();if(seconds===0)done('انتهى الوقت')}},500);refresh()};
+const requested=new URLSearchParams(location.search).get('scene');if(requested!==null&&Number.isInteger(Number(requested))&&Number(requested)>=0&&Number(requested)<CAT.scenes.length){index=Number(requested);$('scene').value=requested}
+reset();
+})();
+</script></body></html>

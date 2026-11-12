@@ -1,42 +1,97 @@
-(() => {
- 'use strict';
+/* MEJ HIDDEN OBJECTS BONUS v1 — replaces sailor gameplay. Offline-first.
+ * 10 badge slots per stage. Each completed/failed attempt settles once.
+ * Mastery stars alone unlock badges; earned bonus never unlocks a badge.
+ * Bonus ledger is locally recorded and client-reported until server verification is deployed.
+ */
+(()=>{'use strict';
  let opening=false;
- const current=p=>currentIsland(p);
- window.mejSailorStage=p=>{
-   const g=current(p);
-   if(countMaster(g,p)>=40)return g;
-   for(let i=12;i>=0;i--)if(permitted(i)&&countMaster(i,p)>=40)return i;
-   return g;
+ const maximum=5;
+ const key=(g,b)=>String(g)+'-'+String(b);
+ const validIndex=b=>Number.isInteger(b)&&b>=1&&b<=10;
+ const ledger=p=>p?.hiddenObjectsLedger&&typeof p.hiddenObjectsLedger==='object'&&!Array.isArray(p.hiddenObjectsLedger)?p.hiddenObjectsLedger:{};
+ const allIDs=Array.from({length:16},(_,i)=>i).filter(i=>i!==6);
+ const shuffle=(src,seed)=>{let t=seed>>>0;let arr=[...src];for(let i=arr.length-1;i>0;i--){t=(Math.imul(t,1664525)+1013904223)>>>0;let j=Math.floor(t/4294967296*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr};
+ // Match the game's LCG, which shuffles from a freshly initialised seed.
+ function targets(stage,badge){
+   let t=(stage*7919+badge*1013)>>>0;
+   const arr=[...allIDs];
+   for(let i=arr.length-1;i>0;i--){t=(Math.imul(t,1664525)+1013904223)>>>0;const j=Math.floor(t/4294967296*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
+   return arr.slice(0,10);
+ }
+ function sanitized(e,stage,badge){
+   if(!e||typeof e!=='object')return null;
+   const correct=new Set(targets(stage,badge));
+   const found=[...new Set(Array.isArray(e.found)?e.found.filter(n=>Number.isInteger(n)&&correct.has(n)):[])].slice(0,10);
+   const misses=Math.max(0,Math.min(3,Number.isInteger(e.misses)?e.misses:0));
+   const remaining=e.remaining==null?null:Math.max(0,Math.min(600,Math.floor(Number(e.remaining)||0)));
+   const finished=e.status==='finished'&&(found.length===10||misses===3||remaining===0);
+   return {status:finished?'finished':'pending',found,misses,remaining,award:finished?Math.floor(found.length/2):0};
+ }
+ window.mejHiddenStageBonus=function(g,p){
+   g=Number(g);if(!Number.isInteger(g)||g<0||g>12)return 0;
+   let sum=0;
+   for(let b=1;b<=10;b++){const e=sanitized(ledger(p)[key(g,b)],g,b);sum+=e?.status==='finished'?e.award:0}
+   return Math.min(50,sum);
  };
- window.openMejSailor=async function(){
-   if(opening||document.getElementById('mejSailorWindow'))return;
-   const student=active(),stage=mejSailorStage(student);
-   if(countMaster(stage,student)<40)return toast('تفتح اللعبة عند الشارة الثانية في المرحلة.');
-   const token=localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
-   if(!token)return toast('اربط حساب الطالب بالمعلم للتحقق من نجوم المرحلة.');
+ window.mejHiddenBonusTotal=function(p){
+   let sum=0;for(let g=0;g<=12;g++)sum+=window.mejHiddenStageBonus(g,p);
+   return sum;
+ };
+ window.mejSailorStage=p=>currentIsland(p); // Backward-compatible alias for saved journey markup.
+ window.openMejSailor=()=>window.openMejHiddenObjects(currentIsland(active()),1); // Legacy link fallback.
+ window.openMejHiddenObjects=function(stage,badge){
+   if(opening||document.getElementById('mejHiddenWindow'))return;
+   const p=active();stage=Number(stage);badge=Number(badge);
+   if(!p||!p.id||!Number.isInteger(stage)||stage<0||stage>12||!validIndex(badge))return;
+   if(!permitted(stage)){toast('هذه الجزيرة لم تُفتح بعد.');return}
+   const mastered=countMaster(stage,p);
+   if(mastered<20*badge){toast('تفتح اللعبة بعد الحصول على '+(20*badge)+' نجمة أساسية في هذه الجزيرة.');return}
+   const k=key(stage,badge),existing=sanitized(ledger(p)[k],stage,badge);
+   if(existing?.status==='finished'){toast('أكملت هذه الجولة وحصلت على '+existing.award+' نجوم إضافية. افتح الشارة التالية للمزيد.');return}
    opening=true;
+   const owner=p.id;
    try{
-     if(typeof sendReport==='function')await sendReport(false);
-     const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-progress',{
-       method:'POST',cache:'no-store',headers:{authorization:'Bearer '+token,'content-type':'application/json'},
-       body:JSON.stringify({action:'student_get'}),signal:AbortSignal.timeout(10000)});
-     if(!response.ok)throw Error('sync');
-     const result=await response.json();
-     if(active().id!==student.id||token!==localStorage.getItem('MEJ_STUDENT_ACCESS_V1'))return;
-     const device=localStorage.getItem('MEJ_STUDENT_DEVICE_REF_V1');
-     if(!result.ok||!result.hasSnapshot||!device||result.studentRef!==device)return toast('يلزم مزامنة حساب الطالب قبل فتح اللعبة.');
-     const row=result.progress?.level_stats?.find(item=>Number(item.level)===stage);
-     const stars=Math.min(countMaster(stage,student),Number(row?.mastered)||0);
-     if(stars<40)return toast('بانتظار تأكيد ٤٠ نجمة في هذه المرحلة. أعد المحاولة بعد المزامنة.');
      const dialog=document.createElement('dialog'),frame=document.createElement('iframe'),back=document.createElement('button');
-     dialog.id='mejSailorWindow';dialog.style='padding:0;border:0;background:#064859;width:100vw;height:100dvh;max-width:100vw;max-height:100dvh';
-     back.textContent='↩ العودة إلى رحلتي';back.style='height:42px;width:100%;font:bold 16px system-ui;background:#064859;color:white;border:none';
-     frame.title='مغامرة البحّار العُماني';frame.style='display:block;width:100%;height:calc(100% - 42px);border:0';
-     const link=()=>{if(dialog.open&&active().id===student.id)frame.contentWindow.postMessage({type:'mej:sailor-link',studentId:result.studentRef,stageId:String(stage),phase:Math.max(1,stage),stageStars:stars},location.origin)};
-     function receive(e){if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='mej:sailor-ready')link()}
-     window.addEventListener('message',receive);frame.addEventListener('load',link);
-     dialog.onclose=()=>{window.removeEventListener('message',receive);dialog.remove()};
-     back.onclick=()=>dialog.close();frame.src='./omani-sailor/index.html';dialog.append(back,frame);document.body.append(dialog);dialog.showModal();
-   }catch{toast('تعذّر التحقق من نجوم الطالب. تأكد من الاتصال ثم أعد المحاولة.')}finally{opening=false}
+     dialog.id='mejHiddenWindow';
+     dialog.style.cssText='padding:0;border:0;background:#07374c;width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;overscroll-behavior:contain';
+     frame.title='Hidden Objects · العثور على الأغراض';
+     frame.style.cssText='display:block;width:100%;height:calc(100% - 42px);border:0';
+     back.type='button';back.textContent='↩ العودة إلى رحلتي';
+     back.style.cssText='height:42px;width:100%;font:bold 16px system-ui;background:#064859;color:white;border:none';
+     const send=()=>{if(dialog.open&&frame.contentWindow&&active()?.id===owner)frame.contentWindow.postMessage({
+       type:'mej:hidden-init',stage,badge,scene:(stage*10+badge)%4,saved:existing?.status==='pending'?existing:null
+     },location.origin)};
+     const receive=e=>{
+       if(e.origin!==location.origin||e.source!==frame.contentWindow||active()?.id!==owner)return;
+       if(e.data?.type==='mej:hidden-ready'){send();return}
+       if(e.data?.type==='mej:hidden-close'){dialog.close();return}
+       if(e.data?.type!=='mej:hidden-progress'||e.data.stage!==stage||e.data.badge!==badge)return;
+       // The host computes points; the iframe never tells us how many bonus stars to award.
+       const current=ledger(active())[k];
+       if(current?.status==='finished')return;
+       const update=sanitized({found:e.data.found,misses:e.data.misses,remaining:e.data.remaining},stage,badge);
+       if(!update)return;
+       const old=sanitized(current,stage,badge);
+       if(old){
+         // Progress cannot lose successfully located objects or reduce its error counter.
+         if(old.found.some(id=>!update.found.includes(id))||update.misses<old.misses)return;
+       }
+       const done=e.data.ended===true&&(update.found.length===10||update.misses===3||update.remaining===0);
+       update.status=done?'finished':'pending';update.award=done?Math.floor(update.found.length/2):0;
+       const person=active();
+       if(!person.hiddenObjectsLedger||typeof person.hiddenObjectsLedger!=='object')person.hiddenObjectsLedger={};
+       person.hiddenObjectsLedger[k]=update;
+       persist(false); // Save locally immediately, cloud sync follows configured app transport.
+       if(done){persist(true);toast('🏆 مكافأة Hidden Objects: +'+update.award+' ⭐')}
+     };
+     window.addEventListener('message',receive);
+     function close(){window.removeEventListener('message',receive);frame.src='about:blank';dialog.remove();if(active()?.id===owner)route('journey')}
+     dialog.addEventListener('close',close,{once:true});
+     back.onclick=()=>dialog.close();
+     dialog.append(back,frame);document.body.append(dialog);
+     dialog.showModal();frame.addEventListener('load',send);
+     frame.src='./hidden-objects/index.html';
+   }catch(err){console.warn('Hidden Objects failed to open',err);toast('تعذر فتح اللعبة. حاول مجددًا.')}
+   finally{opening=false}
  };
 })();

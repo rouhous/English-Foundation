@@ -1,0 +1,20 @@
+{
+  "marker": "MEJ_HIDDEN_GUIDES_AND_TIMER_20261112_V1",
+  "syntax": "pass",
+  "grades1to4": "word+independent illustration",
+  "grades5to8": "word+monochrome silhouette",
+  "grades9to12": "word only",
+  "optionalTimerSeconds": 180,
+  "defaultsWithoutTimer": true,
+  "wrongClickCap": 3,
+  "bonusPer2Objects": 1,
+  "maximumBonusPerRound": 5,
+  "maximumBonusPerStage": 50,
+  "unlockStarsOnly": true,
+  "cloudLedgerTransportWired": true,
+  "offlineAssetsIncluded": true,
+  "artScenesAvailable": 4,
+  "artScenesPerBadgeTarget": 10,
+  "deviceVisualTest": "pending",
+  "cloudRoundtripTest": "pending"
+}

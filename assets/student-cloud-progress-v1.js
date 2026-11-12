@@ -23,7 +23,7 @@ function safePayload(value){
  const asInt=(v,max)=>Number.isSafeInteger(Number(v))?Math.max(0,Math.min(max,Number(v))):0;
  const attempts=asInt(value.attempts,10000000);
  return {studentName:value.studentName.slice(0,120),className:value.className.slice(0,35),grade:value.grade,
-  stars:asInt(value.stars,2600),attempts,correctAnswers:Math.min(attempts,asInt(value.correctAnswers,10000000)),
+  stars:asInt(value.stars,3250),attempts,correctAnswers:Math.min(attempts,asInt(value.correctAnswers,10000000)),
   masteredItems:asInt(value.masteredItems,2600),weeklyAttempts:asInt(value.weeklyAttempts,1000000),
   diagnosticDone:value.diagnosticDone===true,diagnosticLevel:Number.isInteger(value.diagnosticLevel)?value.diagnosticLevel:null,
   highestLevel:Number.isInteger(value.highestLevel)?value.highestLevel:null,
@@ -37,6 +37,7 @@ function safePayload(value){
    out.diagnosticScore=p.diagnosticScore??null;
    out.diagnosticDate=String(p.diagnosticDate||'').slice(0,40);
    out.journeyIsland=Number.isInteger(Number(p.journeyIsland))?Number(p.journeyIsland):null;
+   if(p.hiddenObjectsLedger&&typeof p.hiddenObjectsLedger==='object'&&!Array.isArray(p.hiddenObjectsLedger))out.hiddenObjectsLedger=p.hiddenObjectsLedger;
    if(JSON.stringify(out).length>150000)return {};
    return out;
   })()};

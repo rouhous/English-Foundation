@@ -1,0 +1,36 @@
+name: Apply teacher-approved Writing review 2026-11-12
+on:
+  push:
+    paths:
+      - 'scripts/apply_writing_teacher_approval_20261112.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Apply teacher review without changing approved Writing questions
+        run: node scripts/apply_writing_teacher_approval_20261112.cjs
+      - name: Validate JavaScript and Writing answer keys
+        run: |
+          node -e "const c=require('./reviews/admin-levels-catalog.json');const ids=c.levels.flatMap(l=>l.parts.flatMap(p=>p.questions)).filter(q=>q.type==='Writing' && /^L(6|7|8|9|10|11|12)-19[6-9]$/.test(q.id));if(ids.length!==28||ids.some(q=>q.mode!=='mcq'||q.options.length!==3||new Set(q.options).size!==3||q.options.filter(o=>o===q.answer).length!==1))process.exit(1);console.log('Checked',ids.length,'Writing questions');"
+          node - <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const html=fs.readFileSync('index.html','utf8');
+          const js=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
+          for(const [i,block] of js.entries()){if(!block.trim()||/^[A-Za-z0-9+\/\s=]+$/.test(block.trim()))continue;new vm.Script(block,{filename:'inline-'+i+'.js'});}
+          console.log('Validated',js.length,'inline script blocks');
+          NODE
+      - name: Commit synchronized Writing question changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/admin-levels-catalog.json reviews/quality-audit/teacher-writing-approval-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Apply teacher-approved Writing replacements across levels and diagnostic bank"
+            git push
+          fi

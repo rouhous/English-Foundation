@@ -23,7 +23,7 @@ assert(first&&first.stage===0&&!first.approved);
 assert(first.targets.every(t=>curriculum.has(t.word)),'Scene 05 contains non-curriculum words');
 for(const file of ['hidden-objects/review-v5.html','hidden-objects/index.html']){
  const html=fs.readFileSync(file,'utf8');let blocks=0;
- for(const m of html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)){
+ for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)){
   if(!m[1].trim())continue;new vm.Script(m[1],{filename:file});blocks++;
  }
  assert(blocks>=1,'Cannot verify inline JS '+file);

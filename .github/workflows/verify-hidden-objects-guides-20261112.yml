@@ -1,0 +1,22 @@
+name: Verify Hidden Objects differentiated hints
+on:
+  push:
+    paths: ['scripts/verify_hidden_objects_guides_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check level bands, game logic, and JavaScript syntax
+        run: node scripts/verify_hidden_objects_guides_20261112.cjs
+      - name: Record QA
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/hidden-guides-and-timer-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Verify grade-specific Hidden Objects guides and bonus calculation"
+            git push
+          fi

@@ -18,6 +18,7 @@
  const emergencyAnimationPause=false; // Home-only, event-driven animation.
  let modal=null,frameTimer=0,hideTimer=0,observer=null,lastUserId='',tickQueued=false,animationNo=0;
  let roamTimer=0,drag=null,actorX=null,actorY=null,roamStep=0,lastIdentity='',dropRAF=0,bubbleTimer=0;
+ let direction=-1,lastInteraction=Date.now(),lastIdleAction=0; // MEJ_COMPANION_ROAM_EXPLAIN_V2
  let lastTapAction='',actionTimer=0;
  let motion=true,sound=true;
  try{const saved=JSON.parse(localStorage.getItem('MEJ_COMPANION_SETTINGS_V1')||'{}');motion=saved.motion!==false;sound=saved.sound!==false}catch(_){}
@@ -66,7 +67,10 @@
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
  #mej-companion-actor[hidden]{display:none!important}
  #mej-companion-actor .mej-c-sprite{width:108px;height:142px;background-repeat:no-repeat;background-size:400% 200%;filter:drop-shadow(0 3px 4px #012f5666)}
- #mej-companion-actor .mej-c-bubble{display:inline-block;pointer-events:none;position:absolute;top:0;right:93px;min-width:95px;max-width:185px;padding:6px 8px;border-radius:14px;background:#fff;border:2px solid #edc456;color:#1a4a71;font:800 13px/1.25 system-ui;text-align:center;box-shadow:0 2px 8px #001f4450}
+ #mej-companion-actor .mej-c-bubble{display:inline-block;pointer-events:none;position:absolute;top:0;right:93px;min-width:95px;max-width:min(230px,62vw);padding:8px 10px;border-radius:14px;background:#fff;border:2px solid #edc456;color:#1a4a71;font:800 13px/1.4 system-ui;text-align:center;box-shadow:0 2px 8px #001f4450;white-space:pre-line;overflow-wrap:anywhere;max-height:200px;overflow-y:auto}
+ #mej-companion-actor.mej-c-near-left .mej-c-bubble{left:90px;right:auto}
+ #mej-companion-actor.mej-c-roaming{transition:none!important}
+ #mej-companion-actor.mej-c-explaining .mej-c-bubble{background:#eaf7ff;border-color:#65b4e8}
  #mej-companion-actor.mej-c-bounce .mej-c-sprite{animation:mej-companion-pop .65s ease-in-out 2}
  @keyframes mej-companion-pop{0%,100%{transform:translateY(0)}46%{transform:translateY(-14px)}}
  @media(max-width:600px){#mej-companion-actor{width:78px;top:85px}#mej-companion-actor .mej-c-sprite{width:77px;height:103px}#mej-companion-actor .mej-c-bubble{right:70px;font-size:11px;max-width:125px;min-width:80px}}
@@ -162,6 +166,7 @@
    actorX=Math.max(lim.minX,Math.min(lim.maxX,Number(x)||0));
    actorY=Math.max(lim.minY,Math.min(lim.maxY,Number(y)||0));
    host.style.left=Math.round(actorX)+'px';host.style.top=Math.round(actorY)+'px';
+   host.classList.toggle('mej-c-near-left',actorX<innerWidth*.43);
    if(save)try{localStorage.setItem(actorKey(),JSON.stringify({x:actorX/Math.max(1,lim.maxX),y:actorY/Math.max(1,lim.maxY)}))}catch(_){}
  }
  function restore(host){
@@ -173,10 +178,10 @@
    const band=roamingFloor(host);
    place(host,position?position.x*l.maxX:l.maxX*.79,position?Math.max(band.minY,position.y*l.maxY):band.maxY-12);
  }
- function showPhrase(host,text){
+ function showPhrase(host,text,duration=2300){
    const b=host.querySelector('.mej-c-bubble');if(!b)return;
    clearTimeout(bubbleTimer);b.textContent=text;b.hidden=false;
-   bubbleTimer=setTimeout(()=>{b.hidden=true},2300);
+   bubbleTimer=setTimeout(()=>{b.hidden=true;host.classList.remove('mej-c-explaining')},duration);
  }
  function canShow(){
    if(emergencyAnimationPause)return false;
@@ -271,7 +276,7 @@
      // Dropping from an ordinary drag means repositioning, not automatic parachuting.
      const raised=gesture.startY-e.clientY>48;
      if(!raised||!motion||reduced()||document.hidden){
-       place(host,actorX,actorY,true);return;
+       place(host,actorX,actorY,true);direction=actorX>=limits(host).maxX-25?-1:actorX<=25?1:direction;lastInteraction=Date.now();return;
      }
      // The backpack opens ONLY after a deliberate upward lift and release.
      const band=roamingFloor(host),target=Math.max(band.minY,band.maxY-10);
@@ -304,6 +309,7 @@
  function stop(hide=true){
    clearInterval(frameTimer);frameTimer=0;clearTimeout(hideTimer);hideTimer=0;
    const el=$('mej-companion-actor');if(el)clearTap(el);
+   clearInterval(roamTimer);roamTimer=0;
    if(hide&&el)el.hidden=true
  }
  function frame(el,idx){el.style.backgroundPosition=(idx%4)*100/3+'% '+(idx<4?'0%':'100%')}
@@ -349,36 +355,42 @@
    if(!sound)try{window.speechSynthesis?.cancel()}catch(_){}
  }
  const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7};
+ function roamTick(){
+   if(!canShow()){clearInterval(roamTimer);roamTimer=0;return}
+   if(drag||dropRAF||!motion||reduced())return;
+   const h=$('mej-companion-actor');if(!h||h.hidden||h.dataset.reacting==='1')return;
+   const now=Date.now();
+   if(inSession()&&now-lastInteraction<6500)return;
+   const sp=h.querySelector('.mej-c-sprite'),lim=limits(h),idle=now-lastInteraction>=9000;
+   const run=idle&&Math.floor(now/9500)%3===1;
+   let nx=(actorX??lim.maxX*.8)+direction*(run?8.5:5.5);
+   if(nx<=lim.minX){nx=lim.minX;direction=1}
+   if(nx>=lim.maxX){nx=lim.maxX;direction=-1}
+   place(h,nx,actorY??lim.maxY-10);
+   frame(sp,run?2:(++roamStep%2?1:2));
+   if(idle&&now-lastIdleAction>14500){
+     lastIdleAction=now;clearTap(h);
+     const kind=['jump','football','climb'][Math.floor(now/14500)%3];
+     const cls={jump:'mej-c-jumping',football:'mej-c-football',climb:'mej-c-edge-climb'}[kind];
+     const token=++animationNo;h.dataset.reacting='1';h.classList.add(cls);
+     frame(sp,kind==='football'?7:kind==='climb'?5:3);
+     actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(h);h.dataset.reacting='0'},1800);
+   }
+ }
  function refreshActor(){
    const host=$('mej-companion-actor');
    if(!canShow()){
      clearInterval(roamTimer);roamTimer=0;
      if(dropRAF)cancelAnimationFrame(dropRAF);dropRAF=0;
-     if(host){host.hidden=true;host.classList.remove('mej-c-parachuting','mej-c-climbing')}
+     if(host){host.hidden=true;host.classList.remove('mej-c-parachuting','mej-c-climbing','mej-c-roaming')}
      return;
    }
    const h=actor(),p=profile(),kind=p.companion.kind,sp=h.querySelector('.mej-c-sprite');
    if(h.dataset.kind!==kind){h.dataset.kind=kind;sp.style.backgroundImage='url("'+ART[kind].sheet+'")'}
-   h.hidden=false;h.style.display='block';
-   restore(h);
-   // Continuous roaming is reserved for the journey screen, never exercises.
-   const home=!!$('app')?.querySelector('#mej-companion-avatar-button, .j23-avatar') && !inSession() && !$('mej-skills-overlay') && !$('mej-writing-practice');
-   if(!home){clearInterval(roamTimer);roamTimer=0;if(!drag&&!dropRAF&&h.dataset.reacting!=='1')frame(sp,0);return;}
-   if(!roamTimer){
-     frame(sp,1);
-     roamTimer=setInterval(()=>{
-       if(!canShow()){refreshActor();return}
-       if(drag||dropRAF||!motion||reduced())return;
-       if(h.dataset.reacting==='1')return;
-       const step=++roamStep;
-       frame(sp,step%6===0?2:step%2===0?1:2);
-       if(step%5===0){
-         const band=roamingFloor(h),delta=(step%10===0?-1:1)*Math.min(45,innerWidth*.09);
-         place(h,actorX+delta,Math.max(band.minY,Math.min(band.maxY,actorY)));
-       }
-       // Never scan buttons or exercises during animation.
-},1800);
-   }
+   h.hidden=false;h.style.display='block';restore(h);
+   const moving=motion&&!reduced();h.classList.toggle('mej-c-roaming',moving);
+   if(!moving){clearInterval(roamTimer);roamTimer=0;if(!drag&&!dropRAF&&h.dataset.reacting!=='1')frame(sp,0);return}
+   if(!roamTimer){direction=(actorX??0)>innerWidth*.55?-1:1;roamTimer=setInterval(roamTick,145)}
  }
  function play(name,duration=1900){
    if(!(name in POSES)||!canShow())return false;
@@ -394,16 +406,38 @@
  }
  const positives=['Awesome!','Excellent!','Amazing!','Let’s go!','Unbelievable!'];
  const retries=['Try again!','Don’t give up!','You can do it!','One more chance!'];
- function react(ok){
-   // The diagnostic remains entirely animation-free for iPad stability.
+ function correctionDetails(detail){
+   let q=detail?.question||null;
+   try{if(!q&&typeof questionById!=='undefined'&&typeof shownId!=='undefined')q=questionById[shownId]}catch(_){}
+   const answer=String(q?.answer??detail?.answer??'').trim();
+   let tip=String(q?.tip||'').trim();
+   if(q?.type==='Grammar'){
+     const rule=$('feedback')?.querySelector('.mej-grammar-rule');
+     if(rule?.textContent?.trim())tip=rule.textContent.trim();
+   }
+   if(!tip||/^(اقرأ الجملة كاملة|اقرأ الموقف وحدد|اقرأ الكلمة واستمع)/.test(tip)){
+     tip=q?.type==='Reading'?'راجع النص وابحث عن دليل الإجابة.':
+         q?.type==='Spelling'?'قارن الحروف وترتيبها بالإملاء الصحيح.':
+         q?.type==='Vocabulary'?'راجع معنى الكلمة وحاول ربطها بالإجابة.':
+         'راجع سبب صحة الإجابة وحاول مجددًا.';
+   }
+   return {message:((answer?'الإجابة الصحيحة: '+answer+'\n':'')+tip).slice(0,400),answer};
+ }
+ function react(ok,detail){
    if(inDiagnostic()||!canShow())return;
-   const choices=ok?positives:retries,word=choices[Math.floor(Math.random()*choices.length)];
-   const h=actor();clearTap(h);refreshActor();const sprite=h.querySelector('.mej-c-sprite');
-   frame(sprite,ok?3:4);h.dataset.reacting='1';
-   h.classList.toggle('mej-c-bounce',!!ok);
-   showPhrase(h,word);speak(word);
+   lastInteraction=Date.now();
+   const phrases=ok?positives:retries,word=phrases[Math.floor(Math.random()*phrases.length)];
+   const h=actor();clearTap(h);refreshActor();
+   const sprite=h.querySelector('.mej-c-sprite');
+   frame(sprite,ok?3:5);h.dataset.reacting='1';h.classList.toggle('mej-c-bounce',!!ok);
+   if(ok){h.classList.remove('mej-c-explaining');showPhrase(h,word);speak(word)}
+   else{
+     const correction=correctionDetails(detail);h.classList.add('mej-c-explaining');
+     showPhrase(h,correction.message||word,7400);
+     speak(/^[a-z][a-z\s.,!?'-]{0,50}$/i.test(correction.answer)?'The correct answer is '+correction.answer:word);
+   }
    clearTimeout(hideTimer);const token=++animationNo;
-   hideTimer=setTimeout(()=>{if(token===animationNo){h.dataset.reacting='0';h.classList.remove('mej-c-bounce')}},2100);
+   hideTimer=setTimeout(()=>{if(token===animationNo){h.dataset.reacting='0';h.classList.remove('mej-c-bounce','mej-c-explaining')}},ok?2100:7300);
  }
  function check(){updateAvatar();homeCheck();refreshActor();}
  function queue(){if(tickQueued)return;tickQueued=true;requestAnimationFrame(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
@@ -411,6 +445,8 @@
   const app=$('app');if(!app)return;
   // No DOM observer: route clicks and explicit events drive companion refresh.
   // Settings modal is attached to body, but only inspect it on a user click.
+  document.addEventListener('pointerdown',e=>{if(!e.target?.closest?.('#mej-companion-actor'))lastInteraction=Date.now()},{passive:true});
+  document.addEventListener('keydown',()=>{lastInteraction=Date.now()},{passive:true});
   document.addEventListener('click',e=>{if(e.target?.closest?.('button')){
    setTimeout(()=>{settings();queue()},100);
    setTimeout(queue,450); // Handle route transitions that render asynchronously.
@@ -423,7 +459,7 @@
    if(inDiagnostic())return;
    const correct=event?.detail?.correct;
    if(typeof correct!=='boolean')return;
-   react(correct);
+   react(correct,event.detail);
   });
   window.addEventListener('mej-companion-change',queue);
   window.addEventListener('pageshow',queue);

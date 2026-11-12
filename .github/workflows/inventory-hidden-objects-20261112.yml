@@ -1,0 +1,18 @@
+name: Inventory Hidden Objects integration
+on:
+  push:
+    paths: ['scripts/inventory_hidden_objects_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inventory_hidden_objects_20261112.cjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.github.com"
+          git add reviews/quality-audit/hidden-objects-inventory-20261112.json
+          git commit -m "Record Hidden Objects and stage progress integration" || true
+          git push

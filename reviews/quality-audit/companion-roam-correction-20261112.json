@@ -9,5 +9,6 @@
   "diagnosticExcluded": true,
   "sourceQuestionBankChanged": false,
   "appAnswerEventSnippets": [],
-  "answerEventFound": false
+  "answerEventFound": false,
+  "directCompanionReaction": true
 }

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-12",
+  "reviewRound": 4,
+  "approvedUnchanged": 59,
+  "pendingTeacherApproval": [
+    "L8-197",
+    "L8-198"
+  ],
+  "changes": [
+    {
+      "id": "L8-197",
+      "prompt": "Arrange the events to make a logical paragraph about an adventure trip.\nA. Finally, the group returned to school and shared their photos.\nB. First, the students met their guide and checked their equipment.\nC. Next, they explored the mountain path with their teacher.",
+      "answer": "B → C → A",
+      "options": [
+        "B → C → A",
+        "C → B → A",
+        "B → A → C"
+      ],
+      "tip": "تبدأ الفقرة بالاستعداد (First)، ثم تنفيذ الرحلة (Next)، وتنتهي بالعودة ومشاركة الصور (Finally)."
+    },
+    {
+      "id": "L8-198",
+      "prompt": "Our class wanted to reduce plastic waste on the school trip, ___ we decided to bring reusable water bottles.",
+      "answer": "so",
+      "options": [
+        "although",
+        "so",
+        "unless"
+      ],
+      "tip": "so تربط السبب بالنتيجة: أردنا تقليل النفايات، لذلك قررنا استخدام زجاجات قابلة لإعادة الاستخدام."
+    }
+  ],
+  "note": "Only two rejected questions replaced; all other 59 questions preserved."
+}

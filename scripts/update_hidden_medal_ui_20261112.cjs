@@ -8,7 +8,9 @@ const pattern='<span class="mej-gate-reward">🎮 العب الآن</span>';
 const escaped='\\\"';
 let found=(s.match(/mej-gate-reward/g)||[]).length;
 if(!s.includes(pattern))throw Error('No medal reward label literal. Found '+found+' occurrences.');
-const expression='<span class="mej-gate-reward">'+`\${(window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='finished')?'✅ +'+window.mejHiddenRoundStatus(g,i+1,p).award+' ⭐':(window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='pending'?'🔄 استكمل اللعبة':'🎮 العب الآن')}`+'</span>';
+const expression='<span class="mej-gate-reward">'+
+  "'+((window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='finished')?'✅ +'+window.mejHiddenRoundStatus(g,i+1,p).award+' ⭐':(window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='pending'?'🔄 استكمل اللعبة':'🎮 العب الآن'))+'"+
+  '</span>';
 s=s.replace(pattern,expression);
 s=s.replace(/mej-hidden-badges-v1\.css\?v=[^"']+/, 'mej-hidden-badges-v1.css?v=20261112metallic2');
 if(!s.includes('mej-hidden-badges-v1.css?v=20261112metallic2'))throw Error('CSS cache version unchanged');

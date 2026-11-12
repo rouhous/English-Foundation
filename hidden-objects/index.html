@@ -54,7 +54,7 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 <script>
 (()=>{'use strict';
 const ART=window.MEJHiddenArt;const PHOTO=window.MEJRealPhotoScenes;const el=id=>document.getElementById(id);
-let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null;
+let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null,lastPhotoMiss=null;
 let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
 // An independent symbol must match the *current word*; IDs can be rebound
@@ -97,25 +97,51 @@ function guideFor(id){
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+// V5 teacher-verified polygon hit geometry; allow every visible instance.
+function polyInside(x,y,p){let hit=false;for(let i=0,j=p.length-1;i<p.length;j=i++){
+ const a=p[i],b=p[j];if(((a[1]>y)!==(b[1]>y))&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit
+ }return hit}
+function polyDistance(x,y,p){if(polyInside(x,y,p))return 0;let min=Infinity;
+ for(let i=0;i<p.length;i++){let a=p[i],b=p[(i+1)%p.length],dx=b[0]-a[0],dy=b[1]-a[1];
+ let t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/Math.max(1,dx*dx+dy*dy)));
+ min=Math.min(min,Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy))}
+ return min}
+function photoHit(px,py){if(!photoScene)return -1;const w=Math.max(300,el('scene').clientWidth),tolerance=Math.min(17,Math.max(6,10/Math.max(.3,w/1599))),found=new Set(session.found);
+ const options=[];
+ photoScene.targets.forEach((target,i)=>{const d=Math.min(...(target.regions||[]).map(poly=>polyDistance(px,py,poly)));
+ if(d<=tolerance)options.push({i,d,done:found.has(session.targets[i])})});
+ options.sort((a,b)=>Number(a.done)-Number(b.done)||a.d-b.d);
+ return options[0]?.i??-1;
+}
 function board(){
  const field=el('scene');field.replaceChildren();field.className='scene mode-'+guideMode;
  if(photoScene){
    field.classList.add('photo-active');field.style.backgroundImage='none';
    const canvas=document.createElement('div');canvas.className='photo-board';
    canvas.style.backgroundImage='url("'+PHOTO.root+photoScene.file+'")';
-   if(new URLSearchParams(location.search).get('debug')==='hotspots')canvas.classList.add('show-hotspots');
-   session.targets.forEach((id,i)=>{
-     const entry=photoScene.targets[i];
-     const b=document.createElement('button');b.type='button';b.className='photo-target';
-     b.style.left=(entry.x*100)+'%';b.style.top=(entry.y*100)+'%';
-     b.setAttribute('aria-label','Find '+entry.word);
-     if(session.found.includes(id)){b.classList.add('found');b.setAttribute('aria-label','Already found '+entry.word)}
-     b.addEventListener('click',ev=>{ev.stopPropagation();if(!session.found.includes(id))tap(id)});
-     canvas.append(b);
+   const review=new URLSearchParams(location.search).get('debug')==='hotspots';
+   if(review){
+     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+     svg.setAttribute('viewBox','0 0 1599 900');svg.setAttribute('preserveAspectRatio','none');
+     svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';
+     photoScene.targets.forEach((t,i)=>{for(const region of t.regions||[]){
+       const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+       p.setAttribute('points',region.map(pt=>pt.join(',')).join(' '));
+       p.setAttribute('fill','#edc42a23');p.setAttribute('stroke','#edc42a');p.setAttribute('stroke-width','3');svg.append(p);
+     }});canvas.append(svg);
+   }
+   canvas.addEventListener('click',ev=>{
+     if(completed)return;
+     const rect=canvas.getBoundingClientRect(),px=(ev.clientX-rect.left)*1599/rect.width,py=(ev.clientY-rect.top)*900/rect.height;
+     if(!Number.isFinite(px)||!Number.isFinite(py)||px<0||py<0||px>1599||py>900)return;
+     const picked=photoHit(px,py);
+     if(picked>=0){lastPhotoMiss=null;if(!session.found.includes(session.targets[picked]))tap(session.targets[picked]);return}
+     const now=Date.now();if(lastPhotoMiss&&now-lastPhotoMiss.at<4000&&Math.hypot(px-lastPhotoMiss.x,py-lastPhotoMiss.y)<42){
+       el('notice').textContent='حاول لمس جزء آخر من الغرض أو تكبير الصورة';return;
+     }
+     lastPhotoMiss={x:px,y:py,at:now};wrong();
    });
-   field.append(canvas);
-   canvas.addEventListener('click',ev=>{if(!ev.target.closest('.photo-target'))wrong()});
-   renderListAndScores();return;
+   field.append(canvas);renderListAndScores();return;
  }
  const backgrounds=ART.scenes||[ART.background],view=backgrounds[session.scene%backgrounds.length];
  field.style.backgroundImage='linear-gradient(0deg,#2943341c,#d3bc8a0d),url("'+view+'")';
@@ -188,8 +214,16 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
  // When the photo files are installed the objects are searched in the
  // original illustration, not as separate floating sprites.
  const scenes=PHOTO?.scenes||[];
- const photoIndex=scenes.length?((Number(d.stage)*10+Number(d.badge))%scenes.length):0;
- const mapped=scenes[photoIndex]||null;
+ // Fail closed: unapproved scenes are review-only, not playable for student stars.
+ // Scene targets must correspond to nine really mastered curriculum words and
+ // exactly one curriculum challenge word; never replace a live list with random words.
+ const norm=w=>String(w||'').toLowerCase().trim().replace(/\\s+/g,' ');
+ const known=new Set((Array.isArray(d.masteredWords)?d.masteredWords:[]).map(norm));
+ const level=new Set((Array.isArray(d.levelWords)?d.levelWords:[]).map(norm));
+ const mapped=scenes.find(sc=>sc.approved===true&&sc.stage===Number(d.stage)&&sc.badge===Number(d.badge)&&sc.targets?.length===10
+   &&sc.targets.every(t=>Array.isArray(t.regions)&&t.regions.length)
+   &&sc.targets.filter(t=>known.has(norm(t.word))).length===9
+   &&sc.targets.filter(t=>!known.has(norm(t.word))&&level.has(norm(t.word))).length===1)||null;
  const start=()=>{
    if(photoScene)session.targets.forEach((id,i)=>{words[id]=photoScene.targets[i].word});
    board();

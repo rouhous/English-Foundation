@@ -1,0 +1,22 @@
+name: Normalize vocabulary and spelling target layout
+on:
+  push:
+    paths:
+      - 'scripts/normalize_vocab_spelling_target_20261112.cjs'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/normalize_vocab_spelling_target_20261112.cjs
+      - name: Commit verified display-only fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/vocab-spelling-target-normalization.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Consistently highlight translation and spelling target words"
+            git push
+          fi

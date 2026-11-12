@@ -8,7 +8,7 @@
   const used=new Set(usedSceneIds||[]);
   const eligible=[];
   for(const scene of scenes||[]){
-   if(!scene||scene.approved!==true||scene.stage!==stage||!Array.isArray(scene.targets)||scene.targets.length!==10)continue;
+   if(!scene||scene.approved!==true||scene.stage!==stage||scene.badge!==badge||!Array.isArray(scene.targets)||scene.targets.length!==10)continue;
    const words=scene.targets.map(o=>normalize(o.word));
    if(words.some(x=>!x)||new Set(words).size!==10)continue;
    const known=words.filter(x=>mastered.has(x));

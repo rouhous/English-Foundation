@@ -1,0 +1,1053 @@
+{
+  "version": "2026-11-12",
+  "scope": "My English Journey Hidden Objects",
+  "status": "production_blueprint_not_a_claim_of_130_completed_illustrations",
+  "requiredScenesPerStage": 10,
+  "totalPlannedSceneSlots": 130,
+  "unlockBasicStars": [
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200
+  ],
+  "objectsPerRound": 10,
+  "masteredObjectWords": 9,
+  "newChallengeWords": 1,
+  "bonusStarsPerTwoObjects": 1,
+  "maximumStageBonus": 50,
+  "penaltyWrongClicks": 3,
+  "repeatPolicy": "Every visually recognizable instance of the same target object is a valid hit; repeated copies count only once.",
+  "certificationGates": [
+    "Image visually reviewed at exact native dimensions",
+    "All targets clearly present with no contradictory words",
+    "Each polygon/segmentation mask aligns to actual object; tap on any visible part works",
+    "No target overlaps a different target under mobile touch tolerance",
+    "If object repeats, all valid instances are mapped",
+    "At least nine words confirmed mastered for this individual student; remaining one is new and part of level vocabulary",
+    "Three wrong-click and bonus rules pass automated tests",
+    "Offline image and manifest verified",
+    "One-time bonus written to ledger and cloud sync verified"
+  ],
+  "stages": [
+    {
+      "stage": 0,
+      "hintMode": "picture",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "phonics classroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "toy shelf",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "school bag corner",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "reading nook",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "coloured stationery table",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "playground",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "home bedroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "animal garden",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "children's library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "family picnic",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 1,
+      "hintMode": "picture",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "classroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "bedroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "kitchen",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "toy store",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "school hallway",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "garden",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "living room",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "picnic park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "art room",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "playground",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "hintMode": "picture",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "farm",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "fruit market",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "school",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "family kitchen",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "zoo",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "beach",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "bedroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "sports field",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "hintMode": "picture",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "supermarket",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "city park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "classroom",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "kitchen",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "farm",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "garden",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "home",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "pet shop",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "sports centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "beach",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "hintMode": "picture",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "harbour",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "town market",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "museum",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "farm",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "nature reserve",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "school",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "shop",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "heritage village",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "hintMode": "silhouette",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "Omani souq",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "heritage harbour",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "oasis",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "science corner",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "craft workshop",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "museum",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "ecological garden",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "community market",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "fort",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 6,
+      "hintMode": "silhouette",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "eco beach",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "market",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "sports club",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "wildlife reserve",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "heritage fort",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "science lab",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "school library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "farm",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "port",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "art studio",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 7,
+      "hintMode": "silhouette",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "science centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "coastal environment",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "heritage town",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "technology room",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "farm",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "market",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "nature park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "sports club",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "workshop",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 8,
+      "hintMode": "silhouette",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "sustainable city",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "marine habitat",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "museum",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "science laboratory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "airport",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "heritage fort",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "industrial port",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "recycling centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "community festival",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 9,
+      "hintMode": "word",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "robotics laboratory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "renewable energy park",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "environmental field study",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "smart city",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "marine research station",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "heritage museum",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "airport operations",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "medical centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "university library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "urban transport hub",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 10,
+      "hintMode": "word",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "climate observation station",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "waste recycling centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "sustainable agriculture",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "marine conservation",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "solar laboratory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "technological innovation",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "cultural heritage centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "renewable transport",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "scientific expedition",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "community development",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 11,
+      "hintMode": "word",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "biotechnology laboratory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "sustainable architecture",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "advanced library",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "historical research museum",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "climate innovation lab",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "astronomy observatory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "robotics facility",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "marine research",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "environmental science centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "cultural exhibition",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    },
+    {
+      "stage": 12,
+      "hintMode": "word",
+      "requiredSceneCount": 10,
+      "approvedSceneCount": 0,
+      "sceneBlueprints": [
+        {
+          "badge": 1,
+          "theme": "advanced physics lab",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 2,
+          "theme": "global sustainability summit",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 3,
+          "theme": "environmental engineering",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 4,
+          "theme": "historical archives",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 5,
+          "theme": "smart city command room",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 6,
+          "theme": "marine conservation lab",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 7,
+          "theme": "research expedition",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 8,
+          "theme": "medical science laboratory",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 9,
+          "theme": "innovation centre",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        },
+        {
+          "badge": 10,
+          "theme": "space observation station",
+          "photoReady": false,
+          "hotspotsApproved": false,
+          "curriculumValidated": false
+        }
+      ]
+    }
+  ]
+}

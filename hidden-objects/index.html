@@ -11,6 +11,14 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .play{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,240px);gap:10px;direction:ltr;min-height:360px}
 .scene{position:relative;aspect-ratio:1.65;min-height:330px;border:3px solid #b4d4bb;border-radius:18px;overflow:hidden;background:#8cb5ab center/cover;box-shadow:0 9px 30px #001e29aa;touch-action:manipulation}
 .scene::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#07262340,transparent 27%,#f0e7bd12);z-index:0}
+.scene.photo-active{display:flex;align-items:center;justify-content:center;background:#031c2f;border-color:#c7a45b;min-height:0}
+.photo-board{position:relative;width:100%;aspect-ratio:1599 / 900;background-size:100% 100%;background-position:center;background-repeat:no-repeat;flex:0 0 auto}
+.photo-target{position:absolute;transform:translate(-50%,-50%);height:max(36px,6%);width:max(36px,5%);border:0;border-radius:50%;background:transparent;cursor:pointer;opacity:1;z-index:2;padding:0;touch-action:manipulation}
+.photo-target:focus-visible{outline:3px solid #ffe880;outline-offset:2px;background:#ffd65f30}
+.photo-target.found{pointer-events:none}
+.photo-target.found::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;font:900 25px system-ui;color:white;background:#168665c7;border:2px solid #ccf3d7;border-radius:50%;text-shadow:0 1px 3px #002}
+.photo-board.show-hotspots .photo-target:not(.found){background:#e5c64255;border:2px solid #ffe667}
+@media(max-width:710px){.scene.photo-active{aspect-ratio:auto;min-height:215px}.photo-board{width:100%;height:auto}.photo-target{width:max(32px,6%);height:max(32px,7%)}}
 .spot{position:absolute;border:0;background:none;padding:0;width:clamp(31px,5.8vw,62px);height:clamp(31px,5.8vw,64px);transform:translate(-50%,-50%);cursor:pointer;filter:drop-shadow(1px 2px 2px #2c342887) saturate(.88);opacity:.93;mix-blend-mode:normal;border-radius:12px;transition:filter .15s,opacity .15s}
 .spot img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
 .scene.mode-picture .spot{opacity:.97;filter:drop-shadow(1px 1px 2px #3d3a2f77) saturate(.92)}
@@ -42,11 +50,11 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 <div class="play"><div id="scene" class="scene" aria-label="مشهد البحث عن الأغراض" role="group"></div><aside class="words"><h2>Find these objects:</h2><ul id="words"></ul></aside></div>
 <footer class="foot"><span id="notice" role="status">اختر الغرض الذي يطابق كلمة في القائمة.</span><button class="back" id="back">↩ العودة إلى الرحلة</button></footer>
 </main>
-<script src="./assets.js"></script>
+<script src="./assets.js"></script><script src="./photo-scenes.js"></script>
 <script>
 (()=>{'use strict';
-const ART=window.MEJHiddenArt;const el=id=>document.getElementById(id);
-let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null;
+const ART=window.MEJHiddenArt;const PHOTO=window.MEJRealPhotoScenes;const el=id=>document.getElementById(id);
+let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null;
 let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
 // An independent symbol must match the *current word*; IDs can be rebound
@@ -80,7 +88,10 @@ function guideFor(id){
    if(!cue)return null; // Never show a misleading icon for a replaced curriculum word.
    const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=cue;art.append(icon);
  }else{
-   const img=document.createElement('img');img.src=images[id];img.alt='';art.append(img);
+   // Use monochrome illustrated hints tied to the actual word, never stale photos.
+   const cue=visualCue(words[id],id);if(!cue)return null;
+   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=cue;
+   icon.style.filter='grayscale(1) brightness(0)';art.append(icon);
  }
  return art;
 }
@@ -88,6 +99,24 @@ const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function board(){
  const field=el('scene');field.replaceChildren();field.className='scene mode-'+guideMode;
+ if(photoScene){
+   field.classList.add('photo-active');field.style.backgroundImage='none';
+   const canvas=document.createElement('div');canvas.className='photo-board';
+   canvas.style.backgroundImage='url("'+PHOTO.root+photoScene.file+'")';
+   if(new URLSearchParams(location.search).get('debug')==='hotspots')canvas.classList.add('show-hotspots');
+   session.targets.forEach((id,i)=>{
+     const entry=photoScene.targets[i];
+     const b=document.createElement('button');b.type='button';b.className='photo-target';
+     b.style.left=(entry.x*100)+'%';b.style.top=(entry.y*100)+'%';
+     b.setAttribute('aria-label','Find '+entry.word);
+     if(session.found.includes(id)){b.classList.add('found');b.disabled=true}
+     b.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});
+     canvas.append(b);
+   });
+   field.append(canvas);
+   canvas.addEventListener('click',ev=>{if(!ev.target.closest('.photo-target'))wrong()});
+   renderListAndScores();return;
+ }
  const backgrounds=ART.scenes||[ART.background],view=backgrounds[session.scene%backgrounds.length];
  field.style.backgroundImage='linear-gradient(0deg,#2943341c,#d3bc8a0d),url("'+view+'")';
  const choices=shuffle(words.map((_,i)=>i).filter(i=>i!==6),session.seed);
@@ -103,6 +132,9 @@ function board(){
   item.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});field.append(item);
  });
 
+ renderListAndScores();
+}
+function renderListAndScores(){
  const list=el('words');list.replaceChildren();
  for(const id of session.targets){
    const li=document.createElement('li'),done=session.found.includes(id);
@@ -153,8 +185,22 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
   misses:clamp(Number(saved.misses)||0,0,3),remaining:saved.remaining==null?null:clamp(Math.floor(Number(saved.remaining)||0),0,180),ended:false};
  if(session.remaining==null)el('timer').textContent='⏱️ بدون مؤقت';
  else{el('timer').textContent='⏱️ '+Math.floor(session.remaining/60)+':'+String(session.remaining%60).padStart(2,'0');el('timerToggle').disabled=true;}
- board();if(session.misses>=3||session.found.length===10){finish('all');return}
- lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
+ // When the photo files are installed the objects are searched in the
+ // original illustration, not as separate floating sprites.
+ const scenes=PHOTO?.scenes||[];
+ const photoIndex=scenes.length?((Number(d.stage)*10+Number(d.badge))%scenes.length):0;
+ const mapped=scenes[photoIndex]||null;
+ const start=()=>{
+   if(photoScene)session.targets.forEach((id,i)=>{words[id]=photoScene.targets[i].word});
+   board();
+   if(session.misses>=3||session.found.length===10||session.remaining===0){finish(session.found.length===10?'all':session.misses===3?'mistakes':'timeout');return}
+   lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
+ };
+ if(mapped && mapped.targets?.length===10){
+   const img=new Image();img.onload=()=>{photoScene=mapped;start()};
+   img.onerror=()=>{photoScene=null;start()};
+   img.src=PHOTO.root+mapped.file;
+ }else start();
 });
 el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.end'))return;wrong()});
 el('timerToggle').onclick=()=>{

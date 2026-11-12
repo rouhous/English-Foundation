@@ -1,7 +1,7 @@
 {
   "version": "2026-11-12",
   "scope": "My English Journey Hidden Objects",
-  "status": "production_blueprint_not_a_claim_of_130_completed_illustrations",
+  "status": "one stage-0 scene candidate plus four unassigned realistic photo candidates; 130-stage rollout not complete",
   "requiredScenesPerStage": 10,
   "totalPlannedSceneSlots": 130,
   "unlockBasicStars": [
@@ -44,9 +44,23 @@
         {
           "badge": 1,
           "theme": "phonics classroom",
-          "photoReady": false,
+          "photoReady": true,
           "hotspotsApproved": false,
-          "curriculumValidated": false
+          "curriculumValidated": true,
+          "asset": "hidden-objects/real-scenes/05_phonics_classroom.webp",
+          "candidateWords": [
+            "apple",
+            "egg",
+            "pen",
+            "cup",
+            "bag",
+            "cat",
+            "dog",
+            "fish",
+            "hat",
+            "sun"
+          ],
+          "validationNote": "All ten candidate words are in stage 0 catalog; personalized 9+1 matching and mobile tap review still required."
         },
         {
           "badge": 2,

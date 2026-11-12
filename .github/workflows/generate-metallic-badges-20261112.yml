@@ -1,0 +1,22 @@
+name: Build independent metallic journey badges
+on:
+  push:
+    paths: ['scripts/generate_metallic_badges_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate badge SVGs and apply gate art
+        run: node scripts/generate_metallic_badges_20261112.cjs
+      - name: Commit unique badge art
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/mej-badges-20261112 assets/mej-hidden-badges-v1.css reviews/quality-audit/hidden-badge-art-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace emoji badge symbols with ten independent metallic emblems"
+            git push
+          fi

@@ -1,0 +1,10 @@
+{
+  "version": "MEJ_COMPANION_MIRROR_FIX_V4",
+  "spriteMirrorsOnEveryStep": true,
+  "left": "scaleX(-1)",
+  "right": "scaleX(1)",
+  "sourceSpriteInspection": "Both boy and girl move right in the supplied sprite art",
+  "gameplayDataUnchanged": true,
+  "pwaCache": "mej-public-20261112-mirror-v14",
+  "runtimeDeviceValidation": "pending"
+}

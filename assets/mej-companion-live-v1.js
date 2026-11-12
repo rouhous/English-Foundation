@@ -414,6 +414,14 @@
    if(q?.type==='Grammar'){
      const rule=$('feedback')?.querySelector('.mej-grammar-rule');
      if(rule?.textContent?.trim())tip=rule.textContent.trim();
+     else try{
+       if(typeof mejGrammarCorrection==='function'){
+         const html=mejGrammarCorrection(q);
+         const scratch=document.createElement('div');scratch.innerHTML=html;
+         const explanation=scratch.querySelector('.mej-grammar-rule');
+         if(explanation?.textContent?.trim())tip=explanation.textContent.trim();
+       }
+     }catch(_){}
    }
    if(!tip||/^(اقرأ الجملة كاملة|اقرأ الموقف وحدد|اقرأ الكلمة واستمع)/.test(tip)){
      tip=q?.type==='Reading'?'راجع النص وابحث عن دليل الإجابة.':

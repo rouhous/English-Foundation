@@ -1,0 +1,11 @@
+{
+  "badgeGates": 10,
+  "oldSailorPanelRemoved": true,
+  "bonusPerRound": 5,
+  "maxStageBonus": 50,
+  "totalPossiblePerStage": 250,
+  "bonusSeparateFromUnlock": true,
+  "originalBadgeImagesRemoved": true,
+  "questionBankUnchanged": true,
+  "syntaxScripts": 4
+}

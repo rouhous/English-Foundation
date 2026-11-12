@@ -1,0 +1,13 @@
+{
+  "scenes": [
+    "شواطئ الجزر",
+    "الجبال والواحات",
+    "الميناء العماني",
+    "القلعة البحرية"
+  ],
+  "sceneCount": 4,
+  "allEmbedded": true,
+  "offlineSupported": true,
+  "artOrigin": "Original sailor island artworks",
+  "warning": "Additional grade-specific realistic scenes still require artwork production and QA"
+}

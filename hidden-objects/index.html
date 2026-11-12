@@ -15,7 +15,7 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .photo-board{position:relative;width:100%;aspect-ratio:1599 / 900;background-size:100% 100%;background-position:center;background-repeat:no-repeat;flex:0 0 auto}
 .photo-target{position:absolute;transform:translate(-50%,-50%);height:max(36px,6%);width:max(36px,5%);border:0;border-radius:50%;background:transparent;cursor:pointer;opacity:1;z-index:2;padding:0;touch-action:manipulation}
 .photo-target:focus-visible{outline:3px solid #ffe880;outline-offset:2px;background:#ffd65f30}
-.photo-target.found{pointer-events:none}
+.photo-target.found{pointer-events:auto;cursor:default}
 .photo-target.found::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;font:900 25px system-ui;color:white;background:#168665c7;border:2px solid #ccf3d7;border-radius:50%;text-shadow:0 1px 3px #002}
 .photo-board.show-hotspots .photo-target:not(.found){background:#e5c64255;border:2px solid #ffe667}
 @media(max-width:710px){.scene.photo-active{aspect-ratio:auto;min-height:215px}.photo-board{width:100%;height:auto}.photo-target{width:max(32px,6%);height:max(32px,7%)}}
@@ -109,8 +109,8 @@ function board(){
      const b=document.createElement('button');b.type='button';b.className='photo-target';
      b.style.left=(entry.x*100)+'%';b.style.top=(entry.y*100)+'%';
      b.setAttribute('aria-label','Find '+entry.word);
-     if(session.found.includes(id)){b.classList.add('found');b.disabled=true}
-     b.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});
+     if(session.found.includes(id)){b.classList.add('found');b.setAttribute('aria-label','Already found '+entry.word)}
+     b.addEventListener('click',ev=>{ev.stopPropagation();if(!session.found.includes(id))tap(id)});
      canvas.append(b);
    });
    field.append(canvas);

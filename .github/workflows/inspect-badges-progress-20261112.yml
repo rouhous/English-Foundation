@@ -1,0 +1,18 @@
+name: Inspect level badges and progress hooks
+on:
+  push:
+    paths: ['scripts/inspect_badges_progress_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inspect_badges_progress_20261112.cjs
+      - run: |
+          git config user.name github-actions
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reviews/quality-audit/hidden-bridge-snip-20261112.json
+          git commit -m "Inspect badge and star render hooks" || true
+          git push

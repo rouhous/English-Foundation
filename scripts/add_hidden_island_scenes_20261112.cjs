@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('fs'),vm=require('vm');
+const source=fs.readFileSync('omani-sailor/index.html','utf8');
+const start=source.indexOf('const coastArt={');const end=source.indexOf('};',start);
+if(start<0||end<start)throw Error('Could not locate approved island backgrounds');
+const coast=vm.runInNewContext('('+source.slice(start+'const coastArt='.length,end+1)+')',{},{timeout:2000});
+const target='hidden-objects/assets.js';let content=fs.readFileSync(target,'utf8').replace(/^window\.MEJHiddenArt=/,'').replace(/;\s*$/,'');
+const art=JSON.parse(content);const scenes=['island0','island1','island2','island3'].map(k=>coast[k]);
+if(scenes.some(s=>!s||!s.startsWith('data:image/')))throw Error('Missing island image');
+art.scenes=scenes;art.sceneNames=['شواطئ الجزر','الجبال والواحات','الميناء العماني','القلعة البحرية'];
+fs.writeFileSync(target,'window.MEJHiddenArt='+JSON.stringify(art)+';\n');
+const report={scenes:art.sceneNames,sceneCount:scenes.length,allEmbedded:true,offlineSupported:true,artOrigin:'Original sailor island artworks',warning:'Additional grade-specific realistic scenes still require artwork production and QA'};
+fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/hidden-scene-backgrounds-20261112.json',JSON.stringify(report,null,2));
+console.log(report);

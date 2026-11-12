@@ -1,0 +1,18 @@
+name: Extract hidden game implementation reference
+on:
+  push:
+    paths: ['scripts/extract_hidden_hunt_reference_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/extract_hidden_hunt_reference_20261112.cjs
+      - run: |
+          git config user.name github-actions
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reviews/quality-audit/hidden-hunt-function-source-20261112.json
+          git commit -m "Inspect exact Hidden Objects implementation" || true
+          git push

@@ -1,0 +1,23 @@
+name: Format Spelling prompts and restore companion on levels
+on:
+  push:
+    paths:
+      - 'scripts/format_spelling_restore_companion_20261112.cjs'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch UI safely and check examples
+        run: node scripts/format_spelling_restore_companion_20261112.cjs
+      - name: Commit verified UI changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/spelling-companion-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Display spelling targets prominently and refresh companion on levels route"
+            git push
+          fi

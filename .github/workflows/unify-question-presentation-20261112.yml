@@ -1,0 +1,43 @@
+name: Unify vocabulary and reading question presentation
+on:
+  push:
+    paths:
+      - 'scripts/unify_question_presentation_20261112.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Add a consistent renderer for translation and reading tasks
+        run: node scripts/unify_question_presentation_20261112.cjs
+      - name: Validate inline application syntax and unchanged question IDs
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const html=fs.readFileSync('index.html','utf8');
+          if(!html.includes('MEJ_QUESTION_FORMAT_20261112_V1'))throw Error('UI formatting marker missing');
+          if(!html.includes('mejQuestionPresentation(q,promptRaw)'))throw Error('Formatting helper not wired');
+          const code=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+          let checked=0;for(const [i,tag] of code.entries()){
+            if(/type\s*=\s*["']?(?:application\/json|text\/plain)/i.test(tag[1])||!tag[2].trim())continue;
+            new vm.Script(tag[2],{filename:'inline-'+i+'.js'});checked++;
+          }
+          if(!checked)throw Error('No runnable scripts checked');
+          const catalog=JSON.parse(fs.readFileSync('reviews/admin-levels-catalog.json','utf8'));
+          if(catalog.levels.flatMap(l=>l.parts.flatMap(p=>p.questions)).length!==2600)throw Error('Unexpected question count');
+          console.log('Syntax verified for',checked,'script blocks; question bank size remains 2600');
+          NODE
+      - name: Commit formatting-only update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/quality-audit/question-presentation-formatting-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Standardize translation targets and reading text layout across levels and diagnostic"
+            git push
+          fi

@@ -1,0 +1,23 @@
+name: Verify real-scene Hidden Objects integration
+on:
+  push:
+    paths:
+      - 'scripts/verify_real_scene_hidden_objects_20261112.cjs'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit picture hotspots, scoring and offline fallback
+        run: node scripts/verify_real_scene_hidden_objects_20261112.cjs
+      - name: Commit QA report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/hidden-real-scenes-integration-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record realistic Hidden Objects integration QA"
+            git push
+          fi

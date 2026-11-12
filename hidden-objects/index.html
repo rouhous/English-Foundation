@@ -16,6 +16,16 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .spot:focus-visible{outline:3px solid #ffe36d;outline-offset:2px}.spot:active{filter:brightness(1.5)}.spot.found{opacity:0;pointer-events:none}
 .words{direction:ltr;text-align:left;border:1px solid #7bb9d1;background:#082f4aef;border-radius:17px;padding:12px;max-height:100%;overflow:auto}
 .words h2{font-size:17px;margin:0 0 10px}.words ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}.words li{font-size:clamp(14px,2vw,18px);padding:7px 10px;border-radius:9px;background:#12516a;font-weight:750}.words li.found{color:#89d9af;text-decoration:line-through;opacity:.72}
+.words li{display:flex;gap:9px;align-items:center;min-height:41px}
+.words li .guide-art{flex:0 0 35px;display:grid;place-items:center;width:35px;height:35px;background:#ecf3e5;border:1px solid #a9dbe1;border-radius:9px}
+.words li .guide-art .guide-emoji{font-size:25px;line-height:1}
+.words li .guide-art img{width:31px;height:31px;object-fit:contain}
+.words li.guide-silhouette .guide-art{background:#d9e0d9}
+.words li.guide-silhouette .guide-art img{filter:grayscale(1) brightness(0);opacity:.88}
+.words li.guide-word-only{min-height:35px}
+.words li.found .guide-art{opacity:.52}
+@media(max-width:710px){.words li{flex-direction:column;gap:2px}.words li .guide-art{width:28px;height:28px;flex-basis:28px}.words li .guide-art img{width:24px;height:24px}.words li .guide-art .guide-emoji{font-size:21px}}
+
 .foot{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#073c58b5;border:1px solid #78c5d8;border-radius:13px;padding:11px;min-height:50px}
 button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-ui;padding:10px 15px;color:#173b4d;cursor:pointer}
 #notice{font-weight:800;color:#f4efbd;line-height:1.6;text-align:center}.end{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:#07293cdd;padding:16px}.end-card{width:min(96%,420px);background:#f0fbfc;color:#173f59;border-radius:20px;border:4px solid #d6ad61;padding:23px;text-align:center;box-shadow:0 12px 35px #001f2788}.end-card h2{font-size:27px;color:#0b697c}.end-card strong{font-size:38px;color:#ad7a12}
@@ -33,6 +43,19 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 const ART=window.MEJHiddenArt;const el=id=>document.getElementById(id);
 let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null;
 let words=ART.words,images=ART.images;
+const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
+let guideMode='word';
+function guideFor(id){
+ if(guideMode==='word')return null;
+ const art=document.createElement('span');art.className='guide-art';art.setAttribute('aria-hidden','true');
+ if(guideMode==='picture'){
+   // Independent illustrated hints, never the same photograph/sprite in the scene.
+   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=GUIDE_EMOJI[id]||'🔎';art.append(icon);
+ }else{
+   const img=document.createElement('img');img.src=images[id];img.alt='';art.append(img);
+ }
+ return art;
+}
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function board(){
@@ -53,7 +76,13 @@ function board(){
  });
 
  const list=el('words');list.replaceChildren();
- for(const id of session.targets){const li=document.createElement('li');li.textContent=(session.found.includes(id)?'✓ ':'')+words[id];li.className=session.found.includes(id)?'found':'';list.append(li)}
+ for(const id of session.targets){
+   const li=document.createElement('li'),done=session.found.includes(id);
+   li.className=(done?'found ':'')+(guideMode==='picture'?'guide-picture':guideMode==='silhouette'?'guide-silhouette':'guide-word-only');
+   const guide=guideFor(id);if(guide)li.append(guide);
+   const label=document.createElement('span');label.textContent=(done?'✓ ':'')+words[id];li.append(label);list.append(li);
+ }
+
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
  el('found').textContent=session.found.length+' / 10';
  el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
@@ -79,6 +108,10 @@ function finish(reason){if(completed)return;completed=true;clearInterval(timerHa
 function tick(){if(!session||completed||session.remaining==null)return;const now=Date.now();const diff=clamp(Math.floor((now-lastTime)/1000),0,8);if(diff){lastTime=now;session.remaining=Math.max(0,session.remaining-diff);const sec=session.remaining;el('timer').textContent='⏱️ '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec<=0){finish('timeout');return}if(sec%10===0)send(false)}}
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='mej:hidden-init'||session)return;
  const d=e.data;
+ // Stage is the learner's actual island level, not merely their registered grade.
+ const phase=Math.max(0,Math.min(12,Math.floor(Number(d.stage)||0)));
+ guideMode=phase<=4?'picture':phase<=8?'silhouette':'word';
+ el('instruction').textContent=guideMode==='picture'?'ابحث عن الأغراض بمساعدة الكلمات والرسومات الإرشادية. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':guideMode==='silhouette'?'ابحث عن الأغراض بالاستعانة بالكلمات والظلال فقط. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':'اقرأ الكلمات الإنجليزية وحدد الأغراض داخل المشهد دون صور أو ظلال مساعدة. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.';
  if(Array.isArray(d.items)&&d.items.length===16){
    words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);
    images=ART.images.map((src,i)=>typeof d.items[i]?.src==='string'&&/^(data:image\/|\.\.?\/assets\/)/i.test(d.items[i].src)?d.items[i].src:src);

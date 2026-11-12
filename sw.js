@@ -2,13 +2,14 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-hidden-objects-v3-level-guides-20261112';
+const CACHE='mej-hidden-objects-v4-medals-and-guides-20261112';
 const CORE=['./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
  './reviews/owner-review.html','./reviews/pilot-full.html','./reviews/admin-levels.html',
  './reviews/learning.html','./reviews/admin-levels-catalog.json'];
+const HIDDEN_BADGES=Array.from({length:10},(_,i)=>'./assets/mej-badges-20261112/badge-'+String(i+1).padStart(2,'0')+'.svg');
 const IMAGE_SHARDS=Array.from({length:21},(_,i)=>
  './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261107-approved-all');
 let warmStarted=false;
@@ -30,7 +31,7 @@ self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
   // A single optional missing asset must never invalidate the entire app shell.
-  await Promise.all(CORE.map(async item=>{
+  await Promise.all([...CORE,...HIDDEN_BADGES].map(async item=>{
     try{await cache.add(item)}catch(error){console.warn('Optional shell item unavailable:',item)}
   }));
   await self.skipWaiting();

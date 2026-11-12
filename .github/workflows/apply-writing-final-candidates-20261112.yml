@@ -1,0 +1,25 @@
+name: Apply Grade 8 Writing final candidates
+on:
+  push:
+    paths:
+      - 'scripts/apply_writing_final_candidates_20261112.cjs'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Apply two Writing candidates
+        run: node scripts/apply_writing_final_candidates_20261112.cjs
+      - name: Commit synchronized bank and report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/admin-levels-catalog.json reviews/quality-audit/writing-final-candidates-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace two rejected Grade 8 Writing questions"
+            git push
+          fi

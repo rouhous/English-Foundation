@@ -1,0 +1,11 @@
+{
+  "marker": "MEJ_COMPANION_FACING_20261112_V3",
+  "scriptSyntax": "passed",
+  "singleConsistentWalkingFrame": true,
+  "cssYawRotation": "rotateY(180deg)",
+  "turnAtEdges": true,
+  "interactionsPreserved": true,
+  "questionsUnchanged": true,
+  "cacheVersion": "20261112facing3",
+  "deviceTest": "pending"
+}

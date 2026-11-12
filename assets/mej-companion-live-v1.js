@@ -72,7 +72,8 @@
  #mej-companion-actor.mej-c-near-left .mej-c-bubble{left:90px;right:auto}
  #mej-companion-actor.mej-c-roaming{transition:none!important}
  #mej-companion-actor .mej-c-facing-art{position:absolute;inset:0;width:100%;height:100%;background-size:400% 200%;background-repeat:no-repeat;pointer-events:none;backface-visibility:visible;transform-origin:50% 50%;transform:rotateY(0deg);transition:transform .28s ease-in-out;will-change:transform}
- #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:rotateY(180deg)}
+ #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:scaleX(-1)}
+ #mej-companion-actor[data-facing="right"] .mej-c-facing-art{transform:scaleX(1)}
  #mej-companion-actor .mej-c-sprite{background-image:none!important;background-position:initial!important}
  @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-facing-art{transition:none!important}}
  #mej-companion-actor.mej-c-explaining .mej-c-bubble{background:#eaf7ff;border-color:#65b4e8}
@@ -212,11 +213,20 @@
      face.className='mej-c-facing-art';face.setAttribute('aria-hidden','true');
      sprite.appendChild(face);
    }
+   // Reapply after mounting or remounting the sprite on a changed route.
+   setFacing(host,direction);
    return host;
  }
  function setFacing(host,value){
+   // MEJ_COMPANION_MIRROR_FIX_V4: force real horizontal mirroring on the
+   // sprite image itself, not only a parent data-attribute selector.
    const next=value<0?'left':'right';
-   if(host.dataset.facing!==next)host.dataset.facing=next;
+   host.dataset.facing=next;
+   const art=host.querySelector('.mej-c-facing-art');
+   if(art){
+     art.style.setProperty('transform',next==='left'?'scaleX(-1)':'scaleX(1)','important');
+     art.style.setProperty('-webkit-transform',next==='left'?'scaleX(-1)':'scaleX(1)','important');
+   }
  }
 
  function greet(){
@@ -382,6 +392,8 @@
    if(nx<=lim.minX){nx=lim.minX;direction=1}
    if(nx>=lim.maxX){nx=lim.maxX;direction=-1}
    place(h,nx,actorY??lim.maxY-10);
+   // Apply on EVERY movement step, so crossing either edge flips immediately.
+   setFacing(h,direction);
    // Keep a single consistent body orientation in both walking and running.
    // Switching sheet frames 1/2 previously alternated the girl's front/back artwork.
    roamStep++;

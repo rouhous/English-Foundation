@@ -32,13 +32,14 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 (()=>{'use strict';
 const ART=window.MEJHiddenArt;const el=id=>document.getElementById(id);
 let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null;
+let words=ART.words,images=ART.images;
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function board(){
  const field=el('scene');field.replaceChildren();
  const backgrounds=ART.scenes||[ART.background],view=backgrounds[session.scene%backgrounds.length];
  field.style.backgroundImage='linear-gradient(0deg,#2943341c,#d3bc8a0d),url("'+view+'")';
- const choices=shuffle(ART.words.map((_,i)=>i).filter(i=>i!==6),session.seed);
+ const choices=shuffle(words.map((_,i)=>i).filter(i=>i!==6),session.seed);
  const positions=shuffle(Array.from({length:15},(_,i)=>({
   x:9+(i%5)*20+(i%3)*2.1,y:15+Math.floor(i/5)*32+(i%4)*1.8
  })),session.seed+91);
@@ -47,12 +48,12 @@ function board(){
   item.style.left=positions[i].x+'%';item.style.top=positions[i].y+'%';
   item.style.transform='translate(-50%,-50%) rotate('+(((i*7+session.seed)%29)-14)+'deg) scale('+(.82+(i%5)*.06)+')';
   item.setAttribute('aria-label','Object '+(i+1));item.dataset.item=id;
-  const img=document.createElement('img');img.src=ART.images[id];img.alt='';item.append(img);
+  const img=document.createElement('img');img.src=images[id];img.alt='';item.append(img);
   item.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});field.append(item);
  });
 
  const list=el('words');list.replaceChildren();
- for(const id of session.targets){const li=document.createElement('li');li.textContent=(session.found.includes(id)?'✓ ':'')+ART.words[id];li.className=session.found.includes(id)?'found':'';list.append(li)}
+ for(const id of session.targets){const li=document.createElement('li');li.textContent=(session.found.includes(id)?'✓ ':'')+words[id];li.className=session.found.includes(id)?'found':'';list.append(li)}
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
  el('found').textContent=session.found.length+' / 10';
  el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
@@ -61,7 +62,7 @@ function send(done){parent.postMessage({type:'mej:hidden-progress',stage:session
 function tap(id){if(completed)return;const now=Date.now();if(now-lastClick<330)return;lastClick=now;
  if(!session.targets.includes(id)){wrong(true);return}
  if(session.found.includes(id))return;
- session.found.push(id);el('notice').textContent='Excellent! '+ART.words[id]+' ✓';
+ session.found.push(id);el('notice').textContent='Excellent! '+words[id]+' ✓';
  if(session.found.length===10){finish('all');return}
  send(false);board();
 }
@@ -77,7 +78,12 @@ function finish(reason){if(completed)return;completed=true;clearInterval(timerHa
 }
 function tick(){if(!session||completed||session.remaining==null)return;const now=Date.now();const diff=clamp(Math.floor((now-lastTime)/1000),0,8);if(diff){lastTime=now;session.remaining=Math.max(0,session.remaining-diff);const sec=session.remaining;el('timer').textContent='⏱️ '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec<=0){finish('timeout');return}if(sec%10===0)send(false)}}
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='mej:hidden-init'||session)return;
- const d=e.data;const all=ART.words.map((_,i)=>i).filter(i=>i!==6);
+ const d=e.data;
+ if(Array.isArray(d.items)&&d.items.length===16){
+   words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);
+   images=ART.images.map((src,i)=>typeof d.items[i]?.src==='string'&&/^(data:image\/|\.\.?\/assets\/)/i.test(d.items[i].src)?d.items[i].src:src);
+ }
+ const all=words.map((_,i)=>i).filter(i=>i!==6);
  const seed=Number(d.stage)*7919+Number(d.badge)*1013;
  const proposed=shuffle(all,seed).slice(0,10);const saved=d.saved||{};
  session={stage:d.stage,badge:d.badge,seed,scene:d.scene||0,targets:proposed,

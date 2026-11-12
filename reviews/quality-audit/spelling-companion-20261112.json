@@ -1,0 +1,10 @@
+{
+  "marker": "MEJ_SPELLING_AND_LEVELS_COMPANION_20261112_V1",
+  "questionsUnchanged": true,
+  "bankSha256": "0a3ed9f5fe3d3884abaa0ea1ba0df6c5af0663a7190fd9713c3ccaf964daac41",
+  "spellingExamplesPassed": 4,
+  "inlineScriptsChecked": 4,
+  "companionRouteRefresh": true,
+  "diagnosticCompanionPolicy": "unchanged: companion disabled during diagnostic",
+  "note": "Live companion refresh is triggered after a route render; runtime behavior on actual devices still requires testing."
+}

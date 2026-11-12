@@ -1,0 +1,23 @@
+name: Deliver companion mirror fix v4
+on:
+  push:
+    paths:
+      - 'scripts/deploy_companion_mirror_v4.cjs'
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and refresh companion version and offline cache
+        run: node scripts/deploy_companion_mirror_v4.cjs
+      - name: Commit application references
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js reviews/quality-audit/companion-mirror-v4.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Deploy explicit companion horizontal mirroring v4"
+            git push
+          fi

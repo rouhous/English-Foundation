@@ -72,7 +72,7 @@ hat:'🧢',cap:'🧢',shirt:'👕',shoe:'👞',shoes:'👞',socks:'🧦',dress:'
 brush:'🖌️','toothbrush':'🪥',toothpaste:'🪥',soap:'🧼',towel:'🧻',bed:'🛏️',lamp:'💡',light:'💡',flag:'🚩',coin:'🪙',money:'💰',wallet:'👛',
 paper:'📄',newspaper:'📰',magazine:'📖',letter:'✉️',envelope:'✉️',picture:'🖼️',photo:'📷',painting:'🖼️',globe:'🌐',ruler:'📏',eraser:'🧽',scissors:'✂️',
 doctor:'🩺',nurse:'🧑‍⚕️',scientist:'🧑‍🔬',farmer:'🧑‍🌾',pilot:'🧑‍✈️',firefighter:'🧑‍🚒',chef:'🧑‍🍳',
-'trash can':'🗑️',bin:'🗑️',robot:'🤖',battery:'🔋',charger:'🔌',microphone:'🎤',radio:'📻',television:'📺',tv:'📺',remote:'📱'
+'trash can':'🗑️',bin:'🗑️',robot:'🤖',battery:'🔋',charger:'🔌',microphone:'🎤',radio:'📻',television:'📺',tv:'📺',remote:'📱',lantern:'🏮',bicycle:'🚲',dates:'🌴',dallah:'☕',oranges:'🍊',donkey:'🐴',bridge:'🌉',waterfall:'💦',barrel:'🛢️',net:'🥅',seagull:'🐦',lifebuoy:'🛟',chest:'🧰',apples:'🍎','ship model':'⛵',camera:'📷',rope:'🪢',compass:'🧭',binoculars:'🔭'
 };
 function visualCue(word,id){
  const name=String(word||'').trim().toLowerCase().replace(/\s+/g,' ');
@@ -202,7 +202,7 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
    img.src=PHOTO.root+mapped.file;
  }else start();
 });
-el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.end'))return;wrong()});
+el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.photo-target,.photo-board,.end'))return;wrong()});
 el('timerToggle').onclick=()=>{
  if(!session||completed||session.remaining!=null)return;
  session.remaining=180;lastTime=Date.now();el('timerToggle').disabled=true;

@@ -1,0 +1,12 @@
+{
+  "marker": "MEJ_MEDAL_STATUS_V2_20261112",
+  "statusLabels": [
+    "available",
+    "pending",
+    "finished"
+  ],
+  "badgeSVGCount": 10,
+  "questionBankUnchanged": true,
+  "scriptBlocksVerified": 4,
+  "cssVersion": "20261112metallic2"
+}

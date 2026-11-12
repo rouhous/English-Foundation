@@ -50,7 +50,7 @@ function board(){
   const img=document.createElement('img');img.src=ART.images[id];img.alt='';item.append(img);
   item.addEventListener('click',ev=>{ev.stopPropagation();tap(id)});field.append(item);
  });
- field.addEventListener('click',()=>wrong(),{once:false});
+
  const list=el('words');list.replaceChildren();
  for(const id of session.targets){const li=document.createElement('li');li.textContent=(session.found.includes(id)?'✓ ':'')+ART.words[id];li.className=session.found.includes(id)?'found':'';list.append(li)}
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
@@ -87,6 +87,7 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
  board();if(session.misses>=3||session.found.length===10){finish('all');return}
  lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
 });
+el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.end'))return;wrong()});
 el('back').onclick=()=>parent.postMessage({type:'mej:hidden-close'},location.origin);
 parent.postMessage({type:'mej:hidden-ready'},location.origin);
 })();

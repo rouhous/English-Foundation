@@ -60,6 +60,14 @@
    let sum=0;for(let g=0;g<=12;g++)sum+=window.mejHiddenStageBonus(g,p);
    return sum;
  };
+ window.mejHiddenRoundStatus=function(stage,badge,p){
+   const g=Number(stage),b=Number(badge);
+   if(!Number.isInteger(g)||g<0||g>12||!validIndex(b))return {status:'locked',award:0};
+   const person=p||active();
+   if(!person||countMaster(g,person)<b*20)return {status:'locked',award:0};
+   const item=sanitized(ledger(person)[key(g,b)],g,b);
+   return {status:item?.status==='finished'?'finished':item?.status==='pending'?'pending':'available',award:item?.award||0};
+ };
  window.mejSailorStage=p=>currentIsland(p); // Backward-compatible alias for saved journey markup.
  window.openMejSailor=()=>window.openMejHiddenObjects(currentIsland(active()),1); // Legacy link fallback.
  window.openMejHiddenObjects=function(stage,badge){

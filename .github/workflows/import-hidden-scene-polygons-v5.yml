@@ -1,0 +1,22 @@
+name: Import approved v5 Hidden Objects hit regions
+on:
+  push:
+    paths: ['scripts/import_hidden_scene_polygons_v5.cjs']
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate verified polygons and stage-safe scene catalog
+        run: node scripts/import_hidden_scene_polygons_v5.cjs
+      - name: Commit catalog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hidden-objects/photo-scenes.js reviews/quality-audit/hidden-polygon-import-v5.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Install v5 image-aligned polygons, repeat targets and safe scene status"
+            git push
+          fi

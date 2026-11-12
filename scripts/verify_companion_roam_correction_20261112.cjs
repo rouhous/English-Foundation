@@ -13,4 +13,6 @@ const evidence={date:'2026-11-12',liveCompanionScriptSyntax:'pass',routeEventWir
 const term='mej-answer-evaluated';let matches=[];let start=0;while(true){let p=i.indexOf(term,start);if(p<0)break;matches.push(i.slice(Math.max(0,p-250),p+350));start=p+term.length;if(matches.length>12)break;}
 evidence.appAnswerEventSnippets=matches;
 evidence.answerEventFound=matches.length>0;
+evidence.directCompanionReaction=i.includes('window.MEJCompanion?.react(ok)')||i.includes('window.MEJCompanion.react(ok)');
+if(!evidence.directCompanionReaction&&!evidence.answerEventFound)throw Error('No question-to-companion feedback binding');
 fs.mkdirSync('reviews/quality-audit',{recursive:true});fs.writeFileSync('reviews/quality-audit/companion-roam-correction-20261112.json',JSON.stringify(evidence,null,2));console.log('Companion QA pass',evidence);

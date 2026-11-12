@@ -1,0 +1,22 @@
+name: Test Hidden Objects rewards and integration
+on:
+  push:
+    paths: ['scripts/test_hidden_objects_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test complete bonus model and game code
+        run: node scripts/test_hidden_objects_20261112.cjs
+      - name: Commit QA report
+        run: |
+          git config user.name github-actions
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reviews/quality-audit/hidden-objects-integration-qa-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Hidden Objects scoring and unlock validation"
+            git push
+          fi

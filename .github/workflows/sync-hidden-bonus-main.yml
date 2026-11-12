@@ -1,0 +1,22 @@
+name: Include Hidden Objects bonus in student cloud snapshot
+on:
+  push:
+    paths: ['scripts/sync_hidden_bonus_in_main_20261112.cjs']
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add cloud ledger fields and verify JavaScript
+        run: node scripts/sync_hidden_bonus_in_main_20261112.cjs
+      - name: Commit learner app and offline cache
+        run: |
+          git config user.name github-actions
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html sw.js reviews/quality-audit/hidden-bonus-cloud-sync.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Synchronize Hidden Objects ledger and 3250-star programme limit"
+            git push
+          fi

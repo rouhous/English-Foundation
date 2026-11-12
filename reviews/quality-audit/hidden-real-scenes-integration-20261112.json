@@ -1,0 +1,19 @@
+{
+  "marker": "MEJ_REAL_PHOTO_SCENES_20261112_V2",
+  "realisticPhotoSceneMaps": 4,
+  "originalPhotoObjectHotspots": 40,
+  "photoImagesActuallyOnGithub": 0,
+  "imageInstallationNeeded": true,
+  "floatingImagesUsedForPhotoMode": false,
+  "legacyFallbackOnMissingPhotos": true,
+  "noDuplicatePenaltyOnFoundObjects": true,
+  "threeMistakesEndGame": true,
+  "scoring": "floor(objects_found/2)",
+  "maxPerRound": 5,
+  "tenRoundsPerStage": true,
+  "badgeUnlockBasedOnBaseMastery": true,
+  "offlinePrecacheIncludesPhotos": true,
+  "javascriptSyntax": "pass",
+  "browserDeviceTest": "not performed",
+  "rewardProof": "client-reported; requires server-side trusted verification for secure payouts"
+}

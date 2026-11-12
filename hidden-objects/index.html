@@ -13,6 +13,11 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .scene::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#07262340,transparent 27%,#f0e7bd12);z-index:0}
 .spot{position:absolute;border:0;background:none;padding:0;width:clamp(31px,5.8vw,62px);height:clamp(31px,5.8vw,64px);transform:translate(-50%,-50%);cursor:pointer;filter:drop-shadow(1px 2px 2px #2c342887) saturate(.88);opacity:.93;mix-blend-mode:normal;border-radius:12px;transition:filter .15s,opacity .15s}
 .spot img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+.scene.mode-picture .spot{opacity:.97;filter:drop-shadow(1px 1px 2px #3d3a2f77) saturate(.92)}
+.scene.mode-silhouette .spot{opacity:.89;filter:drop-shadow(1px 2px 2px #3c4b3660) saturate(.79)}
+.scene.mode-word .spot{opacity:.81;filter:drop-shadow(1px 1px 2px #4553355a) saturate(.68)}
+.timer-toggle{border:1px solid #a8dce4;background:#124a5b;color:#fff;font:750 13px system-ui;cursor:pointer}
+.timer-toggle:disabled{opacity:.6;cursor:default}
 .spot:focus-visible{outline:3px solid #ffe36d;outline-offset:2px}.spot:active{filter:brightness(1.5)}.spot.found{opacity:0;pointer-events:none}
 .words{direction:ltr;text-align:left;border:1px solid #7bb9d1;background:#082f4aef;border-radius:17px;padding:12px;max-height:100%;overflow:auto}
 .words h2{font-size:17px;margin:0 0 10px}.words ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}.words li{font-size:clamp(14px,2vw,18px);padding:7px 10px;border-radius:9px;background:#12516a;font-weight:750}.words li.found{color:#89d9af;text-decoration:line-through;opacity:.72}
@@ -32,7 +37,7 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 @media(max-width:710px){.shell{padding:7px;gap:7px}.play{grid-template-columns:1fr;grid-template-rows:minmax(280px,auto) auto}.scene{min-height:285px;aspect-ratio:1.15}.words{max-height:170px;padding:8px}.words ul{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.words li{font-size:11px;text-align:center;padding:5px 2px;overflow-wrap:anywhere}.words h2{font-size:13px}.spot{width:clamp(28px,8vw,46px);height:clamp(30px,9vw,49px)}}
 </style></head><body>
 <main class="shell">
-<header class="head"><h1>🔎 Hidden Objects</h1><div class="status"><span class="chip" id="stage">الجزيرة</span><span class="chip" id="found">0 / 10</span><span class="chip" id="mistakes">❤️❤️❤️</span><span class="chip" id="timer">⏱️ —</span></div></header>
+<header class="head"><h1>🔎 Hidden Objects</h1><div class="status"><span class="chip" id="stage">الجزيرة</span><span class="chip" id="found">0 / 10</span><span class="chip" id="mistakes">❤️❤️❤️</span><span class="chip" id="timer">⏱️ بدون مؤقت</span><span class="chip" id="bonus">⭐ 0/5</span><button type="button" class="chip timer-toggle" id="timerToggle">تحدّي الوقت (3 دقائق)</button></div></header>
 <p class="instruction" id="instruction">ابحث عن الأغراض الإنجليزية في المشهد. ثلاث نقرات خاطئة تنهي الجولة. كل غرضين صحيحين = ⭐ واحدة.</p>
 <div class="play"><div id="scene" class="scene" aria-label="مشهد البحث عن الأغراض" role="group"></div><aside class="words"><h2>Find these objects:</h2><ul id="words"></ul></aside></div>
 <footer class="foot"><span id="notice" role="status">اختر الغرض الذي يطابق كلمة في القائمة.</span><button class="back" id="back">↩ العودة إلى الرحلة</button></footer>
@@ -59,7 +64,7 @@ function guideFor(id){
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function board(){
- const field=el('scene');field.replaceChildren();
+ const field=el('scene');field.replaceChildren();field.className='scene mode-'+guideMode;
  const backgrounds=ART.scenes||[ART.background],view=backgrounds[session.scene%backgrounds.length];
  field.style.backgroundImage='linear-gradient(0deg,#2943341c,#d3bc8a0d),url("'+view+'")';
  const choices=shuffle(words.map((_,i)=>i).filter(i=>i!==6),session.seed);
@@ -85,6 +90,7 @@ function board(){
 
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
  el('found').textContent=session.found.length+' / 10';
+ el('bonus').textContent='⭐ '+Math.floor(session.found.length/2)+'/5';
  el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
 }
 function send(done){parent.postMessage({type:'mej:hidden-progress',stage:session.stage,badge:session.badge,found:[...session.found],misses:session.misses,remaining:session.remaining,ended:!!done},location.origin)}
@@ -121,12 +127,19 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
  const proposed=shuffle(all,seed).slice(0,10);const saved=d.saved||{};
  session={stage:d.stage,badge:d.badge,seed,scene:d.scene||0,targets:proposed,
   found:Array.isArray(saved.found)?saved.found.filter(x=>proposed.includes(x)).slice(0,10):[],
-  misses:clamp(Number(saved.misses)||0,0,3),remaining:saved.remaining??(d.stage<5?null:Math.max(180,360-Number(d.stage)*12)),ended:false};
+  misses:clamp(Number(saved.misses)||0,0,3),remaining:saved.remaining==null?null:clamp(Math.floor(Number(saved.remaining)||0),0,180),ended:false};
  if(session.remaining==null)el('timer').textContent='⏱️ بدون مؤقت';
+ else{el('timer').textContent='⏱️ '+Math.floor(session.remaining/60)+':'+String(session.remaining%60).padStart(2,'0');el('timerToggle').disabled=true;}
  board();if(session.misses>=3||session.found.length===10){finish('all');return}
  lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
 });
 el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.end'))return;wrong()});
+el('timerToggle').onclick=()=>{
+ if(!session||completed||session.remaining!=null)return;
+ session.remaining=180;lastTime=Date.now();el('timerToggle').disabled=true;
+ el('timer').textContent='⏱️ 3:00';el('notice').textContent='بدأ تحدّي الوقت: 3 دقائق. انتهِ قبل انتهاء الوقت!';
+ timerHandle=setInterval(tick,1000);send(false);
+};
 el('back').onclick=()=>parent.postMessage({type:'mej:hidden-close'},location.origin);
 parent.postMessage({type:'mej:hidden-ready'},location.origin);
 })();

@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-12",
+  "decision": {
+    "approved": 51,
+    "rejectedAndReplaced": 10,
+    "awaitingTeacherReview": 10
+  },
+  "notes": "Approved items were not altered. Each replacement has grade-relevant original wording and three distinct MCQ options. These are candidate alternatives pending teacher approval; none was copied verbatim from the textbooks.",
+  "changes": [
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L6-198",
+      "grade": 6,
+      "topic": "Team Together Oman 6A — school magazine and communication",
+      "old": "I took a bottle of water ___ I would not feel thirsty during the trip.",
+      "replacement": "Our class sent a message to the school magazine ___ we wanted to share our ideas."
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L7-196",
+      "grade": 7,
+      "topic": "Team Together Oman 7A — Entertainment",
+      "old": "___ the weather was very hot, the students completed their walk.",
+      "replacement": "First, we bought tickets for the aquarium. What happened next?"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L7-199",
+      "grade": 7,
+      "topic": "Team Together Oman 7A — Travel",
+      "old": "The students practised for two weeks. ___, they performed confidently at the festival.",
+      "replacement": "We packed our suitcases in the evening. ___, we travelled to the airport early the next morning."
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-196",
+      "grade": 8,
+      "topic": "Team Together Oman 8A — Our planet: survey / report",
+      "old": "You will not finish the science project on time ___ you share the tasks fairly.",
+      "replacement": "First, our group chose an endangered animal to study. ___, we collected information about its habitat."
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-197",
+      "grade": 8,
+      "topic": "Team Together Oman 8A — Adventure sports: brochure",
+      "old": "The first island has sandy beaches, ___ the second has steep rocky cliffs.",
+      "replacement": "Choose the sentence that best follows this opening of a brochure: 'Sandboarding is an exciting adventure sport in Oman.'"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L8-198",
+      "grade": 8,
+      "topic": "Team Together Oman 8A — Spend or save?: informal email reply",
+      "old": "The team checked every source carefully. ___, their report contained fewer errors.",
+      "replacement": "Choose the sentence that best completes an informal email: 'Thanks for inviting me to your shopping trip on Friday.'"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L9-196",
+      "grade": 9,
+      "topic": "English for Me 9A — Writers and Writing",
+      "old": "___ the journey was difficult, the volunteers continued helping the villagers.",
+      "replacement": "Choose the best next sentence in a short story: 'When I opened my notebook, I found a letter inside.'"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L9-198",
+      "grade": 9,
+      "topic": "English for Me 9A — Writers and Writing",
+      "old": "The beach looked clean from a distance. ___, the students found plastic under the rocks.",
+      "replacement": "The writer planned the beginning and ending of her story. ___, she wrote the first draft."
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L10-196",
+      "grade": 10,
+      "topic": "English for Me 10A — Climate Change: effects and opinion writing",
+      "old": "The research team can use the survey results ___ the participants have agreed to share their answers.",
+      "replacement": "Choose the sentence that best follows: 'Plastic waste is becoming a serious problem for marine life.'"
+    },
+    {
+      "path": "reviews/admin-levels-catalog.json",
+      "id": "L10-197",
+      "grade": 10,
+      "topic": "English for Me 10A — Climate Change: cause and effect",
+      "old": "Wind turbines need moving air, ___ solar panels depend on sunlight.",
+      "replacement": "Burning fossil fuels releases greenhouse gases. ___, the Earth's temperature can rise over time."
+    }
+  ]
+}

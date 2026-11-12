@@ -1,0 +1,14 @@
+{
+  "marker": "MEJ_HIDDEN_FIVE_SCENE_CANDIDATES_V1",
+  "scenes": 5,
+  "polygons": 57,
+  "targets": 50,
+  "unapprovedCandidates": 5,
+  "studentApproved": 0,
+  "grade0CurriculumCheck": "pass",
+  "bonusDataUntouched": true,
+  "cloudTransportUntouched": true,
+  "offlineImages": "five present",
+  "scripts": "pass",
+  "visualTapTestOnActualDevice": "pending"
+}

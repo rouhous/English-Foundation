@@ -1,0 +1,35 @@
+name: Apply Writing review round 2 (teacher decisions)
+on:
+  push:
+    paths:
+      - 'scripts/apply_writing_teacher_review_round2_20261112.cjs'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Apply 10 teacher-rejected writing questions
+        run: node scripts/apply_writing_teacher_review_round2_20261112.cjs
+      - name: Verify review catalog and question keys
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),c=JSON.parse(fs.readFileSync('reviews/admin-levels-catalog.json','utf8'));
+          const ids=['L6-198','L7-196','L7-199','L8-196','L8-197','L8-198','L9-196','L9-198','L10-196','L10-197'];
+          const q=c.levels.flatMap(l=>l.parts.flatMap(p=>p.questions));
+          for(const id of ids){const x=q.find(z=>z.id===id);if(!x||x.type!=='Writing'||x.mode!=='mcq'||x.options.length!==3||x.options.filter(a=>a===x.answer).length!==1||new Set(x.options).size!==3)throw Error('Invalid '+id);}
+          console.log('Validated all 10 replacement questions');
+          NODE
+      - name: Commit synchronized bank
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html reviews/admin-levels-catalog.json reviews/quality-audit/writing-review-round2-20261112.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace 10 teacher-rejected Writing questions with curriculum-relevant tasks"
+            git push
+          fi

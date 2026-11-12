@@ -1,0 +1,20 @@
+/* MEJ Hidden Objects Gate System v1: no cropped badge art / duplicate locks */
+.journey-v23 .mej-hidden-intro{background:linear-gradient(135deg,#0f5372,#0b8a9b 60%,#074669);border:2px solid #8ae6ee!important}
+.journey-v23 .mej-hidden-intro p{font-size:clamp(15px,2.6vw,20px);font-weight:800;margin:8px 0;color:#fffbd2}
+.journey-v23 .mej-hidden-rewards{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.journey-v23 .mej-hidden-rewards b{border:1px solid #b1e8de;border-radius:10px;padding:7px 10px;background:#03415a77}
+.journey-v23 .mej-hidden-intro small{color:#d6f8ff;line-height:1.6}
+.journey-v23 .j23-medal.mej-gate{cursor:pointer;min-height:130px!important;padding:7px 3px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:5px!important;color:#fff!important;background:linear-gradient(150deg,#275d7e,#0b304c)!important;border:1px solid #9bd0cd!important;border-radius:14px!important}
+.journey-v23 .j23-medal.mej-gate.unlocked{background:linear-gradient(150deg,#135f8a,#0e477b)!important;border:2px solid #f9cb5a!important;box-shadow:inset 0 1px 4px #fff4,0 4px 16px #eabe5866!important}
+.journey-v23 .j23-medal.mej-gate:disabled{opacity:1!important;cursor:default!important}
+.journey-v23 .mej-gate-inner{height:76px;width:min(91%,92px);position:relative;display:grid;place-items:center;overflow:hidden;border:4px solid #a4a7a0;border-bottom:7px solid #665846;border-radius:38px 38px 10px 10px;background:radial-gradient(circle at 35% 40%,#f1c66b,#9e5b1a 67%,#5d320d);box-shadow:inset 0 0 8px #4b2703aa,0 3px 7px #0006}
+.journey-v23 .mej-gate-symbol{font-size:clamp(23px,4vw,37px);filter:drop-shadow(0 2px 1px #4a2500);color:#fff}
+.journey-v23 .mej-gate-door{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#623a1d 0 13px,#8c572c 13px 25px,#66391a 25px 28px);border:3px solid #b87c36;border-radius:34px 34px 2px 2px;box-shadow:inset 0 0 8px #2f170a88;display:grid;place-items:center;transform-origin:0 50%;transition:transform 1s ease,opacity .9s ease;z-index:1}
+.journey-v23 .mej-gate-lock{font-size:clamp(18px,4vw,29px);filter:drop-shadow(0 2px 1px #1d1307)}
+.journey-v23 .mej-gate.unlocked .mej-gate-door{transform:perspective(180px) rotateY(-105deg);opacity:0;pointer-events:none}
+.journey-v23 .mej-gate.locked .mej-gate-symbol{visibility:hidden}
+.journey-v23 .mej-gate strong{font-size:clamp(9px,1.6vw,12px)!important;color:#fff3da}
+.journey-v23 .mej-gate small{font-size:11px!important}
+.journey-v23 .mej-gate-reward{font-size:11px;font-weight:850;color:#a5ffd7}
+.journey-v23 .j23-medal.mej-gate .j23-locked,.journey-v23 .j23-medal.mej-gate .j23-earned{display:none!important}
+@media(max-width:560px){.journey-v23 .j23-medal.mej-gate{min-height:111px!important}.journey-v23 .mej-gate-inner{height:53px;width:94%;border-width:2px}.journey-v23 .mej-gate-symbol{font-size:23px}.journey-v23 .mej-gate-reward{font-size:8px}}

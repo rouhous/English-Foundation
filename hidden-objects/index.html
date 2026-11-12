@@ -217,7 +217,7 @@ window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.typ
  // Fail closed: unapproved scenes are review-only, not playable for student stars.
  // Scene targets must correspond to nine really mastered curriculum words and
  // exactly one curriculum challenge word; never replace a live list with random words.
- const norm=w=>String(w||'').toLowerCase().trim().replace(/\\s+/g,' ');
+ const norm=w=>String(w||'').toLowerCase().trim().replace(/\s+/g,' ');
  const known=new Set((Array.isArray(d.masteredWords)?d.masteredWords:[]).map(norm));
  const level=new Set((Array.isArray(d.levelWords)?d.levelWords:[]).map(norm));
  const mapped=scenes.find(sc=>sc.approved===true&&sc.stage===Number(d.stage)&&sc.badge===Number(d.badge)&&sc.targets?.length===10

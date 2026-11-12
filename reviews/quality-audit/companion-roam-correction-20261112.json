@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-12",
+  "liveCompanionScriptSyntax": "pass",
+  "routeEventWired": true,
+  "roamTickMs": 145,
+  "edgeTurning": true,
+  "inactivityActions": true,
+  "wrongAnswerExplanation": true,
+  "diagnosticExcluded": true,
+  "sourceQuestionBankChanged": false,
+  "appAnswerEventSnippets": [],
+  "answerEventFound": false
+}

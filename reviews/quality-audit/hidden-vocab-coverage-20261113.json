@@ -1,0 +1,383 @@
+{
+  "marker": "MEJ_HIDDEN_VOCAB_COVERAGE_20261113",
+  "stages": [
+    {
+      "stage": 0,
+      "questionsWithTarget": 140,
+      "uniqueWordCount": 71,
+      "physicalCandidates": 68
+    },
+    {
+      "stage": 1,
+      "questionsWithTarget": 123,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 33
+    },
+    {
+      "stage": 2,
+      "questionsWithTarget": 130,
+      "uniqueWordCount": 33,
+      "physicalCandidates": 27
+    },
+    {
+      "stage": 3,
+      "questionsWithTarget": 132,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 30
+    },
+    {
+      "stage": 4,
+      "questionsWithTarget": 134,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 30
+    },
+    {
+      "stage": 5,
+      "questionsWithTarget": 134,
+      "uniqueWordCount": 33,
+      "physicalCandidates": 25
+    },
+    {
+      "stage": 6,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39
+    },
+    {
+      "stage": 7,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 40
+    },
+    {
+      "stage": 8,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39
+    },
+    {
+      "stage": 9,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 17
+    },
+    {
+      "stage": 10,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39
+    },
+    {
+      "stage": 11,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 38
+    },
+    {
+      "stage": 12,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39
+    }
+  ],
+  "sceneCandidates": 5,
+  "approvedForStudentBonus": 0,
+  "candidateChecks": [
+    {
+      "id": 0,
+      "name": "سوق الميناء",
+      "stage": null,
+      "badge": null,
+      "approved": false,
+      "targets": [
+        {
+          "word": "lantern",
+          "inCurriculum": null,
+          "regionCount": 2
+        },
+        {
+          "word": "bicycle",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "apple",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "binoculars",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "compass",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "cat",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "rope",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "backpack",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "football",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "map",
+          "inCurriculum": null,
+          "regionCount": 1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "واحة القلعة",
+      "stage": null,
+      "badge": null,
+      "approved": false,
+      "targets": [
+        {
+          "word": "lantern",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "cat",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "dates",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "dallah",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "clay pot",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "donkey",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "bridge",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "basket",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "waterfall",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "barrel",
+          "inCurriculum": null,
+          "regionCount": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ميناء الصيادين",
+      "stage": null,
+      "badge": null,
+      "approved": false,
+      "targets": [
+        {
+          "word": "hat",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "dallah",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "book",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "cup",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "shoes",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "rope",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "chest",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "net",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "seagull",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "lifebuoy",
+          "inCurriculum": null,
+          "regionCount": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "السوق العُماني",
+      "stage": null,
+      "badge": null,
+      "approved": false,
+      "targets": [
+        {
+          "word": "clock",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "camera",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "book",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "apples",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "dates",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "lantern",
+          "inCurriculum": null,
+          "regionCount": 5
+        },
+        {
+          "word": "backpack",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "ship model",
+          "inCurriculum": null,
+          "regionCount": 1
+        },
+        {
+          "word": "basket",
+          "inCurriculum": null,
+          "regionCount": 3
+        },
+        {
+          "word": "hat",
+          "inCurriculum": null,
+          "regionCount": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "مختبر الأصوات — غرفة الصف",
+      "stage": 0,
+      "badge": 1,
+      "approved": false,
+      "targets": [
+        {
+          "word": "apple",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "egg",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "pen",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "cup",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "bag",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "cat",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "dog",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "fish",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "hat",
+          "inCurriculum": true,
+          "regionCount": 1
+        },
+        {
+          "word": "sun",
+          "inCurriculum": true,
+          "regionCount": 1
+        }
+      ]
+    }
+  ],
+  "notes": "physicalCandidates are heuristic only: every target must be vetted for imageability, curriculum mastery, and photo placement."
+}

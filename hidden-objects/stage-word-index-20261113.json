@@ -1,0 +1,4893 @@
+{
+  "schema": "mej-stage-target-words-v1",
+  "source": "reviews/admin-levels-catalog.json",
+  "stages": [
+    {
+      "stage": 0,
+      "questionsWithTarget": 140,
+      "uniqueWordCount": 71,
+      "physicalCandidates": 68,
+      "words": [
+        {
+          "word": "moon",
+          "questionIds": [
+            "L0-000"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sun",
+          "questionIds": [
+            "L0-001",
+            "L0-074",
+            "L0-194"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "top",
+          "questionIds": [
+            "L0-002",
+            "L0-071",
+            "L0-191"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "apple",
+          "questionIds": [
+            "L0-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pen",
+          "questionIds": [
+            "L0-004",
+            "L0-044",
+            "L0-164"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ink",
+          "questionIds": [
+            "L0-005"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "net",
+          "questionIds": [
+            "L0-006",
+            "L0-047",
+            "L0-167"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cat",
+          "questionIds": [
+            "L0-007",
+            "L0-020",
+            "L0-140"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "orange",
+          "questionIds": [
+            "L0-008"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "dog",
+          "questionIds": [
+            "L0-009",
+            "L0-065",
+            "L0-185"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "goat",
+          "questionIds": [
+            "L0-010"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "egg",
+          "questionIds": [
+            "L0-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hat",
+          "questionIds": [
+            "L0-012",
+            "L0-022",
+            "L0-142"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "red",
+          "questionIds": [
+            "L0-013",
+            "L0-041",
+            "L0-161"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "bag",
+          "questionIds": [
+            "L0-014",
+            "L0-035",
+            "L0-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fish",
+          "questionIds": [
+            "L0-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "leg",
+          "questionIds": [
+            "L0-016"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "up",
+          "questionIds": [
+            "L0-017"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ship",
+          "questionIds": [
+            "L0-018"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "chair",
+          "questionIds": [
+            "L0-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bat",
+          "questionIds": [
+            "L0-021",
+            "L0-141"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mat",
+          "questionIds": [
+            "L0-023",
+            "L0-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rat",
+          "questionIds": [
+            "L0-024",
+            "L0-144"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pat",
+          "questionIds": [
+            "L0-025",
+            "L0-145"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fan",
+          "questionIds": [
+            "L0-026",
+            "L0-146"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "man",
+          "questionIds": [
+            "L0-027",
+            "L0-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pan",
+          "questionIds": [
+            "L0-028",
+            "L0-148"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "can",
+          "questionIds": [
+            "L0-029",
+            "L0-149"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "ran",
+          "questionIds": [
+            "L0-030",
+            "L0-150"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cap",
+          "questionIds": [
+            "L0-031",
+            "L0-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "map",
+          "questionIds": [
+            "L0-032",
+            "L0-152"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tap",
+          "questionIds": [
+            "L0-033",
+            "L0-153"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "nap",
+          "questionIds": [
+            "L0-034",
+            "L0-154"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tag",
+          "questionIds": [
+            "L0-036",
+            "L0-156"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rag",
+          "questionIds": [
+            "L0-037",
+            "L0-157"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "jam",
+          "questionIds": [
+            "L0-038",
+            "L0-158"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ham",
+          "questionIds": [
+            "L0-039",
+            "L0-159"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bed",
+          "questionIds": [
+            "L0-040",
+            "L0-160"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fed",
+          "questionIds": [
+            "L0-042",
+            "L0-162"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hen",
+          "questionIds": [
+            "L0-043",
+            "L0-163"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ten",
+          "questionIds": [
+            "L0-045",
+            "L0-165"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "men",
+          "questionIds": [
+            "L0-046",
+            "L0-166"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pet",
+          "questionIds": [
+            "L0-048",
+            "L0-168"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "wet",
+          "questionIds": [
+            "L0-049",
+            "L0-169"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pin",
+          "questionIds": [
+            "L0-050",
+            "L0-170"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bin",
+          "questionIds": [
+            "L0-051",
+            "L0-171"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fin",
+          "questionIds": [
+            "L0-052",
+            "L0-172"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tin",
+          "questionIds": [
+            "L0-053",
+            "L0-173"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "win",
+          "questionIds": [
+            "L0-054",
+            "L0-174"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "lip",
+          "questionIds": [
+            "L0-055",
+            "L0-175"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tip",
+          "questionIds": [
+            "L0-056",
+            "L0-176"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hip",
+          "questionIds": [
+            "L0-057",
+            "L0-177"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "dip",
+          "questionIds": [
+            "L0-058",
+            "L0-178"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sit",
+          "questionIds": [
+            "L0-059",
+            "L0-179"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hit",
+          "questionIds": [
+            "L0-060",
+            "L0-180"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fit",
+          "questionIds": [
+            "L0-061",
+            "L0-181"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "big",
+          "questionIds": [
+            "L0-062",
+            "L0-182"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "dig",
+          "questionIds": [
+            "L0-063",
+            "L0-183"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pig",
+          "questionIds": [
+            "L0-064",
+            "L0-184"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "log",
+          "questionIds": [
+            "L0-066",
+            "L0-186"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fog",
+          "questionIds": [
+            "L0-067",
+            "L0-187"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hot",
+          "questionIds": [
+            "L0-068",
+            "L0-188"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pot",
+          "questionIds": [
+            "L0-069",
+            "L0-189"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cot",
+          "questionIds": [
+            "L0-070",
+            "L0-190"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mop",
+          "questionIds": [
+            "L0-072",
+            "L0-192"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hop",
+          "questionIds": [
+            "L0-073",
+            "L0-193"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fun",
+          "questionIds": [
+            "L0-075",
+            "L0-195"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "run",
+          "questionIds": [
+            "L0-076",
+            "L0-196"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cup",
+          "questionIds": [
+            "L0-077",
+            "L0-197"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bug",
+          "questionIds": [
+            "L0-078",
+            "L0-198"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rug",
+          "questionIds": [
+            "L0-079",
+            "L0-199"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 1,
+      "questionsWithTarget": 123,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 33,
+      "words": [
+        {
+          "word": "family",
+          "questionIds": [
+            "L1-000",
+            "L1-001",
+            "L1-002",
+            "L1-136",
+            "L1-197"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mother",
+          "questionIds": [
+            "L1-003",
+            "L1-004",
+            "L1-005",
+            "L1-084",
+            "L1-138",
+            "L1-198"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "father",
+          "questionIds": [
+            "L1-006",
+            "L1-007",
+            "L1-008",
+            "L1-140"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "friend",
+          "questionIds": [
+            "L1-009",
+            "L1-010",
+            "L1-011",
+            "L1-142"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bag",
+          "questionIds": [
+            "L1-012",
+            "L1-013",
+            "L1-014",
+            "L1-102",
+            "L1-144"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "book",
+          "questionIds": [
+            "L1-015",
+            "L1-016",
+            "L1-017",
+            "L1-146"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pen",
+          "questionIds": [
+            "L1-018",
+            "L1-019",
+            "L1-020",
+            "L1-078",
+            "L1-148"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "chair",
+          "questionIds": [
+            "L1-021",
+            "L1-022",
+            "L1-023",
+            "L1-112",
+            "L1-150"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "red",
+          "questionIds": [
+            "L1-024",
+            "L1-025",
+            "L1-026",
+            "L1-092",
+            "L1-152"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "blue",
+          "questionIds": [
+            "L1-027",
+            "L1-028",
+            "L1-029",
+            "L1-154"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "green",
+          "questionIds": [
+            "L1-030",
+            "L1-031",
+            "L1-032",
+            "L1-098",
+            "L1-156"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "one",
+          "questionIds": [
+            "L1-033",
+            "L1-034",
+            "L1-035",
+            "L1-158"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "two",
+          "questionIds": [
+            "L1-036",
+            "L1-037",
+            "L1-038",
+            "L1-160"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "three",
+          "questionIds": [
+            "L1-039",
+            "L1-040",
+            "L1-041",
+            "L1-104",
+            "L1-162"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "head",
+          "questionIds": [
+            "L1-042",
+            "L1-043",
+            "L1-044",
+            "L1-164"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hand",
+          "questionIds": [
+            "L1-045",
+            "L1-046",
+            "L1-047",
+            "L1-166"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "leg",
+          "questionIds": [
+            "L1-048",
+            "L1-049",
+            "L1-050",
+            "L1-110",
+            "L1-168"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hat",
+          "questionIds": [
+            "L1-051",
+            "L1-052",
+            "L1-053",
+            "L1-086",
+            "L1-170"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cat",
+          "questionIds": [
+            "L1-054",
+            "L1-055",
+            "L1-056",
+            "L1-088",
+            "L1-172"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "dog",
+          "questionIds": [
+            "L1-057",
+            "L1-058",
+            "L1-059",
+            "L1-108",
+            "L1-174"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sun",
+          "questionIds": [
+            "L1-060",
+            "L1-061",
+            "L1-062",
+            "L1-072",
+            "L1-176"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fish",
+          "questionIds": [
+            "L1-063",
+            "L1-064",
+            "L1-065",
+            "L1-094",
+            "L1-178"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "school",
+          "questionIds": [
+            "L1-066",
+            "L1-067",
+            "L1-068",
+            "L1-180"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "teacher",
+          "questionIds": [
+            "L1-069",
+            "L1-070",
+            "L1-071",
+            "L1-182"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "apple",
+          "questionIds": [
+            "L1-074"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tiger",
+          "questionIds": [
+            "L1-076"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "nose",
+          "questionIds": [
+            "L1-080"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "insect",
+          "questionIds": [
+            "L1-082"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "kite",
+          "questionIds": [
+            "L1-090"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "orange",
+          "questionIds": [
+            "L1-096"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "shop",
+          "questionIds": [
+            "L1-100"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sh",
+          "questionIds": [
+            "L1-101"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "th",
+          "questionIds": [
+            "L1-105"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "umbrella",
+          "questionIds": [
+            "L1-106"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ch",
+          "questionIds": [
+            "L1-113"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "van",
+          "questionIds": [
+            "L1-114"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "questionsWithTarget": 130,
+      "uniqueWordCount": 33,
+      "physicalCandidates": 27,
+      "words": [
+        {
+          "word": "house",
+          "questionIds": [
+            "L2-000",
+            "L2-001",
+            "L2-002",
+            "L2-106",
+            "L2-157",
+            "L2-197"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "room",
+          "questionIds": [
+            "L2-003",
+            "L2-004",
+            "L2-005",
+            "L2-108",
+            "L2-158",
+            "L2-178"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "kitchen",
+          "questionIds": [
+            "L2-006",
+            "L2-007",
+            "L2-008",
+            "L2-110",
+            "L2-179",
+            "L2-199"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "food",
+          "questionIds": [
+            "L2-009",
+            "L2-010",
+            "L2-011",
+            "L2-112",
+            "L2-160"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "water",
+          "questionIds": [
+            "L2-012",
+            "L2-013",
+            "L2-014",
+            "L2-072",
+            "L2-114",
+            "L2-161",
+            "L2-181"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "apple",
+          "questionIds": [
+            "L2-015",
+            "L2-016",
+            "L2-017",
+            "L2-116",
+            "L2-182"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "juice",
+          "questionIds": [
+            "L2-018",
+            "L2-019",
+            "L2-020",
+            "L2-070",
+            "L2-118",
+            "L2-163"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sunday",
+          "questionIds": [
+            "L2-021",
+            "L2-022",
+            "L2-023",
+            "L2-120",
+            "L2-164",
+            "L2-184"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "monday",
+          "questionIds": [
+            "L2-024",
+            "L2-025",
+            "L2-026",
+            "L2-122",
+            "L2-185"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "morning",
+          "questionIds": [
+            "L2-027",
+            "L2-028",
+            "L2-029",
+            "L2-124",
+            "L2-166"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "night",
+          "questionIds": [
+            "L2-030",
+            "L2-031",
+            "L2-032",
+            "L2-126",
+            "L2-167",
+            "L2-187"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "get up",
+          "questionIds": [
+            "L2-033",
+            "L2-034",
+            "L2-136",
+            "L2-172"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "go to school",
+          "questionIds": [
+            "L2-035",
+            "L2-036",
+            "L2-138",
+            "L2-173",
+            "L2-193"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "read",
+          "questionIds": [
+            "L2-037",
+            "L2-038",
+            "L2-039",
+            "L2-140",
+            "L2-194"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "write",
+          "questionIds": [
+            "L2-040",
+            "L2-041",
+            "L2-042",
+            "L2-142",
+            "L2-175"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "play",
+          "questionIds": [
+            "L2-043",
+            "L2-044",
+            "L2-045",
+            "L2-144",
+            "L2-176",
+            "L2-196"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "happy",
+          "questionIds": [
+            "L2-046",
+            "L2-047",
+            "L2-048",
+            "L2-128",
+            "L2-188"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "sad",
+          "questionIds": [
+            "L2-049",
+            "L2-050",
+            "L2-051",
+            "L2-130",
+            "L2-169"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "big",
+          "questionIds": [
+            "L2-052",
+            "L2-053",
+            "L2-054",
+            "L2-132",
+            "L2-170",
+            "L2-190"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "small",
+          "questionIds": [
+            "L2-055",
+            "L2-056",
+            "L2-057",
+            "L2-134",
+            "L2-191"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "tiger",
+          "questionIds": [
+            "L2-058",
+            "L2-059",
+            "L2-060"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "monkey",
+          "questionIds": [
+            "L2-061",
+            "L2-062",
+            "L2-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "carrot",
+          "questionIds": [
+            "L2-064",
+            "L2-065",
+            "L2-066"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "twelve",
+          "questionIds": [
+            "L2-067",
+            "L2-068",
+            "L2-069"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "box",
+          "questionIds": [
+            "L2-074"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "yellow",
+          "questionIds": [
+            "L2-076"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "zebra",
+          "questionIds": [
+            "L2-078"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "green",
+          "questionIds": [
+            "L2-080"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "ee",
+          "questionIds": [
+            "L2-081"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "book",
+          "questionIds": [
+            "L2-082"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "oo",
+          "questionIds": [
+            "L2-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rain",
+          "questionIds": [
+            "L2-084"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ai",
+          "questionIds": [
+            "L2-085"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "questionsWithTarget": 132,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 30,
+      "words": [
+        {
+          "word": "weather",
+          "questionIds": [
+            "L3-000",
+            "L3-001",
+            "L3-002"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hot",
+          "questionIds": [
+            "L3-003",
+            "L3-004",
+            "L3-005"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cold",
+          "questionIds": [
+            "L3-006",
+            "L3-007",
+            "L3-008"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "park",
+          "questionIds": [
+            "L3-009",
+            "L3-010",
+            "L3-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hospital",
+          "questionIds": [
+            "L3-012",
+            "L3-013",
+            "L3-014"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "shop",
+          "questionIds": [
+            "L3-015",
+            "L3-016",
+            "L3-017"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "doctor",
+          "questionIds": [
+            "L3-018",
+            "L3-019",
+            "L3-020",
+            "L3-098",
+            "L3-137",
+            "L3-153",
+            "L3-185"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "football",
+          "questionIds": [
+            "L3-021",
+            "L3-022",
+            "L3-023",
+            "L3-092",
+            "L3-134",
+            "L3-150",
+            "L3-182",
+            "L3-198"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "swim",
+          "questionIds": [
+            "L3-024",
+            "L3-025",
+            "L3-026",
+            "L3-094",
+            "L3-135",
+            "L3-167",
+            "L3-183"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "walk",
+          "questionIds": [
+            "L3-027",
+            "L3-028",
+            "L3-029"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "breakfast",
+          "questionIds": [
+            "L3-030",
+            "L3-031",
+            "L3-032"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "lunch",
+          "questionIds": [
+            "L3-033",
+            "L3-034",
+            "L3-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "today",
+          "questionIds": [
+            "L3-036",
+            "L3-037",
+            "L3-038"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "yesterday",
+          "questionIds": [
+            "L3-039",
+            "L3-040",
+            "L3-041"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "always",
+          "questionIds": [
+            "L3-042",
+            "L3-043",
+            "L3-044",
+            "L3-112",
+            "L3-144",
+            "L3-176",
+            "L3-192"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "sometimes",
+          "questionIds": [
+            "L3-045",
+            "L3-046",
+            "L3-047"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "between",
+          "questionIds": [
+            "L3-048",
+            "L3-049",
+            "L3-050"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "behind",
+          "questionIds": [
+            "L3-051",
+            "L3-052",
+            "L3-053"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "beautiful",
+          "questionIds": [
+            "L3-054",
+            "L3-055",
+            "L3-056"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "oman",
+          "questionIds": [
+            "L3-057",
+            "L3-058",
+            "L3-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "muscat",
+          "questionIds": [
+            "L3-060",
+            "L3-061",
+            "L3-062"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mountain",
+          "questionIds": [
+            "L3-063",
+            "L3-064",
+            "L3-065"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sea",
+          "questionIds": [
+            "L3-066",
+            "L3-067",
+            "L3-068"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "healthy",
+          "questionIds": [
+            "L3-069",
+            "L3-070",
+            "L3-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "music",
+          "questionIds": [
+            "L3-096",
+            "L3-152",
+            "L3-168"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "nurse",
+          "questionIds": [
+            "L3-100",
+            "L3-138",
+            "L3-170",
+            "L3-186"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "bus",
+          "questionIds": [
+            "L3-102",
+            "L3-155",
+            "L3-171"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "car",
+          "questionIds": [
+            "L3-104",
+            "L3-140",
+            "L3-156",
+            "L3-188"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "train",
+          "questionIds": [
+            "L3-106",
+            "L3-141",
+            "L3-173",
+            "L3-189"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "birthday",
+          "questionIds": [
+            "L3-108",
+            "L3-158",
+            "L3-174"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "january",
+          "questionIds": [
+            "L3-110",
+            "L3-143",
+            "L3-159",
+            "L3-191"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "often",
+          "questionIds": [
+            "L3-114",
+            "L3-161",
+            "L3-177"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "never",
+          "questionIds": [
+            "L3-116",
+            "L3-146",
+            "L3-162",
+            "L3-194"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "classroom",
+          "questionIds": [
+            "L3-118",
+            "L3-147",
+            "L3-179",
+            "L3-195"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hobby",
+          "questionIds": [
+            "L3-120",
+            "L3-164",
+            "L3-180"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pilot",
+          "questionIds": [
+            "L3-122",
+            "L3-149",
+            "L3-165",
+            "L3-197"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "questionsWithTarget": 134,
+      "uniqueWordCount": 36,
+      "physicalCandidates": 30,
+      "words": [
+        {
+          "word": "travel",
+          "questionIds": [
+            "L4-000",
+            "L4-001",
+            "L4-002"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "airport",
+          "questionIds": [
+            "L4-003",
+            "L4-004",
+            "L4-005"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "museum",
+          "questionIds": [
+            "L4-006",
+            "L4-007",
+            "L4-008"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "village",
+          "questionIds": [
+            "L4-009",
+            "L4-010",
+            "L4-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "city",
+          "questionIds": [
+            "L4-012",
+            "L4-013",
+            "L4-014"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "river",
+          "questionIds": [
+            "L4-015",
+            "L4-016",
+            "L4-017",
+            "L4-100",
+            "L4-134",
+            "L4-149",
+            "L4-164",
+            "L4-179",
+            "L4-194"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "environment",
+          "questionIds": [
+            "L4-018",
+            "L4-019",
+            "L4-020",
+            "L4-120"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "recycle",
+          "questionIds": [
+            "L4-021",
+            "L4-022",
+            "L4-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "future",
+          "questionIds": [
+            "L4-024",
+            "L4-025",
+            "L4-026"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "weekend",
+          "questionIds": [
+            "L4-027",
+            "L4-028",
+            "L4-029"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "careful",
+          "questionIds": [
+            "L4-030",
+            "L4-031",
+            "L4-032"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "dangerous",
+          "questionIds": [
+            "L4-033",
+            "L4-034",
+            "L4-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "exciting",
+          "questionIds": [
+            "L4-036",
+            "L4-037",
+            "L4-038"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "expensive",
+          "questionIds": [
+            "L4-039",
+            "L4-040",
+            "L4-041"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cheap",
+          "questionIds": [
+            "L4-042",
+            "L4-043",
+            "L4-044"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "early",
+          "questionIds": [
+            "L4-045",
+            "L4-046",
+            "L4-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "late",
+          "questionIds": [
+            "L4-048",
+            "L4-049",
+            "L4-050"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "visited",
+          "questionIds": [
+            "L4-051",
+            "L4-052",
+            "L4-053",
+            "L4-110",
+            "L4-139",
+            "L4-154",
+            "L4-169",
+            "L4-184",
+            "L4-199"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "played",
+          "questionIds": [
+            "L4-054",
+            "L4-055",
+            "L4-056"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "watched",
+          "questionIds": [
+            "L4-057",
+            "L4-058",
+            "L4-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "because",
+          "questionIds": [
+            "L4-060",
+            "L4-061",
+            "L4-062"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "before",
+          "questionIds": [
+            "L4-063",
+            "L4-064",
+            "L4-065"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "after",
+          "questionIds": [
+            "L4-066",
+            "L4-067",
+            "L4-068"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "usually",
+          "questionIds": [
+            "L4-069",
+            "L4-070",
+            "L4-071"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "maths",
+          "questionIds": [
+            "L4-092",
+            "L4-130",
+            "L4-145",
+            "L4-160",
+            "L4-175",
+            "L4-190"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "science",
+          "questionIds": [
+            "L4-094",
+            "L4-131",
+            "L4-146",
+            "L4-161",
+            "L4-176",
+            "L4-191"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mountain",
+          "questionIds": [
+            "L4-096"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "desert",
+          "questionIds": [
+            "L4-098",
+            "L4-133",
+            "L4-148",
+            "L4-163",
+            "L4-178",
+            "L4-193"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "island",
+          "questionIds": [
+            "L4-102"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sandwich",
+          "questionIds": [
+            "L4-104",
+            "L4-136",
+            "L4-151",
+            "L4-166",
+            "L4-181",
+            "L4-196"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "salad",
+          "questionIds": [
+            "L4-106",
+            "L4-137",
+            "L4-152",
+            "L4-167",
+            "L4-182",
+            "L4-197"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "yesterday",
+          "questionIds": [
+            "L4-108"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "higher",
+          "questionIds": [
+            "L4-112",
+            "L4-140",
+            "L4-155",
+            "L4-170",
+            "L4-185"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "must",
+          "questionIds": [
+            "L4-114"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "cooking",
+          "questionIds": [
+            "L4-116",
+            "L4-142",
+            "L4-157",
+            "L4-172",
+            "L4-187"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "recycling",
+          "questionIds": [
+            "L4-118",
+            "L4-143",
+            "L4-158",
+            "L4-173",
+            "L4-188"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "questionsWithTarget": 134,
+      "uniqueWordCount": 33,
+      "physicalCandidates": 25,
+      "words": [
+        {
+          "word": "project",
+          "questionIds": [
+            "L5-000",
+            "L5-001",
+            "L5-002",
+            "L5-112",
+            "L5-142",
+            "L5-174",
+            "L5-190"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "information",
+          "questionIds": [
+            "L5-003",
+            "L5-004",
+            "L5-005"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "technology",
+          "questionIds": [
+            "L5-006",
+            "L5-007",
+            "L5-008"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "community",
+          "questionIds": [
+            "L5-009",
+            "L5-010",
+            "L5-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "protect",
+          "questionIds": [
+            "L5-012",
+            "L5-013",
+            "L5-014",
+            "L5-114",
+            "L5-159",
+            "L5-175"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "energy",
+          "questionIds": [
+            "L5-015",
+            "L5-016",
+            "L5-017"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "exercise",
+          "questionIds": [
+            "L5-018",
+            "L5-019",
+            "L5-020"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "advice",
+          "questionIds": [
+            "L5-021",
+            "L5-022",
+            "L5-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "journey",
+          "questionIds": [
+            "L5-024",
+            "L5-025",
+            "L5-026"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "direction",
+          "questionIds": [
+            "L5-027",
+            "L5-028",
+            "L5-029"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "compare",
+          "questionIds": [
+            "L5-030",
+            "L5-031",
+            "L5-032"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "different",
+          "questionIds": [
+            "L5-033",
+            "L5-034",
+            "L5-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "important",
+          "questionIds": [
+            "L5-036",
+            "L5-037",
+            "L5-038"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "possible",
+          "questionIds": [
+            "L5-039",
+            "L5-040",
+            "L5-041"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tomorrow",
+          "questionIds": [
+            "L5-042",
+            "L5-043",
+            "L5-044"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "should",
+          "questionIds": [
+            "L5-045",
+            "L5-046",
+            "L5-047",
+            "L5-106",
+            "L5-139",
+            "L5-171",
+            "L5-187"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "must",
+          "questionIds": [
+            "L5-048",
+            "L5-049",
+            "L5-050"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "might",
+          "questionIds": [
+            "L5-051",
+            "L5-052",
+            "L5-053"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "taller",
+          "questionIds": [
+            "L5-054",
+            "L5-055",
+            "L5-056",
+            "L5-122",
+            "L5-147",
+            "L5-163",
+            "L5-195"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "better",
+          "questionIds": [
+            "L5-057",
+            "L5-058",
+            "L5-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "interesting",
+          "questionIds": [
+            "L5-060",
+            "L5-061",
+            "L5-062",
+            "L5-120",
+            "L5-162",
+            "L5-178"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "carefully",
+          "questionIds": [
+            "L5-063",
+            "L5-064",
+            "L5-065",
+            "L5-116",
+            "L5-144",
+            "L5-160",
+            "L5-192"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "quickly",
+          "questionIds": [
+            "L5-066",
+            "L5-067",
+            "L5-068",
+            "L5-118",
+            "L5-145",
+            "L5-177",
+            "L5-193"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "prepare",
+          "questionIds": [
+            "L5-069",
+            "L5-070",
+            "L5-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "computer",
+          "questionIds": [
+            "L5-092",
+            "L5-132",
+            "L5-148",
+            "L5-180",
+            "L5-196"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tablet",
+          "questionIds": [
+            "L5-094",
+            "L5-133",
+            "L5-165",
+            "L5-181"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "email",
+          "questionIds": [
+            "L5-096",
+            "L5-150",
+            "L5-166",
+            "L5-198"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "planet",
+          "questionIds": [
+            "L5-098",
+            "L5-135",
+            "L5-151",
+            "L5-183",
+            "L5-199"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rocket",
+          "questionIds": [
+            "L5-100",
+            "L5-136",
+            "L5-168",
+            "L5-184"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "moon",
+          "questionIds": [
+            "L5-102",
+            "L5-153",
+            "L5-169"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "will",
+          "questionIds": [
+            "L5-104",
+            "L5-138",
+            "L5-154",
+            "L5-186"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "money",
+          "questionIds": [
+            "L5-108",
+            "L5-156",
+            "L5-172"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "shop",
+          "questionIds": [
+            "L5-110",
+            "L5-141",
+            "L5-157",
+            "L5-189"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 6,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39,
+      "words": [
+        {
+          "word": "hobby",
+          "questionIds": [
+            "L6-000",
+            "L6-001",
+            "L6-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "skating",
+          "questionIds": [
+            "L6-004",
+            "L6-005",
+            "L6-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cycling",
+          "questionIds": [
+            "L6-008",
+            "L6-009",
+            "L6-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "swimming",
+          "questionIds": [
+            "L6-012",
+            "L6-013",
+            "L6-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "painting",
+          "questionIds": [
+            "L6-016",
+            "L6-017",
+            "L6-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "magazine",
+          "questionIds": [
+            "L6-020",
+            "L6-021",
+            "L6-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "competition",
+          "questionIds": [
+            "L6-024",
+            "L6-025",
+            "L6-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "athlete",
+          "questionIds": [
+            "L6-028",
+            "L6-029",
+            "L6-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "stadium",
+          "questionIds": [
+            "L6-032",
+            "L6-033",
+            "L6-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "exercise",
+          "questionIds": [
+            "L6-036",
+            "L6-037",
+            "L6-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "website",
+          "questionIds": [
+            "L6-040",
+            "L6-041",
+            "L6-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "keyboard",
+          "questionIds": [
+            "L6-044",
+            "L6-045",
+            "L6-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "screen",
+          "questionIds": [
+            "L6-048",
+            "L6-049",
+            "L6-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "device",
+          "questionIds": [
+            "L6-052",
+            "L6-053",
+            "L6-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "message",
+          "questionIds": [
+            "L6-056",
+            "L6-057",
+            "L6-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "search",
+          "questionIds": [
+            "L6-060",
+            "L6-061",
+            "L6-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "information",
+          "questionIds": [
+            "L6-064",
+            "L6-065",
+            "L6-067"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "internet",
+          "questionIds": [
+            "L6-068",
+            "L6-069",
+            "L6-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "password",
+          "questionIds": [
+            "L6-072",
+            "L6-073",
+            "L6-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "online",
+          "questionIds": [
+            "L6-076",
+            "L6-077",
+            "L6-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "museum",
+          "questionIds": [
+            "L6-080",
+            "L6-081",
+            "L6-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "library",
+          "questionIds": [
+            "L6-084",
+            "L6-085",
+            "L6-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mosque",
+          "questionIds": [
+            "L6-088",
+            "L6-089",
+            "L6-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "market",
+          "questionIds": [
+            "L6-092",
+            "L6-093",
+            "L6-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "castle",
+          "questionIds": [
+            "L6-096",
+            "L6-097",
+            "L6-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "village",
+          "questionIds": [
+            "L6-100",
+            "L6-101",
+            "L6-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "city",
+          "questionIds": [
+            "L6-104",
+            "L6-105",
+            "L6-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "coast",
+          "questionIds": [
+            "L6-108",
+            "L6-109",
+            "L6-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mountain",
+          "questionIds": [
+            "L6-112",
+            "L6-113",
+            "L6-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "desert",
+          "questionIds": [
+            "L6-116",
+            "L6-117",
+            "L6-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "home",
+          "questionIds": [
+            "L6-120",
+            "L6-121",
+            "L6-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "roof",
+          "questionIds": [
+            "L6-124",
+            "L6-125",
+            "L6-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "apartment",
+          "questionIds": [
+            "L6-128",
+            "L6-129",
+            "L6-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "furniture",
+          "questionIds": [
+            "L6-132",
+            "L6-133",
+            "L6-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "wardrobe",
+          "questionIds": [
+            "L6-136",
+            "L6-137",
+            "L6-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fashionable",
+          "questionIds": [
+            "L6-140",
+            "L6-141",
+            "L6-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fabric",
+          "questionIds": [
+            "L6-144",
+            "L6-145",
+            "L6-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "expedition",
+          "questionIds": [
+            "L6-148",
+            "L6-149",
+            "L6-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "campsite",
+          "questionIds": [
+            "L6-152",
+            "L6-153",
+            "L6-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "clothes",
+          "questionIds": [
+            "L6-156",
+            "L6-157",
+            "L6-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 7,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 40,
+      "words": [
+        {
+          "word": "entertainment",
+          "questionIds": [
+            "L7-000",
+            "L7-001",
+            "L7-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "concert",
+          "questionIds": [
+            "L7-004",
+            "L7-005",
+            "L7-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "audience",
+          "questionIds": [
+            "L7-008",
+            "L7-009",
+            "L7-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "performance",
+          "questionIds": [
+            "L7-012",
+            "L7-013",
+            "L7-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "actor",
+          "questionIds": [
+            "L7-016",
+            "L7-017",
+            "L7-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "stage",
+          "questionIds": [
+            "L7-020",
+            "L7-021",
+            "L7-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "musician",
+          "questionIds": [
+            "L7-024",
+            "L7-025",
+            "L7-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "instrument",
+          "questionIds": [
+            "L7-028",
+            "L7-029",
+            "L7-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cartoon",
+          "questionIds": [
+            "L7-032",
+            "L7-033",
+            "L7-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "talent",
+          "questionIds": [
+            "L7-036",
+            "L7-037",
+            "L7-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "wildlife",
+          "questionIds": [
+            "L7-040",
+            "L7-041",
+            "L7-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "habitat",
+          "questionIds": [
+            "L7-044",
+            "L7-045",
+            "L7-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "predator",
+          "questionIds": [
+            "L7-048",
+            "L7-049",
+            "L7-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "species",
+          "questionIds": [
+            "L7-052",
+            "L7-053",
+            "L7-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "endangered",
+          "questionIds": [
+            "L7-056",
+            "L7-057",
+            "L7-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "conservation",
+          "questionIds": [
+            "L7-060",
+            "L7-061",
+            "L7-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reptile",
+          "questionIds": [
+            "L7-064",
+            "L7-065",
+            "L7-067"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "mammal",
+          "questionIds": [
+            "L7-068",
+            "L7-069",
+            "L7-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "feathers",
+          "questionIds": [
+            "L7-072",
+            "L7-073",
+            "L7-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "forest",
+          "questionIds": [
+            "L7-076",
+            "L7-077",
+            "L7-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "passport",
+          "questionIds": [
+            "L7-080",
+            "L7-081",
+            "L7-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "luggage",
+          "questionIds": [
+            "L7-084",
+            "L7-085",
+            "L7-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "timetable",
+          "questionIds": [
+            "L7-088",
+            "L7-089",
+            "L7-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ticket",
+          "questionIds": [
+            "L7-092",
+            "L7-093",
+            "L7-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "destination",
+          "questionIds": [
+            "L7-096",
+            "L7-097",
+            "L7-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "departure",
+          "questionIds": [
+            "L7-100",
+            "L7-101",
+            "L7-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "arrival",
+          "questionIds": [
+            "L7-104",
+            "L7-105",
+            "L7-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "airport",
+          "questionIds": [
+            "L7-108",
+            "L7-109",
+            "L7-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "transport",
+          "questionIds": [
+            "L7-112",
+            "L7-113",
+            "L7-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "accommodation",
+          "questionIds": [
+            "L7-116",
+            "L7-117",
+            "L7-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "traffic",
+          "questionIds": [
+            "L7-120",
+            "L7-121",
+            "L7-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "skyscraper",
+          "questionIds": [
+            "L7-124",
+            "L7-125",
+            "L7-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pavement",
+          "questionIds": [
+            "L7-128",
+            "L7-129",
+            "L7-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "neighbourhood",
+          "questionIds": [
+            "L7-132",
+            "L7-133",
+            "L7-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "citizen",
+          "questionIds": [
+            "L7-136",
+            "L7-137",
+            "L7-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "prediction",
+          "questionIds": [
+            "L7-140",
+            "L7-141",
+            "L7-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "career",
+          "questionIds": [
+            "L7-144",
+            "L7-145",
+            "L7-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "invention",
+          "questionIds": [
+            "L7-148",
+            "L7-149",
+            "L7-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "novel",
+          "questionIds": [
+            "L7-152",
+            "L7-153",
+            "L7-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "chapter",
+          "questionIds": [
+            "L7-156",
+            "L7-157",
+            "L7-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 8,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39,
+      "words": [
+        {
+          "word": "planet",
+          "questionIds": [
+            "L8-000",
+            "L8-001",
+            "L8-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "environment",
+          "questionIds": [
+            "L8-004",
+            "L8-005",
+            "L8-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pollution",
+          "questionIds": [
+            "L8-008",
+            "L8-009",
+            "L8-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "recycle",
+          "questionIds": [
+            "L8-012",
+            "L8-013",
+            "L8-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reduce",
+          "questionIds": [
+            "L8-016",
+            "L8-017",
+            "L8-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reuse",
+          "questionIds": [
+            "L8-020",
+            "L8-021",
+            "L8-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "waste",
+          "questionIds": [
+            "L8-024",
+            "L8-025",
+            "L8-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "renewable",
+          "questionIds": [
+            "L8-028",
+            "L8-029",
+            "L8-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "wildlife",
+          "questionIds": [
+            "L8-032",
+            "L8-033",
+            "L8-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "climate",
+          "questionIds": [
+            "L8-036",
+            "L8-037",
+            "L8-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cyclone",
+          "questionIds": [
+            "L8-040",
+            "L8-041",
+            "L8-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "flood",
+          "questionIds": [
+            "L8-044",
+            "L8-045",
+            "L8-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "earthquake",
+          "questionIds": [
+            "L8-048",
+            "L8-049",
+            "L8-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "drought",
+          "questionIds": [
+            "L8-052",
+            "L8-053",
+            "L8-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "protect",
+          "questionIds": [
+            "L8-056",
+            "L8-057",
+            "L8-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "conserve",
+          "questionIds": [
+            "L8-060",
+            "L8-061",
+            "L8-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "adventure",
+          "questionIds": [
+            "L8-064",
+            "L8-065",
+            "L8-067"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "climbing",
+          "questionIds": [
+            "L8-068",
+            "L8-069",
+            "L8-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "surfing",
+          "questionIds": [
+            "L8-072",
+            "L8-073",
+            "L8-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "rafting",
+          "questionIds": [
+            "L8-076",
+            "L8-077",
+            "L8-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sandboarding",
+          "questionIds": [
+            "L8-080",
+            "L8-081",
+            "L8-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "equipment",
+          "questionIds": [
+            "L8-084",
+            "L8-085",
+            "L8-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "helmet",
+          "questionIds": [
+            "L8-088",
+            "L8-089",
+            "L8-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "safety",
+          "questionIds": [
+            "L8-092",
+            "L8-093",
+            "L8-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "challenge",
+          "questionIds": [
+            "L8-096",
+            "L8-097",
+            "L8-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "training",
+          "questionIds": [
+            "L8-100",
+            "L8-101",
+            "L8-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "afford",
+          "questionIds": [
+            "L8-104",
+            "L8-105",
+            "L8-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "budget",
+          "questionIds": [
+            "L8-108",
+            "L8-109",
+            "L8-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "purchase",
+          "questionIds": [
+            "L8-112",
+            "L8-113",
+            "L8-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "discount",
+          "questionIds": [
+            "L8-116",
+            "L8-117",
+            "L8-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "podcast",
+          "questionIds": [
+            "L8-120",
+            "L8-121",
+            "L8-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "vlogger",
+          "questionIds": [
+            "L8-124",
+            "L8-125",
+            "L8-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "receive",
+          "questionIds": [
+            "L8-128",
+            "L8-129",
+            "L8-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "promise",
+          "questionIds": [
+            "L8-132",
+            "L8-133",
+            "L8-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "communication",
+          "questionIds": [
+            "L8-136",
+            "L8-137",
+            "L8-139"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "inventor",
+          "questionIds": [
+            "L8-140",
+            "L8-141",
+            "L8-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "invention",
+          "questionIds": [
+            "L8-144",
+            "L8-145",
+            "L8-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "discovery",
+          "questionIds": [
+            "L8-148",
+            "L8-149",
+            "L8-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "celebration",
+          "questionIds": [
+            "L8-152",
+            "L8-153",
+            "L8-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "experiment",
+          "questionIds": [
+            "L8-156",
+            "L8-157",
+            "L8-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 9,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 17,
+      "words": [
+        {
+          "word": "identity",
+          "questionIds": [
+            "L9-000",
+            "L9-001",
+            "L9-003"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "personality",
+          "questionIds": [
+            "L9-004",
+            "L9-005",
+            "L9-007"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "confident",
+          "questionIds": [
+            "L9-008",
+            "L9-009",
+            "L9-011"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "creative",
+          "questionIds": [
+            "L9-012",
+            "L9-013",
+            "L9-015"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "generous",
+          "questionIds": [
+            "L9-016",
+            "L9-017",
+            "L9-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ambitious",
+          "questionIds": [
+            "L9-020",
+            "L9-021",
+            "L9-023"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "independent",
+          "questionIds": [
+            "L9-024",
+            "L9-025",
+            "L9-027"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "honest",
+          "questionIds": [
+            "L9-028",
+            "L9-029",
+            "L9-031"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "reliable",
+          "questionIds": [
+            "L9-032",
+            "L9-033",
+            "L9-035"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "curious",
+          "questionIds": [
+            "L9-036",
+            "L9-037",
+            "L9-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "habit",
+          "questionIds": [
+            "L9-040",
+            "L9-041",
+            "L9-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "routine",
+          "questionIds": [
+            "L9-044",
+            "L9-045",
+            "L9-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "frequency",
+          "questionIds": [
+            "L9-048",
+            "L9-049",
+            "L9-051"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "interests",
+          "questionIds": [
+            "L9-052",
+            "L9-053",
+            "L9-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "profile",
+          "questionIds": [
+            "L9-056",
+            "L9-057",
+            "L9-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "connection",
+          "questionIds": [
+            "L9-060",
+            "L9-061",
+            "L9-063"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "communication",
+          "questionIds": [
+            "L9-064",
+            "L9-065",
+            "L9-067"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "language",
+          "questionIds": [
+            "L9-068",
+            "L9-069",
+            "L9-071"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "translate",
+          "questionIds": [
+            "L9-072",
+            "L9-073",
+            "L9-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pronounce",
+          "questionIds": [
+            "L9-076",
+            "L9-077",
+            "L9-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "expression",
+          "questionIds": [
+            "L9-080",
+            "L9-081",
+            "L9-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "conversation",
+          "questionIds": [
+            "L9-084",
+            "L9-085",
+            "L9-087"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "explain",
+          "questionIds": [
+            "L9-088",
+            "L9-089",
+            "L9-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "meaning",
+          "questionIds": [
+            "L9-092",
+            "L9-093",
+            "L9-095"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "understand",
+          "questionIds": [
+            "L9-096",
+            "L9-097",
+            "L9-099"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "technology",
+          "questionIds": [
+            "L9-100",
+            "L9-101",
+            "L9-103"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "artificial intelligence",
+          "questionIds": [
+            "L9-104",
+            "L9-105",
+            "L9-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "recommendation",
+          "questionIds": [
+            "L9-108",
+            "L9-109",
+            "L9-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "digital",
+          "questionIds": [
+            "L9-112",
+            "L9-113",
+            "L9-115"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "virtual",
+          "questionIds": [
+            "L9-116",
+            "L9-117",
+            "L9-119"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "device",
+          "questionIds": [
+            "L9-120",
+            "L9-121",
+            "L9-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "privacy",
+          "questionIds": [
+            "L9-124",
+            "L9-125",
+            "L9-127"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "innovation",
+          "questionIds": [
+            "L9-128",
+            "L9-129",
+            "L9-131"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "application",
+          "questionIds": [
+            "L9-132",
+            "L9-133",
+            "L9-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "prediction",
+          "questionIds": [
+            "L9-136",
+            "L9-137",
+            "L9-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "solution",
+          "questionIds": [
+            "L9-140",
+            "L9-141",
+            "L9-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "opinion",
+          "questionIds": [
+            "L9-144",
+            "L9-145",
+            "L9-147"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "suggestion",
+          "questionIds": [
+            "L9-148",
+            "L9-149",
+            "L9-151"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "entertainment",
+          "questionIds": [
+            "L9-152",
+            "L9-153",
+            "L9-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "future",
+          "questionIds": [
+            "L9-156",
+            "L9-157",
+            "L9-159"
+          ],
+          "physicalCandidate": false
+        }
+      ]
+    },
+    {
+      "stage": 10,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39,
+      "words": [
+        {
+          "word": "media",
+          "questionIds": [
+            "L10-000",
+            "L10-001",
+            "L10-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "headline",
+          "questionIds": [
+            "L10-004",
+            "L10-005",
+            "L10-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "article",
+          "questionIds": [
+            "L10-008",
+            "L10-009",
+            "L10-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "source",
+          "questionIds": [
+            "L10-012",
+            "L10-013",
+            "L10-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reliable",
+          "questionIds": [
+            "L10-016",
+            "L10-017",
+            "L10-019"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "advertisement",
+          "questionIds": [
+            "L10-020",
+            "L10-021",
+            "L10-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "blog",
+          "questionIds": [
+            "L10-024",
+            "L10-025",
+            "L10-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reporter",
+          "questionIds": [
+            "L10-028",
+            "L10-029",
+            "L10-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "interview",
+          "questionIds": [
+            "L10-032",
+            "L10-033",
+            "L10-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "broadcast",
+          "questionIds": [
+            "L10-036",
+            "L10-037",
+            "L10-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "climate",
+          "questionIds": [
+            "L10-040",
+            "L10-041",
+            "L10-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "emissions",
+          "questionIds": [
+            "L10-044",
+            "L10-045",
+            "L10-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "global warming",
+          "questionIds": [
+            "L10-048",
+            "L10-049",
+            "L10-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "drought",
+          "questionIds": [
+            "L10-052",
+            "L10-053",
+            "L10-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "temperature",
+          "questionIds": [
+            "L10-056",
+            "L10-057",
+            "L10-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pollution",
+          "questionIds": [
+            "L10-060",
+            "L10-061",
+            "L10-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "conservation",
+          "questionIds": [
+            "L10-064",
+            "L10-065",
+            "L10-067"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "carbon",
+          "questionIds": [
+            "L10-068",
+            "L10-069",
+            "L10-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "sustainable",
+          "questionIds": [
+            "L10-072",
+            "L10-073",
+            "L10-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "impact",
+          "questionIds": [
+            "L10-076",
+            "L10-077",
+            "L10-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "renewable energy",
+          "questionIds": [
+            "L10-080",
+            "L10-081",
+            "L10-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "solar power",
+          "questionIds": [
+            "L10-084",
+            "L10-085",
+            "L10-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "wind power",
+          "questionIds": [
+            "L10-088",
+            "L10-089",
+            "L10-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "turbine",
+          "questionIds": [
+            "L10-092",
+            "L10-093",
+            "L10-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "electricity",
+          "questionIds": [
+            "L10-096",
+            "L10-097",
+            "L10-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "resource",
+          "questionIds": [
+            "L10-100",
+            "L10-101",
+            "L10-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "efficient",
+          "questionIds": [
+            "L10-104",
+            "L10-105",
+            "L10-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "generation",
+          "questionIds": [
+            "L10-108",
+            "L10-109",
+            "L10-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "energy",
+          "questionIds": [
+            "L10-112",
+            "L10-113",
+            "L10-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "environment",
+          "questionIds": [
+            "L10-116",
+            "L10-117",
+            "L10-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "narrator",
+          "questionIds": [
+            "L10-120",
+            "L10-121",
+            "L10-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "character",
+          "questionIds": [
+            "L10-124",
+            "L10-125",
+            "L10-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "plot",
+          "questionIds": [
+            "L10-128",
+            "L10-129",
+            "L10-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "fable",
+          "questionIds": [
+            "L10-132",
+            "L10-133",
+            "L10-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "symptom",
+          "questionIds": [
+            "L10-136",
+            "L10-137",
+            "L10-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "nutrition",
+          "questionIds": [
+            "L10-140",
+            "L10-141",
+            "L10-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "vehicle",
+          "questionIds": [
+            "L10-144",
+            "L10-145",
+            "L10-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "entrepreneur",
+          "questionIds": [
+            "L10-148",
+            "L10-149",
+            "L10-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "investment",
+          "questionIds": [
+            "L10-152",
+            "L10-153",
+            "L10-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "entrepreneurship",
+          "questionIds": [
+            "L10-156",
+            "L10-157",
+            "L10-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 11,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 38,
+      "words": [
+        {
+          "word": "communication",
+          "questionIds": [
+            "L11-000",
+            "L11-001",
+            "L11-003"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "gesture",
+          "questionIds": [
+            "L11-004",
+            "L11-005",
+            "L11-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "body language",
+          "questionIds": [
+            "L11-008",
+            "L11-009",
+            "L11-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "expression",
+          "questionIds": [
+            "L11-012",
+            "L11-013",
+            "L11-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "misunderstanding",
+          "questionIds": [
+            "L11-016",
+            "L11-017",
+            "L11-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "interaction",
+          "questionIds": [
+            "L11-020",
+            "L11-021",
+            "L11-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "network",
+          "questionIds": [
+            "L11-024",
+            "L11-025",
+            "L11-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "feedback",
+          "questionIds": [
+            "L11-028",
+            "L11-029",
+            "L11-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "effective",
+          "questionIds": [
+            "L11-032",
+            "L11-033",
+            "L11-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "nonverbal",
+          "questionIds": [
+            "L11-036",
+            "L11-037",
+            "L11-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "teenager",
+          "questionIds": [
+            "L11-040",
+            "L11-041",
+            "L11-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "adolescence",
+          "questionIds": [
+            "L11-044",
+            "L11-045",
+            "L11-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "peer",
+          "questionIds": [
+            "L11-048",
+            "L11-049",
+            "L11-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "responsibility",
+          "questionIds": [
+            "L11-052",
+            "L11-053",
+            "L11-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "independence",
+          "questionIds": [
+            "L11-056",
+            "L11-057",
+            "L11-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "influence",
+          "questionIds": [
+            "L11-060",
+            "L11-061",
+            "L11-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "friendship",
+          "questionIds": [
+            "L11-064",
+            "L11-065",
+            "L11-067"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "respect",
+          "questionIds": [
+            "L11-068",
+            "L11-069",
+            "L11-071"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "pressure",
+          "questionIds": [
+            "L11-072",
+            "L11-073",
+            "L11-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "generation",
+          "questionIds": [
+            "L11-076",
+            "L11-077",
+            "L11-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tourism",
+          "questionIds": [
+            "L11-080",
+            "L11-081",
+            "L11-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tourist",
+          "questionIds": [
+            "L11-084",
+            "L11-085",
+            "L11-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "destination",
+          "questionIds": [
+            "L11-088",
+            "L11-089",
+            "L11-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "itinerary",
+          "questionIds": [
+            "L11-092",
+            "L11-093",
+            "L11-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "excursion",
+          "questionIds": [
+            "L11-096",
+            "L11-097",
+            "L11-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "accommodation",
+          "questionIds": [
+            "L11-100",
+            "L11-101",
+            "L11-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "landmark",
+          "questionIds": [
+            "L11-104",
+            "L11-105",
+            "L11-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "guidebook",
+          "questionIds": [
+            "L11-108",
+            "L11-109",
+            "L11-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hospitality",
+          "questionIds": [
+            "L11-112",
+            "L11-113",
+            "L11-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "attraction",
+          "questionIds": [
+            "L11-116",
+            "L11-117",
+            "L11-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "achievement",
+          "questionIds": [
+            "L11-120",
+            "L11-121",
+            "L11-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "inspiration",
+          "questionIds": [
+            "L11-124",
+            "L11-125",
+            "L11-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "volunteer",
+          "questionIds": [
+            "L11-128",
+            "L11-129",
+            "L11-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "social network",
+          "questionIds": [
+            "L11-132",
+            "L11-133",
+            "L11-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "record",
+          "questionIds": [
+            "L11-136",
+            "L11-137",
+            "L11-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "champion",
+          "questionIds": [
+            "L11-140",
+            "L11-141",
+            "L11-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "festival",
+          "questionIds": [
+            "L11-144",
+            "L11-145",
+            "L11-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "connection",
+          "questionIds": [
+            "L11-148",
+            "L11-149",
+            "L11-151"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "teamwork",
+          "questionIds": [
+            "L11-152",
+            "L11-153",
+            "L11-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "ambition",
+          "questionIds": [
+            "L11-156",
+            "L11-157",
+            "L11-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    },
+    {
+      "stage": 12,
+      "questionsWithTarget": 120,
+      "uniqueWordCount": 40,
+      "physicalCandidates": 39,
+      "words": [
+        {
+          "word": "retail",
+          "questionIds": [
+            "L12-000",
+            "L12-001",
+            "L12-003"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "consumer",
+          "questionIds": [
+            "L12-004",
+            "L12-005",
+            "L12-007"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "brand",
+          "questionIds": [
+            "L12-008",
+            "L12-009",
+            "L12-011"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "purchase",
+          "questionIds": [
+            "L12-012",
+            "L12-013",
+            "L12-015"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "advertising",
+          "questionIds": [
+            "L12-016",
+            "L12-017",
+            "L12-019"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "persuasion",
+          "questionIds": [
+            "L12-020",
+            "L12-021",
+            "L12-023"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "misleading",
+          "questionIds": [
+            "L12-024",
+            "L12-025",
+            "L12-027"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "exchange",
+          "questionIds": [
+            "L12-028",
+            "L12-029",
+            "L12-031"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "refund",
+          "questionIds": [
+            "L12-032",
+            "L12-033",
+            "L12-035"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "quality",
+          "questionIds": [
+            "L12-036",
+            "L12-037",
+            "L12-039"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "university",
+          "questionIds": [
+            "L12-040",
+            "L12-041",
+            "L12-043"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "scholarship",
+          "questionIds": [
+            "L12-044",
+            "L12-045",
+            "L12-047"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "tuition",
+          "questionIds": [
+            "L12-048",
+            "L12-049",
+            "L12-051"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "orientation",
+          "questionIds": [
+            "L12-052",
+            "L12-053",
+            "L12-055"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "application",
+          "questionIds": [
+            "L12-056",
+            "L12-057",
+            "L12-059"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "deadline",
+          "questionIds": [
+            "L12-060",
+            "L12-061",
+            "L12-063"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "qualification",
+          "questionIds": [
+            "L12-064",
+            "L12-065",
+            "L12-067"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "independent",
+          "questionIds": [
+            "L12-068",
+            "L12-069",
+            "L12-071"
+          ],
+          "physicalCandidate": false
+        },
+        {
+          "word": "accommodation",
+          "questionIds": [
+            "L12-072",
+            "L12-073",
+            "L12-075"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "research",
+          "questionIds": [
+            "L12-076",
+            "L12-077",
+            "L12-079"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "hospitality",
+          "questionIds": [
+            "L12-080",
+            "L12-081",
+            "L12-083"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reservation",
+          "questionIds": [
+            "L12-084",
+            "L12-085",
+            "L12-087"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "reception",
+          "questionIds": [
+            "L12-088",
+            "L12-089",
+            "L12-091"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "customer service",
+          "questionIds": [
+            "L12-092",
+            "L12-093",
+            "L12-095"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "destination",
+          "questionIds": [
+            "L12-096",
+            "L12-097",
+            "L12-099"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "itinerary",
+          "questionIds": [
+            "L12-100",
+            "L12-101",
+            "L12-103"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "restaurant",
+          "questionIds": [
+            "L12-104",
+            "L12-105",
+            "L12-107"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "recommendation",
+          "questionIds": [
+            "L12-108",
+            "L12-109",
+            "L12-111"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "cultural",
+          "questionIds": [
+            "L12-112",
+            "L12-113",
+            "L12-115"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "experience",
+          "questionIds": [
+            "L12-116",
+            "L12-117",
+            "L12-119"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "journalist",
+          "questionIds": [
+            "L12-120",
+            "L12-121",
+            "L12-123"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "interview",
+          "questionIds": [
+            "L12-124",
+            "L12-125",
+            "L12-127"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "career",
+          "questionIds": [
+            "L12-128",
+            "L12-129",
+            "L12-131"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "applicant",
+          "questionIds": [
+            "L12-132",
+            "L12-133",
+            "L12-135"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "workplace",
+          "questionIds": [
+            "L12-136",
+            "L12-137",
+            "L12-139"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "emergency",
+          "questionIds": [
+            "L12-140",
+            "L12-141",
+            "L12-143"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "citizenship",
+          "questionIds": [
+            "L12-144",
+            "L12-145",
+            "L12-147"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "volunteer",
+          "questionIds": [
+            "L12-148",
+            "L12-149",
+            "L12-151"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "community",
+          "questionIds": [
+            "L12-152",
+            "L12-153",
+            "L12-155"
+          ],
+          "physicalCandidate": true
+        },
+        {
+          "word": "responsibility",
+          "questionIds": [
+            "L12-156",
+            "L12-157",
+            "L12-159"
+          ],
+          "physicalCandidate": true
+        }
+      ]
+    }
+  ]
+}

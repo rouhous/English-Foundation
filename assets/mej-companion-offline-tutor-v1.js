@@ -88,7 +88,15 @@ function answer(input){
 let lastAnswer='';
 function speak(message){
  if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;
- try{speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(message.slice(0,350));utter.lang=/[\u0600-\u06ff]/.test(message)?'ar-OM':'en-US';utter.rate=.9;utter.volume=1;speechSynthesis.speak(utter)}catch(_){}
+ try{
+   const lang=/[\u0600-\u06ff]/.test(message)?'ar':'en';
+   const local=(speechSynthesis.getVoices()||[]).find(v=>v.localService===true&&v.lang.toLowerCase().startsWith(lang));
+   if(!local)return; // Never depend on a provider-hosted voice or billable quota.
+   speechSynthesis.cancel();
+   const utter=new SpeechSynthesisUtterance(message.slice(0,350));
+   utter.voice=local;utter.lang=local.lang;utter.rate=.9;utter.volume=1;
+   speechSynthesis.speak(utter);
+ }catch(_){}
 }
 function close(){
  try{recognition?.abort()}catch(_){}
@@ -106,7 +114,7 @@ function open(){
  '<div class="mej-tutor-response" role="status" aria-live="polite">اسألني عن معنى كلمة أو شرح قاعدة بالإنجليزية.</div>'+
  '<form><textarea rows="2" maxlength="240" placeholder="What does usually mean?"></textarea>'+
  '<div class="mej-tutor-buttons"><button type="button" class="mej-tutor-mic">🎙️ تحدث</button><button type="submit">إرسال السؤال</button></div></form>'+
- '<small>مساعد مجاني دون خدمات مدفوعة. دعم الصوت يعتمد على الجهاز؛ لا تُرسل الأسئلة إلى خادم.</small>'+
+ '<small>مساعد مجاني دون خدمات مدفوعة. الصوت محلي فقط إن كان مدعومًا؛ لا تُرسل الأسئلة أو التسجيلات إلى خادم.</small>'+
  '</section>';
  const style=document.createElement('style');style.textContent=`
  #mej-offline-tutor{position:fixed;inset:0;z-index:100010;background:#001c3670;display:grid;place-items:end center;padding:12px;box-sizing:border-box}
@@ -123,15 +131,24 @@ function open(){
  node.addEventListener('click',e=>{if(e.target===node)close()});
  const field=node.querySelector('textarea'),output=node.querySelector('.mej-tutor-response');
  node.querySelector('form').addEventListener('submit',e=>{e.preventDefault();const response=answer(field.value);lastAnswer=response;output.textContent=response;speak(response)});
- node.querySelector('.mej-tutor-mic').addEventListener('click',()=>{
+ node.querySelector('.mej-tutor-mic').addEventListener('click',async()=>{
    const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-   if(!SpeechRecognition){output.textContent='التعرف على الصوت غير متاح في هذا المتصفح. استخدم الكتابة؛ بعض المتصفحات ترسل التسجيلات لخوادم خارجية.';return}
-   // Browser recognition may send audio to a third party; do not silently turn it on.
-   if(!window.confirm('قد تتطلب ميزة التعرف على الصوت إرسال التسجيل إلى خدمة المتصفح. هل تريد المتابعة؟'))return;
-   try{recognition?.abort();recognition=new SpeechRecognition();recognition.lang=/[\u0600-\u06ff]/.test(field.value)?'ar-OM':'en-US';recognition.interimResults=false;
-   recognition.onresult=e=>{field.value=e.results[0][0].transcript;output.textContent='تم التعرف على السؤال. اضغط إرسال.'};
-   recognition.onerror=()=>{output.textContent='تعذر التعرف على الصوت؛ يمكنك كتابة السؤال.'};recognition.start()
-   }catch(_){output.textContent='تعذر تشغيل الميكروفون؛ اكتب سؤالك.'}
+   // Local-only recognition: do not send a child's voice to cloud services.
+   if(!SpeechRecognition||typeof SpeechRecognition.available!=='function'){
+     output.textContent='التعرف الصوتي دون إنترنت غير مدعوم على هذا الجهاز. اكتب سؤالك بدلًا من ذلك.';return;
+   }
+   const lang='en-US';
+   try{
+     const availability=await SpeechRecognition.available({langs:[lang],processLocally:true});
+     if(availability!=='available'){
+       output.textContent='حزمة التعرف على الصوت محليًا غير متاحة. استخدم الكتابة.';return;
+     }
+     recognition?.abort();recognition=new SpeechRecognition();recognition.lang=lang;
+     recognition.processLocally=true;recognition.interimResults=false;
+     recognition.onresult=e=>{field.value=e.results[0][0].transcript;output.textContent='تم التعرف على السؤال. اضغط إرسال.'};
+     recognition.onerror=()=>{output.textContent='تعذر التعرف محليًا؛ اكتب السؤال.'};
+     recognition.start();
+   }catch(_){output.textContent='تعذر تشغيل التعرف المحلي؛ اكتب سؤالك.'}
  });
  field.focus();
 }

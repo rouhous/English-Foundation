@@ -119,7 +119,10 @@ const oldHome=home, oldRoute=route, oldProfile=openProfile, oldPersist=persist;
 const labels=['الاسم الأول','اسم الأب','اسم الجد','اسم العائلة'];
 const profileCode=p=>localStorage.getItem('MEJ_RECOVERY_'+p.id)||'';
 const storeCode=(p,code)=>localStorage.setItem('MEJ_RECOVERY_'+p.id,code);
-const pending=()=>!!active()?.name&&!active().diagnosed&&placementCeiling(active())!==null;
+const ownerSession=()=>window.__MEJ_ACCESS_ROLE==='owner';
+const needsGrade=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())===null;
+const pending=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())!==null;
+const registered=()=>!!active()?.name&&placementCeiling(active())!==null;
 const linked=p=>!!(p.teacherCode||mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1);
 let saving=false;
 async function account(action,data,token){
@@ -146,25 +149,42 @@ async function flushFree(p){
 }
 persist=function(send=true){const ok=oldPersist(send),p=active();if(ok&&profileCode(p)&&!linked(p)){p.accountDirty=(p.accountDirty||0)+1;write();void flushFree(p)}return ok};
 function startRequired(){
- if(active()?.name&&!active().diagnosed&&placementCeiling(active())===null){
-  if(!document.querySelector('#journeyModal'))queueMicrotask(()=>{if(!document.querySelector('#journeyModal'))openProfile(false)});
-  return false;
+ if(ownerSession())return false;
+ if(needsGrade()){
+  if(!document.querySelector('#journeyModal'))queueMicrotask(()=>{if(needsGrade()&&!document.querySelector('#journeyModal'))openProfile(false)});
+  return true;
  }
  if(!pending())return false;if(activeSession?.kind!=='diagnostic'||!document.querySelector('#app .quiz #feedback')){current='diagnostic';document.getElementById('journeyNav')?.classList.remove('open');startDiagnostic()}return true}
 route=function(page){if(!startRequired())return oldRoute(page)};
-home=function(){if(startRequired())return;oldHome();document.querySelectorAll('button[onclick="letsGo()"]').forEach(b=>b.disabled=!active().name)};
+home=function(){if(startRequired())return;oldHome();document.querySelectorAll('button[onclick="letsGo()"]').forEach(b=>{b.disabled=!registered();b.setAttribute('aria-disabled',String(!registered()));b.title=registered()?'':'سجّل الاسم والصف قبل بدء اللعبة'})};
+const originalLetsGo=letsGo;
+letsGo=function(){
+ if(!registered()){toast('لا يمكن بدء اللعبة قبل تسجيل اسم الطالب وصفه.');openProfile(!active()?.name);return}
+ if(startRequired())return;
+ return originalLetsGo();
+};
 const originalStop=stopQuiz;
-stopQuiz=function(){if(!pending())return originalStop()};
+stopQuiz=function(){if(!pending()&&!needsGrade())return originalStop()};
+const originalCloseProfile=closeProfile;
+closeProfile=function(){if(needsGrade()){toast('أكمل بيانات الصف ثم اختبار التشخيص قبل العودة.');return}return originalCloseProfile()};
 function guard(){
- const lock=pending()&&activeSession?.kind==='diagnostic';
+ const diagLock=pending()&&activeSession?.kind==='diagnostic';
+ const dataLock=needsGrade();
+ const skip=document.querySelector('#app .quiz #skipBtn');
+ if(skip&&diagLock){skip.hidden=true;skip.disabled=true}
  for(const el of document.querySelectorAll('button,a[href],input,select,textarea,[role=button],[tabindex]')){
-  const block=lock&&(!el.closest('#app .quiz')||el.getAttribute('onclick')==='stopQuiz()');
+  const action=el.getAttribute('onclick');
+  const block=dataLock?!el.closest('#journeyModal'):
+   diagLock&&(!el.closest('#app .quiz')||action==='stopQuiz()'||action==='skipQuestion()');
   if(block&&!el.inert){el.inert=true;el.dataset.placementInert='1';if('disabled' in el&&!el.disabled){el.disabled=true;el.dataset.placementDisabled='1'}}
   if(!block&&el.dataset.placementInert){el.inert=false;delete el.dataset.placementInert;if(el.dataset.placementDisabled){el.disabled=false;delete el.dataset.placementDisabled}}
  }
 }
 const gateEvents=e=>{
- if(pending()&&activeSession?.kind==='diagnostic'&&(!e.target.closest?.('#app .quiz')||e.target.closest?.('[onclick="stopQuiz()"]'))){e.preventDefault();e.stopImmediatePropagation()}
+ if((needsGrade()&&!e.target.closest?.('#journeyModal'))||
+    (pending()&&activeSession?.kind==='diagnostic'&&(!e.target.closest?.('#app .quiz')||e.target.closest?.('[onclick="stopQuiz()"],[onclick="skipQuestion()"]')))){
+   e.preventDefault();e.stopImmediatePropagation()
+ }
 };
 document.addEventListener('click',gateEvents,true);
 new MutationObserver(guard).observe(document.body,{childList:true,subtree:true});
@@ -204,7 +224,7 @@ openProfile=function(isNew=false){
  modal.querySelector('[data-name-part]').focus();
 };
 function attach(p,r,code){
- for(const [key,val] of Object.entries({MEJ_STUDENT_ACCESS_V1:r.accessToken,MEJ_STUDENT_DEVICE_REF_V1:r.studentRef,MEJ_VERIFIED_SCHOOL_NAME_V1:r.schoolName,MEJ_ASSIGNED_TEACHER_CODE_V1:code,MEJ_VERIFIED_TEACHER_LINKED_V1:'1',MEJ_ASSIGNED_TEACHER_NAME_V1:''}))localStorage.setItem(key,val||'');
+ for(const [key,val] of Object.entries({MEJ_STUDENT_ACCESS_V1:r.accessToken,MEJ_STUDENT_DEVICE_REF_V1:r.studentRef,MEJ_VERIFIED_SCHOOL_NAME_V1:r.schoolName,MEJ_ASSIGNED_TEACHER_CODE_V1:code,MEJ_VERIFIED_TEACHER_LINKED_V1:r.teacherLinked===true?'1':'0',MEJ_ASSIGNED_TEACHER_NAME_V1:''}))localStorage.setItem(key,val||'');
  window.__MEJ_ACCESS_ROLE='student';mejCapture(p.id)
 }
 saveProfileModal=async function(isNew){
@@ -253,12 +273,14 @@ saveProfileModal=async function(isNew){
    closeProfile();if(!recover)alert('تم التسجيل. احتفظ برمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode);route(p.diagnosed?'journey':'diagnostic');
   }else{
    const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
-   await issue(p);
+   if(placementCeiling(p)!==null)await issue(p);
    if(linked(p)&&token&&(name!==p.name||grade!==String(p.grade)))await account('claim',{name,grade,profileRef},token);
    if(!linked(p)&&(name!==p.name||grade!==String(p.grade))){
     if(freeJobs.has(p.id))throw Error('BUSY');
     const snap=snapshot(p);Object.assign(snap.profile,{name,grade,nameParts:parts});
-    const r=await account('free_save',{name,grade,profileRef,recoveryCode:profileCode(p),revision:p.freeRevision,snapshot:snap});p.freeRevision=r.revision
+    if(profileCode(p)){
+     const r=await account('free_save',{name,grade,profileRef,recoveryCode:profileCode(p),revision:p.freeRevision,snapshot:snap});p.freeRevision=r.revision
+    }
    }
    modal.querySelector('#studentName').value=name;p.nameParts=parts;
    if(await saveStudent())closeProfile();
@@ -275,7 +297,9 @@ mejSaveDiagnostic=function(nextIndex){
  oldCheckpoint(nextIndex);
  const p=active();if(!linked(p)&&profileCode(p)){p.accountDirty=(p.accountDirty||0)+1;write();void flushFree(p)}
 };
-function resume(){const p=active();if(p?.name&&!profileCode(p)&&navigator.onLine)void issue(p).catch(()=>{});for(const item of Object.values(db.profiles))void flushFree(item)}
+function resume(){const p=active();if(p?.name&&placementCeiling(p)!==null&&!profileCode(p)&&navigator.onLine)void issue(p).catch(()=>{});for(const item of Object.values(db.profiles))void flushFree(item)}
+window.addEventListener('popstate',()=>{if(pending()||needsGrade())startRequired()});
+window.addEventListener('hashchange',()=>{if(pending()||needsGrade())startRequired()});
 window.addEventListener('online',resume);window.addEventListener('pageshow',resume);
 if(!startRequired()&&document.querySelector('#app [onclick="letsGo()"]'))home();guard();resume();
 })();

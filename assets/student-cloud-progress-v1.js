@@ -112,6 +112,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 /* Profile registration and mandatory placement. */
 (function(){
 'use strict';
+if(window.MEJStudentAccountUI)return;
+window.MEJStudentAccountUI=true;
 const endpoint='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-student-account';
 const oldHome=home, oldRoute=route, oldProfile=openProfile, oldPersist=persist;
 const labels=['الاسم الأول','اسم الأب','اسم الجد','اسم العائلة'];

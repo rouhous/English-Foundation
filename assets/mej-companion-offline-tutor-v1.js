@@ -78,8 +78,9 @@ function answer(input){
  if(/(كرر|repeat|again|مرة أخرى)/.test(n))return lastAnswer||'اسألني عن كلمة أو قاعدة وسأشرحها.';
  const requested=n.match(/(?:meaning of|mean\s+|معنى|ترجمة|translate|what is)\s+["“']?([a-z][a-z -]{1,35})/i);
  const key=(requested?.[1]||n).trim().replace(/[?!.،؟]$/,'');
- let match=Object.keys(dictionary).find(w=>w===key||n===w||n.includes(' '+w+' ')||n.endsWith(' '+w));
- if(match){const [ar,example]=dictionary[match];return match+' = '+ar+'\nExample: '+example+'\nCan you make another sentence?'}
+ const glossary={...dictionary,...(window.MEJTutorBank||{})};
+ let match=Object.keys(glossary).find(w=>w===key||n===w||n.includes(' '+w+' ')||n.endsWith(' '+w));
+ if(match){const [ar,example]=glossary[match];return match+' = '+ar+'\nExample: '+example+'\nCan you make another sentence?'}
  const rule=rules.find(r=>r.keys.some(k=>n.includes(k)));
  if(rule)return rule.label+'\n'+rule.ar+'\n'+rule.en+'\nExample: '+rule.example;
  if(/(hello|hi|مرحبا|السلام)/.test(n))return 'Hello! Ask me about English vocabulary or grammar. مرحبًا! اسألني عن معنى كلمة أو قاعدة.';

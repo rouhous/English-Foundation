@@ -1,7 +1,7 @@
 {
   "version": "2026-11-12",
   "scope": "My English Journey Hidden Objects",
-  "status": "one stage-0 scene candidate plus four unassigned realistic photo candidates; 130-stage rollout not complete",
+  "status": "10 realistic scene candidates produced (5 first batch, 5 second batch); stage/badge and mastery review pending; 130 planned",
   "requiredScenesPerStage": 10,
   "totalPlannedSceneSlots": 130,
   "unlockBasicStars": [
@@ -64,10 +64,24 @@
         },
         {
           "badge": 2,
-          "theme": "toy shelf",
-          "photoReady": false,
+          "theme": "Omani learning classroom",
+          "photoReady": true,
           "hotspotsApproved": false,
-          "curriculumValidated": false
+          "curriculumValidated": true,
+          "asset": "hidden-objects/real-scenes/08_omani_learning_room.webp",
+          "candidateWords": [
+            "apple",
+            "egg",
+            "pen",
+            "bag",
+            "cat",
+            "dog",
+            "fish",
+            "hat",
+            "cup",
+            "rug"
+          ],
+          "validationNote": "Ten words verified in stage 0 catalog; actual student 9 mastered + one new and manual mobile hit tests still required."
         },
         {
           "badge": 3,
@@ -1062,6 +1076,22 @@
           "curriculumValidated": false
         }
       ]
+    }
+  ],
+  "batchHistory": [
+    {
+      "batch": 2,
+      "date": "2026-11-13",
+      "assets": [
+        "06_omani_art_room.webp",
+        "07_omani_science_room.webp",
+        "08_omani_learning_room.webp",
+        "09_omani_music_room.webp",
+        "10_omani_harbour_market.webp"
+      ],
+      "imageCandidates": 5,
+      "approvedStudentGameScenes": 0,
+      "stage0Candidate": "08_omani_learning_room.webp"
     }
   ]
 }

@@ -30,18 +30,31 @@
  // Student-specific mastery derives only from this student's actual question results.
  // Two correct answers to the same item are required for a learned word.
  function stageWordEvidence(stage,p){
-   const learned=new Set(),curriculum=new Set(),questions=typeof byGrade!=='undefined'?byGrade[stage]||[]:[];
+   const learned=new Set(),curriculum=new Set();
+   const questions=typeof byGrade!=='undefined'?(byGrade[stage]||[]):[];
    const correct=p?.correct||{};
+   const clean=value=>String(value||'').trim().toLowerCase().replace(/\s+/g,' ');
+   const english=value=>/^[a-z][a-z '-]{1,35}$/i.test(value);
    for(const q of questions){
+     // Only actual vocabulary / spelling / visual-word exercises produce evidence.
      if(!['Vocabulary','Spelling','Match','Describe','Phonics','Blend'].includes(q.type))continue;
-     let raw=String(q.word||q.targetWord||'').trim().toLowerCase();
-     if(!raw&&['Spelling','Vocabulary'].includes(q.type)){
-       const match=String(q.prompt||'').match(/[“'«"]([A-Za-z][A-Za-z '-]{1,35})[”'»"]/);
-       if(match)raw=match[1].toLowerCase();
+     const prompt=String(q.prompt||'');
+     let word=clean(q.word||q.targetWord||'');
+     if(!english(word)){
+       // In grades 1–5, the English target is often the correct answer to
+       // an Arabic-to-English MCQ, not the q.word field.
+       const answer=clean(q.answer);
+       if(english(answer)&&['Vocabulary','Spelling'].includes(q.type))word=answer;
      }
-     if(!/^[a-z][a-z '-]{1,35}$/.test(raw))continue;
-     curriculum.add(raw);
-     if(Number(correct[q.id])>=2)learned.add(raw);
+     if(!english(word)){
+       // English-to-Arabic translation stems contain the English target
+       // inside quotation marks while the answer is in Arabic.
+       const match=prompt.match(/[“'«"]([A-Za-z][A-Za-z '-]{1,35})[”'»"]/);
+       if(match)word=clean(match[1]);
+     }
+     if(!english(word))continue;
+     curriculum.add(word);
+     if(Number(correct[q.id])>=2)learned.add(word);
    }
    return {masteredWords:[...learned],levelWords:[...curriculum]};
  }

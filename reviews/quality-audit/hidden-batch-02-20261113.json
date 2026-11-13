@@ -1,0 +1,78 @@
+{
+  "marker": "MEJ_HIDDEN_BATCH02_20261113",
+  "imagesAdded": 5,
+  "totalPhotoCandidates": 10,
+  "sceneRange": "06–10",
+  "targets": 50,
+  "polygonCount": 51,
+  "overlappingTargetPairs": [],
+  "outOfBounds": [],
+  "assetsPresentOnGithub": [
+    {
+      "file": "06_omani_art_room.webp",
+      "exists": true
+    },
+    {
+      "file": "07_omani_science_room.webp",
+      "exists": true
+    },
+    {
+      "file": "08_omani_learning_room.webp",
+      "exists": true
+    },
+    {
+      "file": "09_omani_music_room.webp",
+      "exists": true
+    },
+    {
+      "file": "10_omani_harbour_market.webp",
+      "exists": true
+    }
+  ],
+  "stage0Badge2WordMatch": [
+    {
+      "word": "apple",
+      "inStage0Bank": true
+    },
+    {
+      "word": "egg",
+      "inStage0Bank": true
+    },
+    {
+      "word": "pen",
+      "inStage0Bank": true
+    },
+    {
+      "word": "bag",
+      "inStage0Bank": true
+    },
+    {
+      "word": "cat",
+      "inStage0Bank": true
+    },
+    {
+      "word": "dog",
+      "inStage0Bank": true
+    },
+    {
+      "word": "fish",
+      "inStage0Bank": true
+    },
+    {
+      "word": "hat",
+      "inStage0Bank": true
+    },
+    {
+      "word": "cup",
+      "inStage0Bank": true
+    },
+    {
+      "word": "rug",
+      "inStage0Bank": true
+    }
+  ],
+  "studentBonusEligible": 0,
+  "manualPhoneVisualReview": "pending",
+  "rule": "only stage-specific scenes with 9 truly mastered words + 1 curriculum challenge may be enabled",
+  "sourceQuestionBankChanged": false
+}

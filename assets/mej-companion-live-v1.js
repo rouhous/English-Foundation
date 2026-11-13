@@ -297,7 +297,7 @@
      drag=null;host.classList.remove('mej-c-dragging');
      try{sprite.releasePointerCapture(e.pointerId)}catch(_){}
      // A short tap means greeting. It must NEVER deploy the parachute.
-     if(!gesture.moved){randomTap();return}
+     if(!gesture.moved){greet();window.MEJOfflineTutor?.open?.();return}
      // Dropping from an ordinary drag means repositioning, not automatic parachuting.
      const raised=gesture.startY-e.clientY>48;
      if(!raised||!motion||reduced()||document.hidden){
@@ -487,6 +487,17 @@
  function queue(){if(tickQueued)return;tickQueued=true;requestAnimationFrame(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
  function boot(){
   const app=$('app');if(!app)return;
+  // Load independent no-quota tutor after application shell, without blocking navigation.
+  if(!document.getElementById('mej-offline-tutor-loader')){
+   // Dynamic classic scripts with async=false execute in insertion order.
+   // Cached as PWA assets, never fetched from a paid service.
+   for(const [id,url] of [['mej-tutor-bank-loader','./assets/mej-companion-tutor-bank-v1.js'],['mej-offline-tutor-loader','./assets/mej-companion-offline-tutor-v1.js']]){
+    if(document.getElementById(id))continue;
+    const loader=document.createElement('script');loader.id=id;loader.src=url;loader.async=false;
+    loader.onerror=()=>console.warn('Optional offline tutoring resource unavailable',url);
+    document.head.append(loader);
+   }
+  }
   // No DOM observer: route clicks and explicit events drive companion refresh.
   // Settings modal is attached to body, but only inspect it on a user click.
   document.addEventListener('pointerdown',e=>{if(!e.target?.closest?.('#mej-companion-actor'))lastInteraction=Date.now()},{passive:true});

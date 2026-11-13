@@ -488,11 +488,15 @@
  function boot(){
   const app=$('app');if(!app)return;
   // Load independent no-quota tutor after application shell, without blocking navigation.
-  if(!window.MEJOfflineTutor&&!document.getElementById('mej-offline-tutor-loader')){
-   const loader=document.createElement('script');loader.id='mej-offline-tutor-loader';
-   loader.src='./assets/mej-companion-offline-tutor-v1.js';loader.async=true;
-   loader.onerror=()=>console.warn('Offline tutor unavailable; companion remains functional');
-   document.head.append(loader);
+  if(!document.getElementById('mej-offline-tutor-loader')){
+   // Dynamic classic scripts with async=false execute in insertion order.
+   // Cached as PWA assets, never fetched from a paid service.
+   for(const [id,url] of [['mej-tutor-bank-loader','./assets/mej-companion-tutor-bank-v1.js'],['mej-offline-tutor-loader','./assets/mej-companion-offline-tutor-v1.js']]){
+    if(document.getElementById(id))continue;
+    const loader=document.createElement('script');loader.id=id;loader.src=url;loader.async=false;
+    loader.onerror=()=>console.warn('Optional offline tutoring resource unavailable',url);
+    document.head.append(loader);
+   }
   }
   // No DOM observer: route clicks and explicit events drive companion refresh.
   // Settings modal is attached to body, but only inspect it on a user click.

@@ -1,0 +1,22 @@
+name: Audit Hidden Objects vocabulary coverage
+on:
+  push:
+    paths:
+      - 'scripts/audit_hidden_vocab_coverage_20261113.cjs'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/audit_hidden_vocab_coverage_20261113.cjs
+      - name: Publish audit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reviews/quality-audit/hidden-vocab-coverage-20261113.json hidden-objects/stage-word-index-20261113.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit curriculum object vocabulary by stage before producing scenes"
+            git push
+          fi

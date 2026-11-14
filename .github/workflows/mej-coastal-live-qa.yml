@@ -1,0 +1,25 @@
+name: Coastal Arcade — integration verification
+on:
+  push:
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'coastal-arcade/**'
+      - 'scripts/qa-coastal-live.mjs'
+      - '.github/workflows/mej-coastal-live-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original badge artwork and the student arcade bridge
+        run: |
+          node --check coastal-arcade/app-bridge.js
+          node scripts/qa-coastal-live.mjs

@@ -23,6 +23,17 @@ assert.match(preview,/id="adminCode"/);
 assert.match(preview,/id="previewFrame"/);
 assert.match(preview,/PREVIEW_UNLOCK_ANCHOR_MISSING/);
 assert.match(preview,/mejPartUnlocked/);
+assert.match(preview,/new URL\('\.\.\/'\,location\.href\)\.href/,'Blob preview must resolve original relative image and script assets');
+assert.match(preview,/id="desktopMode"/,'Desktop-on-phone mode must be available');
+assert.match(preview,/id="phoneMode"/,'Phone preview mode must be available');
+assert.match(preview,/id="zoomButton"/,'Desktop zoom must be available');
+assert.match(preview,/id="gamesTab"/,'Owner games tab must exist');
+assert.match(preview,/id="badgesTab"/,'Owner badges tab must exist');
+assert.match(preview,/frame\.srcdoc=badgesHTML\(\)/,'Badges are rendered inside the authenticated owner preview');
+assert.match(preview,/frame\.src='\.\.\/games\/index\.html\?grade=12'/,'Arcade preview is inside the owner wrapper');
+assert.match(preview,/\$\('gamesTab'\)\.hidden=false/,'Games must only be revealed when authenticated');
+assert.match(preview,/\$\('badgesTab'\)\.hidden=false/,'Badges must only be revealed when authenticated');
+
 assert.match(preview,/maxAllowed/);
 assert.match(arcade,/__MEJ_ADMIN_PREVIEW_ACTIVE/);
 assert.ok(!arcade.includes('omani-sailor/index.html'),'Retired boat game must not be embedded');

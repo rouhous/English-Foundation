@@ -31,7 +31,12 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
 .toolbar button{padding:7px 12px;border-radius:10px;border:1px solid #9bd1de;background:#f6fdff;color:#10435b;font-weight:750}
 .toolbar button[aria-pressed="true"]{background:#efcb80}
 .preview-note{background:#fff7d8;color:#664500;padding:7px 14px;font-size:12px;line-height:1.5}
-#previewFrame{width:100%;flex:1;border:0;background:#e8f4f6}
+#previewViewport{flex:1;min-height:0;position:relative;overflow:auto;background:#05324f;direction:ltr;overscroll-behavior:contain}
+#frameCanvas{position:relative;width:100%;height:100%;min-height:100px}
+#previewFrame{position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:#e8f4f6;transform-origin:top left;display:block}
+#zoomButton[hidden]{display:none!important}
+.toolbar button[aria-pressed="true"]{background:#efcb80}
+@media(max-width:620px){#previewViewport{min-height:0}}
 @media(max-width:620px){body{padding:10px}.login{margin:4vh auto;padding:18px}.toolbar{gap:5px}.toolbar .title{width:100%;margin:0}.toolbar button{padding:6px 9px;font-size:13px}.preview-note{font-size:11px}}
 </style>
 </head>
@@ -54,11 +59,15 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
   <header class="toolbar">
     <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
     <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
-    <button type="button" id="gamesTab" aria-pressed="false" hidden>الألعاب التفاعلية</button>
+    <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 الألعاب التفاعلية</button>
+    <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 الشارات</button>
+    <button type="button" id="phoneMode" aria-pressed="true">📱 الهاتف</button>
+    <button type="button" id="desktopMode" aria-pressed="false">🖥️ شاشة الكمبيوتر</button>
+    <button type="button" id="zoomButton" hidden>🔎 تكبير 100%</button>
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
   <div class="preview-note">معاينة قبل النشر • الطلاب ما زالوا يرون شاشة الصيانة • الألعاب الحالية قيد المراجعة ولم يُعتمد إصدارها النهائي</div>
-  <iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe>
+  <div id="previewViewport"><div id="frameCanvas"><iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 <script>
 (()=>{
@@ -67,7 +76,7 @@ const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleuserco
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/';
 const VERIFY=API+'mej-owner-verify', GATE=API+'mej-owner-preview-gate', CONTENT=API+'mej-owner-preview-content';
 const $=id=>document.getElementById(id);
-let credential=null,reviewSession=null,blobURL=null,fullHTML=null,activeTab=null,busy=false;
+let credential=null,reviewSession=null,blobURL=null,fullHTML=null,activeTab=null,busy=false,screenMode="phone",zoomed=false;
 function say(message){$('status').textContent=message}
 function hideAccess(){credential=null;reviewSession=null;fullHTML=null;$('pinPanel').hidden=true;$('review').hidden=true;$('login').hidden=false;window.__MEJ_ADMIN_PREVIEW_ACTIVE=false;}
 async function readJSON(r){try{return await r.json()}catch{return {}}}
@@ -110,22 +119,82 @@ function prelude(html){
   if(!html.includes(needle))throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING');
   html=html.replace(needle,edited);
  }
+ // Blob document URLs have no usable relative file hierarchy. Without this
+ // absolute base the desktop image and companion/game assets fail to resolve.
+ const appBase=new URL('../',location.href).href;
+ if(!/^https:\/\//.test(appBase)||new URL(appBase).origin!==location.origin)throw Error('INVALID_PREVIEW_BASE');
+ if(!/<head(?:\s[^>]*)?>/i.test(html))throw Error('INVALID_PREVIEW_HEAD');
+ html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'">');
  return html;
+}
+function applyScreenMode(){
+ const viewport=$('previewViewport'),canvas=$('frameCanvas'),frame=$('previewFrame');
+ const desktop=screenMode==='desktop';
+ $('phoneMode').setAttribute('aria-pressed',String(!desktop));
+ $('desktopMode').setAttribute('aria-pressed',String(desktop));
+ $('zoomButton').hidden=!desktop;
+ $('zoomButton').textContent=zoomed?'🔎 احتواء الشاشة':'🔎 تكبير 100%';
+ if(!desktop){
+  canvas.style.width='100%';canvas.style.height='100%';
+  frame.style.width='100%';frame.style.height='100%';frame.style.transform='none';
+ }else{
+  const width=1280;
+  const fit=Math.min(1,Math.max(.15,(viewport.clientWidth-4)/width));
+  const scale=zoomed?1:fit;
+  const height=Math.max(900,Math.ceil(Math.max(400,viewport.clientHeight-4)/scale));
+  canvas.style.width=Math.ceil(width*scale)+'px';
+  canvas.style.height=Math.ceil(height*scale)+'px';
+  frame.style.width=width+'px';frame.style.height=height+'px';
+  frame.style.transform='scale('+scale+')';
+ }
+}
+function badgesHTML(){
+ // An owner-only review of the progression, not a release of final badge art.
+ const names=['البداية','النخلة','البوصلة','السفينة','الخنجر العُماني','المها العربي','اللبان','الجبل الأخضر','القلعة','كنز الإنجاز'];
+ const marks=['⭐','🌴','🧭','⛵','🗡️','🦌','🌿','⛰️','🏰','🏆'];
+ const cards=names.map((name,i)=>'<article class="badge" data-unlock="'+((i+1)*20)+'"><div class="coin">'+marks[i]+'</div><h2>الشارة '+(i+1)+'</h2><p>'+name+'</p><strong>'+((i+1)*20)+' ⭐</strong></article>').join('');
+ return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>معاينة الشارات</title><style>
+ *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#1379b1,#062c59 70%);color:#fff;font-family:system-ui,"Segoe UI",Tahoma,sans-serif;min-height:100vh}
+ main{max-width:1150px;margin:auto;padding:clamp(16px,3.5vw,34px)}
+ h1{font-size:clamp(26px,4vw,42px);margin:0 0 12px;color:#ffe5a8}
+ .lede{line-height:1.8;color:#ddf3ff;margin:0 0 20px}
+ .progress{background:#ffffffeb;color:#18405b;border:2px solid #e3c47b;border-radius:19px;padding:16px 20px;margin-bottom:20px}
+ .progress label{display:block;font-weight:800;margin-bottom:12px}.progress input{width:100%;accent-color:#0c8ca5}
+ .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}
+ .badge{border:2px solid #87a3b9;border-radius:19px;padding:15px 8px;text-align:center;background:#133d60;color:#cadde8;opacity:.6;transition:.2s}
+ .coin{display:grid;place-items:center;margin:0 auto 9px;width:clamp(58px,8vw,92px);height:clamp(58px,8vw,92px);border-radius:50%;font-size:clamp(29px,4vw,44px);background:radial-gradient(circle at 30% 20%,#fff6c7,#b78d42);box-shadow:0 6px 13px #001c3680;border:4px solid #f0d493;filter:grayscale(.8)}
+ .badge h2{font-size:17px;margin:0 0 4px}.badge p{font-size:14px;min-height:39px;margin:0 0 7px}.badge strong{color:#ffd878}
+ .badge.earned{opacity:1;background:linear-gradient(150deg,#0a6b82,#11476d);border-color:#ffe09c;box-shadow:0 7px 18px #001a3599}.badge.earned .coin{filter:none}
+ .foot{color:#d7f2fc;font-size:13px;line-height:1.8;margin-top:24px}
+ @media(max-width:790px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+ @media(max-width:460px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.badge{padding:12px 5px}}
+ </style></head><body><main><h1>🏅 رحلة الشارات العُمانية</h1>
+ <p class="lede">معاينة التدرّج المقترح: عشر شارات عند 20، 40، 60 ... حتى 200 نجمة في المرحلة. هذه شاشة مراجعة، وليست ربطًا فعليًا برصيد أي طالب أو اعتمادًا نهائيًا للرسومات.</p>
+ <div class="progress"><label for="stars">جرّب عدد النجوم: <output id="currentStars">0</output> / 200 ⭐</label>
+ <input id="stars" type="range" min="0" max="200" step="20" value="0" oninput="document.getElementById('currentStars').textContent=this.value;document.querySelectorAll('[data-unlock]').forEach(x=>x.classList.toggle('earned',Number(this.value)>=Number(x.dataset.unlock)))"></div>
+ <section class="grid">${cards}</section>
+ <p class="foot">الألعاب التفاعلية مرتبطة بالشارات في التصميم المستهدف، لكن احتساب نجوم الطالب ومكافآته لا يتغير في هذه المعاينة.</p>
+ </main></body></html>`;
 }
 function showFrame(tab){
  if(!reviewSession||!fullHTML)return;
  const frame=$('previewFrame');
- frame.src='about:blank';
  activeTab=tab;
- $('appTab').setAttribute('aria-pressed',String(tab==='app'));
- $('gamesTab').setAttribute('aria-pressed',String(tab==='games'));
+ for(const id of ['appTab','gamesTab','badgesTab'])$(id).setAttribute('aria-pressed',String(id===tab+'Tab'));
+ frame.removeAttribute('srcdoc');
+ frame.src='about:blank';
  if(tab==='app'){
   frame.title='معاينة التطبيق الكامل';
   frame.src=blobURL;
- }else{
+ }else if(tab==='games'){
   frame.title='معاينة الألعاب التفاعلية';
   frame.src='../games/index.html?grade=12';
+ }else if(tab==='badges'){
+  frame.title='معاينة الشارات العمانية';
+  frame.srcdoc=badgesHTML();
  }
+ $('previewViewport').scrollTo(0,0);
+ applyScreenMode();
 }
 async function openPreview(){
  say('جار تجهيز نسخة المراجعة...');
@@ -141,6 +210,8 @@ async function openPreview(){
  blobURL=URL.createObjectURL(new Blob([fullHTML],{type:'text/html'}));
  window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;
  $('login').hidden=true;$('review').hidden=false;
+ $('gamesTab').hidden=false;$('badgesTab').hidden=false;
+ screenMode='phone';zoomed=false;
  showFrame('app');
 }
 $('pinPanel').addEventListener('submit',async e=>{
@@ -171,7 +242,12 @@ window.addEventListener('message',event=>{
  if(event.data?.type==='mej:arcade-close')showFrame('app');
 });
 $('appTab').addEventListener('click',()=>showFrame('app'));
-// Unreleased arcade is not available from the owner preview yet.
+$('gamesTab').addEventListener('click',()=>showFrame('games'));
+$('badgesTab').addEventListener('click',()=>showFrame('badges'));
+$('phoneMode').addEventListener('click',()=>{screenMode='phone';zoomed=false;applyScreenMode()});
+$('desktopMode').addEventListener('click',()=>{screenMode='desktop';zoomed=false;applyScreenMode()});
+$('zoomButton').addEventListener('click',()=>{zoomed=!zoomed;applyScreenMode()});
+window.addEventListener('resize',applyScreenMode);
 async function exit(){
  const old=reviewSession;
  $('previewFrame').src='about:blank';

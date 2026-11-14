@@ -4,7 +4,7 @@ import vm from 'node:vm';
 const sandbox={window:{}};
 vm.runInNewContext(fs.readFileSync('games/coastal-badges.js','utf8'),sandbox,{timeout:1000});
 const {badges,gradeBands,gradeBandGames,policy}=sandbox.window.MEJCoastalBadgeReference;
-const expected=["خصب","صحار","ميناء صحار","مسقط","ميناء مطرح","صور","جزر الديمانيات","جزيرة مصيرة","الدقم","صلالة"];
+const expected=["خصب","صحار","ميناء صحار","مسقط","ميناء مطرح","صور","الدقم","جزيرة مصيرة","جزر الديمانيات","صلالة"];
 assert.equal(badges.length,10);
 assert.deepEqual(Array.from(badges,b=>b.ar),expected);
 for(let i=0;i<10;i++){

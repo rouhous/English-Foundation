@@ -66,7 +66,7 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
     <button type="button" id="zoomButton" hidden>🔎 تكبير 100%</button>
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
-  <div class="preview-note">معاينة قبل النشر • الطلاب يرون شاشة الصيانة • الألعاب العشر وصور الشارات الأصلية مدمجة الآن في معاينة GitHub؛ مكافآت الطلاب تتطلب تسجيل الدخول والتقدم الكافي</div>
+  <div class="preview-note">معاينة المالك الخاصة • الشارات العشر والألعاب متاحة للمراجعة بعد تسجيل Admin • لا تُمنح نجوم أو مكافآت فعلية • تقدم الطلاب يبقى دون تغيير</div>
   <div id="previewViewport"><div id="frameCanvas"><iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 <script>
@@ -176,6 +176,30 @@ function badgesHTML(){
  <p class="foot">الألعاب التفاعلية مرتبطة بالشارات في التصميم المستهدف، لكن احتساب نجوم الطالب ومكافآته لا يتغير في هذه المعاينة.</p>
  </main></body></html>`;
 }
+// MEJ_OWNER_ARCADE_FULL_ACCESS_V1: unlock the existing non-rewarding arcade demo after the
+// Google owner + Admin PIN session has been verified by the preview backend.
+function enableOwnerArcadeReview(){
+ if(!reviewSession||!credential||!(activeTab==='games'||activeTab==='badges'))return;
+ const frame=$('previewFrame');
+ let child;
+ try{child=frame.contentWindow?.document}catch(_){return}
+ if(!child||!frame.contentWindow?.MEJV11Review)return;
+ const slider=child.getElementById('badgeCount');
+ if(!slider)return;
+ if(Number(slider.value)!==10){
+  slider.value='10';
+  slider.dispatchEvent(new Event('input',{bubbles:true}));
+ }
+ const closeBadge=child.getElementById('closeBadge');
+ if(closeBadge&&!child.getElementById('badgeShade')?.hidden)closeBadge.click();
+ const note=child.getElementById('mejOwnerPreviewStatus')||child.createElement('p');
+ note.id='mejOwnerPreviewStatus';
+ note.textContent='🔓 وضع Admin: جميع الشارات العشر والألعاب متاحة للمعاينة فقط؛ لا تتغير نجوم الطلاب.';
+ note.style.cssText='font:800 13px/1.7 Tahoma,sans-serif;color:#ffe2a1;text-align:center;margin:8px auto;';
+ const board=child.querySelector('.shell')||child.querySelector('main');
+ if(board&&!note.isConnected)board.prepend(note);
+}
+$('previewFrame').addEventListener('load',enableOwnerArcadeReview);
 function showFrame(tab){
  if(!reviewSession||!fullHTML)return;
  const frame=$('previewFrame');

@@ -13,6 +13,7 @@ html,body{min-height:100%;margin:0}
 body{background:radial-gradient(ellipse at 80% 2%,#2d91b9 0%,#0f648e 28%,#063f6e 67%,#05294f 100%);color:#173952;display:flex;align-items:center;justify-content:center;padding:30px 16px;overflow-x:hidden}
 body:before{content:"";position:fixed;left:-15%;right:-15%;bottom:-22vh;height:44vh;background:radial-gradient(ellipse at top,#37bdc7bb,#1b80ac20 62%,transparent 75%);border-radius:50%;pointer-events:none}
 .glow{position:fixed;width:55vw;height:55vw;max-width:600px;max-height:600px;top:-23vw;left:-17vw;background:#55dcdf29;filter:blur(55px);border-radius:50%;pointer-events:none}
+.admin-control{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));z-index:30;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff85;background:#ffffffed;color:#12587a;box-shadow:0 4px 18px #002c4780;text-decoration:none;font-size:23px}.admin-control:focus-visible{outline:3px solid #f7c763;outline-offset:3px}.admin-control:hover{transform:rotate(30deg)}
 .panel{position:relative;isolation:isolate;width:min(100%,610px);background:linear-gradient(165deg,#fffefd 0%,#f0fbff 100%);border:1px solid #ffffffb3;border-radius:30px;box-shadow:0 30px 70px #03274885,0 2px 15px #062c4540;overflow:hidden;text-align:center;padding:36px clamp(18px,5vw,46px) 38px}
 .panel:before{content:"";position:absolute;left:0;top:0;width:100%;height:7px;background:linear-gradient(90deg,#06a6bd,#e7b656,#0a85aa)}
 .brand{color:#08718e;font-size:clamp(14px,2.8vw,17px);font-weight:800;letter-spacing:.1px;margin:0 0 3px}
@@ -33,6 +34,7 @@ h1{font-size:clamp(24px,5.4vw,33px);line-height:1.45;color:#103d62;margin:12px 0
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
+<a class="admin-control" href="./reviews/admin-preview.html" aria-label="أداة التحكم: معاينة المالك" title="أداة التحكم — Admin">⚙️</a>
 <main class="panel">
   <p class="brand">رحلتي مع الإنجليزية <span class="subbrand" lang="en">My English Journey</span></p>
   <div class="scene-wrap">

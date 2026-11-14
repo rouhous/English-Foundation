@@ -54,7 +54,7 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
   <header class="toolbar">
     <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
     <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
-    <button type="button" id="gamesTab" aria-pressed="false">الألعاب التفاعلية</button>
+    <button type="button" id="gamesTab" aria-pressed="false" hidden>الألعاب التفاعلية</button>
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
   <div class="preview-note">معاينة قبل النشر • الطلاب ما زالوا يرون شاشة الصيانة • الألعاب الحالية قيد المراجعة ولم يُعتمد إصدارها النهائي</div>
@@ -92,9 +92,12 @@ async function gate(action,code){
 }
 function prelude(html){
  if(!/id="mej-owner-only-gate"/.test(html))throw Error('INVALID_PREVIEW_SOURCE');
- // The parent has verified both the owner identity and existing admin code.
- const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;<'+'/script>';
- return html.replace(/<head>/i,'<head>'+mark);
+ // Server has verified the Google owner, existing Admin PIN and expiring session.
+ // Remove the original student-freemium redirect gate only inside this isolated preview.
+ const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
+ if(!gate.test(html))throw Error('INVALID_OWNER_GATE');
+ const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;<'+'/script>';
+ return html.replace(gate,mark);
 }
 function showFrame(tab){
  if(!reviewSession||!fullHTML)return;
@@ -155,7 +158,7 @@ window.addEventListener('message',event=>{
  if(event.data?.type==='mej:arcade-close')showFrame('app');
 });
 $('appTab').addEventListener('click',()=>showFrame('app'));
-$('gamesTab').addEventListener('click',()=>showFrame('games'));
+// Unreleased arcade is not available from the owner preview yet.
 async function exit(){
  const old=reviewSession;
  $('previewFrame').src='about:blank';

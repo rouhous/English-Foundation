@@ -72,11 +72,11 @@ function dispatch(type,evt){listeners[type](evt);return evt.promise}
  const core=await caches.match("./index.html");assert(core,"Main HTML not cached");
  const shardVersion=js.match(/\.js\?v=([^']+)/)?.[1];
  assert(shardVersion,"Service worker image bundle version missing");
- const shardPromises=Array.from({length:12},(_,i)=>"./assets/approved-images-"+String(i+1).padStart(2,"0")+".js?v="+shardVersion);
+ const shardPromises=Array.from({length:21},(_,i)=>"./assets/approved-images-"+String(i+1).padStart(2,"0")+".js?v="+shardVersion);
  for(const shard of shardPromises){assert(await caches.match(shard),"Missing image shard "+shard)}
  let posted=null;
  await dispatch("message",{data:{type:"MEJ_OFFLINE_STATUS"},source:{postMessage(x){posted=x}},waitUntil(p){this.promise=p}});
- assert.equal(posted.imageShardsCached,12);
+ assert.equal(posted.imageShardsCached,21);
  assert.equal(posted.coreCached,true);
  let handled=false;
  listeners.fetch({request:{method:"POST",url:"https://school.example/progress",mode:"cors"},respondWith(){handled=true}});
@@ -89,5 +89,5 @@ function dispatch(type,evt){listeners[type](evt);return evt.promise}
  assert(reply,"Offline local file not intercepted");
  const found=await reply;
  assert(found,"Offline page not served");
- console.log("PWA_FAST_LAUNCH_OFFLINE_TEST_PASSED: nonblocking activation, 12 cached image banks, offline shell, cloud bypass");
+ console.log("PWA_FAST_LAUNCH_OFFLINE_TEST_PASSED: nonblocking activation, 21 cached image banks, offline shell, cloud bypass");
 })().catch(e=>{console.error(e);process.exitCode=1});

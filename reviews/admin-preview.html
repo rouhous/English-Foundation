@@ -59,14 +59,14 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
   <header class="toolbar">
     <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
     <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
-    <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 ألعاب تجريبية (4)</button>
+    <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 الألعاب والشارات (10)</button>
     <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 الشارات (رموز مؤقتة)</button>
     <button type="button" id="phoneMode" aria-pressed="true">📱 الهاتف</button>
     <button type="button" id="desktopMode" aria-pressed="false">🖥️ شاشة الكمبيوتر</button>
     <button type="button" id="zoomButton" hidden>🔎 تكبير 100%</button>
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
-  <div class="preview-note">معاينة قبل النشر • الطلاب يرون شاشة الصيانة • صور الشارات الأصلية وألعاب v11.1 في ملف المراجعة المستقل، ولم تُنقل بعد إلى هذه الصفحة</div>
+  <div class="preview-note">معاينة قبل النشر • الطلاب يرون شاشة الصيانة • الألعاب العشر وصور الشارات الأصلية مدمجة الآن في معاينة GitHub؛ مكافآت الطلاب تتطلب تسجيل الدخول والتقدم الكافي</div>
   <div id="previewViewport"><div id="frameCanvas"><iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 <script>
@@ -191,7 +191,7 @@ function showFrame(tab){
   try{frame.srcdoc=fullHTML;}catch(_){frame.src=blobURL;}
  }else if(tab==='games'){
   frame.title='معاينة الألعاب التفاعلية';
-  frame.src='../games/index.html?grade=12';
+  frame.src='../coastal-arcade/index.html?mode=owner';
  }else if(tab==='badges'){
   frame.title='معاينة الشارات العمانية';
   frame.srcdoc=badgesHTML();

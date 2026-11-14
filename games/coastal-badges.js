@@ -3,7 +3,7 @@
  * Mastery stars for badges MUST come from the verified learning progress ledger.
  */
 (()=>{'use strict';
- const places=[["خصب","Khasab"],["صحار","Sohar"],["ميناء صحار","Port of Sohar"],["مسقط","Muscat"],["ميناء مطرح","Muttrah Port"],["صور","Sur"],["جزر الديمانيات","Daymaniyat Islands"],["جزيرة مصيرة","Masirah Island"],["الدقم","Duqm"],["صلالة","Salalah"]];
+ const places=[["خصب","Khasab"],["صحار","Sohar"],["ميناء صحار","Port of Sohar"],["مسقط","Muscat"],["ميناء مطرح","Muttrah Port"],["صور","Sur"],["الدقم","Duqm"],["جزيرة مصيرة","Masirah Island"],["جزر الديمانيات","Daymaniyat Islands"],["صلالة","Salalah"]];
  const badges=Object.freeze(places.map(([ar,en],i)=>Object.freeze({
    number:i+1,ar,en,requiredMasteryStars:(i+1)*20,gameSlot:i+1
  })));
@@ -12,6 +12,14 @@
    Object.freeze({name:'middle',from:5,to:9,targetGames:10}),
    Object.freeze({name:'upper',from:10,to:12,targetGames:10})
  ]);
+
+ // Exact game inventory recovered from the owner's MEJ_Coastal_Badges_Arcade_v11_1_FIXED.zip.
+ // Metadata for design review only: this file must not grant unlocks or awards.
+ const gradeBandGames=Object.freeze({
+   junior:Object.freeze(["moving","match","memory","word","hidden","falling","sentence","safari","maze","story"]),
+   middle:Object.freeze(["flip","match","word","memory","hidden","falling","vocab","sentence","grammar","mission"]),
+   upper:Object.freeze(["flip","grammar","vocab","sentence","falling","evidence","detective","mission","argument","escape"])
+ });
  const policy=Object.freeze({
    masteryStarsPerBadge:20,
    masteryStarsPerPhase:200,
@@ -23,5 +31,5 @@
    cashRewards:false,
    boatAndGemGameIncluded:false
  });
- window.MEJCoastalBadgeReference=Object.freeze({version:'2026-11-14',badges,gradeBands,policy});
+ window.MEJCoastalBadgeReference=Object.freeze({version:'2026-11-14-v11.1-reconciled',badges,gradeBands,gradeBandGames,policy});
 })();

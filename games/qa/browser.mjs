@@ -101,7 +101,7 @@ try{
  await desktop.locator('#exit').click();
  console.log('Sentence builder gameplay: PASS');
  await desktop.evaluate(()=>window.postMessage({type:'mej:arcade-init',stageStars:50,stage:9},location.origin));
- await desktop.locator('[data-game="hidden"]').waitFor({state:'visible'});
+ await desktop.waitForFunction(()=>!document.querySelector('[data-game="hidden"]').disabled);
  assert.equal(await desktop.locator('[data-game="hidden"]').isEnabled(),true);
  assert.equal(await desktop.locator('[data-game="sailor"]').isEnabled(),true);
  await desktop.locator('[data-game="hidden"]').click();

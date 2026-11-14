@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hidden Objects | مقارنة المشاهد المحفوظة</title>
+<style>
+:root{font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif;color:#e9f7f2;background:#052a3e}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:linear-gradient(165deg,#073347,#0b5e74)}
+main{max-width:1140px;padding:18px clamp(12px,3vw,24px) 45px;margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:clamp(21px,4.6vw,30px);margin:0 0 7px;color:#ffe3a1}
+p{line-height:1.7;margin:7px 0 12px;color:#c5e8e5}
+header a{color:#173747;background:#ffe2a3;border-radius:12px;padding:11px 15px;text-decoration:none;font-weight:800}
+.note{padding:13px 16px;border-radius:14px;background:#0a455c;border:1px solid #7dc2ba;margin:14px 0;line-height:1.7}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+button{border:1px solid #8fd3c3;background:#125970;color:#fff;border-radius:13px;padding:11px 14px;font:800 14px system-ui;cursor:pointer}
+button[aria-pressed="true"]{background:#ffe0a0;color:#174356;border-color:#ffe0a0}
+h2{margin:24px 0 12px;color:#ffe3a1;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+figure{margin:0;background:#06394e;border:1px solid #8abeb4;border-radius:16px;overflow:hidden}
+figure img{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:#123b4e;aspect-ratio:16/9}
+figcaption{padding:12px;line-height:1.5}
+figcaption strong{display:block;font-size:15px}figcaption small{font-size:12px;color:#cee8e2}
+#originalItems{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;margin-top:12px}
+#originalItems figure img{aspect-ratio:1/1;background:#fff;max-height:none}
+#originalItems figcaption{padding:5px;text-align:center;font-size:11px;direction:ltr;overflow-wrap:anywhere}
+#originalItems figcaption strong{font-size:11px}
+[hidden]{display:none!important}
+@media(max-width:640px){.grid{grid-template-columns:1fr}#originalItems{grid-template-columns:repeat(4,minmax(0,1fr))}figure img{max-height:none}}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>🔎 أرشيف Hidden Objects — المشاهد الأصلية والجديدة</h1>
+<p>معاينة بصرية فقط. تعرض الملفات المحفوظة دون تعديلها ودون منح نجوم.</p></div><a href="./admin-preview.html">↩ العودة إلى المعاينة</a></header>
+<div class="note">✅ المحفوظ: <strong>4 مشاهد أصلية + 16 صورة غرض</strong>، إضافة إلى <strong>10 مشاهد واقعية مرشحة</strong>. لم تُحذف المشاهد الأصلية. المشاهد الجديدة ليست مفعّلة لمكافآت الطلاب قبل مراجعة أماكن الأغراض ومفردات المنهج.</div>
+<div class="controls" role="group" aria-label="اختيار مجموعة الصور">
+<button type="button" data-kind="all" aria-pressed="true">عرض المجموعتين</button>
+<button type="button" data-kind="original" aria-pressed="false">المجموعة الأصلية (4)</button>
+<button type="button" data-kind="new" aria-pressed="false">المشاهد الأحدث (10)</button>
+</div>
+<section id="originalSection"><h2>المشاهد الأصلية الأربعة</h2><div id="originalScenes" class="grid"></div><h2>الأغراض الأصلية الـ16</h2><div id="originalItems"></div></section>
+<section id="newSection"><h2>المشاهد الواقعية العشرة — قيد المراجعة</h2><div id="newScenes" class="grid"></div></section>
+</main>
+<script src="../hidden-objects/assets.js"></script>
+<script src="../hidden-objects/photo-scenes.js"></script>
+<script>
+(function(){
+'use strict';
+const old=window.MEJHiddenArt, newer=window.MEJRealPhotoScenes;
+function card(root,src,title,subtitle){
+ const f=document.createElement('figure'),i=document.createElement('img'),cap=document.createElement('figcaption'),strong=document.createElement('strong'),small=document.createElement('small');
+ i.loading='lazy';i.src=src;i.alt=title;strong.textContent=title;small.textContent=subtitle||'';cap.append(strong,small);f.append(i,cap);root.append(f);
+}
+if(old){
+ old.scenes.forEach((src,i)=>card(document.getElementById('originalScenes'),src,old.sceneNames[i]||('مشهد '+(i+1)),'النسخة الأصلية محفوظة'));
+ old.images.forEach((src,i)=>card(document.getElementById('originalItems'),src,old.words[i]||('Object '+(i+1)),''));
+}
+if(newer){
+ newer.scenes.forEach((s,i)=>card(document.getElementById('newScenes'),newer.root.replace(/^\.\//,'../hidden-objects/')+s.file,s.name||('Scene '+(i+1)),s.approved?'معتمدة':'قيد المراجعة — لم تُفعّل'));
+}
+document.querySelectorAll('button[data-kind]').forEach(b=>b.addEventListener('click',()=>{
+ const kind=b.dataset.kind;document.getElementById('originalSection').hidden=kind==='new';document.getElementById('newSection').hidden=kind==='original';
+ document.querySelectorAll('button[data-kind]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+}));
+})();
+</script>
+</body></html>

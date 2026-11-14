@@ -51,10 +51,11 @@ try{
  assert.equal(await game.locator('[data-game="hidden"]').isDisabled(),true,'Self-postMessage must not unlock games');
  await unlock(desktop,20);
  await child.waitForFunction(()=>!document.querySelector('[data-game="hidden"]').disabled);
- assert.equal(await game.locator('[data-game="sailor"]').isDisabled(),true,'Omani Sailor requires second badge at 40 stars');
+ assert.equal(await game.locator('[data-game="sailor"]').isDisabled(),true,'Archived 3D game is temporarily paused');
  await unlock(desktop,40);
- await child.waitForFunction(()=>!document.querySelector('[data-game="sailor"]').disabled);
- console.log('Trusted iframe handshake and 20/40 star gates: PASS');
+ assert.equal(await game.locator('[data-game="sailor"]').isDisabled(),true,'Archived 3D sailor must remain disabled while currency UI is removed');
+ assert.match(await game.locator('[data-game="sailor"]').textContent(),/تحديث النجوم/);
+ console.log('Trusted iframe handshake, 20-star gate, and 3D sailor safety lock: PASS');
  await desktop.screenshot({path:'games-qa-desktop.png',fullPage:true});
  await game.locator('#grade').selectOption('9');
  await game.locator('[data-game="words"]').click();

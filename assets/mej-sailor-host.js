@@ -157,4 +157,32 @@
    }catch(err){console.warn('Hidden Objects failed to open',err);toast('تعذر فتح اللعبة. حاول مجددًا.')}
    finally{opening=false}
  };
+
+ // Supplementary practice-only arcade; does not touch student mastery or rewards.
+ window.openMejArcade=function(){
+   if(document.getElementById('mejArcadeDialog'))return;
+   const learner=active();
+   if(!learner?.id){toast('سجّل ملف الطالب أولًا لفتح الألعاب.');return}
+   const dialog=document.createElement('dialog'),frame=document.createElement('iframe');
+   const bar=document.createElement('div'),back=document.createElement('button'),title=document.createElement('span');
+   dialog.id='mejArcadeDialog';dialog.setAttribute('aria-label','بوابة الألعاب التعليمية');
+   dialog.style.cssText='box-sizing:border-box;padding:0;border:0;background:#082f4f;width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;overflow:hidden;margin:0';
+   bar.style.cssText='display:flex;gap:8px;align-items:center;justify-content:space-between;height:44px;padding:4px 10px;background:#073f5c;color:#fff;font:800 14px system-ui';
+   title.textContent='🎮 بوابة الألعاب · تدريب إضافي';
+   back.type='button';back.textContent='↩ العودة إلى رحلتي';
+   back.style.cssText='border:0;border-radius:9px;background:#f3d083;color:#17354e;font:800 13px system-ui;padding:8px 12px;cursor:pointer';
+   bar.append(title,back);
+   frame.title='بوابة الألعاب — رحلتي مع الإنجليزية';
+   frame.style.cssText='display:block;width:100%;height:calc(100% - 44px);border:0;background:#092f51';
+   frame.setAttribute('allow','fullscreen');
+   frame.src='./games/index.html?grade='+encodeURIComponent(Math.max(1,Math.min(12,Number(learner.grade)||1)));
+   back.addEventListener('click',()=>{if(dialog.open)dialog.close();else dialog.remove()});
+   dialog.addEventListener('close',()=>{
+     frame.src='about:blank';dialog.remove();
+     if(active()?.id===learner.id)route('journey');
+   },{once:true});
+   dialog.append(bar,frame);document.body.append(dialog);
+   if(typeof dialog.showModal==='function')dialog.showModal();
+   else dialog.setAttribute('open','');
+ };
 })();

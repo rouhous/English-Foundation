@@ -60,7 +60,7 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
     <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
     <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
     <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 الألعاب والشارات (10)</button>
-    <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 الشارات (رموز مؤقتة)</button>
+    <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 صور الشارات الأصلية</button>
     <button type="button" id="phoneMode" aria-pressed="true">📱 الهاتف</button>
     <button type="button" id="desktopMode" aria-pressed="false">🖥️ شاشة الكمبيوتر</button>
     <button type="button" id="zoomButton" hidden>🔎 تكبير 100%</button>
@@ -194,7 +194,7 @@ function showFrame(tab){
   frame.src='../coastal-arcade/index.html?mode=owner';
  }else if(tab==='badges'){
   frame.title='معاينة الشارات العمانية';
-  frame.srcdoc=badgesHTML();
+  frame.src='../coastal-arcade/index.html?mode=owner#stations';
  }
  $('previewViewport').scrollTo(0,0);
  applyScreenMode();

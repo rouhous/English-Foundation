@@ -45,7 +45,7 @@ const shuffle=a=>{const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.f
 const goBack=()=>{if(typeof window.route==='function')window.route('skills')};
 function permittedGrade(g){
  if(typeof window.permitted!=='function')return true;
- try{return Boolean(window.permitted(2*g-1)||window.permitted(2*g));}catch(_){return false}
+ try{return Boolean(window.permitted(g));}catch(_){return false}
 }
 function surface(title){
  const root=app();if(!root)return null;root.replaceChildren();const box=E('section');box.id='mej-writing-practice';box.append(E('h2',title));const back=E('button','↩ عودة إلى المهارات');back.onclick=goBack;box.append(back);root.append(box);return box;
@@ -61,8 +61,9 @@ function choose(){
  const old=E('button','Writing 8–12');old.onclick=()=>{
   if(nativeSelect){nativeSelect('Writing');const panel=app();for(const b of panel.querySelectorAll('button')){const match=(b.textContent||'').match(/الصف\s*(\d+)/);if(match&&+match[1]<8)b.remove()}}
  };
- const g8=E('button','📊 رسم بياني — 8A');g8.onclick=()=>chart(8,0);
- const g10=E('button','📊 رسم بياني — 10A');g10.onclick=()=>chart(10,0);
+ const g8=E('button','📊 Charts — الصف 8');g8.disabled=!permittedGrade(8);g8.title=g8.disabled?'افتح المستوى الثامن أولًا':'';g8.onclick=()=>chart(8,0);
+ const g10=E('button','📊 Charts — الصف 10');g10.disabled=!permittedGrade(10);g10.title=g10.disabled?'افتح المستوى العاشر أولًا':'';g10.onclick=()=>chart(10,0);
+ old.disabled=![8,9,10,11,12].some(permittedGrade);
  advanced.append(old,g8,g10);box.append(advanced);
 }
 function practice(g){

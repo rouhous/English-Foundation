@@ -45,6 +45,8 @@ try{
  await desktop.reload({waitUntil:'domcontentloaded'});
  await desktop.locator('body[data-state="open"]').waitFor();
  assert.equal(await desktop.locator('#gameGrid .game-card').count(),6);
+ assert.equal(await desktop.locator('[data-game="hidden"]').isDisabled(),true);
+ assert.equal(await desktop.locator('[data-game="sailor"]').isDisabled(),true);
  await desktop.screenshot({path:'games-qa-desktop.png',fullPage:true});
  console.log('Desktop game hub: PASS');
  await desktop.selectOption('#grade','9');
@@ -98,6 +100,10 @@ try{
  assert.ok((await desktop.locator('#score').textContent()).includes('1 / 4'));
  await desktop.locator('#exit').click();
  console.log('Sentence builder gameplay: PASS');
+ await desktop.evaluate(()=>window.postMessage({type:'mej:arcade-init',stageStars:50,stage:9},location.origin));
+ await desktop.locator('[data-game="hidden"]').waitFor({state:'visible'});
+ assert.equal(await desktop.locator('[data-game="hidden"]').isEnabled(),true);
+ assert.equal(await desktop.locator('[data-game="sailor"]').isEnabled(),true);
  await desktop.locator('[data-game="hidden"]').click();
  const gameFrame=desktop.frameLocator('iframe[title="Hidden Objects practice"]');
  await gameFrame.locator('.scene .spot').first().waitFor({timeout:30000});

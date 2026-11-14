@@ -2195,7 +2195,7 @@ function skills(){
     counts[t]=(counts[t]||0)+1;
    }
   }
-  const types=['Phonics','Blend','Vocabulary','Spelling','Listening','Grammar','Reading','Writing','Writing Builder','Order','Match','Describe'];
+  const types=['Phonics','Blend','Vocabulary','Spelling','Listening','Grammar','Reading','Writing','Writing Builder','Describe'];
   const symbols={Phonics:'🔤',Blend:'🧩',Vocabulary:'📚',Spelling:'✏️',Listening:'🎧',Grammar:'🧠',Reading:'📖',Writing:'📝'};
   const cards=types.filter(t=>counts[t]>0).map(t=>'<div class="info skill-item"><div class="bubble">'+(symbols[t]||'🎮')+'</div><h3>'+esc(t)+'</h3><p class="muted">'+counts[t]+' عنصر</p><button type="button" class="btn small" onclick="selectSkill('+jsStr(t)+')">تدرّب</button></div>').join('');
   host.innerHTML='<section class="card skill-center"><h1 class="section-title">🎯 مركز المهارات</h1><p class="skill-center-intro">اختر مهارة للتدريب من مستواك المفتوح.</p><div class="grid skill-cards">'+cards+'</div></section>'+
@@ -2906,4 +2906,4 @@ window.eeScheduleCloudSave=function(){clearTimeout(timer);timer=setTimeout(()=>{
 <span class="mej-rights-owner"><b>حسام لطفي الرواتبي</b> <span aria-hidden="true">|</span> <b dir="ltr" lang="en">Houssem Lotfi Rouatbi</b></span>
 </div>
 
-<script src="./assets/mej-sailor-host.js"></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script></body></html>
+<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-writing-skills-v1.js?v=20261114-skills-charts" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script></body></html>

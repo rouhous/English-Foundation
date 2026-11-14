@@ -1,0 +1,45 @@
+name: MEJ release candidate integration test
+on:
+  push:
+    branches: [mej-games-release-verified-20261114]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'assets/mej-sailor-host.js'
+      - 'games/qa/integration.mjs'
+      - '.github/workflows/mej-games-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Browser engine
+        run: npm install --no-save --no-package-lock playwright-core@1.56.1
+      - name: Run integration in headless Chrome
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-integration-server.log 2>&1 &
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS http://127.0.0.1:8765/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          node games/qa/integration.mjs
+      - name: Attach candidate screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mej-release-candidate-screenshots
+          path: |
+            mej-integration-desktop.png
+            mej-integration-mobile.png
+          if-no-files-found: ignore

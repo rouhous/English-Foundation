@@ -8,7 +8,7 @@
  if(!bank||window.MEJArcadeRelease!==true)return;
  document.body.dataset.state='open';
  const state={grade:1,mode:null,index:0,score:0,deck:[],responded:false,firstAttempt:true,selected:[],tokens:[],shuffledTokens:[],choices:[],audioEnabled:true};
- let audioContext=null,frame=null;
+ let audioContext=null,frame=null,hostUnlockStars=0;
  const shuffle=items=>{
   const a=[...items];
   for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
@@ -57,12 +57,31 @@
   el('sound').setAttribute('aria-pressed',String(state.audioEnabled));
   el('sound').textContent=state.audioEnabled?'🔊 الصوت':'🔇 بدون صوت';
  };
+ function applyBadgeLocks(){
+  const required={hidden:20,sailor:40};
+  Object.entries(required).forEach(([game,min])=>{
+   const b=el('gameGrid').querySelector('[data-game="'+game+'"]');
+   if(!b)return;
+   b.disabled=hostUnlockStars<min;
+   b.textContent=b.disabled?'🔒 تفتح عند '+min+' نجمة':game==='hidden'?'🔎 ابدأ البحث':'⛵ انطلق في البحر';
+   b.title=b.disabled?'تحتاج إلى '+min+' نجمة أساسية في جزيرتك الحالية':'';
+  });
+ }
+ applyBadgeLocks();
+ window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==window.parent)return;
+  if(event.data?.type!=='mej:arcade-init')return;
+  const n=Number(event.data.stageStars);
+  hostUnlockStars=Number.isFinite(n)?Math.max(0,Math.min(200,Math.floor(n))):0;
+  applyBadgeLocks();
+ });
+ if(window.parent!==window)window.parent.postMessage({type:'mej:arcade-ready'},location.origin);
  function displayHome(){
   state.mode=null;state.deck=[];state.selected=[];state.tokens=[];state.shuffledTokens=[];
   if(frame){frame.remove();frame=null;}
   el('frameWrap').replaceChildren();
   show('hero',true);show('selector',true);show('gameGrid',true);show('gameStage',false);
-  el('gameGrid').querySelectorAll('button').forEach(b=>b.disabled=false);
+  applyBadgeLocks();
   window.scrollTo({top:0,behavior:'smooth'});
  }
  el('exit').addEventListener('click',displayHome);
@@ -73,6 +92,7 @@
  });
  function start(mode){
   if(!shortMode[mode])return;
+  if((mode==='sailor'&&hostUnlockStars<40)||(mode==='hidden'&&hostUnlockStars<20))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
   state.deck=shuffle(mode==='words'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:[]).slice(0,mode==='words'?8:mode==='sentences'?4:3);

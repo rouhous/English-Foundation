@@ -21,3 +21,6 @@ A PIN enrollment has not been made on the server as of this development snapshot
 
 ## Testing
 `node scripts/qa-admin-preview.mjs` performs static checks. Device-side Google sign-in, PIN acceptance, app iframe rendering and re-lock after logout must still be manually tested by the owner. A static test is not a successful full sign-in.
+
+### Owner-only visual access to all levels
+The authenticated, temporary Blob preview patches the four level/skill access helpers **only in memory** after server-verified Google + PIN login. This lets the owner review all 13 stage indexes (0–12), L1/L2 and skill categories regardless of a learner's diagnosed progress. It does not alter normal student unlocking rules, actual mastery records, accounts or teacher data. Do not use live student records for test answers.

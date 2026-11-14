@@ -97,7 +97,20 @@ function prelude(html){
  const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
  if(!gate.test(html))throw Error('INVALID_OWNER_GATE');
  const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;<'+'/script>';
- return html.replace(gate,mark);
+ html=html.replace(gate,mark);
+ // All learning stages are inspectable by the authenticated owner only inside
+ // the temporary preview document. The public student app remains unchanged.
+ const reviewUnlocks=[
+  ["function maxAllowed(p=active()){","function maxAllowed(p=active()){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return 12;"],
+  ["function permitted(g){","function permitted(g){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12;"],
+  ["function mejPartUnlocked(g,part,p=active()){","function mejPartUnlocked(g,part,p=active()){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12&&(Number(part)===1||Number(part)===2);"],
+  ["const maxG=p.diagnosed?Math.min(cap,limit):0;","const maxG=(p.diagnosed||window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')?Math.min(cap,limit):0;"]
+ ];
+ for(const [needle,edited] of reviewUnlocks){
+  if(!html.includes(needle))throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING');
+  html=html.replace(needle,edited);
+ }
+ return html;
 }
 function showFrame(tab){
  if(!reviewSession||!fullHTML)return;

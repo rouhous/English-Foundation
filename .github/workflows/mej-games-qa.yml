@@ -1,0 +1,48 @@
+name: MEJ games acceptance checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'games/**'
+      - '.github/workflows/mej-games-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  games-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout the published source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright browser API
+        run: npm install --no-save --no-package-lock playwright-core@1.56.1
+      - name: Validate JavaScript syntax
+        run: |
+          node --check games/arcade.js
+          node --check games/bank.js
+          node --check games/release.js
+          node --check games/qa/browser.mjs
+      - name: Test game controls, curriculum banks, and phone layout
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-game-server.log 2>&1 &
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS http://127.0.0.1:8765/games/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          node games/qa/browser.mjs
+      - name: Store QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mej-game-qa-screenshots
+          path: |
+            games-qa-desktop.png
+            games-qa-mobile.png
+          if-no-files-found: ignore

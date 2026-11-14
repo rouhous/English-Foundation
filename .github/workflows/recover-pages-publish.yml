@@ -1,12 +1,8 @@
 name: Publish My English Journey site (recovery)
+# Legacy emergency artifact uploader: use manually only.
+# Normal GitHub Pages branch publishing now deploys the entire repository.
+# Auto-publishing a partial _site would remove the newly integrated games.
 on:
-  push:
-    paths:
-      - .github/workflows/recover-pages-publish.yml
-      - reviews/companion-2d-lab.html
-      - index.html
-      - sw.js
-      - assets/mej-companion-*.js
   workflow_dispatch:
 permissions:
   contents: read

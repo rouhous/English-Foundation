@@ -32,7 +32,7 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
 .toolbar button[aria-pressed="true"]{background:#efcb80}
 .preview-note{background:#fff7d8;color:#664500;padding:7px 14px;font-size:12px;line-height:1.5}
 #previewViewport{flex:1;min-height:0;position:relative;overflow:auto;background:#05324f;direction:ltr;overscroll-behavior:contain}
-#frameCanvas{position:relative;width:100%;height:100%;min-height:100px}
+#frameCanvas{position:relative;width:100%;height:100%;min-height:100px;background:#063b5e url("../assets/background%20PC.png") center top / contain no-repeat}
 #previewFrame{position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:#e8f4f6;transform-origin:top left;display:block}
 #zoomButton[hidden]{display:none!important}
 .toolbar button[aria-pressed="true"]{background:#efcb80}
@@ -59,14 +59,14 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
   <header class="toolbar">
     <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
     <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
-    <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 الألعاب التفاعلية</button>
-    <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 الشارات</button>
+    <button type="button" id="gamesTab" aria-pressed="false" hidden>🎮 ألعاب تجريبية (4)</button>
+    <button type="button" id="badgesTab" aria-pressed="false" hidden>🏅 الشارات (رموز مؤقتة)</button>
     <button type="button" id="phoneMode" aria-pressed="true">📱 الهاتف</button>
     <button type="button" id="desktopMode" aria-pressed="false">🖥️ شاشة الكمبيوتر</button>
     <button type="button" id="zoomButton" hidden>🔎 تكبير 100%</button>
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
-  <div class="preview-note">معاينة قبل النشر • الطلاب ما زالوا يرون شاشة الصيانة • الألعاب الحالية قيد المراجعة ولم يُعتمد إصدارها النهائي</div>
+  <div class="preview-note">معاينة قبل النشر • الطلاب يرون شاشة الصيانة • صور الشارات الأصلية وألعاب v11.1 في ملف المراجعة المستقل، ولم تُنقل بعد إلى هذه الصفحة</div>
   <div id="previewViewport"><div id="frameCanvas"><iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 <script>
@@ -150,9 +150,9 @@ function applyScreenMode(){
 }
 function badgesHTML(){
  // An owner-only review of the progression, not a release of final badge art.
- const names=['البداية','النخلة','البوصلة','السفينة','الخنجر العُماني','المها العربي','اللبان','الجبل الأخضر','القلعة','كنز الإنجاز'];
- const marks=['⭐','🌴','🧭','⛵','🗡️','🦌','🌿','⛰️','🏰','🏆'];
- const cards=names.map((name,i)=>'<article class="badge" data-unlock="'+((i+1)*20)+'"><div class="coin">'+marks[i]+'</div><h2>الشارة '+(i+1)+'</h2><p>'+name+'</p><strong>'+((i+1)*20)+' ⭐</strong></article>').join('');
+ const names=['خصب','صحار','ميناء صحار','مسقط','ميناء مطرح','صور','الدقم','جزيرة مصيرة','جزر الديمانيات','صلالة'];
+ const marks=['🧭','⛵','⚓','🏝️','🚢','🪵','🏗️','🐢','🐠','🏆'];
+ const cards=names.map((name,i)=>'<article class="badge" data-unlock="'+((i+1)*20)+'"><div class="coin">'+marks[i]+'</div><h2>المحطة '+(i+1)+'</h2><p>'+name+'</p><strong>'+((i+1)*20)+' ⭐</strong></article>').join('');
  return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>معاينة الشارات</title><style>
  *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#1379b1,#062c59 70%);color:#fff;font-family:system-ui,"Segoe UI",Tahoma,sans-serif;min-height:100vh}
  main{max-width:1150px;margin:auto;padding:clamp(16px,3.5vw,34px)}
@@ -169,7 +169,7 @@ function badgesHTML(){
  @media(max-width:790px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
  @media(max-width:460px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.badge{padding:12px 5px}}
  </style></head><body><main><h1>🏅 رحلة الشارات العُمانية</h1>
- <p class="lede">معاينة التدرّج المقترح: عشر شارات عند 20، 40، 60 ... حتى 200 نجمة في المرحلة. هذه شاشة مراجعة، وليست ربطًا فعليًا برصيد أي طالب أو اعتمادًا نهائيًا للرسومات.</p>
+ <p class="lede">ترتيب الوجهات مطابق لملف v11.1: عشر شارات عند 20، 40، 60 ... حتى 200 نجمة تعليمية. هذه رموز مؤقتة في معاينة GitHub؛ الصور الأصلية موجودة في حزمة v11.1 المرفقة، ولم تُدمج في الموقع بعد.</p>
  <div class="progress"><label for="stars">جرّب عدد النجوم: <output id="currentStars">0</output> / 200 ⭐</label>
  <input id="stars" type="range" min="0" max="200" step="20" value="0" oninput="document.getElementById('currentStars').textContent=this.value;document.querySelectorAll('[data-unlock]').forEach(x=>x.classList.toggle('earned',Number(this.value)>=Number(x.dataset.unlock)))"></div>
  <section class="grid">${cards}</section>
@@ -185,7 +185,10 @@ function showFrame(tab){
  frame.src='about:blank';
  if(tab==='app'){
   frame.title='معاينة التطبيق الكامل';
-  frame.src=blobURL;
+  // Prefer srcdoc to avoid blank/blob-URL frame failures observed in mobile preview.
+  // The absolute <base> inserted by prelude() resolves existing PC background, dhow,
+  // child, islands, fort and other app assets against the original deployment.
+  try{frame.srcdoc=fullHTML;}catch(_){frame.src=blobURL;}
  }else if(tab==='games'){
   frame.title='معاينة الألعاب التفاعلية';
   frame.src='../games/index.html?grade=12';

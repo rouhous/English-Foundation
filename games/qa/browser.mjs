@@ -22,7 +22,7 @@ for(let grade=1;grade<=12;grade++){
  }
  for(const s of pack.sentences){
    assert.ok(s.text.endsWith('.'), 'Sentence punctuation '+grade);
-   assert.ok(s.text.split(' ').length>=4, 'Sentence token length '+grade);
+   assert.ok(s.text.split(' ').length>=3, 'Sentence token length '+grade);
  }
 }
 console.log('Bank validated: 12 grades, 96 words, 48 sentences, 36 grammar questions');

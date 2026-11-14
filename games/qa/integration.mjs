@@ -31,6 +31,15 @@ async function inspect(size,mobile){
  });
  assert.ok(outcome.ok,'Journey render: '+outcome.error);
  assert.ok(outcome.button,'Game launcher must appear in quick access');
+ // First-time learners choose their companion before the app permits clicks.
+ await page.waitForTimeout(250);
+ const companion=page.locator('#mej-companion-choice');
+ if(await companion.isVisible().catch(()=>false)){
+  await companion.locator('.mej-c-pick').first().click();
+  await companion.locator('input').fill('مرشد');
+  await companion.locator('.mej-c-save').click();
+  await companion.waitFor({state:'detached'});
+ }
  await page.locator('.j23-links button').filter({hasText:'الألعاب'}).click();
  await page.locator('#mejArcadeDialog').waitFor();
  const arcade=page.frameLocator('#mejArcadeDialog iframe');

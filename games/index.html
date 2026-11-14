@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#073f64">
+<meta name="description" content="بوابة ألعاب رحلتي مع الإنجليزية — تدريب تفاعلي للمفردات والجمل والقواعد">
+<title>بوابة الألعاب | رحلتي مع الإنجليزية</title>
+<link rel="stylesheet" href="./arcade.css">
+</head>
+<body data-state="locked">
+<section id="locked">
+ <main class="locked-card">
+  <div class="mark" aria-hidden="true">⛵</div>
+  <p><strong>رحلتي مع الإنجليزية · My English Journey</strong></p>
+  <h1>🔧 نعتذر، جاري التحديث...</h1>
+  <p>نعمل على تجهيز التصميم النهائي للألعاب والأنشطة التعليمية والتأكد من سلامتها قبل إتاحتها للطلاب.</p>
+  <h2>🎮 ترقبوا مزيدًا من الألعاب قريبًا!</h2>
+  <p>شكرًا لتفهمكم. لن تضيع نجومكم أو نتائجكم السابقة.</p>
+ </main>
+</section>
+<main class="arcade" id="arcade">
+ <header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true">⛵</span><span>رحلتي مع الإنجليزية<small>MY ENGLISH JOURNEY · GAME ARCADE</small></span></div>
+  <div class="header-tools">
+   <button id="sound" type="button" class="ghost sound-toggle" aria-pressed="true">🔊 الصوت</button>
+   <button id="backTop" type="button" class="ghost">↩ العودة إلى رحلتي</button>
+  </div>
+ </header>
+ <section class="hero" id="hero" aria-labelledby="heroTitle">
+  <div class="hero-copy">
+   <span class="kicker">ألعاب وتحديات تعليمية · Grades 1–12</span>
+   <h1 id="heroTitle">تعلم الإنجليزية وسط المغامرة!</h1>
+   <p>أبحر بين الكلمات، وابنِ الجمل، وتغلّب على تحديات القواعد، وابحث عن الكنوز والأغراض في عالم عُماني مليء بالمغامرات.</p>
+  </div>
+  <svg class="scene-art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 310" aria-label="سفينة عُمانية أمام قلعة ونخيل">
+   <defs>
+    <linearGradient id="water" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#17b7c7"/><stop offset="1" stop-color="#046b99"/></linearGradient>
+    <linearGradient id="hull" x1="0" x2="1"><stop stop-color="#a97838"/><stop offset=".5" stop-color="#7f4c2a"/><stop offset="1" stop-color="#5b3522"/></linearGradient>
+    <linearGradient id="sail" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fffbe3"/><stop offset="1" stop-color="#e4c17d"/></linearGradient>
+   </defs>
+   <circle cx="373" cy="71" r="47" fill="#ffdf87"/>
+   <path d="M0 226c70-23 105-18 150 0s99 18 152 0 121-25 168-1v85H0z" fill="url(#water)"/>
+   <path d="M0 250q38 14 81 0t88 1 97 0 91 0 113-4" fill="none" stroke="#b3ffff" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+   <path d="M316 193v-52h18v-16h45v16h19v52z" fill="#e5b978" stroke="#ad8456" stroke-width="3"/>
+   <path d="M335 142v-14h15v14m17-14v-17h17v31" fill="#deb17d" stroke="#ad8456" stroke-width="3"/>
+   <path d="M357 193v-26q10-13 19 0v26" fill="#936a45"/>
+   <path d="M428 193q-10-44-4-94" stroke="#927040" stroke-width="8" stroke-linecap="round"/>
+   <path d="M424 117q-48-19-51-6m51 6q40-41 41-29m-41 29q23 39 43 19m-43-19q-37 26-38 46" fill="none" stroke="#2b965a" stroke-width="14" stroke-linecap="round"/>
+   <path d="M39 213h275l-38 54H85z" fill="url(#hull)" stroke="#714526" stroke-width="5"/>
+   <path d="M44 213h259" stroke="#f0bc65" stroke-width="11" stroke-linecap="round"/>
+   <path d="M163 37v176" stroke="#79532c" stroke-width="9"/>
+   <path d="M158 49L79 207h78z" fill="url(#sail)" stroke="#dab77c" stroke-width="3"/>
+   <path d="M172 54l116 153H172z" fill="#fff9ec" stroke="#d3c29a" stroke-width="3"/>
+   <path d="M163 41l42 10-42 14z" fill="#d64946"/>
+   <path d="M30 65l7 15 16 2-12 12 3 17-15-8-15 8 3-17L4 82l17-2zm275-38l6 12 13 2-10 9 2 13-11-6-12 6 2-13-10-9 13-2z" fill="#d99f3b"/>
+   <circle cx="114" cy="237" r="5" fill="#e4c477"/><circle cx="158" cy="237" r="5" fill="#e4c477"/><circle cx="203" cy="237" r="5" fill="#e4c477"/><circle cx="245" cy="237" r="5" fill="#e4c477"/>
+  </svg>
+ </section>
+ <section class="selector" id="selector" aria-label="إعدادات التدريب">
+  <label for="grade">اختر صفك:</label><select id="grade" name="grade"></select>
+  <span id="gradeTag" class="practice-pill">الصف 1</span>
+  <span id="topic" class="topic"></span>
+  <span class="practice-pill">تدريب حر · لا يغيّر رصيد النجوم</span>
+ </section>
+ <section class="grid" id="gameGrid" aria-label="الألعاب">
+  <article class="game-card"><span class="tag">Vocabulary</span><div class="emoji" aria-hidden="true">🧭🖼️</div><h2>مغامرة الكلمات</h2><p>انظر إلى الكلمة الإنجليزية واختر معناها أو صورتها الصحيحة. 8 تحديات متجددة في كل جولة.</p><button type="button" class="play" data-game="words">🎮 ابدأ اللعب</button></article>
+  <article class="game-card"><span class="tag">Writing</span><div class="emoji" aria-hidden="true">🧩📝</div><h2>بناء الجمل</h2><p>رتّب الكلمات خطوة بخطوة لتكوين جملة إنجليزية سليمة. المس الكلمات بالترتيب المناسب.</p><button type="button" class="play" data-game="sentences">🎮 ابدأ التحدي</button></article>
+  <article class="game-card"><span class="tag">Grammar</span><div class="emoji" aria-hidden="true">🏰📘</div><h2>بوابة القواعد</h2><p>افتح البوابة بالإجابة الصحيحة، وتعلم من شرح موجز للقاعدة عند الخطأ.</p><button type="button" class="play" data-game="grammar">🎮 افتح البوابة</button></article>
+  <article class="game-card featured"><span class="tag">Hidden Objects</span><div class="emoji" aria-hidden="true">🔍🏝️</div><h2>البحث عن الأغراض</h2><p>فتّش المشهد العُماني عن الأشياء المطلوبة باللغة الإنجليزية. جولة تدريبية من اللعبة الأصلية.</p><button type="button" class="play" data-game="hidden">🔎 ابدأ البحث</button></article>
+  <article class="game-card dark"><span class="tag">3D Adventure</span><div class="emoji" aria-hidden="true">⛵💎</div><h2>مغامرة البحّار العُماني</h2><p>أبحر بالقارب، تفادَ العوائق، واجمع الجواهر حتى تصل إلى الجزيرة والكنز في اللعبة ثلاثية الأبعاد.</p><button type="button" class="play" data-game="sailor">⛵ انطلق في البحر</button></article>
+  <article class="game-card"><span class="tag">Coming next</span><div class="emoji" aria-hidden="true">🎯⭐</div><h2>مغامرات جديدة</h2><p>سيُضاف المزيد من الألعاب المرتبطة بوحدات ومهارات الكتب الدراسية بعد المراجعة والاعتماد.</p><button type="button" class="play" disabled>🚧 قريبًا</button></article>
+ </section>
+ <section class="stage" id="gameStage" hidden aria-label="منطقة اللعب">
+  <header class="stage-header">
+   <h2 id="gameTitle">Word Explorer</h2>
+   <div class="stage-badges"><span id="round">الجولة 1</span><span id="score">🏆 0</span><button type="button" class="ghost" id="exit">✕ إنهاء</button></div>
+  </header>
+  <div class="progress-track"><div id="progress" class="progress-fill" role="progressbar" aria-label="تقدم التحدي" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"></div></div>
+  <section class="question" id="practiceView" hidden>
+   <div class="prompt-icon" id="promptIcon" aria-hidden="true"></div>
+   <div class="prompt-kicker" id="promptKicker"></div>
+   <h3 id="prompt" lang="en"></h3>
+   <div class="answers" id="answers" hidden></div>
+   <div class="sentence-parts" id="sentenceZone" aria-label="الجملة المختارة" dir="ltr" hidden></div>
+   <div class="word-bank" id="wordBank" aria-label="كلمات غير مرتبة" dir="ltr" hidden></div>
+   <div class="controls">
+    <button class="primary" type="button" id="check" hidden>تحقق من الجملة ✓</button>
+    <button class="secondary" type="button" id="reset" hidden>إعادة الترتيب</button>
+    <button class="secondary" type="button" id="skip" hidden>تخطي</button>
+    <button class="primary" type="button" id="next" hidden>التالي ←</button>
+   </div>
+   <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+  </section>
+  <section class="summary" id="resultView" hidden>
+   <div class="trophy" aria-hidden="true">🏆</div>
+   <h3>أحسنت، أكملت المغامرة!</h3>
+   <strong id="resultScore"></strong>
+   <p id="resultText"></p>
+   <p>هذه نقاط تدريبية فقط ولا تُضاف إلى نجوم الرحلة أو المكافآت.</p>
+   <div class="controls"><button class="primary" type="button" id="again">🔄 العب مرة أخرى</button><button class="secondary" type="button" id="home">العودة للألعاب</button></div>
+  </section>
+  <section id="frameView" hidden>
+   <div class="frame-wrap" id="frameWrap"></div>
+   <div class="arcade-panel"><strong>ملاحظة:</strong> <span id="frameCaption"></span></div>
+  </section>
+ </section>
+ <footer class="footnote">بوابة تدريب تفاعلية — المحتوى الإضافي موضوعات مناسبة للأعمار وليس بديلًا عن الوحدات الرسمية. مكافآت البيسات تحتاج ربطًا آمنًا بخادم المدرسة قبل اعتمادها.</footer>
+</main>
+<script src="./release.js"></script>
+<script src="./bank.js"></script>
+<script src="./arcade.js"></script>
+</body>
+</html>

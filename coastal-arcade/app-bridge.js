@@ -4,17 +4,16 @@ const places=[['خصب','Khasab'],['صحار','Sohar'],['ميناء صحار','P
 const badgeRoot=new URL('./coastal-arcade/badges/',document.baseURI).href;let activeProfile=null;
 // MEJ_OWNER_PREVIEW_BADGES_V1 — authenticated owner review only; no reward writes.
 function ownerPreview(){
- return window.__MEJ_ADMIN_PREVIEW_ACTIVE===true &&
-        window.__MEJ_ACCESS_ROLE==='owner' &&
+ return window.__MEJ_ACCESS_ROLE==='owner' &&
         window.__MEJ_OWNER_VERIFIED_SESSION===true;
 }
 function count(stage){try{return Math.max(0,Math.min(200,Number(countMaster(stage,active()))||0))}catch(_){return 0}}
 function safe(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function repaint(){
- const grid=document.querySelector('#app .j23-badge-grid');if(!grid||grid.dataset.coastalReady==='yes')return;
+ const grid=document.querySelector('#app .j23-badge-grid');if(!grid)return;const role=ownerPreview()?'owner':'student';if(grid.dataset.coastalReady==='yes'&&grid.dataset.coastalAccess===role)return;
  if(typeof active!=='function'||typeof currentIsland!=='function')return;
  const stage=currentIsland(active());if(!Number.isInteger(stage)||stage<0||stage>12)return;
- const stars=count(stage),admin=ownerPreview(),opened=admin?10:Math.floor(stars/20);grid.dataset.coastalReady='yes';
+ const stars=count(stage),admin=ownerPreview(),opened=admin?10:Math.floor(stars/20);grid.dataset.coastalReady='yes';grid.dataset.coastalAccess=role;
  const intro=document.querySelector('#app .mej-hidden-intro');
  if(intro)intro.innerHTML=admin?'<h2>🔓 معاينة المالك · شارات عُمان</h2><p>جميع الشارات والألعاب مفتوحة للمراجعة فقط.</p><div class="mej-hidden-rewards"><b>⭐ '+stars+'/200 إتقان فعلي</b><b>🏅 10/10 شارات</b></div><small>دون منح نجوم أو تغيير تقدم الطلاب.</small>':'<h2>🏅 رحلة الشارات الساحلية</h2><p>كل 20 نجمة تعليمية تفتح شارة عُمانية ولعبة جديدة.</p><div class="mej-hidden-rewards"><b>⭐ '+stars+'/200 إتقان</b><b>🏅 '+opened+'/10 شارات</b></div><small>نجوم الألعاب محفوظة منفصلة عن الإتقان والترتيب. المزامنة لازمة لاحتساب المكافآت.</small>';
  const h=document.querySelector('#app .j23-badges h2');if(h)h.textContent='🏅 الشارات الساحلية · Coastal Badges';
@@ -34,6 +33,7 @@ function open(stage,badge){
  const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student';
  dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
 }
+window.addEventListener('mej-owner-verified',()=>{const grid=document.querySelector('#app .j23-badge-grid');if(grid)grid.removeAttribute('data-coastal-ready');repaint()});
 window.mejCoastalOpen=open;window.mejCoastalClose=close;
 window.addEventListener('message',event=>{
  const f=document.getElementById('mejCoastalFrame');if(!f||event.origin!==location.origin||event.source!==f.contentWindow||event.data?.type!=='mej:coastal-ready')return;

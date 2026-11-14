@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#063b5e">
+<title>مراجعة المالك | رحلتي مع الإنجليزية</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;min-height:100dvh;background:linear-gradient(135deg,#083c62,#107f9c 70%,#2cbdc4);color:#153a50;padding:18px}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+.login{width:min(100%,500px);margin:7vh auto 0;padding:28px;background:#f7fdff;border-radius:26px;box-shadow:0 24px 55px #002b4e80;text-align:center}
+.mark{font-size:46px;margin:4px}h1{font-size:clamp(23px,5vw,29px);margin:7px 0 12px;color:#074d6a}
+.muted{font-size:14px;color:#56788a;line-height:1.9;margin:10px 0}
+#googleButton{display:flex;justify-content:center;min-height:48px;margin:20px auto 8px}
+#pinPanel{border-top:1px solid #cae1e7;padding-top:16px;margin-top:14px;text-align:right}
+#pinPanel label{display:block;font-size:15px;font-weight:800;margin-bottom:9px}
+#adminCode{display:block;width:100%;border:2px solid #a9cad5;border-radius:13px;background:white;padding:13px 15px;font-size:23px;letter-spacing:5px;text-align:center;direction:ltr}
+.primary{border:0;border-radius:12px;background:#e5ba5c;color:#163b52;padding:12px 18px;font-weight:850;margin-top:13px}
+.secondary{border:1px solid #a2d2e1;border-radius:12px;background:#ecfbfc;color:#0a506e;padding:10px 15px;font-weight:750}
+#status{margin:14px 0;min-height:24px;color:#19526a;font-weight:700;line-height:1.7}
+.back{display:inline-block;margin:9px;color:#0b668c}
+#review[hidden]{display:none}
+#review{position:fixed;inset:0;background:#052e4c;z-index:20;display:flex;flex-direction:column}
+.toolbar{min-height:54px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 12px;background:#083b5d;color:white;border-bottom:1px solid #7bc4db}
+.toolbar .title{font-size:14px;font-weight:850;margin-inline-end:auto}
+.toolbar button{padding:7px 12px;border-radius:10px;border:1px solid #9bd1de;background:#f6fdff;color:#10435b;font-weight:750}
+.toolbar button[aria-pressed="true"]{background:#efcb80}
+.preview-note{background:#fff7d8;color:#664500;padding:7px 14px;font-size:12px;line-height:1.5}
+#previewFrame{width:100%;flex:1;border:0;background:#e8f4f6}
+@media(max-width:620px){body{padding:10px}.login{margin:4vh auto;padding:18px}.toolbar{gap:5px}.toolbar .title{width:100%;margin:0}.toolbar button{padding:6px 9px;font-size:13px}.preview-note{font-size:11px}}
+</style>
+</head>
+<body>
+<main id="login" class="login">
+  <div class="mark" aria-hidden="true">⚙️</div>
+  <h1>معاينة المالك الخاصة</h1>
+  <p class="muted">للدخول إلى نسخة المراجعة، سجّل أولًا بحساب Google الخاص بمالك التطبيق، ثم أدخل رمز Admin الحالي المكوّن من 6 أرقام.</p>
+  <div id="googleButton"></div>
+  <form id="pinPanel" hidden autocomplete="off">
+    <label for="adminCode">رمز Admin الحالي</label>
+    <input id="adminCode" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required placeholder="••••••">
+    <button id="unlock" class="primary" type="submit">🔓 فتح المعاينة</button>
+    <p class="muted">عند استخدام الرمز أول مرة، تحفظ خدمة المراجعة بصمته الآمنة لحساب المالك فقط. لا يُنشأ رمز بديل.</p>
+  </form>
+  <p id="status" role="status" aria-live="polite">جار تحميل تسجيل الدخول...</p>
+  <a class="back" href="../">العودة إلى شاشة الصيانة</a>
+</main>
+<section id="review" hidden aria-label="مساحة معاينة Admin">
+  <header class="toolbar">
+    <div class="title">🔒 معاينة المالك — رحلتي مع الإنجليزية</div>
+    <button type="button" id="appTab" aria-pressed="true">التطبيق الكامل</button>
+    <button type="button" id="gamesTab" aria-pressed="false">الألعاب التفاعلية</button>
+    <button type="button" id="exit">إنهاء المعاينة</button>
+  </header>
+  <div class="preview-note">معاينة قبل النشر • الطلاب ما زالوا يرون شاشة الصيانة • الألعاب الحالية قيد المراجعة ولم يُعتمد إصدارها النهائي</div>
+  <iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe>
+</section>
+<script>
+(()=>{
+'use strict';
+const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
+const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/';
+const VERIFY=API+'mej-owner-verify', GATE=API+'mej-owner-preview-gate', CONTENT=API+'mej-owner-preview-content';
+const $=id=>document.getElementById(id);
+let credential=null,reviewSession=null,blobURL=null,fullHTML=null,activeTab=null,busy=false;
+function say(message){$('status').textContent=message}
+function hideAccess(){credential=null;reviewSession=null;fullHTML=null;$('pinPanel').hidden=true;$('review').hidden=true;$('login').hidden=false;window.__MEJ_ADMIN_PREVIEW_ACTIVE=false;}
+async function readJSON(r){try{return await r.json()}catch{return {}}}
+async function verifyGoogle(response){
+ hideAccess();
+ const token=response?.credential;
+ if(typeof token!=='string'||token.length>8192){say('تعذر تسجيل الدخول بواسطة Google.');return}
+ say('جار التحقق من حساب المالك...');
+ try{
+   const r=await fetch(VERIFY,{method:'GET',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(15000)});
+   const data=await readJSON(r);
+   if(!r.ok||data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){say('هذا الحساب غير مخوّل بمراجعة التطبيق.');return}
+   credential=token;$('pinPanel').hidden=false;say('تم التحقق من Google. أدخل رمز Admin الحالي.');
+   $('adminCode').focus();
+ }catch{say('تعذر الاتصال بخدمة التحقق. تحقق من الإنترنت ثم أعد المحاولة.')}
+}
+async function gate(action,code){
+ const res=await fetch(GATE,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+   headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},
+   body:JSON.stringify({action,code,reviewSession}),signal:AbortSignal.timeout(20000)});
+ return {res,data:await readJSON(res)};
+}
+function prelude(html){
+ if(!/id="mej-owner-only-gate"/.test(html))throw Error('INVALID_PREVIEW_SOURCE');
+ // The parent has verified both the owner identity and existing admin code.
+ const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;<'+'/script>';
+ return html.replace(/<head>/i,'<head>'+mark);
+}
+function showFrame(tab){
+ if(!reviewSession||!fullHTML)return;
+ const frame=$('previewFrame');
+ frame.src='about:blank';
+ activeTab=tab;
+ $('appTab').setAttribute('aria-pressed',String(tab==='app'));
+ $('gamesTab').setAttribute('aria-pressed',String(tab==='games'));
+ if(tab==='app'){
+  frame.title='معاينة التطبيق الكامل';
+  frame.src=blobURL;
+ }else{
+  frame.title='معاينة الألعاب التفاعلية';
+  frame.src='../games/index.html?grade=12';
+ }
+}
+async function openPreview(){
+ say('جار تجهيز نسخة المراجعة...');
+ const r=await fetch(CONTENT,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+  headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},
+  body:JSON.stringify({action:'preview-content',reviewSession}),
+  signal:AbortSignal.timeout(30000)});
+ if(!r.ok)throw Error('CONTENT_FETCH_'+r.status);
+ const raw=await r.text();
+ fullHTML=prelude(raw);
+ sessionStorage.setItem('MEJ_OWNER_ACCESS_V1',credential);
+ if(blobURL)URL.revokeObjectURL(blobURL);
+ blobURL=URL.createObjectURL(new Blob([fullHTML],{type:'text/html'}));
+ window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;
+ $('login').hidden=true;$('review').hidden=false;
+ showFrame('app');
+}
+$('pinPanel').addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(busy||!credential)return;
+ const code=$('adminCode').value.trim();
+ if(!/^[0-9]{6}$/.test(code)){say('الرمز يتكون من 6 أرقام.');return}
+ busy=true;$('unlock').disabled=true;say('جار التحقق من رمز Admin...');
+ try{
+  let result=await gate('unlock',code);
+  // First owner-only enrollment registers the existing code, not a new one.
+  if(result.res.status===409&&result.data.error==='SETUP_REQUIRED')result=await gate('setup',code);
+  if(!result.res.ok||result.data.ok!==true||!/^[0-9a-f]{64}$/.test(result.data.reviewSession||'')){
+   if(result.res.status===429)say('تم إيقاف المحاولات مؤقتًا. أعد المحاولة لاحقًا.');
+   else say('رمز Admin غير صحيح أو تعذر التحقق منه.');
+   return;
+  }
+  reviewSession=result.data.reviewSession;
+  $('adminCode').value='';
+  await openPreview();
+ }catch(err){
+  say('تعذر فتح المعاينة. تحقق من اتصال الإنترنت وخدمة المراجعة.');
+ }finally{busy=false;$('unlock').disabled=false}
+});
+window.addEventListener('message',event=>{
+ if(!reviewSession||activeTab!=='games'||event.origin!==location.origin||event.source!==$('previewFrame').contentWindow)return;
+ if(event.data?.type==='mej:arcade-ready')event.source.postMessage({type:'mej:arcade-init',stageStars:200,stage:12},location.origin);
+ if(event.data?.type==='mej:arcade-close')showFrame('app');
+});
+$('appTab').addEventListener('click',()=>showFrame('app'));
+$('gamesTab').addEventListener('click',()=>showFrame('games'));
+async function exit(){
+ const old=reviewSession;
+ $('previewFrame').src='about:blank';
+ if(blobURL){URL.revokeObjectURL(blobURL);blobURL=null}
+ if(credential&&old){try{await gate('logout')}catch{}}
+ sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');
+ hideAccess();
+ location.replace('../');
+}
+$('exit').addEventListener('click',exit);
+window.addEventListener('pagehide',()=>{sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');});
+let checks=0;
+const loader=setInterval(()=>{
+ if(window.google?.accounts?.id){
+  clearInterval(loader);
+  try{
+   google.accounts.id.initialize({client_id:CLIENT_ID,callback:verifyGoogle,auto_select:false,cancel_on_tap_outside:true});
+   google.accounts.id.renderButton($('googleButton'),{type:'standard',theme:'outline',size:'large',shape:'pill',text:'signin_with',width:270});
+   say('سجّل الدخول بحساب المالك.');
+  }catch{say('تعذر تشغيل تسجيل الدخول باستخدام Google.')}
+ }else if(++checks>65){clearInterval(loader);say('تعذر تحميل Google. تحقق من اتصال الإنترنت.')}
+},180);
+})();
+</script>
+</body></html>

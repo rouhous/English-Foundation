@@ -6,7 +6,8 @@
  const el=id=>document.getElementById(id);
  const bank=window.MEJArcadeBank;
  // Student games must open inside the journey, not as a public standalone URL.
- if(!bank||window.MEJArcadeRelease!==true||window.parent===window)return;
+ const previewHost=(()=>{try{return window.parent!==window&&window.parent.__MEJ_ADMIN_PREVIEW_ACTIVE===true}catch{return false}})();
+ if(!bank||(window.MEJArcadeRelease!==true&&!previewHost)||window.parent===window)return;
  document.body.dataset.state='open';
  const state={grade:1,mode:null,index:0,score:0,deck:[],responded:false,firstAttempt:true,selected:[],tokens:[],shuffledTokens:[],choices:[],audioEnabled:true};
  let audioContext=null,frame=null,hostUnlockStars=0,hostStage=null,hostAuthorized=false;

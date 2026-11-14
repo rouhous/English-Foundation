@@ -17,7 +17,10 @@ body:before{content:"";position:fixed;left:-15%;right:-15%;bottom:-22vh;height:4
 .panel:before{content:"";position:absolute;left:0;top:0;width:100%;height:7px;background:linear-gradient(90deg,#06a6bd,#e7b656,#0a85aa)}
 .brand{color:#08718e;font-size:clamp(14px,2.8vw,17px);font-weight:800;letter-spacing:.1px;margin:0 0 3px}
 .subbrand{display:block;font-size:13px;color:#5c7b89;direction:ltr;font-weight:650;letter-spacing:.4px}
-.scene{width:100%;max-width:350px;height:auto;display:block;margin:15px auto 3px;filter:drop-shadow(0 8px 9px #1a70892a)}
+.scene-wrap{position:relative;width:min(100%,350px);margin:15px auto 3px}
+.scene{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 9px #1a70892a)}
+.owner-gear{position:absolute;bottom:8px;right:12px;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:2px solid #a5e0ec;background:#fffdf3;color:#0d5e83;font-size:23px;box-shadow:0 5px 13px #1c678d55;cursor:pointer;z-index:2}
+.owner-gear:focus-visible{outline:3px solid #ffcc55;outline-offset:3px}
 .status{display:inline-flex;align-items:center;gap:9px;background:#fff5da;border:1px solid #efda9e;border-radius:99px;padding:9px 17px;font-size:14px;color:#96651b;font-weight:800;margin:14px auto 5px}
 .dot{height:9px;width:9px;border-radius:50%;background:#dd9d28;box-shadow:0 0 0 4px #ebc86d55;animation:pulse 1.8s ease-in-out infinite}
 h1{font-size:clamp(24px,5.4vw,33px);line-height:1.45;color:#103d62;margin:12px 0 12px;font-weight:900}
@@ -32,6 +35,7 @@ h1{font-size:clamp(24px,5.4vw,33px);line-height:1.45;color:#103d62;margin:12px 0
 <div class="glow" aria-hidden="true"></div>
 <main class="panel">
   <p class="brand">رحلتي مع الإنجليزية <span class="subbrand" lang="en">My English Journey</span></p>
+  <div class="scene-wrap">
   <svg class="scene" viewBox="0 0 360 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="قارب عماني يبحر نحو قلعة ونجوم">
     <defs><linearGradient id="sea" x2="0" y2="1"><stop stop-color="#37b8c8"/><stop offset="1" stop-color="#0f719e"/></linearGradient><linearGradient id="sail" x2="0" y2="1"><stop stop-color="#fff6d2"/><stop offset="1" stop-color="#e8c780"/></linearGradient></defs>
     <circle cx="268" cy="44" r="31" fill="#ffe8a1"/>
@@ -48,6 +52,8 @@ h1{font-size:clamp(24px,5.4vw,33px);line-height:1.45;color:#103d62;margin:12px 0
     <path d="M32 44l5 10 11 2-9 7 2 11-9-5-9 5 2-11-9-7 11-2zM234 21l3 6 7 2-6 5 1 7-5-4-7 3 1-7-6-4 7-2z" fill="#f3c565"/>
     <path d="M26 171q18 7 36 0m181 5q18 7 36 0m31-14q12 5 25 0" stroke="#e9ffff" stroke-linecap="round" stroke-width="4" fill="none"/>
   </svg>
+  <button type="button" class="owner-gear" id="mejPreviewSettings" title="الإعدادات" aria-label="الإعدادات" onclick="location.assign('./reviews/admin-preview.html')">⚙️</button>
+  </div>
   <div class="status" aria-label="حالة التطبيق"><span class="dot" aria-hidden="true"></span> جاري التحديث...</div>
   <h1>نعتذر عن إيقاف التطبيق مؤقتًا</h1>
   <p class="message">نعمل على تطوير <strong>رحلتي مع الإنجليزية</strong> وتحسين الألعاب والأنشطة التعليمية، لنقدم لكم تجربة أكثر متعة وتفاعلًا.</p>

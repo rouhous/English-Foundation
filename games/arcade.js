@@ -5,10 +5,11 @@
 (()=>{'use strict';
  const el=id=>document.getElementById(id);
  const bank=window.MEJArcadeBank;
- if(!bank||window.MEJArcadeRelease!==true)return;
+ // Student games must open inside the journey, not as a public standalone URL.
+ if(!bank||window.MEJArcadeRelease!==true||window.parent===window)return;
  document.body.dataset.state='open';
  const state={grade:1,mode:null,index:0,score:0,deck:[],responded:false,firstAttempt:true,selected:[],tokens:[],shuffledTokens:[],choices:[],audioEnabled:true};
- let audioContext=null,frame=null,hostUnlockStars=0;
+ let audioContext=null,frame=null,hostUnlockStars=0,hostStage=null,hostAuthorized=false;
  const shuffle=items=>{
   const a=[...items];
   for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
@@ -62,7 +63,7 @@
   Object.entries(required).forEach(([game,min])=>{
    const b=el('gameGrid').querySelector('[data-game="'+game+'"]');
    if(!b)return;
-   b.disabled=hostUnlockStars<min;
+   b.disabled=!hostAuthorized||hostUnlockStars<min;
    b.textContent=b.disabled?'🔒 تفتح عند '+min+' نجمة':game==='hidden'?'🔎 ابدأ البحث':'⛵ انطلق في البحر';
    b.title=b.disabled?'تحتاج إلى '+min+' نجمة أساسية في جزيرتك الحالية':'';
   });
@@ -71,8 +72,9 @@
  window.addEventListener('message',event=>{
   if(event.origin!==location.origin||event.source!==window.parent)return;
   if(event.data?.type!=='mej:arcade-init')return;
-  const n=Number(event.data.stageStars);
-  hostUnlockStars=Number.isFinite(n)?Math.max(0,Math.min(200,Math.floor(n))):0;
+  const n=Number(event.data.stageStars),s=Number(event.data.stage);
+  if(!Number.isInteger(s)||s<0||s>12||!Number.isInteger(n)||n<0||n>200)return;
+  hostStage=s;hostUnlockStars=n;hostAuthorized=true;
   applyBadgeLocks();
  });
  if(window.parent!==window)window.parent.postMessage({type:'mej:arcade-ready'},location.origin);
@@ -92,7 +94,7 @@
  });
  function start(mode){
   if(!shortMode[mode])return;
-  if((mode==='sailor'&&hostUnlockStars<40)||(mode==='hidden'&&hostUnlockStars<20))return;
+  if(((mode==='sailor'||mode==='hidden')&&!hostAuthorized)||(mode==='sailor'&&hostUnlockStars<40)||(mode==='hidden'&&hostUnlockStars<20))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
   state.deck=shuffle(mode==='words'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:[]).slice(0,mode==='words'?8:mode==='sentences'?4:3);
@@ -254,7 +256,7 @@
   if(d?.type==='mej:hidden-ready'){
    const grade=state.grade;
    frame.contentWindow.postMessage({
-    type:'mej:hidden-init',stage:grade,badge:1,scene:grade%4,
+    type:'mej:hidden-init',stage:hostStage,badge:1,scene:hostStage%4,practice:true,
     masteredWords:[],levelWords:[],saved:null
    },location.origin);
   }else if(d?.type==='mej:hidden-close'){

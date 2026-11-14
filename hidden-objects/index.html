@@ -54,7 +54,7 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 <script>
 (()=>{'use strict';
 const ART=window.MEJHiddenArt;const PHOTO=window.MEJRealPhotoScenes;const el=id=>document.getElementById(id);
-let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null,lastPhotoMiss=null;
+let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null,lastPhotoMiss=null,practiceOnly=false;
 let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
 // An independent symbol must match the *current word*; IDs can be rebound
@@ -171,7 +171,7 @@ function renderListAndScores(){
 
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
  el('found').textContent=session.found.length+' / 10';
- el('bonus').textContent='⭐ '+Math.floor(session.found.length/2)+'/5';
+ el('bonus').textContent=(practiceOnly?'🎯 ':'⭐ ')+Math.floor(session.found.length/2)+'/5'+(practiceOnly?' تدريب':'');
  el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
 }
 function send(done){parent.postMessage({type:'mej:hidden-progress',stage:session.stage,badge:session.badge,found:[...session.found],misses:session.misses,remaining:session.remaining,ended:!!done},location.origin)}
@@ -189,16 +189,18 @@ function wrong(item){if(completed)return;const now=Date.now();if(now-lastClick<3
 }
 function finish(reason){if(completed)return;completed=true;clearInterval(timerHandle);session.ended=true;send(true);board();
  const award=Math.floor(session.found.length/2);
- const box=document.createElement('div');box.className='end';box.innerHTML='<div class="end-card"><h2>'+(reason==='all'?'أحسنت! اكتملت الجولة 🎉':reason==='mistakes'?'انتهت المحاولات الثلاث':'انتهى الوقت')+'</h2><p>جمعت '+session.found.length+' من 10 أغراض</p><strong>+'+award+' ⭐</strong><p>نجمة لكل غرضين صحيحين</p><button class="back" id="closeGame">العودة إلى رحلتي</button></div>';
+ const rewardLabel=practiceOnly?'<strong>🎯 '+award+' / 5 نقاط تدريب</strong><p>لا تُضاف نجوم إلى حساب الطالب</p>':'<strong>+'+award+' ⭐</strong><p>نجمة لكل غرضين صحيحين</p>';
+ const box=document.createElement('div');box.className='end';box.innerHTML='<div class="end-card"><h2>'+(reason==='all'?'أحسنت! اكتملت الجولة 🎉':reason==='mistakes'?'انتهت المحاولات الثلاث':'انتهى الوقت')+'</h2><p>جمعت '+session.found.length+' من 10 أغراض</p>'+rewardLabel+'<button class="back" id="closeGame">العودة إلى رحلتي</button></div>';
  el('scene').append(box);el('closeGame').onclick=()=>parent.postMessage({type:'mej:hidden-close'},location.origin);
 }
 function tick(){if(!session||completed||session.remaining==null)return;const now=Date.now();const diff=clamp(Math.floor((now-lastTime)/1000),0,8);if(diff){lastTime=now;session.remaining=Math.max(0,session.remaining-diff);const sec=session.remaining;el('timer').textContent='⏱️ '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec<=0){finish('timeout');return}if(sec%10===0)send(false)}}
-window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='mej:hidden-init'||session)return;
+window.addEventListener('message',e=>{if(window.parent===window||e.origin!==location.origin||e.source!==window.parent||e.data?.type!=='mej:hidden-init'||session)return;
  const d=e.data;
+ practiceOnly=d.practice===true;
  // Stage is the learner's actual island level, not merely their registered grade.
  const phase=Math.max(0,Math.min(12,Math.floor(Number(d.stage)||0)));
  guideMode=phase<=4?'picture':phase<=8?'silhouette':'word';
- el('instruction').textContent=guideMode==='picture'?'ابحث عن الأغراض بمساعدة الكلمات والرسومات الإرشادية. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':guideMode==='silhouette'?'ابحث عن الأغراض بالاستعانة بالكلمات والظلال فقط. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':'اقرأ الكلمات الإنجليزية وحدد الأغراض داخل المشهد دون صور أو ظلال مساعدة. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.';
+ el('instruction').textContent=practiceOnly?'🎮 وضع التدريب فقط: ابحث عن الأغراض دون إضافة نجوم أو مكافآت إلى حسابك.':guideMode==='picture'?'ابحث عن الأغراض بمساعدة الكلمات والرسومات الإرشادية. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':guideMode==='silhouette'?'ابحث عن الأغراض بالاستعانة بالكلمات والظلال فقط. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':'اقرأ الكلمات الإنجليزية وحدد الأغراض داخل المشهد دون صور أو ظلال مساعدة. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.';
  if(Array.isArray(d.items)&&d.items.length===16){
    words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);
    images=ART.images.map((src,i)=>typeof d.items[i]?.src==='string'&&/^(data:image\/|\.\.?\/assets\/)/i.test(d.items[i].src)?d.items[i].src:src);

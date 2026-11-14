@@ -85,7 +85,7 @@
   window.scrollTo({top:0,behavior:'smooth'});
  }
  el('exit').addEventListener('click',displayHome);
- el('backTop').addEventListener('click',()=>{if(state.mode)displayHome();else location.href='../';});
+ el('backTop').addEventListener('click',()=>{if(state.mode)displayHome();else if(window.parent!==window)window.parent.postMessage({type:'mej:arcade-close'},location.origin);else location.href='../';});
  el('gameGrid').addEventListener('click',ev=>{
   const btn=ev.target.closest('[data-game]');
   if(btn)start(btn.dataset.game);

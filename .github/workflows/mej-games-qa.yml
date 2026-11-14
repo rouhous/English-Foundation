@@ -28,6 +28,10 @@ jobs:
           node --check games/arcade.js
           node --check games/bank.js
           node --check games/release.js
+          node --check games/coastal-badges.js
+          node --check games/qa/coastal-badges.mjs
+      - name: Verify agreed coastal badges and stars-only scoring policy
+        run: node games/qa/coastal-badges.mjs
           node --check games/qa/browser.mjs
       - name: Test game controls, curriculum banks, and phone layout
         run: |

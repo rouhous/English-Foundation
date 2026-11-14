@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-spelling-20261114-v1';
+const CACHE='mej-owner-badges-20261114-v1';
 const CORE=['./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/mej-spelling-skills-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -75,7 +75,7 @@ self.addEventListener('fetch',event=>{
  const isStaffScript=/\/assets\/(?:teacher-dashboard-v2|school-dashboard-v1|teacher-progress-v1|staff-native-portal-v1)\.js$/.test(path);
  // Approved vocabulary image banks must always refresh online, while retaining
  // an offline copy of the latest successfully downloaded version.
- const isCompanionAsset=path.endsWith('/assets/mej-writing-skills-v1.js')||path.endsWith('/assets/mej-writing-curriculum-v3.js')||path.endsWith('/assets/mej-companion-art-v1.js')||path.endsWith('/assets/mej-companion-live-v1.js')||path.endsWith('/assets/mej-companion-setup-v1.js')||path.endsWith('/assets/mej-companion-motion-v1.js')||path.endsWith('/assets/mej-companion-3d-v1.js')||path.endsWith('/assets/mej-study-companion.js')||path.endsWith('/assets/student-cloud-progress-v1.js')||path.endsWith('/assets/mej-skill-expansion-v1.js')||path.endsWith('/assets/mej-spelling-skills-v1.js');
+ const isCompanionAsset=path.endsWith('/assets/mej-writing-skills-v1.js')||path.endsWith('/assets/mej-writing-curriculum-v3.js')||path.endsWith('/assets/mej-companion-art-v1.js')||path.endsWith('/assets/mej-companion-live-v1.js')||path.endsWith('/assets/mej-companion-setup-v1.js')||path.endsWith('/assets/mej-companion-motion-v1.js')||path.endsWith('/assets/mej-companion-3d-v1.js')||path.endsWith('/assets/mej-study-companion.js')||path.endsWith('/assets/student-cloud-progress-v1.js')||path.endsWith('/assets/mej-skill-expansion-v1.js')||path.endsWith('/assets/mej-spelling-skills-v1.js')||path.endsWith('/coastal-arcade/app-bridge.js');
  if(isCompanionAsset){
    event.respondWith((async()=>{
      const cache=await caches.open(CACHE);
@@ -148,6 +148,16 @@ self.addEventListener('fetch',event=>{
    const cacheKey=isMain?'./index.html':pathname.startsWith(mainPath)?'.'+pathname.slice(mainPath.length-1):null;
    // Authentication pages must not be served stale from the offline cache.
    // Require a fresh page; ordinary learning stays offline-first.
+   // Always refresh the badge-game portal online, but retain a usable offline copy.
+   if(pathname===mainPath+'coastal-arcade/index.html'){
+     const coastalCache=await caches.open(CACHE);
+     const offline=await coastalCache.match('./coastal-arcade/index.html');
+     try{
+       const response=await fetch(request,{cache:'no-store'});
+       if(response.ok){try{await coastalCache.put('./coastal-arcade/index.html',response.clone())}catch(_){}}
+       return response;
+     }catch(_){return offline||Response.error()}
+   }
    if(pathname===mainPath+'reviews/owner-login.html'){
     try {return await fetch(request,{cache:'no-store'})}
     catch(_){return new Response('Login requires an internet connection.',{

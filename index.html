@@ -13,7 +13,7 @@
  const reveal=()=>document.getElementById('mej-owner-gate-style')?.remove();
  const allowed=(role,data)=>{
    window.__MEJ_ACCESS_ROLE=role;
-   if(role==='owner')window.__MEJ_OWNER_VERIFIED_SESSION=true;
+   if(role==='owner'){window.__MEJ_OWNER_VERIFIED_SESSION=true;window.dispatchEvent(new Event('mej-owner-verified'));}
    if(role==='student'&&typeof data?.schoolName==='string'){
       localStorage.setItem('MEJ_VERIFIED_SCHOOL_NAME_V1',data.schoolName);
       localStorage.setItem('MEJ_VERIFIED_TEACHER_LINKED_V1',data.teacherLinked===true?'1':'0');
@@ -1561,7 +1561,9 @@ function countMaster(g,p=active()){return byGrade[g].filter(x=>(p.correct||{})[x
 function totalMaster(p=active()){return Array.from({length:13},(_,g)=>countMaster(g,p)).reduce((a,b)=>a+b,0)}
 function achieved(g,p=active()){return countMaster(g,p)>=200}
 // MEJ_STAGE1_LEVEL_UNLOCK_V2
+// MEJ_VERIFIED_OWNER_FULL_ACCESS_20261114_V1: owner read-only learning and game preview without modifying student stars.
 function maxAllowed(p=active()){
+ if(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true)return 12;
  if(!p.diagnosed)return 0;
  let cap=Math.max(0,Math.min(12,Number(p.assigned)||0));
  while(cap<12){
@@ -1571,6 +1573,7 @@ function maxAllowed(p=active()){
  return cap
 }
 function permitted(g){
+ if(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true)return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12;
  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
  return Number(g)===0 || (active().diagnosed&&Number(g)<=limit&&Number(g)<=maxAllowed());
 }
@@ -1935,6 +1938,7 @@ function mejStageMastered(g,part,p=active()){return mejStageQuestions(g,part).fi
 // MEJ_PRIOR_PARTS_UNLOCKED_V1
 function mejPartUnlocked(g,part,p=active()){
   g=Number(g);part=Number(part);
+  if(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true)return Number.isInteger(g)&&g>=0&&g<=12&&(part===1||part===2);
   if(part===1)return true;
   if(part!==2||!Number.isInteger(g)||g<0||g>12)return false;
   // The student has already reached a later stage: all earlier parts stay open.
@@ -1944,7 +1948,7 @@ function mejPartUnlocked(g,part,p=active()){
   return first.length>0&&mejStageMastered(g,1,p)===first.length;
 }
 function beginStagePart(g,part){if(!checkAccess(g))return;mejQuizOrigin='levels';if(!mejPartUnlocked(g,part)){toast('أكمل المستوى الأول أولًا لفتح المستوى الثاني.');return}const p=active();const pool=mejStageQuestions(g,part);if(!pool.length){toast('لا توجد أسئلة لهذه المجموعة بعد.');return}const pending=pool.filter(q=>(p.correct[q.id]||0)<2);const ids=shuffle(pending.length?pending:pool).slice(0,Math.min(12,pool.length)).map(q=>q.id);activeSession={kind:'practice',grade:g,stagePart:part,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
-function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><div class="actions" style="margin:8px 0 14px"><button type="button" class="btn light" onclick="route(\'journey\')">⛵ العودة إلى رحلتي</button></div><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
+function levels(){const p=active();document.getElementById('app').innerHTML=`<section class="card"><h1 class="section-title">🗺️ خريطة رحلة التعلم</h1><div class="actions" style="margin:8px 0 14px"><button type="button" class="btn light" onclick="route(\'journey\')">⛵ العودة إلى رحلتي</button></div><p class="caption">لكل مرحلة مستويان للتعلم والتدريب. يُحسب إتقان السؤال بعد إجابتين صحيحتين.</p>${!p.diagnosed&&!(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true)?'<div class="notice">🔒 ابدأ اختبار تحديد المستوى لفتح المراحل المناسبة لك.</div>':''}<div class="actions"><button class="btn light" onclick="route('diagnostic')">🧭 التشخيص</button></div></section><div class="levels">${Array.from({length:13},(_,g)=>g).filter(g=>permitted(g)).flatMap(g=>[1,2].map(part=>{const pool=mejStageQuestions(g,part),m=mejStageMastered(g,part,p),total=pool.length;return `<div class="level"><span class="level-index">${g===0?'🔤 مرحلة التأسيس':'🏝️ المرحلة '+g} • المستوى ${part} / 2</span><h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p><div class="meter"><i style="width:${pct(m,total)}%"></i></div><div class="ministats" style="margin-top:8px"><b>${m}/${total}</b> • ${pct(m,total)}%</div><div class="actions"><button class="btn small mint" ${mejPartUnlocked(g,part,p)?"":"disabled"} onclick="beginStagePart(${g},${part})">${mejPartUnlocked(g,part,p)?"▶ لعب":"🔒 مقفل"}</button><button class="btn small light" onclick="learnLevel(${g},${part})">📘 تعلّم</button></div></div>` })).join('')}</div>`}
 // The school grade limits both placement questions and the suggested placement level.
 // "Other / foundation" uses the pre-Grade-6 bridge (Levels 0–5).
 // An unselected grade must be saved before a placement attempt.
@@ -2185,7 +2189,7 @@ function skills(){
  try{
   const p=active(),cap=maxAllowed(p);
   const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
-  const maxG=p.diagnosed?Math.min(cap,limit):0;
+  const maxG=(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true||p.diagnosed)?Math.min(cap,limit):0;
   const counts=Object.create(null);
   for(let g=0;g<=maxG;g++){
    const questions=byGrade[g];

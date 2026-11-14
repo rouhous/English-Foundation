@@ -1,5 +1,5 @@
 /* My English Journey — interactive arcade, standalone supplementary practice.
- * No mastery stars, treasure baisa, or school rewards are written from this page.
+ * Game points are practice-only; no cash, wallets or student mastery stars are written here.
  * The app host must verify progress and awards separately after release.
  */
 (()=>{'use strict';
@@ -63,9 +63,9 @@
   Object.entries(required).forEach(([game,min])=>{
    const b=el('gameGrid').querySelector('[data-game="'+game+'"]');
    if(!b)return;
-   b.disabled=!hostAuthorized||hostUnlockStars<min;
-   b.textContent=b.disabled?'🔒 تفتح عند '+min+' نجمة':game==='hidden'?'🔎 ابدأ البحث':'⛵ انطلق في البحر';
-   b.title=b.disabled?'تحتاج إلى '+min+' نجمة أساسية في جزيرتك الحالية':'';
+   b.disabled=game==='sailor'||!hostAuthorized||hostUnlockStars<min;
+   b.textContent=game==='sailor'?'⛵ قريبًا · تحديث النجوم':b.disabled?'🔒 تفتح عند '+min+' نجمة':'🔎 ابدأ البحث';
+   b.title=game==='sailor'?'تفتح عند 40 نجمة بعد إكمال تحديث النسخة ثلاثية الأبعاد':b.disabled?'تحتاج إلى '+min+' نجمة أساسية في جزيرتك الحالية':'';
   });
  }
  applyBadgeLocks();
@@ -94,7 +94,7 @@
  });
  function start(mode){
   if(!shortMode[mode])return;
-  if(((mode==='sailor'||mode==='hidden')&&!hostAuthorized)||(mode==='sailor'&&hostUnlockStars<40)||(mode==='hidden'&&hostUnlockStars<20))return;
+  if(mode==='sailor'||(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<20)))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
   state.deck=shuffle(mode==='words'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:[]).slice(0,mode==='words'?8:mode==='sentences'?4:3);
@@ -235,13 +235,13 @@
  el('again').onclick=()=>start(state.mode);
  el('home').onclick=displayHome;
  function startFrame(mode){
-  show('frameView',true);set('round','تدريب حر');set('score','لا توجد مكافآت مالية');
+  show('frameView',true);set('round','تدريب حر');set('score','🎮 نقاط لعب فقط');
   el('progress').style.width='0%';
   el('frameWrap').replaceChildren();
   const status=el('frameCaption');
   status.textContent=mode==='hidden'
    ?'ابحث عن الأغراض في المشهد. التدريب هنا لا يضيف نجومًا لحساب الطالب.'
-   :'اللعبة الأصلية ثلاثية الأبعاد. النقاط والكنوز المعروضة فيها تجريبية وليست رصيدًا ماليًا.';
+   :'مغامرة البحّار قيد التحويل إلى نظام النجوم فقط؛ ستعود بعد إزالة جميع عناصر العملات من نسختها ثلاثية الأبعاد.';
   frame=document.createElement('iframe');
   frame.title=mode==='hidden'?'Hidden Objects practice':'Omani Sailor practice';
   frame.loading='eager';frame.referrerPolicy='same-origin';
@@ -262,7 +262,7 @@
   }else if(d?.type==='mej:hidden-close'){
    displayHome();
   }else if(d?.type==='mej:hidden-progress'&&d.ended===true){
-   set('frameCaption','اكتملت جولة البحث. هذا تدريب فقط؛ لا تُضاف نجوم أو بيسات إلى حساب الطالب.');
+   set('frameCaption','اكتملت جولة البحث. هذا تدريب فقط؛ لا تُضاف نجوم إلى حساب الطالب.');
   }
  });
  window.addEventListener('pagehide',()=>{if(audioContext)audioContext.close().catch(()=>{});});

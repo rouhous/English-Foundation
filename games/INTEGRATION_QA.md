@@ -5,16 +5,15 @@
 - `games/release.js` remains `window.MEJArcadeRelease = false`; direct game links are locked.
 - Arcade only runs within a same-origin parent frame after a valid `mej:arcade-init` handshake.
 - Host-provided **current stage** is used for Hidden Objects rather than treating selected grade as stage.
-- Hidden Objects unlocks at 20 verified basic stars; Omani Sailor unlocks at **40** (second badge). Practice scores are **not** deposited as student stars or money.
+- Hidden Objects unlocks at 20 verified basic stars; Omani Sailor requires **40** (second badge) but remains temporarily disabled until its archived 3D currency interface is removed. Practice scores are **not** deposited as student stars or money.
 - Regression suite `games/qa/browser.mjs` checks the maintenance gate, standalone access rejection, hostile self-message, 20/40 unlocking, grade-aware exercises, practice hunt, return navigation and mobile layout. Its workflow is `.github/workflows/mej-games-qa.yml`.
 
 ## Remaining release blockers
 1. Review every question for exact Oman Ministry textbook alignment; the current 12-grade mini-bank is thematic supplemental practice, not a certified textbook mapping.
 2. Visually inspect 3D game on Android and iOS; test swipe/touch, sound and offline load.
-3. Connect *authenticated server-side* rewards and teacher settlements before activating real baisa amounts. Current 3D treasure is demo-only and not verified payout.
-3a. **Approved reward-plan mismatch:** previous agreed release schedule is badge 2 at **40** stars: up to **50 baisa** (chests in 5-baisa increments), then +50 at **100** stars, +100 at **140**, and +100 at **200**, for **300 baisa per phase**. Existing preview code in `boat-game/rewards.js` and `omani-sailor/INTEGRATION.md` describes **150 baisa** (100 badges + 50 treasure). Do not treat this demo formula as approved; reconcile and implement it server-side only after test coverage of milestone caps, replay/idempotency and settlement.
+3. Remove remaining monetary displays and storage from the archived 3D Omani Sailor before enabling it; its launch remains disabled in the arcade until then. Keep only educational mastery stars, badges and separate practice game points.
 4. Confirm browser CI green and manual PWA testing; desktop and mobile screenshots alone do not certify device-specific behavior.
-5. Keep root maintenance files and `games/release.js` locked until approval. Never infer payout or entitlement from child iframe postMessage or localStorage.
+5. Keep root maintenance files and `games/release.js` locked until approval. Never infer earned mastery stars or badge entitlement from child iframe postMessage or localStorage.
 
 ## Reopening
 Restore original entrypoint and service worker carefully, merge intervening feature changes, pass QA, then change release flag only as part of an approved production release. No user data was cleared by these source edits.

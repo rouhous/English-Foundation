@@ -176,8 +176,23 @@
    frame.style.cssText='display:block;width:100%;height:calc(100% - 44px);border:0;background:#092f51';
    frame.setAttribute('allow','fullscreen');
    frame.src='./games/index.html?grade='+encodeURIComponent(Math.max(1,Math.min(12,Number(learner.grade)||1)));
+   const sendInit=()=>{
+     const now=active();
+     if(!dialog.open||now?.id!==learner.id)return;
+     const stage=currentIsland(now);
+     const stageStars=countMaster(stage,now);
+     frame.contentWindow?.postMessage({type:'mej:arcade-init',stageStars,stage},location.origin);
+   };
+   const onArcadeMessage=event=>{
+     if(event.origin!==location.origin||event.source!==frame.contentWindow||active()?.id!==learner.id)return;
+     if(event.data?.type==='mej:arcade-ready')sendInit();
+     if(event.data?.type==='mej:arcade-close'&&dialog.open)dialog.close();
+   };
+   window.addEventListener('message',onArcadeMessage);
+   frame.addEventListener('load',sendInit);
    back.addEventListener('click',()=>{if(dialog.open)dialog.close();else dialog.remove()});
    dialog.addEventListener('close',()=>{
+     window.removeEventListener('message',onArcadeMessage);
      frame.src='about:blank';dialog.remove();
      if(active()?.id===learner.id)route('journey');
    },{once:true});

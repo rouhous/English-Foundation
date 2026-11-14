@@ -29,7 +29,7 @@ assert.match(preview,/id="phoneMode"/,'Phone preview mode must be available');
 assert.match(preview,/id="zoomButton"/,'Desktop zoom must be available');
 assert.match(preview,/id="gamesTab"/,'Owner games tab must exist');
 assert.match(preview,/id="badgesTab"/,'Owner badges tab must exist');
-assert.match(preview,/frame\.srcdoc=badgesHTML\(\)/,'Badges are rendered inside the authenticated owner preview');
+assert.match(preview,/frame\.src='\.\.\/coastal-arcade\/index\.html\?mode=owner#stations'/,'Original badges inside authenticated owner preview');
 assert.match(preview,/frame\.src='\.\.\/coastal-arcade\/index\.html\?mode=owner'/,'Owner games tab must use all ten coastal games');
 assert.match(preview,/\$\('gamesTab'\)\.hidden=false/,'Games must only be revealed when authenticated');
 assert.match(preview,/\$\('badgesTab'\)\.hidden=false/,'Badges must only be revealed when authenticated');

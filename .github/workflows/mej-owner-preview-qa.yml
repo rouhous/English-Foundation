@@ -1,0 +1,30 @@
+name: MEJ owner preview safety checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'reviews/admin-preview.html'
+      - 'games/release.js'
+      - 'games/arcade.js'
+      - 'admin-backend/supabase/functions/mej-owner-preview-content/**'
+      - 'admin-backend/supabase/functions/mej-owner-preview-gate/**'
+      - 'scripts/qa-admin-preview.mjs'
+      - '.github/workflows/mej-owner-preview-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maintenance-owner-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify maintenance, private owner preview and launch controls
+        run: node scripts/qa-admin-preview.mjs

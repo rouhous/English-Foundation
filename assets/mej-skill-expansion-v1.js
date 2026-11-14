@@ -202,4 +202,11 @@ function boot(){
  refresh();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+ // MEJ_SPELLING_SKILL_LOADER_20261114
+ const spellingEntry=document.createElement('script');
+ spellingEntry.src='./assets/mej-spelling-skills-v1.js?v=20261114';
+ spellingEntry.defer=true;
+ spellingEntry.onerror=()=>console.warn('Spelling skill module did not load');
+ document.head.append(spellingEntry);
+
 })();

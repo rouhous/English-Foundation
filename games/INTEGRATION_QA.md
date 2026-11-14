@@ -4,15 +4,15 @@
 - The student root `index.html` and `sw.js` still show maintenance; student access is paused.
 - `games/release.js` remains `window.MEJArcadeRelease = false`.
 - Existing arcade has **four working-category implementations** as interim review content, not the ten games per age band accepted in the newer badge conversation.
-- `games/coastal-badges.js` defines the ten coastal-Oman locations and 20-star mastery milestones. **It is not yet used to award or unlock anything.**
+- `games/coastal-badges.js` now defines the ten locations in the original uploaded-image order (خصب → صحار → ميناء صحار → مسقط → ميناء مطرح → صور → الدقم → جزيرة مصيرة → جزر الديمانيات → صلالة), 20-star mastery milestones and exact game inventories for all three age bands. **It is not yet used to award or unlock anything.**
 - Omani Sailor / boat steering and gem collecting remain **excluded from the approved arcade**. Their source survives only as an archive.
 - The four-game arcade checks parent-frame messages and makes Hidden Objects practice available at 20 phase mastery stars; practice play does not award mastery stars.
 
 ## Mandatory before reopening
-1. Recover/reconcile **the complete v11.1 badge-games source** to obtain the exact ten-game lists per band. Keep games distinct; no duplicate Word Builder or Sentence Builder.
-2. Implement Moving Pictures (1–4), Flip Cards using approved vocabulary pictures (5–12), Falling Words Survival with ten correctly formed sentences, plus the agreed age-specific interactive activities and listening missions.
+1. **Reconciled:** the owner's uploaded v11.1 FIXED archive supplied all 30 game assignments, now recorded in `games/coastal-badges.js`; the original artwork and executable code still need importing to GitHub before live integration.
+2. Import the functioning v11.1 review game sources; upgrade Falling Words from choice bubbles to the agreed survival box (10 sentences, overflow fails), and enforce bank-approved images for Moving Pictures and Flip Cards.
 3. Replace placeholder/taster bank with textbook-aligned content; use student-level/mastered evidence and approved images; match listening answers to recordings and raise difficulty appropriately.
-4. Integrate the ten Omani places as differentiated badge designs and bilingual learning content. 20 verified mastery stars unlock a badge, bonus stars do not.
+4. Import all **original 580×580 WebP badges** and **30 bilingual graded destination cards** from the user's v11.1 FIXED archive, replacing owner-preview emoji placeholders. 20 verified mastery stars unlock a badge; bonus stars do not.
 5. Add authenticated/idempotent game bonus ledger: ten tasks/game, maximum ten bonus stars, at most two scoring attempts, credit only improvement; do not count bonus stars as unlock stars.
 6. Complete automated browser regression and manual Android, iPhone/iPad, offline, touch and sound checks.
 7. Ensure no boat/gem game link or cash-money interface appears anywhere in the restored **main** student navigation.
@@ -21,3 +21,7 @@
 ## Available checks
 `games/qa/browser.mjs` exercises the *current four-game subset*. It is not certification of the final ten-game system.
 `games/qa/coastal-badges.mjs` validates the 10 reference badges, thresholds, grade-band and no-money/no-boat policies without requiring Playwright.
+
+## Reconciliation checkpoint — 2026-11-14
+
+The master source is the user's **MEJ_Coastal_Badges_Arcade_v11_1_FIXED.zip**, not the older deployed four-game page. The package has ten original badge pictures and a live independent arcade preview. The current main GitHub tree has been aligned at the **reference-data level only**; this is neither an uploaded production game bundle nor a completed authenticated reward implementation. Maintenance must remain active.

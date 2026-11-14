@@ -12,6 +12,7 @@
 1. Review every question for exact Oman Ministry textbook alignment; the current 12-grade mini-bank is thematic supplemental practice, not a certified textbook mapping.
 2. Visually inspect 3D game on Android and iOS; test swipe/touch, sound and offline load.
 3. Connect *authenticated server-side* rewards and teacher settlements before activating real baisa amounts. Current 3D treasure is demo-only and not verified payout.
+3a. **Approved reward-plan mismatch:** previous agreed release schedule is badge 2 at **40** stars: up to **50 baisa** (chests in 5-baisa increments), then +50 at **100** stars, +100 at **140**, and +100 at **200**, for **300 baisa per phase**. Existing preview code in `boat-game/rewards.js` and `omani-sailor/INTEGRATION.md` describes **150 baisa** (100 badges + 50 treasure). Do not treat this demo formula as approved; reconcile and implement it server-side only after test coverage of milestone caps, replay/idempotency and settlement.
 4. Confirm browser CI green and manual PWA testing; desktop and mobile screenshots alone do not certify device-specific behavior.
 5. Keep root maintenance files and `games/release.js` locked until approval. Never infer payout or entitlement from child iframe postMessage or localStorage.
 

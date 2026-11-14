@@ -1,6 +1,20 @@
 # My English Journey — integration & release gates
 
-## Current confirmed repository state
+## Coastal arcade student release — 14 November 2026
+
+**Live deployment:** main `index.html` restored from the pre-maintenance learner shell (original blob `5403a68...`) and now loads `coastal-arcade/app-bridge.js`; `sw.js` restored to offline-first learner service worker and caches `coastal-arcade/index.html` plus all ten original badge images at 580×580 in `coastal-arcade/badges/`. `reviews/admin-preview.html` uses the ten-game coastal arcade and original artwork.
+
+The archive's 30 age-band game slots are present in `coastal-arcade/index.html` with 30 graded destination learning cards. Original WebP badges were uploaded from the user's v11.2 source, not replaced with emoji thumbnails.
+
+**Student score integration:** Supabase Edge Function `mej-arcade-rewards` verifies the active opaque student access token via `mej_short_student_links`, active license, the synced `mej_student_progress.level_stats` per stage, and the grade-band game mapping. Atomic RPC `mej_arcade_action` uses `mej_arcade_scores` and `mej_arcade_runs` for at most two scored attempts/game, best-improvement awards, idempotent run IDs, and total bonus stars kept **separate** from academic/mastery stars and class ranking. Anonymous public endpoints do not grant table privileges; RLS is on. Client-reported gameplay scores are *unverified* as answers are not yet validated server-side.
+
+**Field-test release, not QA certification:** real-student login→play→finish→reconnect flow, Android/iPhone/iPad touch/sound/performance, approved picture-bank coverage, upper-level listening quality, and Falling Words survival mechanics still require checks or improvements. Hidden Objects is deliberately practice-only until hotspots/scene alignment is approved; existing legacy hidden-badge history is not silently rewritten. No boat-steering, gem collecting, or cash payouts.
+
+**Recovery:** branch `backup/mej-maintenance-before-coastal-20261114` preserves the previous maintenance state. Main rollback must preserve student data and any later progress; never wipe browser storage or cloud tables.
+
+
+
+## Historical pre-release snapshot (superseded by above live integration)
 - The student root `index.html` and `sw.js` still show maintenance; student access is paused.
 - `games/release.js` remains `window.MEJArcadeRelease = false`.
 - Existing arcade has **four working-category implementations** as interim review content, not the ten games per age band accepted in the newer badge conversation.

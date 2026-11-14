@@ -1,3 +1,5 @@
+> **ARCHIVED — NOT APPROVED FOR THE CURRENT APP.** The boat-steering and gem-collection game is out of the approved My English Journey release scope. Keep this source for reference only. Do not link, embed, publish as an approved activity, or restore it without a new explicit instruction.
+
 # Omani Sailor — stars-only migration
 
 The user has discontinued **all monetary rewards**. No baisa, cash, wallet, payout or teacher settlement feature is authorized.

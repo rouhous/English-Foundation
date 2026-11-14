@@ -1,19 +1,22 @@
-# My English Journey — arcade integration readiness (2026-11-14)
+# My English Journey — interactive games integration and readiness
 
-## Confirmed in source
-- Root `index.html` and `sw.js` are still maintenance screens: learner access stays paused.
-- `games/release.js` remains `window.MEJArcadeRelease = false`; direct game links are locked.
-- Arcade only runs within a same-origin parent frame after a valid `mej:arcade-init` handshake.
-- Host-provided **current stage** is used for Hidden Objects rather than treating selected grade as stage.
-- Hidden Objects unlocks at 20 verified basic stars; Omani Sailor requires **40** (second badge) but remains temporarily disabled until its archived 3D currency interface is removed. Practice scores are **not** deposited as student stars or money.
-- Regression suite `games/qa/browser.mjs` checks the maintenance gate, standalone access rejection, hostile self-message, 20/40 unlocking, grade-aware exercises, practice hunt, return navigation and mobile layout. Its workflow is `.github/workflows/mej-games-qa.yml`.
+## Approved scope (updated 2026-11-14)
+Only **Word Explorer, Sentence Builder, Grammar Gate and Hidden Objects** belong to the approved interactive games release candidate. **Omani Sailor / boat and jewel collection are excluded**, not merely postponed for conversion to stars. Their old files are retained as archive references and must not be linked or loaded from the arcade.
 
-## Remaining release blockers
-1. Review every question for exact Oman Ministry textbook alignment; the current 12-grade mini-bank is thematic supplemental practice, not a certified textbook mapping.
-2. Visually inspect 3D game on Android and iOS; test swipe/touch, sound and offline load.
-3. Remove remaining monetary displays and storage from the archived 3D Omani Sailor before enabling it; its launch remains disabled in the arcade until then. Keep only educational mastery stars, badges and separate practice game points.
-4. Confirm browser CI green and manual PWA testing; desktop and mobile screenshots alone do not certify device-specific behavior.
-5. Keep root maintenance files and `games/release.js` locked until approval. Never infer earned mastery stars or badge entitlement from child iframe postMessage or localStorage.
+## Verified in repository source
+- The app's root `index.html` and `sw.js` provide the maintenance page; public learner access remains paused.
+- `games/release.js` remains `window.MEJArcadeRelease = false`.
+- The arcade requires an embedding parent and validates the same-origin parent before accepting an island and its learning stars.
+- Hidden Objects practice opens at 20 phase learning stars and never adds practice points to student learning stars.
+- The game hub contains four active game choices and no boat/jewel-collection option or runtime iframe path.
+- Browser regression tests check the maintenance gate, standalone rejection, untrusted self-messages, Hidden Objects gating, boat exclusion, grade-specific vocabulary, sentence/grammar gameplay, return navigation and mobile layout.
 
-## Reopening
-Restore original entrypoint and service worker carefully, merge intervening feature changes, pass QA, then change release flag only as part of an approved production release. No user data was cleared by these source edits.
+## Outstanding release checks
+1. Verify the thematic question bank against actual grades, textbook units and required question types.
+2. Execute GitHub Actions browser QA and inspect failures/screenshots. Source-level syntax checks alone are not acceptance.
+3. Check mobile (Android and iPhone/iPad), sound, touch controls and offline recovery.
+4. Confirm that the restored **main app** navigation has no old Omani Sailor launch button or label; legacy `openMejSailor` compatibility routes to Hidden Objects but must not be visible as a boat feature.
+5. Confirm account-linked stars and badges remain correct; practice scores must never be added to mastery stars.
+6. Keep the whole app in maintenance and `games/release.js` false until a separately approved production release.
+
+No cash rewards or monetary wallets are in the approved scope.

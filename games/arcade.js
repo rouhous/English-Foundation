@@ -17,7 +17,7 @@
  };
  const set=(id,value)=>{el(id).textContent=String(value)};
  const show=(id,visible)=>{el(id).hidden=!visible};
- const shortMode={words:'🖼️ Word Explorer',sentences:'🧩 Sentence Builder',grammar:'🏰 Grammar Gate',hidden:'🔎 Hidden Objects',sailor:'⛵ Omani Sailor'};
+ const shortMode={words:'🖼️ Word Explorer',sentences:'🧩 Sentence Builder',grammar:'🏰 Grammar Gate',hidden:'🔎 Hidden Objects'};
  function tone(ok){
   if(!state.audioEnabled)return;
   try{
@@ -59,14 +59,11 @@
   el('sound').textContent=state.audioEnabled?'🔊 الصوت':'🔇 بدون صوت';
  };
  function applyBadgeLocks(){
-  const required={hidden:20,sailor:40};
-  Object.entries(required).forEach(([game,min])=>{
-   const b=el('gameGrid').querySelector('[data-game="'+game+'"]');
-   if(!b)return;
-   b.disabled=game==='sailor'||!hostAuthorized||hostUnlockStars<min;
-   b.textContent=game==='sailor'?'⛵ قريبًا · تحديث النجوم':b.disabled?'🔒 تفتح عند '+min+' نجمة':'🔎 ابدأ البحث';
-   b.title=game==='sailor'?'تفتح عند 40 نجمة بعد إكمال تحديث النسخة ثلاثية الأبعاد':b.disabled?'تحتاج إلى '+min+' نجمة أساسية في جزيرتك الحالية':'';
-  });
+  const button=el('gameGrid').querySelector('[data-game="hidden"]');
+  if(!button)return;
+  button.disabled=!hostAuthorized||hostUnlockStars<20;
+  button.textContent=button.disabled?'🔒 تفتح عند 20 نجمة':'🔎 ابدأ البحث';
+  button.title=button.disabled?'تحتاج إلى 20 نجمة أساسية في جزيرتك الحالية':'';
  }
  applyBadgeLocks();
  window.addEventListener('message',event=>{
@@ -94,14 +91,14 @@
  });
  function start(mode){
   if(!shortMode[mode])return;
-  if(mode==='sailor'||(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<20)))return;
+  if(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<20))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
   state.deck=shuffle(mode==='words'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:[]).slice(0,mode==='words'?8:mode==='sentences'?4:3);
   show('hero',false);show('selector',false);show('gameGrid',false);show('gameStage',true);
   show('practiceView',false);show('frameView',false);show('resultView',false);
   set('gameTitle',shortMode[mode]);
-  if(mode==='hidden'||mode==='sailor')startFrame(mode);
+  if(mode==='hidden')startFrame();
   else{
    show('practiceView',true);
    renderQuestion();
@@ -234,19 +231,16 @@
  }
  el('again').onclick=()=>start(state.mode);
  el('home').onclick=displayHome;
- function startFrame(mode){
-  show('frameView',true);set('round','تدريب حر');set('score','🎮 نقاط لعب فقط');
+ function startFrame(){
+  show('frameView',true);set('round','تدريب حر');set('score','🎮 نقاط تدريب فقط');
   el('progress').style.width='0%';
   el('frameWrap').replaceChildren();
-  const status=el('frameCaption');
-  status.textContent=mode==='hidden'
-   ?'ابحث عن الأغراض في المشهد. التدريب هنا لا يضيف نجومًا لحساب الطالب.'
-   :'مغامرة البحّار قيد التحويل إلى نظام النجوم فقط؛ ستعود بعد إزالة جميع عناصر العملات من نسختها ثلاثية الأبعاد.';
+  el('frameCaption').textContent='ابحث عن الأغراض في المشهد. التدريب هنا لا يضيف نجومًا لحساب الطالب.';
   frame=document.createElement('iframe');
-  frame.title=mode==='hidden'?'Hidden Objects practice':'Omani Sailor practice';
+  frame.title='Hidden Objects practice';
   frame.loading='eager';frame.referrerPolicy='same-origin';
   frame.setAttribute('allow','fullscreen');
-  frame.src=mode==='hidden'?'../hidden-objects/index.html':'../omani-sailor/index.html?practice=1';
+  frame.src='../hidden-objects/index.html';
   el('frameWrap').append(frame);
  }
  window.addEventListener('message',event=>{
@@ -254,7 +248,6 @@
   if(state.mode!=='hidden')return;
   const d=event.data;
   if(d?.type==='mej:hidden-ready'){
-   const grade=state.grade;
    frame.contentWindow.postMessage({
     type:'mej:hidden-init',stage:hostStage,badge:1,scene:hostStage%4,practice:true,
     masteredWords:[],levelWords:[],saved:null

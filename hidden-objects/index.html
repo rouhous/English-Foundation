@@ -43,6 +43,10 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-ui;padding:10px 15px;color:#173b4d;cursor:pointer}
 #notice{font-weight:800;color:#f4efbd;line-height:1.6;text-align:center}.end{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:#07293cdd;padding:16px}.end-card{width:min(96%,420px);background:#f0fbfc;color:#173f59;border-radius:20px;border:4px solid #d6ad61;padding:23px;text-align:center;box-shadow:0 12px 35px #001f2788}.end-card h2{font-size:27px;color:#0b697c}.end-card strong{font-size:38px;color:#ad7a12}
 @media(max-width:710px){.shell{padding:7px;gap:7px}.play{grid-template-columns:1fr;grid-template-rows:minmax(280px,auto) auto}.scene{min-height:285px;aspect-ratio:1.15}.words{max-height:170px;padding:8px}.words ul{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.words li{font-size:11px;text-align:center;padding:5px 2px;overflow-wrap:anywhere}.words h2{font-size:13px}.spot{width:clamp(28px,8vw,46px);height:clamp(30px,9vw,49px)}}
+
+.precision-pending{position:absolute;inset:auto 3% 4%;background:#092c3de8;color:#ffe6ae;border:1px solid #f7d282;border-radius:13px;padding:13px 15px;text-align:center;font-weight:800;font-size:clamp(12px,2.8vw,16px);line-height:1.6}
+.precision-unavailable{min-height:230px;display:grid;place-items:center;text-align:center;padding:20px;line-height:1.75;color:#ffe2a3}
+.draft-guide{overflow:hidden}.draft-guide-image{display:block;width:35px;height:35px;background-repeat:no-repeat;background-color:#ecf5ee}
 </style></head><body>
 <main class="shell">
 <header class="head"><h1>🔎 Hidden Objects</h1><div class="status"><span class="chip" id="stage">الجزيرة</span><span class="chip" id="found">0 / 10</span><span class="chip" id="mistakes">❤️❤️❤️</span><span class="chip" id="timer">⏱️ بدون مؤقت</span><span class="chip" id="bonus">⭐ 0/5</span><button type="button" class="chip timer-toggle" id="timerToggle">تحدّي الوقت (3 دقائق)</button></div></header>
@@ -50,11 +54,11 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 <div class="play"><div id="scene" class="scene" aria-label="مشهد البحث عن الأغراض" role="group"></div><aside class="words"><h2>Find these objects:</h2><ul id="words"></ul></aside></div>
 <footer class="foot"><span id="notice" role="status">اختر الغرض الذي يطابق كلمة في القائمة.</span><button class="back" id="back">↩ العودة إلى الرحلة</button></footer>
 </main>
-<script src="./assets.js"></script><script src="./photo-scenes.js"></script>
+<script src="./assets.js"></script><script src="./photo-scenes.js"></script><script src="./precision-v3-client.js"></script>
 <script>
 (()=>{'use strict';
 const ART=window.MEJHiddenArt;const PHOTO=window.MEJRealPhotoScenes;const el=id=>document.getElementById(id);
-let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null,lastPhotoMiss=null,practiceOnly=false;
+let session=null,completed=false,lastClick=0,lastTime=0,timerHandle=null,photoScene=null,lastPhotoMiss=null,practiceOnly=false,previewCandidate=null,reviewMessage="";
 let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
 // An independent symbol must match the *current word*; IDs can be rebound
@@ -90,6 +94,27 @@ function guideFor(id){
  img.onerror=()=>{img.remove();const cue=visualCue(words[id],id);if(cue){const fallback=document.createElement('span');fallback.className='guide-emoji';fallback.textContent=cue;if(guideMode==='silhouette')fallback.style.filter='brightness(0)';art.append(fallback)}};
  art.append(img);return art;
 }
+
+function draftCue(id){
+ if(guideMode==='word')return null;
+ const candidate=photoScene?.targets?.[id],poly=candidate?.regions?.[0];
+ if(!photoScene?.reviewSource||!Array.isArray(poly)||poly.length<3)return null;
+ const shell=document.createElement('span');shell.className='guide-art draft-guide';shell.setAttribute('aria-hidden','true');
+ const x=poly.map(p=>p[0]),y=poly.map(p=>p[1]);
+ const x0=Math.min(...x),x1=Math.max(...x),y0=Math.min(...y),y1=Math.max(...y);
+ const regionW=Math.max(8,x1-x0),regionH=Math.max(8,y1-y0);
+ const scale=Math.min(35/regionW,35/regionH)*.82;
+ const offX=(35-regionW*scale)/2,offY=(35-regionH*scale)/2;
+ const mask=document.createElement('span');mask.className='draft-guide-image';
+ mask.style.backgroundImage='url("'+photoScene.file+'")';
+ mask.style.backgroundSize=(1599*scale)+'px '+(900*scale)+'px';
+ mask.style.backgroundPosition=(offX-x0*scale)+'px '+(offY-y0*scale)+'px';
+ if(guideMode==='silhouette'){
+   const pts=poly.map(([px,py])=>((offX+(px-x0)*scale)/35*100).toFixed(2)+'% '+((offY+(py-y0)*scale)/35*100).toFixed(2)+'%').join(',');
+   mask.style.clipPath='polygon('+pts+')';mask.style.filter='brightness(0)';
+ }
+ shell.append(mask);return shell;
+}
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 // V5 teacher-verified polygon hit geometry; allow every visible instance.
@@ -113,7 +138,7 @@ function board(){
  if(photoScene){
    field.classList.add('photo-active');field.style.backgroundImage='none';
    const canvas=document.createElement('div');canvas.className='photo-board';
-   canvas.style.backgroundImage='url("'+PHOTO.root+photoScene.file+'")';
+   canvas.style.backgroundImage='url("'+(photoScene.reviewSource?photoScene.file:PHOTO.root+photoScene.file)+'")';
    const review=new URLSearchParams(location.search).get('debug')==='hotspots';
    if(review){
      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -125,8 +150,9 @@ function board(){
        p.setAttribute('fill','#edc42a23');p.setAttribute('stroke','#edc42a');p.setAttribute('stroke-width','3');svg.append(p);
      }});canvas.append(svg);
    }
+   if(previewCandidate&&!photoScene.targets?.length){const msg=document.createElement('div');msg.className='precision-pending';msg.textContent=reviewMessage;canvas.append(msg);}
    canvas.addEventListener('click',ev=>{
-     if(completed)return;
+     if(completed||previewCandidate&&!photoScene.targets?.length)return;
      const rect=canvas.getBoundingClientRect(),px=(ev.clientX-rect.left)*1599/rect.width,py=(ev.clientY-rect.top)*900/rect.height;
      if(!Number.isFinite(px)||!Number.isFinite(py)||px<0||py<0||px>1599||py>900)return;
      const picked=photoHit(px,py);
@@ -160,12 +186,12 @@ function renderListAndScores(){
  for(const id of session.targets){
    const li=document.createElement('li'),done=session.found.includes(id);
    li.className=(done?'found ':'')+(guideMode==='picture'?'guide-picture':guideMode==='silhouette'?'guide-silhouette':'guide-word-only');
-   const guide=guideFor(id);if(guide)li.append(guide);
+   const guide=photoScene?.reviewSource?draftCue(id):guideFor(id);if(guide)li.append(guide);
    const label=document.createElement('span');label.textContent=(done?'✓ ':'')+words[id];li.append(label);list.append(li);
  }
 
  el('stage').textContent='الجزيرة '+session.stage+' · الشارة '+session.badge;
- el('found').textContent=session.found.length+' / 10';
+ el('found').textContent=session.found.length+' / '+(previewCandidate?Math.max(0,session.targets.length):10);
  el('bonus').textContent=(practiceOnly?'🎯 ':'⭐ ')+Math.floor(session.found.length/2)+'/5'+(practiceOnly?' تدريب':'');
  el('mistakes').textContent='❤️'.repeat(Math.max(0,3-session.misses))+'🖤'.repeat(session.misses);
 }
@@ -191,10 +217,10 @@ function finish(reason){if(completed)return;completed=true;clearInterval(timerHa
 function tick(){if(!session||completed||session.remaining==null)return;const now=Date.now();const diff=clamp(Math.floor((now-lastTime)/1000),0,8);if(diff){lastTime=now;session.remaining=Math.max(0,session.remaining-diff);const sec=session.remaining;el('timer').textContent='⏱️ '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');if(sec<=0){finish('timeout');return}if(sec%10===0)send(false)}}
 window.addEventListener('message',e=>{if(window.parent===window||e.origin!==location.origin||e.source!==window.parent||e.data?.type!=='mej:hidden-init'||session)return;
  const d=e.data;
- practiceOnly=d.practice===true;
+ practiceOnly=d.practice===true||d.preview===true;
  // Stage is the learner's actual island level, not merely their registered grade.
  const phase=Math.max(0,Math.min(12,Math.floor(Number(d.stage)||0)));
- guideMode=phase<=4?'picture':phase<=9?'silhouette':'word';
+ guideMode=phase<=4?'picture':phase<=8?'silhouette':'word';
  el('instruction').textContent=guideMode==='picture'?'🔎 ابحث عن 10 أغراض بمساعدة صورها. ثلاث محاولات للأخطاء.':guideMode==='silhouette'?'🔎 ابحث عن 10 أغراض بمساعدة الظلال والكلمات. ثلاث محاولات للأخطاء.':'🔎 اقرأ الكلمات الإنجليزية وحدد 10 أغراض داخل المشهد. ثلاث محاولات للأخطاء.';
  if(Array.isArray(d.items)&&d.items.length===16){
    words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);
@@ -221,17 +247,44 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
    &&sc.targets.every(t=>Array.isArray(t.regions)&&t.regions.length)
    &&sc.targets.filter(t=>known.has(norm(t.word))).length===9
    &&sc.targets.filter(t=>!known.has(norm(t.word))&&level.has(norm(t.word))).length===1)||null;
+ const candidate=window.MEJPrecisionLibrary?.sceneSlots?.find(s=>s.stage===phase&&s.badge===Number(d.badge))||null;
+ previewCandidate=!mapped?candidate:null;
+ const previewAccess=d.preview===true&&practiceOnly;
+ const estimate=previewCandidate?.assetId?window.MEJPrecisionLibrary?.hotspots?.[previewCandidate.assetId]||{}:{};
+ const provisional=Object.entries(estimate).filter(([w,v])=>Array.isArray(v.points)&&v.points.length>=3)
+  .map(([word,v])=>({word,regions:[v.points.map(([x,y])=>[x*15.99,y*9])]}));
+ const reviewPlayable=previewAccess&&provisional.length===10&&!!previewCandidate?.image;
  const start=()=>{
-   if(photoScene)session.targets.forEach((id,i)=>{words[id]=photoScene.targets[i].word});
+   if(photoScene?.targets?.length===10){
+     session.targets=Array.from({length:10},(_,i)=>i);
+     words=ART.words.slice();for(let i=0;i<10;i++)words[i]=photoScene.targets[i].word;
+   }else if(previewCandidate){session.targets=[];session.remaining=null;}
    board();
-   if(session.misses>=3||session.found.length===10||session.remaining===0){finish(session.found.length===10?'all':session.misses===3?'mistakes':'timeout');return}
+   if(previewCandidate&&session.targets.length===0){el('notice').textContent=reviewMessage;el('timerToggle').hidden=true;return;}
+   if(session.misses>=3||session.found.length===10||session.remaining===0){
+     finish(session.found.length===10?'all':session.misses===3?'mistakes':'timeout');return;
+   }
    lastTime=Date.now();if(session.remaining!=null)timerHandle=setInterval(tick,1000);
  };
- if(mapped && mapped.targets?.length===10){
+ if(mapped&&mapped.targets.length===10){
    const img=new Image();img.onload=()=>{photoScene=mapped;start()};
    img.onerror=()=>{photoScene=null;start()};
    img.src=PHOTO.root+mapped.file;
- }else start();
+ }else if(candidate?.image){
+   // Incomplete approval MUST NOT turn draft geometry into a scored student attempt.
+   practiceOnly=true;
+   photoScene={file:candidate.image,reviewSource:true,targets:reviewPlayable?provisional:[]};
+   reviewMessage=previewAccess?'هذا المشهد محفوظ للمراجعة، لكن مناطق أغراضه لم تعتمد بعد. افتح محرر Precision Hotspots لإكمالها.':'هذه الصورة قيد المراجعة التعليمية، وستتاح لعبة البحث بعد اعتماد أغراضها.';
+   const img=new Image();img.onload=start;img.onerror=()=>{
+     photoScene=null;previewCandidate=null;el('notice').textContent='تعذر عرض صورة المشهد. تحقق من تنزيل ملفات اللعبة.';start();
+   };img.src=candidate.image;
+ }else{
+   practiceOnly=true;previewCandidate={image:null};photoScene=null;session.targets=[];reviewMessage='لا توجد صورة معتمدة لهذا الموضوع بعد. لم تُستخدم صورة غير مناسبة بدلًا منها.';
+   el('notice').textContent=reviewMessage;board();
+   const field=el('scene');field.replaceChildren();field.style.backgroundImage='none';
+   const msg=document.createElement('div');msg.className='precision-unavailable';msg.textContent=reviewMessage;field.append(msg);
+   el('words').replaceChildren();el('timerToggle').hidden=true;
+ }
 });
 el('scene').addEventListener('click',ev=>{if(ev.target.closest('.spot,.photo-target,.photo-board,.end'))return;wrong()});
 el('timerToggle').onclick=()=>{

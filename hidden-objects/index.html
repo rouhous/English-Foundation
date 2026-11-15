@@ -249,7 +249,7 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
    &&sc.targets.filter(t=>!known.has(norm(t.word))&&level.has(norm(t.word))).length===1)||null;
  const candidate=window.MEJPrecisionLibrary?.sceneSlots?.find(s=>s.stage===phase&&s.badge===Number(d.badge))||null;
  previewCandidate=!mapped?candidate:null;
- const previewAccess=practiceOnly&&(d.preview===true||(phase===0&&Number(d.badge)===1));
+ const previewAccess=practiceOnly&&(d.preview===true||((phase===0||phase===1)&&Number(d.badge)===1));
  const estimate=previewCandidate?.assetId?window.MEJPrecisionLibrary?.hotspots?.[previewCandidate.assetId]||{}:{};
  const provisional=Object.entries(estimate).filter(([w,v])=>Array.isArray(v.points)&&v.points.length>=3)
   .map(([word,v])=>({word,regions:[v.points.map(([x,y])=>[x*15.99,y*9])]}));

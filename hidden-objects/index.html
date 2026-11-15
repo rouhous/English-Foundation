@@ -141,7 +141,9 @@ function photoHit(px,py){if(!photoScene)return -1;const w=Math.max(300,el('scene
  });
  // Adjacent school objects may have touching candidate rectangles.
  // The nearest object centre breaks ties, avoiding arbitrary source-order picks.
- options.sort((a,b)=>Number(a.done)-Number(b.done)||a.d-b.d||a.center-b.center);
+ options.sort((a,b)=>a.d-b.d||a.center-b.center||Number(a.done)-Number(b.done));
+ // Do not let tapping the same found object collect a neighbouring target.
+ if(options[0]?.done)return -2;
  return options[0]?.i??-1;
 }
 function board(){
@@ -167,6 +169,7 @@ function board(){
      const rect=canvas.getBoundingClientRect(),px=(ev.clientX-rect.left)*1599/rect.width,py=(ev.clientY-rect.top)*900/rect.height;
      if(!Number.isFinite(px)||!Number.isFinite(py)||px<0||py<0||px>1599||py>900)return;
      const picked=photoHit(px,py);
+     if(picked===-2){el('notice').textContent='✅ لقد عثرت على هذا الغرض بالفعل. ابحث عن الغرض التالي.';return}
      if(picked>=0){lastPhotoMiss=null;if(!session.found.includes(session.targets[picked]))tap(session.targets[picked]);return}
      const now=Date.now();if(lastPhotoMiss&&now-lastPhotoMiss.at<4000&&Math.hypot(px-lastPhotoMiss.x,py-lastPhotoMiss.y)<42){
        el('notice').textContent='حاول لمس جزء آخر من الغرض أو تكبير الصورة';return;

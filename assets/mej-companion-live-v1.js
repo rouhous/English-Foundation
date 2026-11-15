@@ -58,12 +58,27 @@
  #mej-companion-actor.mej-c-edge-climb .mej-c-sprite{animation:mej-tap-edge-climb 1.8s ease-in-out both}
  #mej-companion-actor.mej-c-football .mej-c-sprite{animation:mej-tap-kick 1.1s ease-in-out both}
  #mej-companion-actor.mej-c-football .mej-c-sprite:after{content:'⚽';position:absolute;bottom:2px;left:45%;font-size:28px;animation:mej-tap-ball 1.5s ease-out both;pointer-events:none}
+ /* Gender-specific lightweight play props; no canvas, WebGL or extra timers. */
+ #mej-companion-actor .mej-c-action-prop{display:none;position:absolute;pointer-events:none;z-index:2;user-select:none}
+ #mej-companion-actor[data-kind="girl"].mej-c-skipping .mej-c-sprite{animation:mej-rope-hop .65s ease-in-out infinite}
+ #mej-companion-actor[data-kind="girl"].mej-c-skipping .mej-c-action-prop{display:block;box-sizing:border-box;left:-12%;top:-3%;width:124%;height:109%;border:3px solid #e75fa5;border-top-color:transparent;border-radius:49% 49% 44% 44%;box-shadow:0 2px 1px #ffffff70;animation:mej-rope-swing .65s linear infinite}
+ #mej-companion-actor[data-kind="girl"].mej-c-scooter .mej-c-sprite{animation:mej-scooter-glide 1.7s ease-in-out both}
+ #mej-companion-actor[data-kind="girl"].mej-c-scooter .mej-c-action-prop{display:block;left:0;bottom:-13%;width:100%;height:54%;font:normal clamp(43px,7vw,69px)/1 system-ui;text-align:center;filter:drop-shadow(0 4px 2px #163b6a44)}
+ #mej-companion-actor[data-kind="girl"].mej-c-scooter .mej-c-action-prop:after{content:'🛴'}
+ #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-sprite{animation:mej-skate-glide 1.7s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop{display:block;left:14%;bottom:-11%;width:74%;height:36%;font:normal clamp(40px,7vw,65px)/1 system-ui;text-align:center;animation:mej-skate-board .46s ease-in-out 4;filter:drop-shadow(0 4px 2px #163b6a44)}
+ #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop:after{content:'🛹'}
+ @keyframes mej-rope-hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-19px)}}
+ @keyframes mej-rope-swing{0%,100%{transform:rotateX(0deg)}50%{transform:rotateX(175deg)}}
+ @keyframes mej-scooter-glide{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(18px) rotate(-4deg)}65%{transform:translateX(-7px) rotate(4deg)}}
+ @keyframes mej-skate-glide{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(20px) rotate(-9deg)}65%{transform:translateX(-8px) rotate(8deg)}}
+ @keyframes mej-skate-board{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(6deg)}}
  @keyframes mej-tap-jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-35px)}}
  @keyframes mej-tap-run{0%,100%{transform:translateX(0)}15%{transform:translateX(-17px) rotate(-6deg)}35%{transform:translateX(16px) rotate(6deg)}55%{transform:translateX(-17px) rotate(-6deg)}75%{transform:translateX(16px) rotate(6deg)}}
  @keyframes mej-tap-edge-climb{0%,100%{transform:translateY(0)}30%{transform:translateY(-34px) rotate(-9deg)}50%{transform:translateY(-55px) rotate(5deg)}70%{transform:translateY(-37px)}}
  @keyframes mej-tap-kick{0%,100%{transform:rotate(0)}35%{transform:rotate(-11deg)}50%{transform:rotate(14deg)}65%{transform:rotate(0)}}
  @keyframes mej-tap-ball{0%{opacity:1;transform:translate(0,0) scale(.8)}40%{opacity:1;transform:translate(35px,-17px) scale(1)}100%{opacity:0;transform:translate(120px,8px) scale(.65)}}
- @media(prefers-reduced-motion:reduce){#mej-companion-actor.mej-c-jumping .mej-c-sprite,#mej-companion-actor.mej-c-running .mej-c-sprite,#mej-companion-actor.mej-c-edge-climb .mej-c-sprite,#mej-companion-actor.mej-c-football .mej-c-sprite{animation:none!important}}
+ @media(prefers-reduced-motion:reduce){#mej-companion-actor.mej-c-jumping .mej-c-sprite,#mej-companion-actor.mej-c-running .mej-c-sprite,#mej-companion-actor.mej-c-edge-climb .mej-c-sprite,#mej-companion-actor.mej-c-football .mej-c-sprite,#mej-companion-actor.mej-c-skipping .mej-c-sprite,#mej-companion-actor.mej-c-scooter .mej-c-sprite,#mej-companion-actor.mej-c-skating .mej-c-sprite,#mej-companion-actor .mej-c-action-prop{animation:none!important}}
  #mej-companion-actor.mej-c-dragging .mej-c-sprite{cursor:grabbing}
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
  #mej-companion-actor[hidden]{display:none!important}
@@ -71,9 +86,9 @@
  #mej-companion-actor .mej-c-bubble{display:inline-block;pointer-events:none;position:absolute;top:0;right:93px;min-width:95px;max-width:min(230px,62vw);padding:8px 10px;border-radius:14px;background:#fff;border:2px solid #edc456;color:#1a4a71;font:800 13px/1.4 system-ui;text-align:center;box-shadow:0 2px 8px #001f4450;white-space:pre-line;overflow-wrap:anywhere;max-height:200px;overflow-y:auto}
  #mej-companion-actor.mej-c-near-left .mej-c-bubble{left:90px;right:auto}
  #mej-companion-actor.mej-c-roaming{transition:none!important}
- #mej-companion-actor .mej-c-facing-art{position:absolute;inset:0;width:100%;height:100%;background-size:400% 200%;background-repeat:no-repeat;pointer-events:none;backface-visibility:visible;transform-origin:50% 50%;transform:rotateY(0deg);transition:transform .28s ease-in-out;will-change:transform}
- #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:scaleX(-1)}
- #mej-companion-actor[data-facing="right"] .mej-c-facing-art{transform:scaleX(1)}
+ #mej-companion-actor .mej-c-facing-art{position:absolute;inset:0;width:100%;height:100%;background-size:400% 200%;background-repeat:no-repeat;pointer-events:none;backface-visibility:visible;-webkit-backface-visibility:visible;transform-origin:50% 50%;-webkit-transform-origin:50% 50%;transform:rotateY(0deg);transition:transform .34s ease-in-out;-webkit-transition:-webkit-transform .34s ease-in-out}
+ #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+ #mej-companion-actor[data-facing="right"] .mej-c-facing-art{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
  #mej-companion-actor .mej-c-sprite{background-image:none!important;background-position:initial!important}
  @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-facing-art{transition:none!important}}
  #mej-companion-actor.mej-c-explaining .mej-c-bubble{background:#eaf7ff;border-color:#65b4e8}
@@ -213,19 +228,24 @@
      face.className='mej-c-facing-art';face.setAttribute('aria-hidden','true');
      sprite.appendChild(face);
    }
+   if(sprite&&!sprite.querySelector('.mej-c-action-prop')){
+     const prop=document.createElement('span');prop.className='mej-c-action-prop';prop.setAttribute('aria-hidden','true');sprite.appendChild(prop);
+   }
    // Reapply after mounting or remounting the sprite on a changed route.
    setFacing(host,direction);
    return host;
  }
  function setFacing(host,value){
-   // MEJ_COMPANION_MIRROR_FIX_V4: force real horizontal mirroring on the
-   // sprite image itself, not only a parent data-attribute selector.
+   // MEJ_COMPANION_GIRL_TURN_180_V5: rotate the actual image 180 degrees,
+   // not the speech bubble, backpack canopy, or draggable outer actor.
+   // Both boy and girl use the same facing logic for Safari/iPad and Android.
    const next=value<0?'left':'right';
    host.dataset.facing=next;
    const art=host.querySelector('.mej-c-facing-art');
    if(art){
-     art.style.setProperty('transform',next==='left'?'scaleX(-1)':'scaleX(1)','important');
-     art.style.setProperty('-webkit-transform',next==='left'?'scaleX(-1)':'scaleX(1)','important');
+     const turn=next==='left'?'rotateY(180deg)':'rotateY(0deg)';
+     art.style.setProperty('transform',turn,'important');
+     art.style.setProperty('-webkit-transform',turn,'important');
    }
  }
 
@@ -250,11 +270,12 @@
      host.dataset.reacting='0';
    },1850);
  }
- const tapClasses=['mej-c-jumping','mej-c-running','mej-c-edge-climb','mej-c-football'];
+ const tapClasses=['mej-c-jumping','mej-c-running','mej-c-edge-climb','mej-c-football','mej-c-skipping','mej-c-scooter','mej-c-skating'];
  function clearTap(host){clearTimeout(actionTimer);actionTimer=0;host.classList.remove(...tapClasses)}
  function randomTap(){
    if(!canShow()||drag)return;
-   const choices=['jump','run','climb','football','greet'].filter(a=>a!==lastTapAction);
+   const girl=profile()?.companion?.kind==='girl';
+   const choices=(girl?['jump','run','climb','skipping','scooter','greet']:['jump','run','climb','football','skating','greet']).filter(a=>a!==lastTapAction);
    const choice=choices[Math.floor(Math.random()*choices.length)];
    lastTapAction=choice;
    if(choice==='greet'||!motion||reduced()){greet();return}
@@ -264,7 +285,10 @@
    const map={jump:['mej-c-jumping',3,1800,'Jump!'],
     run:['mej-c-running',2,1600,"Let's run!"],
     climb:['mej-c-edge-climb',5,1800,'Up we go!'],
-    football:['mej-c-football',7,1600,"Let's play football!"]};
+    football:['mej-c-football',7,1600,"Let's play football!"],
+    skipping:['mej-c-skipping',3,1900,"Let's skip rope!"],
+    scooter:['mej-c-scooter',1,1800,"Let's ride a scooter!"],
+    skating:['mej-c-skating',2,1800,"Let's skateboard!"]};
    const [cls,pose,duration,phrase]=map[choice];
    frame(sprite,pose);host.classList.add(cls);showPhrase(host,phrase);speak(phrase);
    actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(host);host.dataset.reacting='0';frame(sprite,0)},duration);
@@ -379,7 +403,7 @@
    if(button){button.textContent=sound?'🔊 صوت الرفيق: مفعّل':'🔇 صوت الرفيق: متوقف';button.setAttribute('aria-pressed',String(sound))}
    if(!sound)try{window.speechSynthesis?.cancel()}catch(_){}
  }
- const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7};
+ const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7,skipping:3,scooter:1,skating:2};
  function roamTick(){
    if(!canShow()){clearInterval(roamTimer);roamTimer=0;return}
    if(drag||dropRAF||!motion||reduced())return;
@@ -401,10 +425,11 @@
    setFacing(h,direction);
    if(idle&&now-lastIdleAction>14500){
      lastIdleAction=now;clearTap(h);
-     const kind=['jump','football','climb'][Math.floor(now/14500)%3];
-     const cls={jump:'mej-c-jumping',football:'mej-c-football',climb:'mej-c-edge-climb'}[kind];
+     const choices=h.dataset.kind==='girl'?['jump','skipping','scooter','climb']:['jump','football','skating','climb'];
+     const kind=choices[Math.floor(now/14500)%choices.length];
+     const cls={jump:'mej-c-jumping',football:'mej-c-football',climb:'mej-c-edge-climb',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating'}[kind];
      const token=++animationNo;h.dataset.reacting='1';h.classList.add(cls);
-     frame(sp,kind==='football'?7:kind==='climb'?5:3);
+     frame(sp,kind==='football'?7:kind==='skating'?2:kind==='scooter'?1:kind==='climb'?5:3);
      actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(h);h.dataset.reacting='0'},1800);
    }
  }
@@ -432,12 +457,16 @@
    if(!(name in POSES)||!canShow())return false;
    clearTap(actor());
    refreshActor();const h=actor(),sp=h.querySelector('.mej-c-sprite');
+   const girl=h.dataset.kind==='girl';
+   if((girl&&['football','skating'].includes(name))||(!girl&&['skipping','scooter'].includes(name)))return false;
    frame(sp,POSES[name]);h.dataset.reacting='1';
+   const activities={football:'mej-c-football',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating'};
+   if(activities[name]&&motion&&!reduced())h.classList.add(activities[name]);
    h.classList.toggle('mej-c-bounce',name==='excited');
-   const captions={idle:'Ready!',walk:'Let’s go!',run:'Here we go!',excited:'Awesome!',sorry:'Try again!',pointing:'Look here!',thinking:'Think carefully!',football:'Let’s play!'};
+   const captions={idle:'Ready!',walk:'Let’s go!',run:'Here we go!',excited:'Awesome!',sorry:'Try again!',pointing:'Look here!',thinking:'Think carefully!',football:'Let’s play!',skipping:"Let's skip rope!",scooter:"Let's ride a scooter!",skating:"Let's skateboard!"};
    showPhrase(h,captions[name]);const token=++animationNo;
    clearTimeout(hideTimer);
-   hideTimer=setTimeout(()=>{if(token===animationNo){h.dataset.reacting='0';h.classList.remove('mej-c-bounce')}},Math.min(3000,Math.max(500,duration)));
+   hideTimer=setTimeout(()=>{if(token===animationNo){clearTap(h);h.dataset.reacting='0';h.classList.remove('mej-c-bounce')}},Math.min(3000,Math.max(500,duration)));
    return true;
  }
  const positives=['Awesome!','Excellent!','Amazing!','Let’s go!','Unbelievable!'];

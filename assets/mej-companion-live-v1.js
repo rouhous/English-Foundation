@@ -68,6 +68,19 @@
  #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-sprite{animation:mej-skate-glide 1.7s ease-in-out both}
  #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop{display:block;left:14%;bottom:-11%;width:74%;height:36%;font:normal clamp(40px,7vw,65px)/1 system-ui;text-align:center;animation:mej-skate-board .46s ease-in-out 4;filter:drop-shadow(0 4px 2px #163b6a44)}
  #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop:after{content:'🛹'}
+ /* Tennis rally: visible racket, a side target and a ball that rebounds to the player. */
+ #mej-companion-actor .mej-c-tennis-ball,#mej-companion-actor .mej-c-tennis-target{display:none;pointer-events:none;position:absolute;z-index:3;user-select:none}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-sprite{animation:mej-tennis-swing 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop{display:block;width:22px;height:30px;right:3%;bottom:23%;border:3px solid #e3a34c;background:repeating-linear-gradient(90deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px),repeating-linear-gradient(0deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px);border-radius:48% 48% 46% 46%;transform:rotate(-25deg);animation:mej-tennis-racket 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop:after{content:'';display:block;position:absolute;width:5px;height:28px;left:8px;top:27px;border-radius:5px;background:#875126}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-ball{display:block;left:42%;bottom:12%;font:normal 26px/1 system-ui;animation:mej-tennis-rally 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-ball:after{content:'🎾'}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-target{display:block;left:calc(42% + var(--mej-tennis-reach,90px));bottom:20%;font:normal 32px/1 system-ui;animation:mej-tennis-target-hit 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-target:after{content:'🎯'}
+ @keyframes mej-tennis-swing{0%,100%{transform:rotate(0) translateX(0)}15%{transform:rotate(-7deg)}32%{transform:rotate(9deg)}60%{transform:rotate(0)}}
+ @keyframes mej-tennis-racket{0%,100%{transform:rotate(-25deg)}18%{transform:rotate(28deg)}34%{transform:rotate(-42deg)}}
+ @keyframes mej-tennis-rally{0%,8%{transform:translate(0,0) scale(.8)}22%{transform:translate(0,-10px) scale(1)}46%{transform:translate(var(--mej-tennis-reach,90px),-14px) scale(.9)}53%{transform:translate(var(--mej-tennis-reach,90px),-14px) scale(.9)}76%{transform:translate(28px,-20px) scale(1)}100%{transform:translate(0,0) scale(.8)}}
+ @keyframes mej-tennis-target-hit{0%,43%,59%,100%{transform:scale(1)}48%,54%{transform:scale(1.27)}}
  @keyframes mej-rope-hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-19px)}}
  @keyframes mej-rope-swing{0%,100%{transform:rotateX(0deg)}50%{transform:rotateX(175deg)}}
  @keyframes mej-scooter-glide{0%,100%{transform:translateX(0) rotate(0)}30%{transform:translateX(18px) rotate(-4deg)}65%{transform:translateX(-7px) rotate(4deg)}}
@@ -78,7 +91,7 @@
  @keyframes mej-tap-edge-climb{0%,100%{transform:translateY(0)}30%{transform:translateY(-34px) rotate(-9deg)}50%{transform:translateY(-55px) rotate(5deg)}70%{transform:translateY(-37px)}}
  @keyframes mej-tap-kick{0%,100%{transform:rotate(0)}35%{transform:rotate(-11deg)}50%{transform:rotate(14deg)}65%{transform:rotate(0)}}
  @keyframes mej-tap-ball{0%{opacity:1;transform:translate(0,0) scale(.8)}40%{opacity:1;transform:translate(35px,-17px) scale(1)}100%{opacity:0;transform:translate(120px,8px) scale(.65)}}
- @media(prefers-reduced-motion:reduce){#mej-companion-actor.mej-c-jumping .mej-c-sprite,#mej-companion-actor.mej-c-running .mej-c-sprite,#mej-companion-actor.mej-c-edge-climb .mej-c-sprite,#mej-companion-actor.mej-c-football .mej-c-sprite,#mej-companion-actor.mej-c-skipping .mej-c-sprite,#mej-companion-actor.mej-c-scooter .mej-c-sprite,#mej-companion-actor.mej-c-skating .mej-c-sprite,#mej-companion-actor .mej-c-action-prop{animation:none!important}}
+ @media(prefers-reduced-motion:reduce){#mej-companion-actor.mej-c-jumping .mej-c-sprite,#mej-companion-actor.mej-c-running .mej-c-sprite,#mej-companion-actor.mej-c-edge-climb .mej-c-sprite,#mej-companion-actor.mej-c-football .mej-c-sprite,#mej-companion-actor.mej-c-skipping .mej-c-sprite,#mej-companion-actor.mej-c-scooter .mej-c-sprite,#mej-companion-actor.mej-c-skating .mej-c-sprite,#mej-companion-actor.mej-c-tennis .mej-c-sprite,#mej-companion-actor .mej-c-action-prop,#mej-companion-actor .mej-c-tennis-ball,#mej-companion-actor .mej-c-tennis-target{animation:none!important}}
  #mej-companion-actor.mej-c-dragging .mej-c-sprite{cursor:grabbing}
  #mej-companion-actor .mej-c-bubble[hidden]{display:none!important}
  #mej-companion-actor[hidden]{display:none!important}
@@ -89,6 +102,8 @@
  #mej-companion-actor .mej-c-facing-art{position:absolute;inset:0;width:100%;height:100%;background-size:400% 200%;background-repeat:no-repeat;pointer-events:none;backface-visibility:visible;-webkit-backface-visibility:visible;transform-origin:50% 50%;-webkit-transform-origin:50% 50%;transform:rotateY(0deg);transition:transform .34s ease-in-out;-webkit-transition:-webkit-transform .34s ease-in-out}
  #mej-companion-actor[data-facing="left"] .mej-c-facing-art{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
  #mej-companion-actor[data-facing="right"] .mej-c-facing-art{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
+ #mej-companion-actor[data-kind="girl"][data-facing="left"] .mej-c-facing-art{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
+ #mej-companion-actor[data-kind="girl"][data-facing="right"] .mej-c-facing-art{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
  #mej-companion-actor .mej-c-sprite{background-image:none!important;background-position:initial!important}
  @media(prefers-reduced-motion:reduce){#mej-companion-actor .mej-c-facing-art{transition:none!important}}
  #mej-companion-actor.mej-c-explaining .mej-c-bubble{background:#eaf7ff;border-color:#65b4e8}
@@ -231,19 +246,26 @@
    if(sprite&&!sprite.querySelector('.mej-c-action-prop')){
      const prop=document.createElement('span');prop.className='mej-c-action-prop';prop.setAttribute('aria-hidden','true');sprite.appendChild(prop);
    }
+   if(sprite&&!sprite.querySelector('.mej-c-tennis-ball')){
+     for(const cls of ['mej-c-tennis-ball','mej-c-tennis-target']){
+       const el=document.createElement('span');el.className=cls;el.setAttribute('aria-hidden','true');sprite.appendChild(el);
+     }
+   }
    // Reapply after mounting or remounting the sprite on a changed route.
    setFacing(host,direction);
    return host;
  }
  function setFacing(host,value){
-   // MEJ_COMPANION_GIRL_TURN_180_V5: rotate the actual image 180 degrees,
-   // not the speech bubble, backpack canopy, or draggable outer actor.
-   // Both boy and girl use the same facing logic for Safari/iPad and Android.
+   // MEJ_COMPANION_GIRL_REVERSE_ORIENTATION_V6:
+   // The girl's source art faces the opposite side from the boy's.
+   // Flip the image 180 degrees in the OTHER direction; never rotate the canopy,
+   // speech bubbles, the draggable actor, or the girl's play props.
    const next=value<0?'left':'right';
    host.dataset.facing=next;
    const art=host.querySelector('.mej-c-facing-art');
    if(art){
-     const turn=next==='left'?'rotateY(180deg)':'rotateY(0deg)';
+     const girl=host.dataset.kind==='girl';
+     const turn=(next==='left')!==girl?'rotateY(180deg)':'rotateY(0deg)';
      art.style.setProperty('transform',turn,'important');
      art.style.setProperty('-webkit-transform',turn,'important');
    }
@@ -270,12 +292,19 @@
      host.dataset.reacting='0';
    },1850);
  }
- const tapClasses=['mej-c-jumping','mej-c-running','mej-c-edge-climb','mej-c-football','mej-c-skipping','mej-c-scooter','mej-c-skating'];
+ const tapClasses=['mej-c-jumping','mej-c-running','mej-c-edge-climb','mej-c-football','mej-c-skipping','mej-c-scooter','mej-c-skating','mej-c-tennis'];
  function clearTap(host){clearTimeout(actionTimer);actionTimer=0;host.classList.remove(...tapClasses)}
+ function prepareTennis(host){
+   // Keep the target inside the visible screen, even on small phones.
+   const lim=limits(host),x=actorX??lim.maxX*.5;
+   const right=x+100<innerWidth-35;
+   const reach=right?Math.min(112,innerWidth-x-105):-Math.min(112,x-24);
+   host.style.setProperty('--mej-tennis-reach',Math.round(Math.abs(reach)<60?(right?60:-60):reach)+'px');
+ }
  function randomTap(){
    if(!canShow()||drag)return;
    const girl=profile()?.companion?.kind==='girl';
-   const choices=(girl?['jump','run','climb','skipping','scooter','greet']:['jump','run','climb','football','skating','greet']).filter(a=>a!==lastTapAction);
+   const choices=(girl?['jump','run','climb','football','skipping','scooter','greet']:['jump','run','climb','football','skating','tennis','greet']).filter(a=>a!==lastTapAction);
    const choice=choices[Math.floor(Math.random()*choices.length)];
    lastTapAction=choice;
    if(choice==='greet'||!motion||reduced()){greet();return}
@@ -288,8 +317,10 @@
     football:['mej-c-football',7,1600,"Let's play football!"],
     skipping:['mej-c-skipping',3,1900,"Let's skip rope!"],
     scooter:['mej-c-scooter',1,1800,"Let's ride a scooter!"],
-    skating:['mej-c-skating',2,1800,"Let's skateboard!"]};
+    skating:['mej-c-skating',2,1800,"Let's skateboard!"],
+    tennis:['mej-c-tennis',2,1900,"Let's play tennis!"]};
    const [cls,pose,duration,phrase]=map[choice];
+   if(choice==='tennis')prepareTennis(host);
    frame(sprite,pose);host.classList.add(cls);showPhrase(host,phrase);speak(phrase);
    actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(host);host.dataset.reacting='0';frame(sprite,0)},duration);
  }
@@ -403,7 +434,7 @@
    if(button){button.textContent=sound?'🔊 صوت الرفيق: مفعّل':'🔇 صوت الرفيق: متوقف';button.setAttribute('aria-pressed',String(sound))}
    if(!sound)try{window.speechSynthesis?.cancel()}catch(_){}
  }
- const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7,skipping:3,scooter:1,skating:2};
+ const POSES={idle:0,walk:1,run:2,excited:3,sorry:4,pointing:5,thinking:6,football:7,skipping:3,scooter:1,skating:2,tennis:2};
  function roamTick(){
    if(!canShow()){clearInterval(roamTimer);roamTimer=0;return}
    if(drag||dropRAF||!motion||reduced())return;
@@ -425,11 +456,12 @@
    setFacing(h,direction);
    if(idle&&now-lastIdleAction>14500){
      lastIdleAction=now;clearTap(h);
-     const choices=h.dataset.kind==='girl'?['jump','skipping','scooter','climb']:['jump','football','skating','climb'];
+     const choices=h.dataset.kind==='girl'?['jump','football','skipping','scooter','climb']:['jump','football','skating','tennis','climb'];
      const kind=choices[Math.floor(now/14500)%choices.length];
-     const cls={jump:'mej-c-jumping',football:'mej-c-football',climb:'mej-c-edge-climb',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating'}[kind];
+     const cls={jump:'mej-c-jumping',football:'mej-c-football',climb:'mej-c-edge-climb',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating',tennis:'mej-c-tennis'}[kind];
+     if(kind==='tennis')prepareTennis(h);
      const token=++animationNo;h.dataset.reacting='1';h.classList.add(cls);
-     frame(sp,kind==='football'?7:kind==='skating'?2:kind==='scooter'?1:kind==='climb'?5:3);
+     frame(sp,kind==='football'?7:kind==='tennis'||kind==='skating'?2:kind==='scooter'?1:kind==='climb'?5:3);
      actionTimer=setTimeout(()=>{if(token!==animationNo)return;clearTap(h);h.dataset.reacting='0'},1800);
    }
  }
@@ -449,6 +481,8 @@
      if(art)art.style.backgroundImage='url("'+ART[kind].sheet+'")';
    }
    h.hidden=false;h.style.display='block';restore(h);
+   // Important after profile/gender switches: actor() may have run before data-kind was set.
+   setFacing(h,direction);
    const moving=motion&&!reduced();h.classList.toggle('mej-c-roaming',moving);
    if(!moving){clearInterval(roamTimer);roamTimer=0;if(!drag&&!dropRAF&&h.dataset.reacting!=='1')frame(sp,0);return}
    if(!roamTimer){direction=(actorX??0)>innerWidth*.55?-1:1;setFacing(h,direction);frame(sp,1);roamTimer=setInterval(roamTick,145)}
@@ -458,12 +492,13 @@
    clearTap(actor());
    refreshActor();const h=actor(),sp=h.querySelector('.mej-c-sprite');
    const girl=h.dataset.kind==='girl';
-   if((girl&&['football','skating'].includes(name))||(!girl&&['skipping','scooter'].includes(name)))return false;
+   if((girl&&['skating','tennis'].includes(name))||(!girl&&['skipping','scooter'].includes(name)))return false;
    frame(sp,POSES[name]);h.dataset.reacting='1';
-   const activities={football:'mej-c-football',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating'};
+   const activities={football:'mej-c-football',skipping:'mej-c-skipping',scooter:'mej-c-scooter',skating:'mej-c-skating',tennis:'mej-c-tennis'};
+   if(name==='tennis')prepareTennis(h);
    if(activities[name]&&motion&&!reduced())h.classList.add(activities[name]);
    h.classList.toggle('mej-c-bounce',name==='excited');
-   const captions={idle:'Ready!',walk:'Let’s go!',run:'Here we go!',excited:'Awesome!',sorry:'Try again!',pointing:'Look here!',thinking:'Think carefully!',football:'Let’s play!',skipping:"Let's skip rope!",scooter:"Let's ride a scooter!",skating:"Let's skateboard!"};
+   const captions={idle:'Ready!',walk:'Let’s go!',run:'Here we go!',excited:'Awesome!',sorry:'Try again!',pointing:'Look here!',thinking:'Think carefully!',football:'Let’s play!',skipping:"Let's skip rope!",scooter:"Let's ride a scooter!",skating:"Let's skateboard!",tennis:"Let's play tennis!"};
    showPhrase(h,captions[name]);const token=++animationNo;
    clearTimeout(hideTimer);
    hideTimer=setTimeout(()=>{if(token===animationNo){clearTap(h);h.dataset.reacting='0';h.classList.remove('mej-c-bounce')}},Math.min(3000,Math.max(500,duration)));

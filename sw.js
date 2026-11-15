@@ -2,8 +2,8 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-hidden-khasab-first-badge-20261115-v3';
-const CORE=['./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./hidden-objects/precision-v3-client.js','./hidden-objects/first-badge-practice.js','./hidden-objects/assets/base_classroom.webp','./hidden-objects/assets/variant_classroom.webp','./hidden-objects/assets/variant_souq_harbour.webp','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
+const CACHE='mej-hidden-112-scenes-20261115-v1';
+const CORE=['./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./hidden-objects/precision-v3-client.js','./hidden-objects/first-badge-practice.js','./hidden-objects/practice-region-library-a.js','./hidden-objects/practice-region-library-b.js','./hidden-objects/practice-region-library-c.js','./hidden-objects/practice-region-loader.js','./hidden-objects/assets/base_classroom.webp','./hidden-objects/assets/variant_classroom.webp','./hidden-objects/assets/variant_souq_harbour.webp','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/mej-spelling-skills-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
  './assets/class-ranking-route-v1.js',
@@ -12,6 +12,7 @@ const CORE=['./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./as
 const COASTAL_BADGES=Array.from({length:10},(_,i)=>'./coastal-arcade/badges/coast-'+String(i+1).padStart(2,'0')+'.webp');
 const HIDDEN_BADGES=Array.from({length:10},(_,i)=>'./assets/mej-badges-20261112/badge-'+String(i+1).padStart(2,'0')+'.svg');
 const OPTIONAL_REAL_SCENES=['01_harbour_market.webp','02_oasis_fortress.webp','03_fishing_harbour.webp','04_traditional_souq.webp','05_phonics_classroom.webp','06_omani_art_room.webp','07_omani_science_room.webp','08_omani_learning_room.webp','09_omani_music_room.webp','10_omani_harbour_market.webp'].map(file=>'./hidden-objects/real-scenes/'+file);
+const HIDDEN_PHOTO_LIBRARY=["./hidden-objects/assets/base_art_room.webp","./hidden-objects/assets/base_beach.webp","./hidden-objects/assets/base_canteen.webp","./hidden-objects/assets/base_classroom.webp","./hidden-objects/assets/base_classroom2.webp","./hidden-objects/assets/base_coastalpicnic.webp","./hidden-objects/assets/base_computer_lab.webp","./hidden-objects/assets/base_ecolab.webp","./hidden-objects/assets/base_familykitchen.webp","./hidden-objects/assets/base_familyliving.webp","./hidden-objects/assets/base_farm.webp","./hidden-objects/assets/base_kitchen2.webp","./hidden-objects/assets/base_library.webp","./hidden-objects/assets/base_market.webp","./hidden-objects/assets/base_music_studio.webp","./hidden-objects/assets/base_omani_market.webp","./hidden-objects/assets/base_park.webp","./hidden-objects/assets/base_renewables.webp","./hidden-objects/assets/base_s1_01.webp","./hidden-objects/assets/base_s1_02.webp","./hidden-objects/assets/base_s1_03.webp","./hidden-objects/assets/base_s1_04.webp","./hidden-objects/assets/base_s1_05.webp","./hidden-objects/assets/base_s1_06.webp","./hidden-objects/assets/base_s1_07.webp","./hidden-objects/assets/base_s1_08.webp","./hidden-objects/assets/base_s1_09.webp","./hidden-objects/assets/base_s1_10.webp","./hidden-objects/assets/base_school.webp","./hidden-objects/assets/base_school_garden.webp","./hidden-objects/assets/base_schoolcorridor.webp","./hidden-objects/assets/base_science_lab.webp","./hidden-objects/assets/base_sports_field.webp","./hidden-objects/assets/base_zoo.webp","./hidden-objects/assets/variant_beach.webp","./hidden-objects/assets/variant_classroom.webp","./hidden-objects/assets/variant_farm_A.webp","./hidden-objects/assets/variant_farm_B.webp","./hidden-objects/assets/variant_harbour_cafe.webp","./hidden-objects/assets/variant_kitchen.webp","./hidden-objects/assets/variant_market_A.webp","./hidden-objects/assets/variant_market_B.webp","./hidden-objects/assets/variant_market_C.webp","./hidden-objects/assets/variant_renewables_lab.webp","./hidden-objects/assets/variant_science_lab.webp","./hidden-objects/assets/variant_souq_harbour.webp","./hidden-objects/assets/variant_zoo.webp"];
 const IMAGE_SHARDS=Array.from({length:21},(_,i)=>
  './assets/approved-images-'+String(i+1).padStart(2,'0')+'.js?v=20261107-approved-all');
 let warmStarted=false;
@@ -28,6 +29,21 @@ async function warmPictures(){
    }));
   }
  }finally{warmStarted=false}
+}
+/* Best-effort offline image warmer: 47 retained WebP scenes, never delays page navigation. */
+let hiddenWarmStarted=false;
+async function warmHiddenPictures(){
+ if(hiddenWarmStarted)return;
+ hiddenWarmStarted=true;
+ try{
+  const cache=await caches.open(CACHE);
+  for(let i=0;i<HIDDEN_PHOTO_LIBRARY.length;i+=3){
+   await Promise.all(HIDDEN_PHOTO_LIBRARY.slice(i,i+3).map(async path=>{
+    try{if(!await cache.match(path))await cache.add(path)}
+    catch(e){console.warn('Hidden photo offline cache postponed:',path)}
+   }));
+  }
+ }finally{hiddenWarmStarted=false}
 }
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
@@ -152,6 +168,7 @@ self.addEventListener('fetch',event=>{
    // Student Hidden Objects must receive corrected scene maps immediately online;
    // offline-first still works from the most recent saved game page.
    if(pathname===mainPath+'hidden-objects/index.html'){
+     event.waitUntil(warmHiddenPictures().catch(()=>{}));
      const hiddenCache=await caches.open(CACHE);
      const offline=await hiddenCache.match('./hidden-objects/index.html');
      try{

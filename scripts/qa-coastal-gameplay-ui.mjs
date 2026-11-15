@@ -38,6 +38,7 @@ try{
  }
  {
   const p=await pageFor('flip');
+  console.log('FLIP_DIAGNOSTIC',JSON.stringify(await p.evaluate(()=>({context:window.MEJ_GAME_CONTEXT,bodyClass:document.body.className,heading:document.querySelector('#heading')?.textContent,playHidden:document.querySelector('#play')?.hidden,sceneHTML:document.querySelector('#scene')?.innerHTML.slice(0,500),scripts:document.scripts.length}))),JSON.stringify(errors));
   await checkGrid(p,'#scene .flip-grid .tile',3,10,'Flip Cards');
   await p.screenshot({path:'arcade-qa-flip-mobile.png',fullPage:true});
   await p.close();

@@ -1,0 +1,28 @@
+name: Audit voyage labels (read-only)
+on:
+  push:
+    paths:
+      - .github/workflows/audit-voyage-labels-20261115.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print scoped UI code excerpts
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          print('DOCUMENT_SIZE',len(s))
+          terms=['Phonics Lab','First Words','Everyday English','Reading Builder','المرحلة','المستوى','level-card','levelCard','stage-card','stageCard','renderLevels','renderParts','partTitle','مرحلة التأسيس','levels-grid','مرحلة 1','phaseName','stageName','levelName','maxAllowed','const STAGES','stageTitles','level-part']
+          for t in terms:
+            matches=list(re.finditer(re.escape(t),s,re.I))
+            print('\\nTERM',repr(t),'COUNT',len(matches))
+            for m in matches[:6]:
+              beg=max(0,m.start()-230);end=min(len(s),m.end()+260)
+              print('LINE',s.count('\\n',0,m.start())+1,repr(s[beg:end].replace('\\n',' '))[:650])
+          PY

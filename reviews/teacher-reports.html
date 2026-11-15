@@ -134,10 +134,15 @@ function gather(reports){
 function renderCards(reports,entries){
  const host=clear('stats');
  const sum=(name)=>reports.reduce((a,r)=>a+integer(r[name]),0);
+ const skillFilterActive=!!$('skillFilter').value;
+ const countWrong=skillFilterActive?entries.reduce((a,x)=>a+x.wrong,0):sum('wrongAttempts');
+ const countRepeated=skillFilterActive?entries.reduce((a,x)=>a+x.repeated,0):sum('repeatItems');
+ const countUnresolved=skillFilterActive?entries.reduce((a,x)=>a+x.unresolvedStudents,0):sum('unresolved');
+ const countMastered=skillFilterActive?entries.reduce((a,x)=>a+x.students-x.unresolvedStudents,0):sum('masteredAfter');
  const metrics=[
- ['الطلاب في التقرير',reports.length],['المحاولات المسجلة',sum('attempts')],
- ['محاولات الإجابة الخاطئة',sum('wrongAttempts')],['أسئلة شهدت خطأً متكرراً',sum('repeatItems')],
- ['أسئلة تحتاج إلى تدريب',sum('unresolved')],['أسئلة أُتقنت بعد أخطاء',sum('masteredAfter')],
+ ['الطلاب في التقرير',reports.length],['المحاولات المسجلة (كل المهارات)',sum('attempts')],
+ ['محاولات الإجابة الخاطئة',countWrong],['أسئلة شهدت خطأً متكرراً',countRepeated],
+ ['أسئلة تحتاج إلى تدريب',countUnresolved],['أسئلة أُتقنت بعد أخطاء',countMastered],
  ['أنشطة مختلفة حدثت فيها أخطاء',entries.length]
  ];
  for(const [label,val] of metrics){
@@ -203,7 +208,7 @@ function render(){
 }
 function csv(){
  const reports=selected(),entries=gather(reports);
- const quote=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
+ const quote=x=>{const v=String(x??'');const safe=/^[=+@-]/.test(v)?"'"+v:v;return '"'+safe.replace(/"/g,'""')+'"'};
  const lines=[['نوع السجل','الطالب/النطاق','القسم','معرّف النشاط','المهارة','السؤال','المستوى','مرات الخطأ','عدد الطلاب','تكرار الأخطاء','بحاجة إلى تدريب','آخر خطأ']];
  for(const r of reports){
   for(const i of r.items||[]){

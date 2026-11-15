@@ -79,7 +79,7 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="../assets/teacher-dashboard-v2.js?v=20261115-level-stars-1" defer></script>
 </head><body>
-<header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
+<header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><a href="./teacher-reports.html" title="تقارير الأخطاء والمهارات والأنشطة المتكررة">التقارير التشخيصية</a><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <dialog id="codeDialog" aria-labelledby="codeDialogTitle" class="codeDialog">
  <h2 id="codeDialogTitle">رمز ربط الطلاب الجديد</h2>
  <p class="notice">استخدم الرمز الجديد لربط الطلاب الجدد. الطلاب المرتبطون سابقًا يبقون مرتبطين بمعلمهم.</p>
@@ -100,7 +100,7 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
  </div>
  <div class="sheet"><div class="subline"><div><h2>نظرة عامة</h2><p class="notice" id="dataScope">البيانات المباشرة والسجلات التجريبية منفصلتان</p></div></div><div class="metricGrid" id="metrics"></div></div>
  <div class="sheet"><div class="subline"><h2>صفوفي</h2><span id="classCount" class="notice"></span></div><div id="classes" class="classGrid"></div></div>
-<div class="sheet"><h2>مقارنة الصفوف</h2><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
+<div class="sheet"><div class="subline"><h2>مقارنة الصفوف</h2><a href="./teacher-reports.html" class="button alt" style="text-decoration:none">تقرير الأخطاء والمهارات</a></div><div id="charts" class="charts"></div><p class="notice">توزيع الطلاب بحسب المستوى، وأعلى عدد نجوم في كل صف. السجلات القديمة مميزة بأنها تجريبية.</p></div>
 </section>
 <section id="detail" hidden>
  <div class="sheet"><div class="subline"><button id="back" class="button alt" type="button">← جميع الصفوف</button><span id="detailScope" class="notice"></span></div><h2 id="detailTitle">قائمة الطلاب</h2><div class="metricGrid" id="detailMetrics"></div><div style="height:14px"></div><div class="sortControls">

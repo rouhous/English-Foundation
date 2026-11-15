@@ -225,7 +225,7 @@ if(d.type==='mej:v10-close'||d.type==='mej:hidden-close'){closeGame();return}
 if(d.type==='mej:v10-replay'){if(c.id!=='hidden'&&d.game===c.id&&Number(d.run)===c.run)openGame(c.index);return}
 if(d.type==='mej:v10-finished'){if(c.id==='hidden'||d.game!==c.id||d.grade!==c.grade||Number(d.run)!==c.run)return;const valid=['all','time','lives','quit'];if(!valid.includes(d.reason)||!Number.isInteger(d.score)||d.score<0||d.score>10)return;settle(d.score,d.reason);return}
 if(c.id!=='hidden')return;
-if(d.type==='mej:hidden-ready'){try{frame.contentWindow.postMessage({type:'mej:hidden-init',stage:LIVE?liveStage:state.grade,badge:c.index,scene:(c.index-1)%4,practice:true,masteredWords:[],levelWords:[]},location.origin==='null'?'*':location.origin)}catch(e){}return}
+if(d.type==='mej:hidden-ready'){try{frame.contentWindow.postMessage({type:'mej:hidden-init',stage:LIVE?liveStage:state.grade,badge:c.index,scene:(c.index-1)%4,practice:true,preview:!LIVE,masteredWords:[],levelWords:[]},location.origin==='null'?'*':location.origin)}catch(e){}return}
 if(d.type==='mej:hidden-progress'){const found=Array.isArray(d.found)?Math.min(10,d.found.length):0;if(d.ended)toast('Hidden Objects: '+found+'/10. لا تُحتسب نجوم قبل اعتماد المشاهد.');}
 });
 $('closeBadge').onclick=closeBadge;$('backBadges').onclick=closeBadge;$('closeGame').onclick=closeGame;

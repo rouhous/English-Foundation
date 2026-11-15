@@ -101,4 +101,18 @@ try{
  assert.deepEqual(failures,[],'No uncaught browser errors');
  console.log('MEJ_HIDDEN_PRECISION_QA_PASS 47 images SHA-256 verified; 130 stages; 30 draft polygons; 10-target review; 3 level-sensitive hint modes; no draft rewards');
  await page.close();
-}finally{await browser.close();}
+}finally{await browser.close();}  for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'word'],[12,'word']]){
+   const frame=await launch(stage,1,true);
+   const mode=await frame.locator('#scene').getAttribute('class');
+   assert.ok(mode.includes('mode-'+kind),'stage '+stage+' must use '+kind+' clues');
+   assert.equal(await frame.locator('#bonus').innerText().then(s=>s.includes('تدريب')),true,'no live star writes');
+  }
+  // The source deliberately leaves stage 8 badge 1 without an image. Never invent a substitute.
+  {
+   const frame=await launch(8,1,true);
+   await frame.locator('.precision-unavailable').waitFor();
+   const mode=await frame.locator('#scene').getAttribute('class');
+   assert.ok(mode.includes('mode-silhouette'),'stage 8 keeps the appropriate hint mode');
+   assert.equal(await frame.locator('#words li').count(),0,'unmapped scene must not offer fake targets');
+  }
+

@@ -1,0 +1,6438 @@
+{
+  "version": "2026-11-13-smart-reuse-review",
+  "targetSlots": 130,
+  "contextCount": 250,
+  "libraryAssets": [
+    {
+      "id": "base_s1_01",
+      "theme": "classroom",
+      "category": "classroom",
+      "file": "assets/base_s1_01.webp",
+      "source": "stage1-review",
+      "sha256": "885d9723a5d2b9b413637d4d7224d6a8e7cfdc62d04e1903e6105ac9a6321814",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_02",
+      "theme": "bedroom",
+      "category": "bedroom",
+      "file": "assets/base_s1_02.webp",
+      "source": "stage1-review",
+      "sha256": "673d6fccc1fc8ed507517e9b72c4888865917c1a21878738e8c714b4be136606",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_03",
+      "theme": "kitchen",
+      "category": "kitchen",
+      "file": "assets/base_s1_03.webp",
+      "source": "stage1-review",
+      "sha256": "b2fe6cdf2b8414faa0f95db6da5bde63a8ebe9c284485a4d1060e4aa0d74a1fc",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_04",
+      "theme": "toy-store",
+      "category": "toy-store",
+      "file": "assets/base_s1_04.webp",
+      "source": "stage1-review",
+      "sha256": "d13647535a3ee6e072238a3f5d188e702e9e8f4d73597a7444d3384a397b52ab",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_05",
+      "theme": "school-hallway",
+      "category": "school-hallway",
+      "file": "assets/base_s1_05.webp",
+      "source": "stage1-review",
+      "sha256": "0099cbbd2355ebfc666aafaedcb0a435dd93cc42deeedd72d33252b35db2e993",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_06",
+      "theme": "garden",
+      "category": "garden",
+      "file": "assets/base_s1_06.webp",
+      "source": "stage1-review",
+      "sha256": "2698a05d87122d0e0343623185aeaf5773162d0c6ec644ff8f3d0af42a6747b8",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_07",
+      "theme": "living-room",
+      "category": "living-room",
+      "file": "assets/base_s1_07.webp",
+      "source": "stage1-review",
+      "sha256": "ae48b87c73b16e477e164216fb8f96db36f1cca783790bc1abe284dea0c13909",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_08",
+      "theme": "picnic",
+      "category": "picnic",
+      "file": "assets/base_s1_08.webp",
+      "source": "stage1-review",
+      "sha256": "95fc6b0762a5684403285380dd31bdefe1a3c9d32af8a66c508feb303bb95d11",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_09",
+      "theme": "art-room",
+      "category": "art-room",
+      "file": "assets/base_s1_09.webp",
+      "source": "stage1-review",
+      "sha256": "ea5b9a3d7bbba18f84ea1365424ee62258a15a90d2e2fa57e1384acae87420e0",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_s1_10",
+      "theme": "playground",
+      "category": "playground",
+      "file": "assets/base_s1_10.webp",
+      "source": "stage1-review",
+      "sha256": "4bb9439071f556d5ce46d9585fed945eacb2b1484fce7c318074a0bd9c599b80",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_farm",
+      "theme": "farm",
+      "category": "farm",
+      "file": "assets/base_farm.webp",
+      "source": "batch04",
+      "sha256": "ef088e5ffd0d318863991b4116b18590f62f0ca1dcb8ead5f69608423224153e",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_market",
+      "theme": "fruit market",
+      "category": "market",
+      "file": "assets/base_market.webp",
+      "source": "batch04",
+      "sha256": "4140008fda5c503e27e27ca43435530ed38b553bc2e938f42ffb452d17d67ee3",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_school",
+      "theme": "school",
+      "category": "school",
+      "file": "assets/base_school.webp",
+      "source": "batch04",
+      "sha256": "3b0203c668e595843403f9f7642774516f1686e9f7a8c8fffd0427fb1e83f17e",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_familykitchen",
+      "theme": "family kitchen",
+      "category": "kitchen",
+      "file": "assets/base_familykitchen.webp",
+      "source": "batch04",
+      "sha256": "3d719851836e28201d521e810096045e46cb0a566ecb972f1e1d4f626f04dccf",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_zoo",
+      "theme": "zoo",
+      "category": "zoo",
+      "file": "assets/base_zoo.webp",
+      "source": "batch04",
+      "sha256": "8b5e0f49d95eeec4808669cb978296a705a40c7d3d04441e8e8c00712b3251e8",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_beach",
+      "theme": "beach",
+      "category": "beach",
+      "file": "assets/base_beach.webp",
+      "source": "batch04",
+      "sha256": "d35715eb05ca957fe6b4bde0070b405fc96d94cce6868720bed716088e66176f",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_park",
+      "theme": "coastal beach",
+      "category": "beach",
+      "file": "assets/base_park.webp",
+      "source": "batch04",
+      "sha256": "7ebda75e45f9a6843570e0f131c40b538851346e9c2dc04d0b9ac12811732e75",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_schoolcorridor",
+      "theme": "school hallway",
+      "category": "school-hallway",
+      "file": "assets/base_schoolcorridor.webp",
+      "source": "batch04",
+      "sha256": "419c3ea952713f18238a38173587472136212d3d2b07b732c5e37248e59632ec",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_market_A",
+      "theme": "fruit market variant",
+      "category": "market",
+      "file": "assets/variant_market_A.webp",
+      "source": "batch04-alternative",
+      "sha256": "2b20fcf5a936e8891ecb51ad490deca3bd48402b2c755d4031114181e227deaa",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_market_B",
+      "theme": "fruit market stalls",
+      "category": "market",
+      "file": "assets/variant_market_B.webp",
+      "source": "batch04-alternative",
+      "sha256": "547fbf90bf8768e07e63645c68540afbe2f86303742e93f949e91fef53847670",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_market_C",
+      "theme": "Omani produce market",
+      "category": "market",
+      "file": "assets/variant_market_C.webp",
+      "source": "batch04-alternative",
+      "sha256": "c7993469fe2cd2242649356743844b35b8b97c67e559bf2da7347a3a91d75136",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_farm_A",
+      "theme": "farm animals variant",
+      "category": "farm",
+      "file": "assets/variant_farm_A.webp",
+      "source": "batch04-alternative",
+      "sha256": "aaaae3659145174ba1d79a12a12dbadf7f68af25091de6c5690898de75269b82",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_farm_B",
+      "theme": "farm crops variant",
+      "category": "farm",
+      "file": "assets/variant_farm_B.webp",
+      "source": "batch04-alternative",
+      "sha256": "18f6d83b68df27cfc101fa22d8e2da382bebd8dcb9173caa97e3b913f70d5795",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_zoo",
+      "theme": "wildlife zoo variant",
+      "category": "zoo",
+      "file": "assets/variant_zoo.webp",
+      "source": "batch04-alternative",
+      "sha256": "41d4697d398e89ad046c3e6a3a9da070a7b435da7290b5f44cdb294de42ef992",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_beach",
+      "theme": "seaside beach variant",
+      "category": "beach",
+      "file": "assets/variant_beach.webp",
+      "source": "batch04-alternative",
+      "sha256": "1f1d28f29cab2dd4fa8439862b34d809b0e3d10cae1679d232288fbcd87ea3fc",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_kitchen",
+      "theme": "family kitchen variant",
+      "category": "kitchen",
+      "file": "assets/variant_kitchen.webp",
+      "source": "batch04-alternative",
+      "sha256": "11e50168b0d55dffd27e3a09088e536db705ed686addbe86d045040fa4602452",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "variant_classroom",
+      "theme": "schoolroom variant",
+      "category": "classroom",
+      "file": "assets/variant_classroom.webp",
+      "source": "batch04-alternative",
+      "sha256": "27c460a06fc2fc0ab7af57f19ac99086197db78106be71cfe0a1d2728cfee6a6",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_library",
+      "theme": "library",
+      "category": "library",
+      "file": "assets/base_library.webp",
+      "source": "batch11-20",
+      "sha256": "8d94a4f08cdf27e1f8161095804d932713d18d631308fdb89e1a7b7896f0d21f",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_classroom",
+      "theme": "classroom",
+      "category": "classroom",
+      "file": "assets/base_classroom.webp",
+      "source": "batch11-20",
+      "sha256": "8755d52ff58bc68d591d117c135a9de370378743ca0b84cbf27bb691824e9e6f",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_school_garden",
+      "theme": "school garden",
+      "category": "school-garden",
+      "file": "assets/base_school_garden.webp",
+      "source": "batch11-20",
+      "sha256": "9642ace91f27d52cffbe80bbc554fa786ef08a1d8ae773e89bfe174fdbe7532e",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_sports_field",
+      "theme": "sports field",
+      "category": "sports-field",
+      "file": "assets/base_sports_field.webp",
+      "source": "batch11-20",
+      "sha256": "122a1746376888f1a4575a3c9cd020954540b47548e4414b7ba20bec68839122",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_science_lab",
+      "theme": "science lab",
+      "category": "science-lab",
+      "file": "assets/base_science_lab.webp",
+      "source": "batch11-20",
+      "sha256": "e5dd7b70ac802f703b8003dd59aa65c80ca197c9419cb489be2df7987aca16b1",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_art_room",
+      "theme": "art room",
+      "category": "art-room",
+      "file": "assets/base_art_room.webp",
+      "source": "batch11-20",
+      "sha256": "93d7e21c8823fb4f4a301471c6a097fa55c992a7558d44f3fb5abb864af38126",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_music_studio",
+      "theme": "music studio",
+      "category": "music-studio",
+      "file": "assets/base_music_studio.webp",
+      "source": "batch11-20",
+      "sha256": "1208dc75ca3ca52bee624730f5d233c49c72f64d54b5e60dc9f66e445717ec45",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_computer_lab",
+      "theme": "computer lab",
+      "category": "computer-lab",
+      "file": "assets/base_computer_lab.webp",
+      "source": "batch11-20",
+      "sha256": "29e433f4ea86b0f4ff93a8a865794da7f81040b4f87b2d69a33fcccd25678f90",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_canteen",
+      "theme": "canteen",
+      "category": "canteen",
+      "file": "assets/base_canteen.webp",
+      "source": "batch11-20",
+      "sha256": "5c3fa5490352c95280354b24e8b7e8b63eefc68a1201e8b77721509527052da7",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_omani_market",
+      "theme": "omani market",
+      "category": "omani-market",
+      "file": "assets/base_omani_market.webp",
+      "source": "batch11-20",
+      "sha256": "7b262ce7e9e63045b3f5ac4782dd0287dfdbcd3dcacba5afc52f0a4a6b0e09b7",
+      "width": 1600,
+      "height": 900
+    },
+    {
+      "id": "base_ecolab",
+      "theme": "sustainability energy science laboratory",
+      "category": "energy-lab",
+      "file": "assets/base_ecolab.webp",
+      "source": "new-generated",
+      "sha256": "786a0984c8952aa75fa0326afdf30bcc9eac30b24381c2eb2c7b73a9b7eecca5",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "base_renewables",
+      "theme": "renewable energy experiment",
+      "category": "energy-lab",
+      "file": "assets/base_renewables.webp",
+      "source": "new-generated",
+      "sha256": "7b9bbe374dd58645e4682df17fbb85feede9d861fa0281f765d05f3dd2241154",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "base_familyliving",
+      "theme": "Omani living room",
+      "category": "living-room",
+      "file": "assets/base_familyliving.webp",
+      "source": "new-generated",
+      "sha256": "e6854ff30fe6e30f77fa7cdaaf1a09a3c0cae7d1fb697e81dcf3f9e4e10bfc18",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "base_coastalpicnic",
+      "theme": "Omani seaside picnic",
+      "category": "picnic",
+      "file": "assets/base_coastalpicnic.webp",
+      "source": "new-generated",
+      "sha256": "ea65241acfaca102f2852a9689c0e36eb8e064e689db17c62db8964bf50bd0c9",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "base_classroom2",
+      "theme": "Omani classroom",
+      "category": "classroom",
+      "file": "assets/base_classroom2.webp",
+      "source": "new-generated",
+      "sha256": "cf7b210d563df2fc43988b5e6aaa0f10cc3a25577bddd1570470926e0f9e24d0",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "base_kitchen2",
+      "theme": "Omani kitchen",
+      "category": "kitchen",
+      "file": "assets/base_kitchen2.webp",
+      "source": "new-generated",
+      "sha256": "c9235084586de003d25d9edce0cecd0c9843eb2abbf1d51e37fb814a55a792c3",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "variant_souq_harbour",
+      "theme": "waterfront Omani souq",
+      "category": "omani-market",
+      "file": "assets/variant_souq_harbour.webp",
+      "source": "prior-generated-image",
+      "sha256": "46fc8013a7f9e722e32d2119594e50f6644c9a9b1c79f5e3579fed788dc2b884",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "variant_harbour_cafe",
+      "theme": "Omani harbour market cafe",
+      "category": "omani-market",
+      "file": "assets/variant_harbour_cafe.webp",
+      "source": "prior-generated-image",
+      "sha256": "06acc76a9b17c421f675befdf96f51be250278c681fc4176c284c361e95329c5",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "variant_science_lab",
+      "theme": "science classroom exploration",
+      "category": "science-lab",
+      "file": "assets/variant_science_lab.webp",
+      "source": "prior-generated-image",
+      "sha256": "bb93f7c6ecd1347b605135f3e2e0447cde0bb608f231a2e02b57e5c4ecef8986",
+      "width": 1599,
+      "height": 900
+    },
+    {
+      "id": "variant_renewables_lab",
+      "theme": "environmental science laboratory",
+      "category": "energy-lab",
+      "file": "assets/variant_renewables_lab.webp",
+      "source": "prior-generated-image",
+      "sha256": "bb93f7c6ecd1347b605135f3e2e0447cde0bb608f231a2e02b57e5c4ecef8986",
+      "width": 1599,
+      "height": 900
+    }
+  ],
+  "sceneSlots": [
+    {
+      "sceneId": "stage00-badge01",
+      "stage": 0,
+      "badge": 1,
+      "theme": "phonics classroom",
+      "hintMode": "picture",
+      "assetId": "base_classroom",
+      "image": "assets/base_classroom.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge02",
+      "stage": 0,
+      "badge": 2,
+      "theme": "Omani learning classroom",
+      "hintMode": "picture",
+      "assetId": "base_classroom2",
+      "image": "assets/base_classroom2.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge03",
+      "stage": 0,
+      "badge": 3,
+      "theme": "school bag corner",
+      "hintMode": "picture",
+      "assetId": "base_school",
+      "image": "assets/base_school.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge04",
+      "stage": 0,
+      "badge": 4,
+      "theme": "reading nook",
+      "hintMode": "picture",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge05",
+      "stage": 0,
+      "badge": 5,
+      "theme": "coloured stationery table",
+      "hintMode": "picture",
+      "assetId": "base_s1_01",
+      "image": "assets/base_s1_01.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge06",
+      "stage": 0,
+      "badge": 6,
+      "theme": "playground",
+      "hintMode": "picture",
+      "assetId": "base_s1_10",
+      "image": "assets/base_s1_10.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge07",
+      "stage": 0,
+      "badge": 7,
+      "theme": "home bedroom",
+      "hintMode": "picture",
+      "assetId": "base_familyliving",
+      "image": "assets/base_familyliving.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge08",
+      "stage": 0,
+      "badge": 8,
+      "theme": "animal garden",
+      "hintMode": "picture",
+      "assetId": "base_zoo",
+      "image": "assets/base_zoo.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage00-badge09",
+      "stage": 0,
+      "badge": 9,
+      "theme": "children's library",
+      "hintMode": "picture",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage00-badge10",
+      "stage": 0,
+      "badge": 10,
+      "theme": "family picnic",
+      "hintMode": "picture",
+      "assetId": "base_coastalpicnic",
+      "image": "assets/base_coastalpicnic.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge01",
+      "stage": 1,
+      "badge": 1,
+      "theme": "classroom",
+      "hintMode": "picture",
+      "assetId": "variant_classroom",
+      "image": "assets/variant_classroom.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge02",
+      "stage": 1,
+      "badge": 2,
+      "theme": "bedroom",
+      "hintMode": "picture",
+      "assetId": "base_s1_02",
+      "image": "assets/base_s1_02.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge03",
+      "stage": 1,
+      "badge": 3,
+      "theme": "kitchen",
+      "hintMode": "picture",
+      "assetId": "base_familykitchen",
+      "image": "assets/base_familykitchen.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge04",
+      "stage": 1,
+      "badge": 4,
+      "theme": "toy store",
+      "hintMode": "picture",
+      "assetId": "base_s1_04",
+      "image": "assets/base_s1_04.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge05",
+      "stage": 1,
+      "badge": 5,
+      "theme": "school hallway",
+      "hintMode": "picture",
+      "assetId": "base_school",
+      "image": "assets/base_school.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage01-badge06",
+      "stage": 1,
+      "badge": 6,
+      "theme": "garden",
+      "hintMode": "picture",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge07",
+      "stage": 1,
+      "badge": 7,
+      "theme": "living room",
+      "hintMode": "picture",
+      "assetId": "base_s1_07",
+      "image": "assets/base_s1_07.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge08",
+      "stage": 1,
+      "badge": 8,
+      "theme": "picnic park",
+      "hintMode": "picture",
+      "assetId": "base_s1_08",
+      "image": "assets/base_s1_08.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge09",
+      "stage": 1,
+      "badge": 9,
+      "theme": "art room",
+      "hintMode": "picture",
+      "assetId": "base_art_room",
+      "image": "assets/base_art_room.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage01-badge10",
+      "stage": 1,
+      "badge": 10,
+      "theme": "playground",
+      "hintMode": "picture",
+      "assetId": "base_s1_10",
+      "image": "assets/base_s1_10.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage02-badge01",
+      "stage": 2,
+      "badge": 1,
+      "theme": "farm",
+      "hintMode": "picture",
+      "assetId": "base_farm",
+      "image": "assets/base_farm.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge02",
+      "stage": 2,
+      "badge": 2,
+      "theme": "fruit market",
+      "hintMode": "picture",
+      "assetId": "base_market",
+      "image": "assets/base_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge03",
+      "stage": 2,
+      "badge": 3,
+      "theme": "school",
+      "hintMode": "picture",
+      "assetId": "base_school",
+      "image": "assets/base_school.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage02-badge04",
+      "stage": 2,
+      "badge": 4,
+      "theme": "family kitchen",
+      "hintMode": "picture",
+      "assetId": "base_kitchen2",
+      "image": "assets/base_kitchen2.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge05",
+      "stage": 2,
+      "badge": 5,
+      "theme": "zoo",
+      "hintMode": "picture",
+      "assetId": "variant_zoo",
+      "image": "assets/variant_zoo.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge06",
+      "stage": 2,
+      "badge": 6,
+      "theme": "beach",
+      "hintMode": "picture",
+      "assetId": "base_beach",
+      "image": "assets/base_beach.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge07",
+      "stage": 2,
+      "badge": 7,
+      "theme": "bedroom",
+      "hintMode": "picture",
+      "assetId": "base_s1_02",
+      "image": "assets/base_s1_02.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage02-badge08",
+      "stage": 2,
+      "badge": 8,
+      "theme": "sports field",
+      "hintMode": "picture",
+      "assetId": "base_sports_field",
+      "image": "assets/base_sports_field.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage02-badge09",
+      "stage": 2,
+      "badge": 9,
+      "theme": "park",
+      "hintMode": "picture",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage02-badge10",
+      "stage": 2,
+      "badge": 10,
+      "theme": "library",
+      "hintMode": "picture",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge01",
+      "stage": 3,
+      "badge": 1,
+      "theme": "supermarket",
+      "hintMode": "picture",
+      "assetId": "variant_market_A",
+      "image": "assets/variant_market_A.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage03-badge02",
+      "stage": 3,
+      "badge": 2,
+      "theme": "city park",
+      "hintMode": "picture",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge03",
+      "stage": 3,
+      "badge": 3,
+      "theme": "classroom",
+      "hintMode": "picture",
+      "assetId": "base_classroom",
+      "image": "assets/base_classroom.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge04",
+      "stage": 3,
+      "badge": 4,
+      "theme": "kitchen",
+      "hintMode": "picture",
+      "assetId": "base_s1_03",
+      "image": "assets/base_s1_03.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage03-badge05",
+      "stage": 3,
+      "badge": 5,
+      "theme": "farm",
+      "hintMode": "picture",
+      "assetId": "variant_farm_A",
+      "image": "assets/variant_farm_A.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage03-badge06",
+      "stage": 3,
+      "badge": 6,
+      "theme": "garden",
+      "hintMode": "picture",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge07",
+      "stage": 3,
+      "badge": 7,
+      "theme": "home",
+      "hintMode": "picture",
+      "assetId": "base_familyliving",
+      "image": "assets/base_familyliving.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge08",
+      "stage": 3,
+      "badge": 8,
+      "theme": "pet shop",
+      "hintMode": "picture",
+      "assetId": "variant_market_B",
+      "image": "assets/variant_market_B.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage03-badge09",
+      "stage": 3,
+      "badge": 9,
+      "theme": "sports centre",
+      "hintMode": "picture",
+      "assetId": "base_sports_field",
+      "image": "assets/base_sports_field.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage03-badge10",
+      "stage": 3,
+      "badge": 10,
+      "theme": "beach",
+      "hintMode": "picture",
+      "assetId": "base_park",
+      "image": "assets/base_park.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage04-badge01",
+      "stage": 4,
+      "badge": 1,
+      "theme": "harbour",
+      "hintMode": "picture",
+      "assetId": "base_omani_market",
+      "image": "assets/base_omani_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage04-badge02",
+      "stage": 4,
+      "badge": 2,
+      "theme": "town market",
+      "hintMode": "picture",
+      "assetId": "variant_market_C",
+      "image": "assets/variant_market_C.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage04-badge03",
+      "stage": 4,
+      "badge": 3,
+      "theme": "museum",
+      "hintMode": "picture",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage04-badge04",
+      "stage": 4,
+      "badge": 4,
+      "theme": "library",
+      "hintMode": "picture",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage04-badge05",
+      "stage": 4,
+      "badge": 5,
+      "theme": "farm",
+      "hintMode": "picture",
+      "assetId": "variant_farm_B",
+      "image": "assets/variant_farm_B.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage04-badge06",
+      "stage": 4,
+      "badge": 6,
+      "theme": "nature reserve",
+      "hintMode": "picture",
+      "assetId": "base_school_garden",
+      "image": "assets/base_school_garden.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage04-badge07",
+      "stage": 4,
+      "badge": 7,
+      "theme": "school",
+      "hintMode": "picture",
+      "assetId": "base_school",
+      "image": "assets/base_school.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage04-badge08",
+      "stage": 4,
+      "badge": 8,
+      "theme": "shop",
+      "hintMode": "picture",
+      "assetId": "base_market",
+      "image": "assets/base_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage04-badge09",
+      "stage": 4,
+      "badge": 9,
+      "theme": "park",
+      "hintMode": "picture",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage04-badge10",
+      "stage": 4,
+      "badge": 10,
+      "theme": "heritage village",
+      "hintMode": "picture",
+      "assetId": "variant_harbour_cafe",
+      "image": "assets/variant_harbour_cafe.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage05-badge01",
+      "stage": 5,
+      "badge": 1,
+      "theme": "Omani souq",
+      "hintMode": "silhouette",
+      "assetId": "variant_souq_harbour",
+      "image": "assets/variant_souq_harbour.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage05-badge02",
+      "stage": 5,
+      "badge": 2,
+      "theme": "heritage harbour",
+      "hintMode": "silhouette",
+      "assetId": "base_omani_market",
+      "image": "assets/base_omani_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage05-badge03",
+      "stage": 5,
+      "badge": 3,
+      "theme": "oasis",
+      "hintMode": "silhouette",
+      "assetId": "base_s1_06",
+      "image": "assets/base_s1_06.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage05-badge04",
+      "stage": 5,
+      "badge": 4,
+      "theme": "science corner",
+      "hintMode": "silhouette",
+      "assetId": "base_science_lab",
+      "image": "assets/base_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage05-badge05",
+      "stage": 5,
+      "badge": 5,
+      "theme": "craft workshop",
+      "hintMode": "silhouette",
+      "assetId": "base_s1_09",
+      "image": "assets/base_s1_09.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage05-badge06",
+      "stage": 5,
+      "badge": 6,
+      "theme": "museum",
+      "hintMode": "silhouette",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage05-badge07",
+      "stage": 5,
+      "badge": 7,
+      "theme": "ecological garden",
+      "hintMode": "silhouette",
+      "assetId": "base_school_garden",
+      "image": "assets/base_school_garden.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage05-badge08",
+      "stage": 5,
+      "badge": 8,
+      "theme": "library",
+      "hintMode": "silhouette",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage05-badge09",
+      "stage": 5,
+      "badge": 9,
+      "theme": "community market",
+      "hintMode": "silhouette",
+      "assetId": "variant_market_A",
+      "image": "assets/variant_market_A.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage05-badge10",
+      "stage": 5,
+      "badge": 10,
+      "theme": "fort",
+      "hintMode": "silhouette",
+      "assetId": "variant_harbour_cafe",
+      "image": "assets/variant_harbour_cafe.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge01",
+      "stage": 6,
+      "badge": 1,
+      "theme": "eco beach",
+      "hintMode": "silhouette",
+      "assetId": "base_school_garden",
+      "image": "assets/base_school_garden.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge02",
+      "stage": 6,
+      "badge": 2,
+      "theme": "market",
+      "hintMode": "silhouette",
+      "assetId": "variant_market_B",
+      "image": "assets/variant_market_B.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge03",
+      "stage": 6,
+      "badge": 3,
+      "theme": "sports club",
+      "hintMode": "silhouette",
+      "assetId": "base_sports_field",
+      "image": "assets/base_sports_field.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge04",
+      "stage": 6,
+      "badge": 4,
+      "theme": "wildlife reserve",
+      "hintMode": "silhouette",
+      "assetId": "base_zoo",
+      "image": "assets/base_zoo.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge05",
+      "stage": 6,
+      "badge": 5,
+      "theme": "heritage fort",
+      "hintMode": "silhouette",
+      "assetId": "variant_souq_harbour",
+      "image": "assets/variant_souq_harbour.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge06",
+      "stage": 6,
+      "badge": 6,
+      "theme": "science lab",
+      "hintMode": "silhouette",
+      "assetId": "variant_science_lab",
+      "image": "assets/variant_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage06-badge07",
+      "stage": 6,
+      "badge": 7,
+      "theme": "school library",
+      "hintMode": "silhouette",
+      "assetId": "base_school",
+      "image": "assets/base_school.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge08",
+      "stage": 6,
+      "badge": 8,
+      "theme": "farm",
+      "hintMode": "silhouette",
+      "assetId": "base_farm",
+      "image": "assets/base_farm.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge09",
+      "stage": 6,
+      "badge": 9,
+      "theme": "port",
+      "hintMode": "silhouette",
+      "assetId": "base_omani_market",
+      "image": "assets/base_omani_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage06-badge10",
+      "stage": 6,
+      "badge": 10,
+      "theme": "art studio",
+      "hintMode": "silhouette",
+      "assetId": "base_art_room",
+      "image": "assets/base_art_room.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge01",
+      "stage": 7,
+      "badge": 1,
+      "theme": "science centre",
+      "hintMode": "silhouette",
+      "assetId": "base_science_lab",
+      "image": "assets/base_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge02",
+      "stage": 7,
+      "badge": 2,
+      "theme": "coastal environment",
+      "hintMode": "silhouette",
+      "assetId": "variant_beach",
+      "image": "assets/variant_beach.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage07-badge03",
+      "stage": 7,
+      "badge": 3,
+      "theme": "heritage town",
+      "hintMode": "silhouette",
+      "assetId": "variant_harbour_cafe",
+      "image": "assets/variant_harbour_cafe.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge04",
+      "stage": 7,
+      "badge": 4,
+      "theme": "technology room",
+      "hintMode": "silhouette",
+      "assetId": "base_computer_lab",
+      "image": "assets/base_computer_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage07-badge05",
+      "stage": 7,
+      "badge": 5,
+      "theme": "farm",
+      "hintMode": "silhouette",
+      "assetId": "variant_farm_A",
+      "image": "assets/variant_farm_A.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge06",
+      "stage": 7,
+      "badge": 6,
+      "theme": "market",
+      "hintMode": "silhouette",
+      "assetId": "variant_market_C",
+      "image": "assets/variant_market_C.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge07",
+      "stage": 7,
+      "badge": 7,
+      "theme": "library",
+      "hintMode": "silhouette",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge08",
+      "stage": 7,
+      "badge": 8,
+      "theme": "nature park",
+      "hintMode": "silhouette",
+      "assetId": "base_school_garden",
+      "image": "assets/base_school_garden.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge09",
+      "stage": 7,
+      "badge": 9,
+      "theme": "sports club",
+      "hintMode": "silhouette",
+      "assetId": "base_sports_field",
+      "image": "assets/base_sports_field.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage07-badge10",
+      "stage": 7,
+      "badge": 10,
+      "theme": "workshop",
+      "hintMode": "silhouette",
+      "assetId": "base_s1_09",
+      "image": "assets/base_s1_09.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage08-badge01",
+      "stage": 8,
+      "badge": 1,
+      "theme": "sustainable city",
+      "hintMode": "silhouette",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage08-badge02",
+      "stage": 8,
+      "badge": 2,
+      "theme": "marine habitat",
+      "hintMode": "silhouette",
+      "assetId": "base_beach",
+      "image": "assets/base_beach.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage08-badge03",
+      "stage": 8,
+      "badge": 3,
+      "theme": "museum",
+      "hintMode": "silhouette",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage08-badge04",
+      "stage": 8,
+      "badge": 4,
+      "theme": "science laboratory",
+      "hintMode": "silhouette",
+      "assetId": "variant_science_lab",
+      "image": "assets/variant_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage08-badge05",
+      "stage": 8,
+      "badge": 5,
+      "theme": "airport",
+      "hintMode": "silhouette",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage08-badge06",
+      "stage": 8,
+      "badge": 6,
+      "theme": "heritage fort",
+      "hintMode": "silhouette",
+      "assetId": "variant_souq_harbour",
+      "image": "assets/variant_souq_harbour.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage08-badge07",
+      "stage": 8,
+      "badge": 7,
+      "theme": "industrial port",
+      "hintMode": "silhouette",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage08-badge08",
+      "stage": 8,
+      "badge": 8,
+      "theme": "recycling centre",
+      "hintMode": "silhouette",
+      "assetId": "base_ecolab",
+      "image": "assets/base_ecolab.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage08-badge09",
+      "stage": 8,
+      "badge": 9,
+      "theme": "library",
+      "hintMode": "silhouette",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage08-badge10",
+      "stage": 8,
+      "badge": 10,
+      "theme": "community festival",
+      "hintMode": "silhouette",
+      "assetId": "base_market",
+      "image": "assets/base_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge01",
+      "stage": 9,
+      "badge": 1,
+      "theme": "robotics laboratory",
+      "hintMode": "word",
+      "assetId": "base_renewables",
+      "image": "assets/base_renewables.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage09-badge02",
+      "stage": 9,
+      "badge": 2,
+      "theme": "renewable energy park",
+      "hintMode": "word",
+      "assetId": "variant_renewables_lab",
+      "image": "assets/variant_renewables_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "visual_candidate"
+    },
+    {
+      "sceneId": "stage09-badge03",
+      "stage": 9,
+      "badge": 3,
+      "theme": "environmental field study",
+      "hintMode": "word",
+      "assetId": "base_school_garden",
+      "image": "assets/base_school_garden.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge04",
+      "stage": 9,
+      "badge": 4,
+      "theme": "smart city",
+      "hintMode": "word",
+      "assetId": "base_ecolab",
+      "image": "assets/base_ecolab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge05",
+      "stage": 9,
+      "badge": 5,
+      "theme": "marine research station",
+      "hintMode": "word",
+      "assetId": "base_park",
+      "image": "assets/base_park.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge06",
+      "stage": 9,
+      "badge": 6,
+      "theme": "heritage museum",
+      "hintMode": "word",
+      "assetId": "base_omani_market",
+      "image": "assets/base_omani_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge07",
+      "stage": 9,
+      "badge": 7,
+      "theme": "airport operations",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage09-badge08",
+      "stage": 9,
+      "badge": 8,
+      "theme": "medical centre",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage09-badge09",
+      "stage": 9,
+      "badge": 9,
+      "theme": "university library",
+      "hintMode": "word",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage09-badge10",
+      "stage": 9,
+      "badge": 10,
+      "theme": "urban transport hub",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage10-badge01",
+      "stage": 10,
+      "badge": 1,
+      "theme": "climate observation station",
+      "hintMode": "word",
+      "assetId": "base_renewables",
+      "image": "assets/base_renewables.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge02",
+      "stage": 10,
+      "badge": 2,
+      "theme": "waste recycling centre",
+      "hintMode": "word",
+      "assetId": "variant_renewables_lab",
+      "image": "assets/variant_renewables_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge03",
+      "stage": 10,
+      "badge": 3,
+      "theme": "sustainable agriculture",
+      "hintMode": "word",
+      "assetId": "base_ecolab",
+      "image": "assets/base_ecolab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge04",
+      "stage": 10,
+      "badge": 4,
+      "theme": "marine conservation",
+      "hintMode": "word",
+      "assetId": "variant_beach",
+      "image": "assets/variant_beach.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge05",
+      "stage": 10,
+      "badge": 5,
+      "theme": "solar laboratory",
+      "hintMode": "word",
+      "assetId": "base_renewables",
+      "image": "assets/base_renewables.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge06",
+      "stage": 10,
+      "badge": 6,
+      "theme": "technological innovation",
+      "hintMode": "word",
+      "assetId": "variant_renewables_lab",
+      "image": "assets/variant_renewables_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge07",
+      "stage": 10,
+      "badge": 7,
+      "theme": "cultural heritage centre",
+      "hintMode": "word",
+      "assetId": "variant_harbour_cafe",
+      "image": "assets/variant_harbour_cafe.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge08",
+      "stage": 10,
+      "badge": 8,
+      "theme": "renewable transport",
+      "hintMode": "word",
+      "assetId": "base_ecolab",
+      "image": "assets/base_ecolab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage10-badge09",
+      "stage": 10,
+      "badge": 9,
+      "theme": "scientific expedition",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage10-badge10",
+      "stage": 10,
+      "badge": 10,
+      "theme": "community development",
+      "hintMode": "word",
+      "assetId": "variant_market_A",
+      "image": "assets/variant_market_A.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge01",
+      "stage": 11,
+      "badge": 1,
+      "theme": "biotechnology laboratory",
+      "hintMode": "word",
+      "assetId": "base_science_lab",
+      "image": "assets/base_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge02",
+      "stage": 11,
+      "badge": 2,
+      "theme": "sustainable architecture",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage11-badge03",
+      "stage": 11,
+      "badge": 3,
+      "theme": "advanced library",
+      "hintMode": "word",
+      "assetId": "base_library",
+      "image": "assets/base_library.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge04",
+      "stage": 11,
+      "badge": 4,
+      "theme": "historical research museum",
+      "hintMode": "word",
+      "assetId": "variant_souq_harbour",
+      "image": "assets/variant_souq_harbour.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge05",
+      "stage": 11,
+      "badge": 5,
+      "theme": "climate innovation lab",
+      "hintMode": "word",
+      "assetId": "base_renewables",
+      "image": "assets/base_renewables.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge06",
+      "stage": 11,
+      "badge": 6,
+      "theme": "astronomy observatory",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage11-badge07",
+      "stage": 11,
+      "badge": 7,
+      "theme": "robotics facility",
+      "hintMode": "word",
+      "assetId": "variant_renewables_lab",
+      "image": "assets/variant_renewables_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge08",
+      "stage": 11,
+      "badge": 8,
+      "theme": "marine research",
+      "hintMode": "word",
+      "assetId": "base_beach",
+      "image": "assets/base_beach.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge09",
+      "stage": 11,
+      "badge": 9,
+      "theme": "environmental science centre",
+      "hintMode": "word",
+      "assetId": "variant_science_lab",
+      "image": "assets/variant_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage11-badge10",
+      "stage": 11,
+      "badge": 10,
+      "theme": "cultural exhibition",
+      "hintMode": "word",
+      "assetId": "base_omani_market",
+      "image": "assets/base_omani_market.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage12-badge01",
+      "stage": 12,
+      "badge": 1,
+      "theme": "advanced physics lab",
+      "hintMode": "word",
+      "assetId": "base_science_lab",
+      "image": "assets/base_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage12-badge02",
+      "stage": 12,
+      "badge": 2,
+      "theme": "global sustainability summit",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage12-badge03",
+      "stage": 12,
+      "badge": 3,
+      "theme": "environmental engineering",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage12-badge04",
+      "stage": 12,
+      "badge": 4,
+      "theme": "historical archives",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage12-badge05",
+      "stage": 12,
+      "badge": 5,
+      "theme": "smart city command room",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage12-badge06",
+      "stage": 12,
+      "badge": 6,
+      "theme": "marine conservation lab",
+      "hintMode": "word",
+      "assetId": "base_park",
+      "image": "assets/base_park.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage12-badge07",
+      "stage": 12,
+      "badge": 7,
+      "theme": "research expedition",
+      "hintMode": "word",
+      "assetId": "variant_science_lab",
+      "image": "assets/variant_science_lab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage12-badge08",
+      "stage": 12,
+      "badge": 8,
+      "theme": "medical science laboratory",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    },
+    {
+      "sceneId": "stage12-badge09",
+      "stage": 12,
+      "badge": 9,
+      "theme": "innovation centre",
+      "hintMode": "word",
+      "assetId": "base_ecolab",
+      "image": "assets/base_ecolab.webp",
+      "visualFit": "topic-aligned",
+      "status": "reuse_candidate"
+    },
+    {
+      "sceneId": "stage12-badge10",
+      "stage": 12,
+      "badge": 10,
+      "theme": "space observation station",
+      "hintMode": "word",
+      "assetId": null,
+      "image": null,
+      "visualFit": "not-available",
+      "status": "needs-new-scene"
+    }
+  ],
+  "levelContexts": [
+    {
+      "contextId": "stage00-level1-badge01",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage00-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge02",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage00-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge03",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage00-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge04",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage00-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge05",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage00-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge06",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage00-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge07",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage00-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge08",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage00-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge09",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage00-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage00-level1-badge10",
+      "stage": 0,
+      "islandId": null,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage00-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge01",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage01-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge01",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage01-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge02",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage01-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge02",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage01-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge03",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage01-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge03",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage01-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge04",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage01-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge04",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage01-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge05",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage01-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge05",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage01-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge06",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage01-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge06",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage01-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge07",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage01-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge07",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage01-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge08",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage01-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge08",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage01-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge09",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage01-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge09",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage01-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level1-badge10",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage01-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage01-level2-badge10",
+      "stage": 1,
+      "islandId": 1,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage01-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge01",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage02-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge01",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage02-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge02",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage02-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge02",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage02-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge03",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage02-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge03",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage02-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge04",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage02-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge04",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage02-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge05",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage02-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge05",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage02-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge06",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage02-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge06",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage02-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge07",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage02-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge07",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage02-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge08",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage02-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge08",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage02-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge09",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage02-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge09",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage02-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level1-badge10",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage02-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage02-level2-badge10",
+      "stage": 2,
+      "islandId": 2,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage02-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge01",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage03-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge01",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage03-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge02",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage03-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge02",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage03-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge03",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage03-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge03",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage03-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge04",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage03-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge04",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage03-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge05",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage03-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge05",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage03-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge06",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage03-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge06",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage03-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge07",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage03-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge07",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage03-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge08",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage03-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge08",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage03-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge09",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage03-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge09",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage03-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level1-badge10",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage03-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage03-level2-badge10",
+      "stage": 3,
+      "islandId": 3,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage03-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge01",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage04-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge01",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage04-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge02",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage04-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge02",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage04-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge03",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage04-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge03",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage04-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge04",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage04-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge04",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage04-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge05",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage04-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge05",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage04-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge06",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage04-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge06",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage04-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge07",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage04-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge07",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage04-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge08",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage04-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge08",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage04-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge09",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage04-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge09",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage04-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level1-badge10",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage04-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage04-level2-badge10",
+      "stage": 4,
+      "islandId": 4,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage04-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "moving-pictures"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge01",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage05-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge01",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage05-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge02",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage05-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge02",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage05-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge03",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage05-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge03",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage05-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge04",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage05-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge04",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage05-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge05",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage05-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge05",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage05-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge06",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage05-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge06",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage05-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge07",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage05-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge07",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage05-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge08",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage05-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge08",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage05-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge09",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage05-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge09",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage05-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level1-badge10",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage05-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage05-level2-badge10",
+      "stage": 5,
+      "islandId": 5,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage05-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge01",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage06-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge01",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage06-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge02",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage06-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge02",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage06-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge03",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage06-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge03",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage06-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge04",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage06-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge04",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage06-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge05",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage06-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge05",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage06-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge06",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage06-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge06",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage06-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge07",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage06-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge07",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage06-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge08",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage06-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge08",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage06-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge09",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage06-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge09",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage06-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level1-badge10",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage06-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage06-level2-badge10",
+      "stage": 6,
+      "islandId": 6,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage06-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge01",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage07-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge01",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage07-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge02",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage07-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge02",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage07-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge03",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage07-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge03",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage07-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge04",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage07-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge04",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage07-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge05",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage07-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge05",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage07-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge06",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage07-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge06",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage07-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge07",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage07-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge07",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage07-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge08",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage07-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge08",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage07-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge09",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage07-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge09",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage07-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level1-badge10",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage07-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage07-level2-badge10",
+      "stage": 7,
+      "islandId": 7,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage07-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge01",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage08-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge01",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage08-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge02",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage08-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge02",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage08-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge03",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage08-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge03",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage08-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge04",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage08-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge04",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage08-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge05",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage08-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge05",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage08-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge06",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage08-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge06",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage08-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge07",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage08-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge07",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage08-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge08",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage08-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge08",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage08-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge09",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage08-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge09",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage08-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level1-badge10",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage08-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage08-level2-badge10",
+      "stage": 8,
+      "islandId": 8,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage08-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge01",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage09-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge01",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage09-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge02",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage09-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge02",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage09-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge03",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage09-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge03",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage09-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge04",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage09-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge04",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage09-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge05",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage09-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge05",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage09-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge06",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage09-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge06",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage09-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge07",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage09-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge07",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage09-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge08",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage09-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge08",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage09-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge09",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage09-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge09",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage09-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level1-badge10",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage09-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage09-level2-badge10",
+      "stage": 9,
+      "islandId": 9,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage09-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge01",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage10-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge01",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage10-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge02",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage10-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge02",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage10-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge03",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage10-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge03",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage10-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge04",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage10-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge04",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage10-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge05",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage10-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge05",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage10-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge06",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage10-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge06",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage10-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge07",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage10-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge07",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage10-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge08",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage10-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge08",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage10-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge09",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage10-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge09",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage10-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level1-badge10",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage10-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage10-level2-badge10",
+      "stage": 10,
+      "islandId": 10,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage10-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge01",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage11-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge01",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage11-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge02",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage11-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge02",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage11-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge03",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage11-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge03",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage11-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge04",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage11-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge04",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage11-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge05",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage11-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge05",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage11-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge06",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage11-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge06",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage11-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge07",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage11-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge07",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage11-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge08",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage11-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge08",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage11-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge09",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage11-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge09",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage11-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level1-badge10",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage11-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage11-level2-badge10",
+      "stage": 11,
+      "islandId": 11,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage11-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge01",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 1,
+      "sceneId": "stage12-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge01",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 1,
+      "sceneId": "stage12-badge01",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge02",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 2,
+      "sceneId": "stage12-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge02",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 2,
+      "sceneId": "stage12-badge02",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge03",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 3,
+      "sceneId": "stage12-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge03",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 3,
+      "sceneId": "stage12-badge03",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge04",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 4,
+      "sceneId": "stage12-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge04",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 4,
+      "sceneId": "stage12-badge04",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge05",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 5,
+      "sceneId": "stage12-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge05",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 5,
+      "sceneId": "stage12-badge05",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge06",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 6,
+      "sceneId": "stage12-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge06",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 6,
+      "sceneId": "stage12-badge06",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge07",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 7,
+      "sceneId": "stage12-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge07",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 7,
+      "sceneId": "stage12-badge07",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge08",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 8,
+      "sceneId": "stage12-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge08",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 8,
+      "sceneId": "stage12-badge08",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge09",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 9,
+      "sceneId": "stage12-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge09",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 9,
+      "sceneId": "stage12-badge09",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level1-badge10",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 1,
+      "badgeId": 10,
+      "sceneId": "stage12-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    },
+    {
+      "contextId": "stage12-level2-badge10",
+      "stage": 12,
+      "islandId": 12,
+      "levelId": 2,
+      "badgeId": 10,
+      "sceneId": "stage12-badge10",
+      "vocabularySource": "student mastery for this exact island and level",
+      "difficultySource": "level-specific approved skill bank",
+      "contentApproved": false,
+      "rewardMode": "FIRST_FINISHED_ATTEMPT_ONLY",
+      "repeatMode": "PRACTICE_ONLY",
+      "gameIds": [
+        "hidden-objects",
+        "falling-words",
+        "flip-cards"
+      ]
+    }
+  ],
+  "certification": {
+    "imageVerified": false,
+    "hotspotsVerified": false,
+    "curriculumWordsVerified": false,
+    "masteryVerified": false
+  },
+  "rules": {
+    "badgeOpenedFromStudentProgressOnly": true,
+    "studentMaySelectStageLevelBadge": false,
+    "firstCompletedGameAttemptConsumesRewardChanceEvenOnFailure": true,
+    "repeatAllowedForPracticeOnly": true,
+    "rewardIdentityFields": [
+      "studentId",
+      "islandId",
+      "levelId",
+      "badgeId",
+      "gameId"
+    ],
+    "offlineCloudSyncRequiresAtomicIdempotency": true,
+    "currentGameScores": "not production enabled"
+  },
+  "notes": [
+    "A visual topic assignment is not an approved hidden-object game.",
+    "Reuse is allowed across semantically related levels; each level must use distinct verified target words and corresponding hotspot polygons.",
+    "No stars or production deployment are enabled by this package.",
+    "A scene without an appropriate image is deliberately left unassigned."
+  ]
+}

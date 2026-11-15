@@ -143,9 +143,9 @@ const B=window.MEJV11_BADGES, BONUS=window.MEJArcadeBonus;
 if(!B||B.length!==10||!BONUS){document.body.textContent='لم تكتمل ملفات الشارات؛ افتح نسخة HTML المستقلة أو استعد ملفات الحزمة.';return}
 const $=id=>document.getElementById(id);
 const LIB={
-  lower:[['moving','🎯','Moving Pictures'],['match','🧩','Picture Match'],['memory','🧠','Memory Cards'],['word','🔤','Word Builder'],['hidden','🔎','Hidden Objects'],['falling','🫧','Falling Words'],['sentence','✏️','Sentence Builder'],['safari','🦋','Listening Safari'],['maze','🧭','Sound Maze'],['story','🚂','Story Train']],
-  middle:[['flip','🃏','Flip Cards'],['match','🧩','Picture Match'],['word','🔤','Word Builder'],['memory','🧠','Memory Cards'],['hidden','🔎','Hidden Objects'],['falling','🫧','Falling Words'],['vocab','📖','Vocabulary Quiz'],['sentence','✏️','Sentence Builder'],['grammar','📚','Grammar Challenge'],['mission','📻','Listening Mission']],
-  upper:[['flip','🃏','Flip Cards Advanced'],['grammar','📚','Grammar Challenge'],['vocab','📖','Vocabulary Quiz'],['sentence','✏️','Sentence Builder Advanced'],['falling','🫧','Falling Words Advanced'],['evidence','🔬','Evidence Hunt'],['detective','🕵️','Reading Detective'],['mission','📻','Listening Mission'],['argument','⚖️','Argument Lab'],['escape','🏰','Escape Room']]
+  lower:[['hidden','🔎','Hidden Objects'],['moving','🎯','Moving Pictures'],['match','🧩','Picture Match'],['memory','🧠','Memory Cards'],['word','🔤','Word Builder'],['falling','🫧','Falling Words'],['sentence','✏️','Sentence Builder'],['safari','🦋','Listening Safari'],['maze','🧭','Sound Maze'],['story','🚂','Story Train']],
+  middle:[['hidden','🔎','Hidden Objects'],['flip','🃏','Flip Cards'],['match','🧩','Picture Match'],['word','🔤','Word Builder'],['memory','🧠','Memory Cards'],['falling','🫧','Falling Words'],['vocab','📖','Vocabulary Quiz'],['sentence','✏️','Sentence Builder'],['grammar','📚','Grammar Challenge'],['mission','📻','Listening Mission']],
+  upper:[['hidden','🔎','Hidden Objects'],['flip','🃏','Flip Cards Advanced'],['grammar','📚','Grammar Challenge'],['vocab','📖','Vocabulary Quiz'],['sentence','✏️','Sentence Builder Advanced'],['falling','🫧','Falling Words Advanced'],['evidence','🔬','Evidence Hunt'],['detective','🕵️','Reading Detective'],['argument','⚖️','Argument Lab'],['escape','🏰','Escape Room']]
 };
 const LIVE=new URLSearchParams(location.search).get('mode')==='student'&&window.parent!==window;
 const REWARDS_API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-arcade-rewards';
@@ -171,7 +171,7 @@ const state={grade:8,unlocked:4,selected:4,activeBadge:0,run:0,current:null,sett
 const imageUrl=(i)=>window.MEJV11Inline?.badges?.[i-1]||B[i-1].image;
 const group=()=>state.grade<=4?'lower':state.grade<=9?'middle':'upper';
 const gradeBand=()=>group()==='lower'?'الصفوف 1–4':group()==='middle'?'الصفوف 5–9':'الصفوف 10–12';
-const gameAt=i=>LIB[group()][i-1];
+const gameAt=i=>(state.grade>=8&&state.grade<=9&&i===9?['argument','⚖️','Argument Lab']:LIB[group()][i-1]);
 const recordKey=i=>{const v=gameAt(i);return BONUS.gameKey('preview-student','grade-'+state.grade,'coastal-badge-'+i,group()+'-'+v[0])};
 const record=i=>{let r=records[recordKey(i)];return r&&typeof r==='object'?{attempts:Math.max(0,Number(r.attempts)||0),best:BONUS.clampScore(r.best)}:{attempts:0,best:0}};
 function persist(){if(LIVE)return;try{localStorage.setItem(STORAGE,JSON.stringify(records))}catch(e){}}
@@ -183,7 +183,7 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('on');c
 function updateHeader(){const n=state.unlocked;const featured=B[Math.max(0,n-1)];$('heroBadge').src=imageUrl(Math.max(1,n));$('heroBadge').alt=featured?'شارة '+featured.ar:'بداية رحلة الشارات';$('heroPlace').textContent=n?featured.ar:'بداية الرحلة';$('heroRank').textContent=n?featured.rank:'افتح شارتك الأولى';$('badgeCount').value=n;$('badgeCountLabel').textContent=n+' / 10';$('statBadges').innerHTML=n+' <b>/ 10</b>';$('statGames').innerHTML=n+' <b>/ 10</b>';$('statBonus').innerHTML=currentBonus()+' <b>/ '+(n*10)+'</b>';$('gamesHeaderCount').textContent=n+' '+(n===1?'لعبة مفتوحة':'ألعاب مفتوحة');$('bandLabel').textContent=gradeBand()}
 function renderRoute(){const root=$('route');root.replaceChildren();for(let i=1;i<=10;i++){let b=B[i-1];let btn=makeButton('',()=>openBadge(i),'route-node'+(i<=state.unlocked?' unlocked':' locked')+(i===state.unlocked?' current':''));btn.setAttribute('aria-label',(i<=state.unlocked?'فتح معلومات شارة ':'شارة مغلقة: ')+b.ar);let dot=make('span','route-dot',i<=state.unlocked?'✓':'🔒');let label=make('span','route-label',b.ar);btn.append(dot,label);root.append(btn)}}
 function renderBadges(){const root=$('badgesGrid');root.replaceChildren();for(let i=1;i<=10;i++){const b=B[i-1],isOpen=i<=state.unlocked,isCurrent=i===state.unlocked;const c=make('article','badge-card'+(isOpen?' unlocked':' locked')+(isCurrent?' current':''));const btn=makeButton('',()=>openBadge(i));btn.setAttribute('aria-label',(isOpen?'اكتشف ':'شارة مغلقة ')+b.ar);const img=make('img');img.src=imageUrl(i);img.alt=b.ar;img.loading='lazy';const place=make('strong','badge-place',b.ar);const en=make('span','badge-en',b.en);en.lang='en';const rank=make('span','badge-rank',b.rank);const status=make('span','badge-status',isOpen?(isCurrent?'✨ أحدث شارة':'🎮 '+i+' '+(i===1?'لعبة':'ألعاب')+' متاحة'):'🔒 لم تصل إليها بعد');btn.append(img,place,en,rank,status);if(!isOpen){let lock=make('span','lock-pill','🔒');c.append(lock)}c.append(btn);root.append(c)}}
-function renderGames(){const root=$('gamesGrid');root.replaceChildren();for(let i=1;i<=10;i++){const g=gameAt(i),isOpen=i<=state.unlocked,rec=record(i),b=B[i-1];const row=make('article','game-card'+(isOpen?'':' locked')+(i===state.unlocked?' recent':''));const icon=make('span','game-emoji',g[1]);const info=make('div','game-text');const title=make('strong','',g[2]);const meta=make('small','',b.ar+' · '+(i===state.unlocked&&isOpen?'✨ لعبة جديدة':isOpen?'✓ متاحة':'🔒 مقفلة'));const recordInfo=make('span','game-record',g[0]==='hidden'?'🔍 مشاهد للمراجعة — بلا نجوم حتى الاعتماد':('⭐ الأفضل '+rec.best+'/10 · '+Math.min(2,rec.attempts)+'/2 محاولات محتسبة'));info.append(title,meta,recordInfo);let button=makeButton(isOpen?'▶ العب':'🔒',()=>openGame(i),'game-action');button.disabled=!isOpen;row.append(icon,info,button);root.append(row)}}
+function renderGames(){const root=$('gamesGrid');root.replaceChildren();for(let i=1;i<=10;i++){const g=gameAt(i),isOpen=i<=state.unlocked,rec=record(i),b=B[i-1];const row=make('article','game-card'+(isOpen?'':' locked')+(i===state.unlocked?' recent':''));const icon=make('span','game-emoji',g[1]);const info=make('div','game-text');const title=make('strong','',g[2]);const meta=make('small','',b.ar+' · '+(i===state.unlocked&&isOpen?'✨ لعبة جديدة':isOpen?'✓ متاحة':'🔒 مقفلة'));const recordInfo=make('span','game-record',g[0]==='hidden'?'🔎 البحث عن الأغراض · النسخة الأصلية · تدريب فقط':('⭐ الأفضل '+rec.best+'/10 · '+Math.min(2,rec.attempts)+'/2 محاولات محتسبة'));info.append(title,meta,recordInfo);let button=makeButton(isOpen?'▶ العب':'🔒',()=>openGame(i),'game-action');button.disabled=!isOpen;row.append(icon,info,button);root.append(row)}}
 function draw(){updateHeader();renderRoute();renderBadges();renderGames()}
 const focusBeforeModal={element:null};
 function modalOpen(el){focusBeforeModal.element=document.activeElement;el.hidden=false;document.body.style.overflow='hidden';el.querySelector('button')?.focus()}
@@ -204,7 +204,7 @@ if(g[0]==='hidden'){
    if(onProject)f.src='/English-Foundation/hidden-objects/index.html';
    else if(window.MEJV11Inline?.hidden)f.srcdoc=window.MEJV11Inline.hidden;
    else f.src='legacy/hidden-objects/index.html';
-   toast('Hidden Objects: المشاهد قيد الاعتماد؛ هذه الجولة لا تمنح نجومًا إضافية.');return;
+   toast('Hidden Objects: اللعبة الأصلية متاحة للتدريب؛ المكافآت تُعتمد بعد التحقق من المشاهد.');return;
 }
 const query='?game='+encodeURIComponent(g[0])+'&grade='+state.grade+'&run='+state.current.run;
 if(window.MEJV11Inline?.game){const h=window.MEJV11Inline.game;const init='<script>window.MEJ_GAME_CONTEXT={search:'+JSON.stringify(query)+'};<\/script>';f.srcdoc=h.replace('<!-- MEJ_INLINE_CONTEXT -->',init)}else f.src='games/new-games.html'+query;
@@ -225,7 +225,7 @@ if(d.type==='mej:v10-close'||d.type==='mej:hidden-close'){closeGame();return}
 if(d.type==='mej:v10-replay'){if(c.id!=='hidden'&&d.game===c.id&&Number(d.run)===c.run)openGame(c.index);return}
 if(d.type==='mej:v10-finished'){if(c.id==='hidden'||d.game!==c.id||d.grade!==c.grade||Number(d.run)!==c.run)return;const valid=['all','time','lives','quit'];if(!valid.includes(d.reason)||!Number.isInteger(d.score)||d.score<0||d.score>10)return;settle(d.score,d.reason);return}
 if(c.id!=='hidden')return;
-if(d.type==='mej:hidden-ready'){try{frame.contentWindow.postMessage({type:'mej:hidden-init',stage:0,badge:c.index,masteredWords:[],levelWords:[]},location.origin==='null'?'*':location.origin)}catch(e){}return}
+if(d.type==='mej:hidden-ready'){try{frame.contentWindow.postMessage({type:'mej:hidden-init',stage:LIVE?liveStage:state.grade,badge:c.index,scene:(c.index-1)%4,practice:true,masteredWords:[],levelWords:[]},location.origin==='null'?'*':location.origin)}catch(e){}return}
 if(d.type==='mej:hidden-progress'){const found=Array.isArray(d.found)?Math.min(10,d.found.length):0;if(d.ended)toast('Hidden Objects: '+found+'/10. لا تُحتسب نجوم قبل اعتماد المشاهد.');}
 });
 $('closeBadge').onclick=closeBadge;$('backBadges').onclick=closeBadge;$('closeGame').onclick=closeGame;
@@ -248,7 +248,7 @@ if(LIVE){
   const d=event.data;
   if(!Number.isInteger(d.grade)||d.grade<1||d.grade>12||!Number.isInteger(d.stage)||d.stage<0||d.stage>12||!Number.isInteger(d.stageStars)||d.stageStars<0||d.stageStars>200)return;
   liveReady=true;liveStage=d.stage;liveToken=/^[a-f0-9]{64}$/.test(d.accessToken||'')?d.accessToken:'';
-  state.grade=d.grade;state.unlocked=Math.floor(d.stageStars/20);state.selected=Math.max(1,state.unlocked);
+  state.grade=Math.max(1,Math.min(12,d.stage||1));state.unlocked=Math.floor(d.stageStars/20);state.selected=Math.max(1,state.unlocked);
   $('grade').value=String(state.grade);
   const stats=document.querySelector('#mejLiveTotal');if(stats)stats.textContent='المرحلة '+liveStage+' · '+d.stageStars+'/200 نجمة إتقان · '+(liveToken?'مكافآت مرتبطة بحسابك':'تدريب دون مكافأة لغير المرتبطين بمعلم');
   try{window.MEJ_APPROVED_IMAGES=window.parent.MEJ_APPROVED_IMAGES||null}catch(_){window.MEJ_APPROVED_IMAGES=null}

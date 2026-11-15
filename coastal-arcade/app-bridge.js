@@ -30,7 +30,7 @@ function open(stage,badge){
  const header=document.createElement('header');header.className='mej-coastal-top';
  const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ العودة إلى رحلتي';back.onclick=close;header.append(name,back);
- const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student';
+ const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2';
  dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
 }
 window.addEventListener('mej-owner-verified',()=>{const grid=document.querySelector('#app .j23-badge-grid');if(grid)grid.removeAttribute('data-coastal-ready');repaint()});

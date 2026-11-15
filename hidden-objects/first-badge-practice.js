@@ -18,17 +18,30 @@
   scissors:[[1144,816],[1206,789],[1265,763],[1315,731],[1372,728],[1403,752],[1381,772],[1342,773],[1324,809],[1199,841],[1147,839]],
   ball:[[623,451],[670,451],[696,475],[695,528],[665,551],[618,549],[594,517],[597,478]]
  };
- const polygons=Object.fromEntries(Object.entries(pixelRegions).map(([word,points])=>[word,{
+ const gradeOneRegions={
+  clock:[[1160,60],[1176,40],[1235,30],[1291,55],[1297,110],[1270,155],[1228,177],[1185,160],[1154,117]],
+  globe:[[1150,217],[1208,220],[1255,259],[1254,341],[1202,356],[1153,344],[1117,302]],
+  map:[[409,140],[619,137],[623,295],[411,295]],
+  'teddy bear':[[1491,257],[1541,256],[1579,289],[1576,342],[1494,352],[1475,310]],
+  cup:[[967,344],[1005,346],[1019,366],[1013,396],[972,396]],
+  laptop:[[654,307],[747,300],[776,385],[831,388],[842,396],[677,395]],
+  apple:[[573,505],[610,520],[630,562],[603,607],[560,598],[537,560]],
+  ruler:[[500,612],[715,617],[713,638],[500,636]],
+  backpack:[[340,540],[406,565],[459,630],[492,855],[455,889],[246,891],[236,760],[263,616]],
+  ball:[[1342,670],[1396,677],[1432,726],[1430,776],[1370,801],[1317,786],[1302,738]]
+ };
+ const toPolygons=(regions)=>Object.fromEntries(Object.entries(regions).map(([word,points])=>[word,{
   points:points.map(([x,y])=>[+(x/1599*100).toFixed(3),+(y/900*100).toFixed(3)]),
-  status:'practice-unverified',
-  source:'MEJ_Hidden_Objects_Precision_Hotspots_Offline_FIXED_v3.html / visual pilot 2026-11-15'
+  status:'practice-unverified',source:'manual visual pilot 2026-11-15; not curriculum approved'
  }]));
+ const candidates={base_classroom:toPolygons(pixelRegions),variant_classroom:toPolygons(gradeOneRegions)};
  library.hotspots=library.hotspots||{};
  // Never overwrite a later, teacher-reviewed map.
- if(!library.hotspots.base_classroom||Object.keys(library.hotspots.base_classroom).length===0)
-  library.hotspots.base_classroom=polygons;
+ for(const [assetId,regions] of Object.entries(candidates))
+  if(!library.hotspots[assetId]||Object.keys(library.hotspots[assetId]).length===0)
+   library.hotspots[assetId]=regions;
  window.MEJHiddenFirstBadgePractice=Object.freeze({
-  stage:0,badge:1,assetId:'base_classroom',count:Object.keys(polygons).length,
-  rewardEligible:false,contentApproved:false
+  scenes:Object.freeze([{stage:0,badge:1,assetId:'base_classroom'},{stage:1,badge:1,assetId:'variant_classroom'}]),
+  targetCountPerScene:10,rewardEligible:false,contentApproved:false
  });
 })();

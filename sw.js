@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-companion-turn-games-20261115-v1';
+const CACHE='mej-companion-girl-facing-tennis-20261115-v2';
 const CORE=['./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./hidden-objects/precision-v3-client.js','./hidden-objects/first-badge-practice.js','./hidden-objects/assets/base_classroom.webp','./hidden-objects/assets/variant_classroom.webp','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/mej-spelling-skills-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',

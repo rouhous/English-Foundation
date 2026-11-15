@@ -249,7 +249,7 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
    &&sc.targets.filter(t=>!known.has(norm(t.word))&&level.has(norm(t.word))).length===1)||null;
  const candidate=window.MEJPrecisionLibrary?.sceneSlots?.find(s=>s.stage===phase&&s.badge===Number(d.badge))||null;
  previewCandidate=!mapped?candidate:null;
- const previewAccess=practiceOnly&&(d.preview===true||((phase===0||phase===1)&&Number(d.badge)===1));
+ const previewAccess=practiceOnly&&(d.preview===true||([0,1,5].includes(phase)&&Number(d.badge)===1));
  const estimate=previewCandidate?.assetId?window.MEJPrecisionLibrary?.hotspots?.[previewCandidate.assetId]||{}:{};
  const provisional=Object.entries(estimate).filter(([w,v])=>Array.isArray(v.points)&&v.points.length>=3)
   .map(([word,v])=>({word,regions:[v.points.map(([x,y])=>[x*15.99,y*9])]}));
@@ -260,6 +260,7 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
      words=ART.words.slice();for(let i=0;i<10;i++)words[i]=photoScene.targets[i].word;
    }else if(previewCandidate){session.targets=[];session.remaining=null;}
    board();
+   if(reviewPlayable&&session.targets.length===10){el('notice').textContent='✅ اللعبة مفعّلة: ابحث عن الأغراض العشرة داخل الصورة. تُحتسب نقاط تدريب فقط دون منح نجوم.';}
    if(previewCandidate&&session.targets.length===0){el('notice').textContent=reviewMessage;el('timerToggle').hidden=true;return;}
    if(session.misses>=3||session.found.length===10||session.remaining===0){
      finish(session.found.length===10?'all':session.misses===3?'mistakes':'timeout');return;

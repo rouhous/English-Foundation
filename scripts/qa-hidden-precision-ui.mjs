@@ -62,62 +62,51 @@ try{
         stage:window.__mejTarget.stage,badge:window.__mejTarget.badge,practice:true,
         preview:window.__mejTarget.preview,masteredWords:[],levelWords:[]},location.origin);
       else if(v?.type==='mej:hidden-progress')window.__hEvents.push(v);
-     };
-     window.addEventListener('message',window.__hListener);
+    };
+    window.addEventListener('message',window.__hListener);
    }
-   const f=document.createElement('iframe');f.id='h';f.title='Hidden Objects review';f.style.cssText='width:100%;height:760px;border:0';f.src='/hidden-objects/index.html';document.body.append(f);
+   const f=document.createElement('iframe');f.id='h';f.title='Hidden Objects review';
+   f.style.cssText='width:100%;height:760px;border:0';
+   f.src='/hidden-objects/index.html';document.body.append(f);
   },{stage,badge,preview});
   const frame=page.frameLocator('#h');
-  await frame.locator('.photo-board,.precision-unavailable').first().waitFor({timeout:20000}).catch(e=>{
-    throw new Error('Scene launch failed: stage='+stage+' badge='+badge+' preview='+preview+'; errors='+JSON.stringify(failures)+'; '+e.message);
-  });
+  await frame.locator('.photo-board,.precision-unavailable').first().waitFor({timeout:20000});
   return frame;
  }
- // The reference draft contains exactly 10 preliminary polygons for the bedroom scene.
  {
   const frame=await launch(1,2,true);
   await frame.locator('#words li').first().waitFor({timeout:8000});
-  assert.equal(await frame.locator('#words li').count(),10,'review mode should enable all ten draft polygons');
-  assert.equal(await frame.locator('#words li.guide-picture').count(),10,'stage 1 photo guide');
-  assert.equal(await frame.locator('.photo-board').evaluate(el=>getComputedStyle(el).backgroundImage.includes('base_s1_02.webp')),true,'correct draft scene image');
-  assert.equal(await frame.locator('#bonus').innerText().then(x=>x.includes('تدريب')),true,'review stars must be training only');
+  assert.equal(await frame.locator('#words li').count(),10,'ten review polygons available');
+  assert.equal(await frame.locator('#words li.guide-picture').count(),10,'level 1 picture guide');
+  assert.ok(await frame.locator('.photo-board').evaluate(el=>getComputedStyle(el).backgroundImage.includes('base_s1_02.webp')),'correct scene image');
+  assert.ok((await frame.locator('#bonus').innerText()).includes('تدريب'),'no real rewards');
   const bounds=await frame.locator('.photo-board').boundingBox();
   await frame.locator('.photo-board').click({position:{x:bounds.width*.135,y:bounds.height*.66}});
-  assert.ok((await frame.locator('#found').innerText()).startsWith('1 / 10'),'click inside backpack polygon should register');
+  assert.ok((await frame.locator('#found').innerText()).startsWith('1 / 10'),'tap mapped backpack hotspot');
   await page.screenshot({path:'hidden-precision-review-picture.png',fullPage:true});
  }
- // Draft scene does not award or expose provisional hit polygons to real students.
  {
   const frame=await launch(1,2,false);
   await frame.locator('.photo-board').waitFor();
-  assert.equal(await frame.locator('#words li').count(),0,'unapproved student word list must remain hidden');
-  assert.equal(await frame.locator('#scene .precision-pending').count(),1,'student sees review notice rather than fake questions');
+  assert.equal(await frame.locator('#words li').count(),0,'unapproved content hidden from student');
+  assert.equal(await frame.locator('.precision-pending').count(),1,'student shown review status');
   await page.screenshot({path:'hidden-precision-student-pending.png',fullPage:true});
  }
- for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[8,'silhouette'],[9,'word'],[12,'word']]){
+ for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'word'],[12,'word']]){
   const frame=await launch(stage,1,true);
-  const mode=await frame.locator('#scene').getAttribute('class');
-  assert.ok(mode.includes('mode-'+kind),'stage '+stage+' must use '+kind+' clues');
-  assert.equal(await frame.locator('#bonus').innerText().then(s=>s.includes('تدريب')),true,'no live star writes');
+  const className=await frame.locator('#scene').getAttribute('class');
+  assert.ok(className.includes('mode-'+kind),'stage '+stage+' hint '+kind);
+  assert.ok((await frame.locator('#bonus').innerText()).includes('تدريب'),'no stars for unapproved review');
+ }
+ {
+  const frame=await launch(8,1,true);
+  await frame.locator('.precision-unavailable').waitFor();
+  assert.ok((await frame.locator('#scene').getAttribute('class')).includes('mode-silhouette'),'stage 8 hint mode');
+  assert.equal(await frame.locator('#words li').count(),0,'do not substitute random words for unavailable scene');
  }
  assert.deepEqual(failures,[],'No uncaught browser errors');
- console.log('MEJ_HIDDEN_PRECISION_QA_PASS 47 images SHA-256 verified; 130 stages; 30 draft polygons; 10-target review; 3 level-sensitive hint modes; no draft rewards');
+ console.log('MEJ_HIDDEN_PRECISION_QA_PASS: 47 original embedded images verified; 130 slots; 30 draft polygons; ten object taps; 3 stage clue modes; no rewards');
  await page.close();
-}finally{await browser.close();}  for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'word'],[12,'word']]){
-   const frame=await launch(stage,1,true);
-   const mode=await frame.locator('#scene').getAttribute('class');
-   assert.ok(mode.includes('mode-'+kind),'stage '+stage+' must use '+kind+' clues');
-   assert.equal(await frame.locator('#bonus').innerText().then(s=>s.includes('تدريب')),true,'no live star writes');
-  }
-  // Stage 8 badge 1 is intentionally unassigned. No substitute is invented.
-  {
-   const frame=await launch(8,1,true);
-   await frame.locator('.precision-unavailable').waitFor();
-   const mode=await frame.locator('#scene').getAttribute('class');
-   assert.ok(mode.includes('mode-silhouette'),'stage 8 keeps the appropriate hint mode');
-   assert.equal(await frame.locator('#words li').count(),0,'unmapped scene must not offer fake targets');
-  }
-  assert.deepEqual(failures,[],'No uncaught browser errors');
-  console.log('MEJ_HIDDEN_PRECISION_QA_PASS: 47 original embedded images verified; 130 slots; 30 draft polygons; unscored image click test; 3 level-sensitive hint modes');
-  await page.close();
-}finally{await browser.close();}
+}finally{
+ await browser.close();
+}

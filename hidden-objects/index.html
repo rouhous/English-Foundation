@@ -128,9 +128,20 @@ function polyDistance(x,y,p){if(polyInside(x,y,p))return 0;let min=Infinity;
  return min}
 function photoHit(px,py){if(!photoScene)return -1;const w=Math.max(300,el('scene').clientWidth),tolerance=Math.min(17,Math.max(6,10/Math.max(.3,w/1599))),found=new Set(session.found);
  const options=[];
- photoScene.targets.forEach((target,i)=>{const d=Math.min(...(target.regions||[]).map(poly=>polyDistance(px,py,poly)));
- if(d<=tolerance)options.push({i,d,done:found.has(session.targets[i])})});
- options.sort((a,b)=>Number(a.done)-Number(b.done)||a.d-b.d);
+ photoScene.targets.forEach((target,i)=>{
+  const polys=target.regions||[];
+  const d=Math.min(...polys.map(poly=>polyDistance(px,py,poly)));
+  if(d<=tolerance){
+   const center=Math.min(...polys.map(poly=>{
+    const cx=poly.reduce((n,p)=>n+p[0],0)/poly.length,cy=poly.reduce((n,p)=>n+p[1],0)/poly.length;
+    return Math.hypot(px-cx,py-cy);
+   }));
+   options.push({i,d,center,done:found.has(session.targets[i])});
+  }
+ });
+ // Adjacent school objects may have touching candidate rectangles.
+ // The nearest object centre breaks ties, avoiding arbitrary source-order picks.
+ options.sort((a,b)=>Number(a.done)-Number(b.done)||a.d-b.d||a.center-b.center);
  return options[0]?.i??-1;
 }
 function board(){

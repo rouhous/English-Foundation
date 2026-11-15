@@ -1,0 +1,40 @@
+name: Apply port-and-islands voyage labels
+on:
+  push:
+    paths:
+      - scripts/rename_voyage_sites_20261115.py
+      - .github/workflows/apply-voyage-labels-20261115.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Replace UI stage labels, preserve IDs and student records
+        run: python3 scripts/rename_voyage_sites_20261115.py
+      - name: Validate app display labels and stable progression
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert 'MEJ_PORT_12_ISLANDS_ARRIVAL_DEPARTURE_20261115' in s
+          assert 'mejVoyagePlace(g)} • ${mejVoyageLeg(part)}' in s
+          assert 'function maxAllowed(p=active())' in s
+          assert 'function mejPartUnlocked(g,part,p=active())' in s
+          assert 'mejStageQuestions(g,part)' in s
+          assert '⚓ الميناء' in s and '🏝️ الجزيرة' in s and 'مغادرة' in s and 'وصول' in s
+          print('DISPLAY_LABEL_VALIDATION_PASS')
+          PY
+      - name: Commit updated original full application
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Display port and 12 islands as arrival and departure at all 26 stops"
+            git push
+          fi

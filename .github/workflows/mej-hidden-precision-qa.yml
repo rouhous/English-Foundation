@@ -1,0 +1,37 @@
+name: Hidden Objects precision review QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hidden-objects/**'
+      - 'scripts/qa-hidden-precision.mjs'
+      - '.github/workflows/mej-hidden-precision-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test dependency
+        run: |
+          npm install --no-save --no-package-lock playwright-core@1.56.1
+          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null; then npx playwright-core install chromium; fi
+      - name: Validate precision studio, original assets, and stage-specific preview
+        run: |
+          node --check scripts/qa-hidden-precision.mjs
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-hidden-qa-http.log 2>&1 &
+          for n in 1 2 3 4 5 6 7 8 9 10; do if curl -fsS http://127.0.0.1:8765/hidden-objects/index.html >/dev/null; then break; fi; sleep 1; done
+          node scripts/qa-hidden-precision.mjs
+      - name: Save original-scene review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mej-hidden-precision-qa-mobile
+          path: hidden-qa-*.png
+          if-no-files-found: ignore

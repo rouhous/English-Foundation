@@ -52,9 +52,32 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 @media(max-width:540px){.actions{width:100%;gap:5px}.actions button{font-size:12px;padding:9px 8px;flex:1;white-space:nowrap}}
 @media print{.codeDialog{display:none!important}}
 .ownerScopeButtons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.ownerScopeButtons button{padding:15px 8px;border:1px solid #a9d5ed;border-radius:13px;background:#e9f5fd;color:#0b4d83;font:700 16px system-ui,Tahoma,sans-serif;cursor:pointer}.ownerScopeButtons button[aria-pressed="true"]{background:#075ca2;color:white;border-color:#075ca2}.ownerScopeButtons button:focus-visible{outline:3px solid #e7b955}@media(max-width:480px){.ownerScopeButtons button{font-size:14px;padding:13px 6px}}
+.levelPills{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;align-items:center}
+.levelPill{font:700 11px system-ui,Tahoma,sans-serif;background:#e5f3ff;color:#09538f;border:1px solid #b9dcef;border-radius:8px;padding:5px 7px;white-space:nowrap}
+.levelPill.extraStars{background:#fff5df;border-color:#e6c886;color:#805713}
+.noLevelBreakdown{font-size:11px;color:#6b8396}
+.levelCompareBox{margin:18px 0;padding:13px;border:1px solid #c7e1ef;background:#f8fcff;border-radius:15px}
+.levelCompareBox h3{margin:0 0 6px}
+.levelTableScroll{max-width:100%;overflow:auto;border:1px solid #d0e3f0;border-radius:12px;background:#fff;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.levelsMatrix{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:12px;white-space:nowrap;text-align:center}
+.levelsMatrix th,.levelsMatrix td{border-left:1px solid #e4edf5;border-bottom:1px solid #e4edf5;padding:10px 8px;min-width:57px}
+.levelsMatrix thead th{position:sticky;top:0;background:#e6f3fd;color:#084a80;z-index:1}
+.levelsMatrix th:first-child,.levelsMatrix td:first-child{position:sticky;right:0;min-width:150px;max-width:210px;text-align:right;z-index:2;background:#fff}
+.levelsMatrix thead th:first-child{background:#d8edfa;z-index:3}
+.levelsMatrix tbody tr:nth-child(even) td{background:#f7fbfe}
+.levelsMatrix tbody tr:nth-child(even) td:first-child{background:#f7fbfe}
+.levelsMatrix .matrixTotal,.levelsMatrix .matrixEarned{font-weight:800;color:#07558d}
+.levelsMatrix .matrixZero{color:#849cac}.levelsMatrix .matrixUnavailable{color:#8d9da6}
+.levelsMatrix .matrixExtra{color:#9e690d;background:#fff7e8;font-weight:800}
+.matrixStudentName{border:0;background:none;padding:0;font:700 12px system-ui,Tahoma,sans-serif;color:#074b8e;cursor:pointer;text-align:right;white-space:normal}
+.matrixStudentName:hover,.matrixStudentName:focus-visible{text-decoration:underline;outline:2px solid #0ba3d5}
+#studentDetails .chartRow{grid-template-columns:65px minmax(0,1fr) 85px}
+#studentDetails .chartRow strong{text-align:left;white-space:nowrap}
+@media(max-width:600px){.levelCompareBox{padding:9px}.levelsMatrix th:first-child,.levelsMatrix td:first-child{min-width:120px;max-width:150px}.levelsMatrix th,.levelsMatrix td{padding:9px 7px;min-width:53px}}
+@media print{.levelTableScroll{overflow:visible}.levelsMatrix{font-size:9px}.levelsMatrix th,.levelsMatrix td{padding:4px 3px;min-width:0}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/teacher-dashboard-v2.js?v=20261107-7" defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261115-level-stars-1" defer></script>
 </head><body>
 <header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <dialog id="codeDialog" aria-labelledby="codeDialogTitle" class="codeDialog">
@@ -87,7 +110,13 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <option value="level">الأعلى مستوى أولًا</option>
 </select>
 </div>
-<input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off"><div id="studentList" class="students"></div></div>
+<input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off">
+<div class="levelCompareBox">
+<h3>مقارنة نجوم الطلاب حسب المستوى (L0–L12)</h3>
+<p class="notice">يعرض الجدول النجوم المكتسبة في كل مستوى بشكل منفصل. يمكنك اختيار «نجوم المستوى» من قائمة الترتيب، وتحريك الجدول أفقيًا على الهاتف. الفرق بين المجموع ونجوم المستويات يظهر في «غير موزعة» دون تخمين مصدره. الرمز — يعني أن البيانات غير متوفرة.</p>
+<div id="levelsComparison" class="levelTableScroll" role="region" aria-label="جدول مقارنة النجوم حسب المستوى" tabindex="0"></div>
+</div>
+<h3>بطاقات الطلاب</h3><div id="studentList" class="students"></div></div>
  <div class="sheet" id="studentDetail" hidden><div class="subline"><h2 id="studentTitle">تفاصيل تقدم الطالب</h2><button id="closeStudent" class="button alt" type="button">إغلاق</button></div><div id="studentDetails"></div></div>
 </section>
 <section id="loading" class="sheet"><p role="status" id="message">جار التحقق من الحساب وتحميل الصفوف...</p></section>

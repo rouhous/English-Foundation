@@ -81,19 +81,14 @@ function visualCue(word,id){
 let guideMode='word';
 function guideFor(id){
  if(guideMode==='word')return null;
- const art=document.createElement('span');art.className='guide-art';art.setAttribute('aria-hidden','true');
- if(guideMode==='picture'){
-   // Independent illustrated hints, never the same photograph/sprite in the scene.
-   const cue=visualCue(words[id],id);
-   if(!cue)return null; // Never show a misleading icon for a replaced curriculum word.
-   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=cue;art.append(icon);
- }else{
-   // Use monochrome illustrated hints tied to the actual word, never stale photos.
-   const cue=visualCue(words[id],id);if(!cue)return null;
-   const icon=document.createElement('span');icon.className='guide-emoji';icon.textContent=cue;
-   icon.style.filter='grayscale(1) brightness(0)';art.append(icon);
- }
- return art;
+ const art=document.createElement('span');art.className='guide-art';
+ art.setAttribute('aria-hidden','true');
+ // Use the exact target artwork for the picture/outline cues: no unrelated emojis.
+ const img=document.createElement('img');
+ img.src=images[id];img.alt='';img.loading='lazy';
+ if(guideMode==='silhouette'){img.style.filter='brightness(0)';img.style.opacity='.9';}
+ img.onerror=()=>{img.remove();const cue=visualCue(words[id],id);if(cue){const fallback=document.createElement('span');fallback.className='guide-emoji';fallback.textContent=cue;if(guideMode==='silhouette')fallback.style.filter='brightness(0)';art.append(fallback)}};
+ art.append(img);return art;
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -199,8 +194,8 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
  practiceOnly=d.practice===true;
  // Stage is the learner's actual island level, not merely their registered grade.
  const phase=Math.max(0,Math.min(12,Math.floor(Number(d.stage)||0)));
- guideMode=phase<=4?'picture':phase<=8?'silhouette':'word';
- el('instruction').textContent=practiceOnly?'🎮 وضع التدريب فقط: ابحث عن الأغراض دون إضافة نجوم أو مكافآت إلى حسابك.':guideMode==='picture'?'ابحث عن الأغراض بمساعدة الكلمات والرسومات الإرشادية. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':guideMode==='silhouette'?'ابحث عن الأغراض بالاستعانة بالكلمات والظلال فقط. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.':'اقرأ الكلمات الإنجليزية وحدد الأغراض داخل المشهد دون صور أو ظلال مساعدة. كل غرضين = نجمة إضافية. ثلاث أخطاء تنهي الجولة.';
+ guideMode=phase<=4?'picture':phase<=9?'silhouette':'word';
+ el('instruction').textContent=guideMode==='picture'?'🔎 ابحث عن 10 أغراض بمساعدة صورها. ثلاث محاولات للأخطاء.':guideMode==='silhouette'?'🔎 ابحث عن 10 أغراض بمساعدة الظلال والكلمات. ثلاث محاولات للأخطاء.':'🔎 اقرأ الكلمات الإنجليزية وحدد 10 أغراض داخل المشهد. ثلاث محاولات للأخطاء.';
  if(Array.isArray(d.items)&&d.items.length===16){
    words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);
    images=ART.images.map((src,i)=>typeof d.items[i]?.src==='string'&&/^(data:image\/|\.\.?\/assets\/)/i.test(d.items[i].src)?d.items[i].src:src);

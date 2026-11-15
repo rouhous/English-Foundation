@@ -30,18 +30,33 @@
   backpack:[[340,540],[406,565],[459,630],[492,855],[455,889],[246,891],[236,760],[263,616]],
   ball:[[1342,670],[1396,677],[1432,726],[1430,776],[1370,801],[1317,786],[1302,738]]
  };
+ // The Omani waterfront souq shown for Stage 5 / the Khasab first badge.
+ // Coordinates are on the original 1599 x 900 artwork; they are manual
+ // click-area candidates and deliberately NEVER approve student rewards.
+ const stageFiveSouqRegions={
+  lantern:[[201,45],[230,64],[260,106],[277,170],[278,269],[252,303],[179,311],[151,284],[144,187],[161,110]],
+  hat:[[1316,54],[1383,75],[1422,121],[1401,199],[1364,259],[1302,288],[1241,279],[1201,231],[1195,177],[1228,107],[1271,78]],
+  bicycle:[[952,334],[996,333],[1045,359],[1104,355],[1135,388],[1142,441],[1126,480],[1077,506],[941,503],[912,468],[906,412],[920,377]],
+  apple:[[659,352],[689,367],[705,390],[702,430],[675,452],[645,444],[620,418],[623,382]],
+  bananas:[[820,490],[844,479],[888,480],[935,499],[977,532],[982,557],[905,568],[824,555],[787,536]],
+  camera:[[613,565],[691,569],[748,588],[753,676],[716,709],[613,710],[583,681],[577,612]],
+  fish:[[983,629],[1061,623],[1130,647],[1175,666],[1148,693],[1091,702],[1010,718],[948,707],[902,679],[930,647]],
+  bottle:[[1199,447],[1229,446],[1245,481],[1252,641],[1242,684],[1192,687],[1175,650],[1179,490]],
+  basket:[[1349,370],[1401,396],[1448,483],[1450,656],[1413,699],[1286,694],[1250,650],[1255,476],[1288,420]],
+  'coffee pot':[[271,438],[296,455],[301,511],[349,522],[396,544],[383,577],[348,599],[340,702],[301,722],[224,712],[197,676],[193,612],[164,611],[168,574],[221,552],[238,513],[250,473]]
+ };
  const toPolygons=(regions)=>Object.fromEntries(Object.entries(regions).map(([word,points])=>[word,{
   points:points.map(([x,y])=>[+(x/1599*100).toFixed(3),+(y/900*100).toFixed(3)]),
   status:'practice-unverified',source:'manual visual pilot 2026-11-15; not curriculum approved'
  }]));
- const candidates={base_classroom:toPolygons(pixelRegions),variant_classroom:toPolygons(gradeOneRegions)};
+ const candidates={base_classroom:toPolygons(pixelRegions),variant_classroom:toPolygons(gradeOneRegions),variant_souq_harbour:toPolygons(stageFiveSouqRegions)};
  library.hotspots=library.hotspots||{};
  // Never overwrite a later, teacher-reviewed map.
  for(const [assetId,regions] of Object.entries(candidates))
   if(!library.hotspots[assetId]||Object.keys(library.hotspots[assetId]).length===0)
    library.hotspots[assetId]=regions;
  window.MEJHiddenFirstBadgePractice=Object.freeze({
-  scenes:Object.freeze([{stage:0,badge:1,assetId:'base_classroom'},{stage:1,badge:1,assetId:'variant_classroom'}]),
+  scenes:Object.freeze([{stage:0,badge:1,assetId:'base_classroom'},{stage:1,badge:1,assetId:'variant_classroom'},{stage:5,badge:1,assetId:'variant_souq_harbour'}]),
   targetCountPerScene:10,rewardEligible:false,contentApproved:false
  });
 })();

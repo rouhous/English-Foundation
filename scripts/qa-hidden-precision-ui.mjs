@@ -109,7 +109,7 @@ try{
    assert.ok(mode.includes('mode-'+kind),'stage '+stage+' must use '+kind+' clues');
    assert.equal(await frame.locator('#bonus').innerText().then(s=>s.includes('تدريب')),true,'no live star writes');
   }
-  // The source deliberately leaves stage 8 badge 1 without an image. Never invent a substitute.
+  // Stage 8 badge 1 is intentionally unassigned. No substitute is invented.
   {
    const frame=await launch(8,1,true);
    await frame.locator('.precision-unavailable').waitFor();
@@ -117,4 +117,7 @@ try{
    assert.ok(mode.includes('mode-silhouette'),'stage 8 keeps the appropriate hint mode');
    assert.equal(await frame.locator('#words li').count(),0,'unmapped scene must not offer fake targets');
   }
-
+  assert.deepEqual(failures,[],'No uncaught browser errors');
+  console.log('MEJ_HIDDEN_PRECISION_QA_PASS: 47 original embedded images verified; 130 slots; 30 draft polygons; unscored image click test; 3 level-sensitive hint modes');
+  await page.close();
+}finally{await browser.close();}

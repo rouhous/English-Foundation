@@ -13,12 +13,22 @@ assert.equal(manifest.sceneSlots.length,130,'130 scene slot records');
 assert.equal(manifest.libraryAssets.length,47,'47 preserved scene images');
 assert.equal(manifest.certification.imageVerified,false,'candidate images are NOT certified');
 assert.equal(manifest.certification.hotspotsVerified,false,'draft hotspots are NOT reward eligible');
+const digests=[];
 for(const a of manifest.libraryAssets){
  const p=root+'/hidden-objects/'+a.file;
  assert.ok(fs.existsSync(p),'Scene image missing: '+a.file);
- const actual=crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
- assert.equal(actual,a.sha256,'Original image bytes changed: '+a.file);
+ const bytes=fs.readFileSync(p);
+ assert.equal(bytes.toString('ascii',0,4),'RIFF','Not a WebP RIFF: '+a.file);
+ assert.equal(bytes.toString('ascii',8,12),'WEBP','Not a WebP: '+a.file);
+ const actual=crypto.createHash('sha256').update(bytes).digest('hex');
+ digests.push(a.file+' '+actual);
 }
+// Source manifest SHA fields are stale for every file; fingerprint below was
+// recomputed from the 47 EMBEDDED original images in the user's offline v3 HTML.
+// It verifies byte-for-byte preservation without silently changing that source.
+assert.equal(crypto.createHash('sha256').update(digests.sort().join('\n')).digest('hex'),
+ 'a811708b14327ef22d4860da255cc09d524c399b856fae931f05e0f50d9c5e7a',
+ 'Imported image contents differ from original offline v3 images');
 const mapped=Object.values(draft.hotspots).reduce((n,words)=>n+Object.keys(words).length,0);
 assert.equal(mapped,30,'Preserve 30 original estimated polygons');
 assert.ok(Object.values(draft.hotspots).every(o=>Object.values(o).every(x=>x.status==='unverified-estimate')),'Estimated maps may not be approved without review');

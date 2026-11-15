@@ -1,0 +1,18 @@
+name: Test teacher diagnostic reporting
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/test-teacher-diagnostics.cjs"
+      - ".github/workflows/test-teacher-diagnostics.yml"
+permissions:
+  contents: read
+jobs:
+  report-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node scripts/test-teacher-diagnostics.cjs

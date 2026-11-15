@@ -1,0 +1,42 @@
+name: Apply school-grade titles to port/islands
+on:
+  push:
+    paths:
+      - scripts/rename_voyage_grades_20261115.py
+      - .github/workflows/apply-voyage-grades-20261115.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Rename grade display and remove English subheadings
+        run: python3 scripts/rename_voyage_grades_20261115.py
+      - name: Verify stage labels and grade labels
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert 'MEJ_VOYAGE_GRADE_LABELS_20261115' in s
+          assert 'mejVoyagePlace(g)} • ${mejVoyageLeg(part)}' in s
+          assert '<h3>${esc(mejVoyageGrade(g))}</h3>' in s
+          assert '<h3>${esc(LV[g][0])}</h3>' not in s
+          assert 'التأسيسي' in s and 'الحادي عشر' in s and 'الثاني عشر' in s
+          assert 'function mejStageQuestions(g,part){' in s
+          assert 'function mejPartUnlocked(g,part,p=active()){' in s
+          assert 'function maxAllowed(p=active()){' in s
+          print('GRADE_LABELS_AND_26_STOPS_PASS')
+          PY
+      - name: Commit display-only update
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Show foundation and grades 1-12 under port/island names"
+            git push
+          fi

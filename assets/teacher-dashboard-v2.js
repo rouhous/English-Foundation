@@ -73,6 +73,68 @@ function groupClasses(students){
 function metric(name,value){const e=node('div','metric');e.append(node('strong','',safe(value)),node('small','',name));return e}
 function metrics(target,items){clear(target);items.forEach(([title,value])=>target.append(metric(title,value)))}
 function studentLabel(s){return s.kind==='trial'?'تجريبي مستورد':'متزامن من التطبيق'}
+// The cloud snapshot stores per-stage mastery as "mastered" (out of 200).
+// Never infer an individual stage from the overall stars; the total may
+// include awards that have not been attributed to a particular stage.
+function levelStars(s,level){
+ if(s.kind!=='live'||!Array.isArray(s.levelStats)||!s.levelStats.length)return null;
+ const item=s.levelStats.find(x=>Number(x?.level)===level);
+ if(!item||!Number.isFinite(Number(item.mastered)))return null;
+ return Math.min(200,integer(item.mastered))
+}
+function assignedStars(s){
+ let sum=0;for(let i=0;i<=12;i++)sum+=levelStars(s,i)||0;
+ return sum
+}
+function otherStars(s){
+ if(s.kind!=='live'||!Array.isArray(s.levelStats)||!s.levelStats.length)return null;
+ return s.stars-assignedStars(s)
+}
+function levelPills(s){
+ const wrap=node('div','levelPills');
+ if(s.kind!=='live'||!s.levelStats.length){wrap.append(node('span','noLevelBreakdown','تفصيل المستويات غير متوفر لهذا السجل'));return wrap}
+ let count=0;
+ for(let i=0;i<=12;i++){
+  const value=levelStars(s,i);
+  if(value>0){wrap.append(node('span','levelPill','L'+i+' · ⭐ '+value));count++}
+ }
+ if(!count)wrap.append(node('span','noLevelBreakdown','لا توجد نجوم مسجلة في المستويات بعد'));
+ const difference=otherStars(s);
+ if(difference>0)wrap.append(node('span','levelPill extraStars','غير موزعة · ⭐ '+difference));
+ if(difference<0)wrap.append(node('span','levelPill extraStars','فرق مزامنة · '+difference));
+ return wrap
+}
+function renderLevelComparison(students){
+ const host=clear($('levelsComparison'));
+ if(!students.length){host.append(node('p','notice','لا توجد نتائج للمقارنة.'));return}
+ const table=node('table','levelsMatrix');
+ table.setAttribute('aria-label','مقارنة نجوم الطلاب من المستوى صفر إلى المستوى الثاني عشر');
+ const head=node('thead'),heading=node('tr');
+ for(const label of ['الطالب','المجموع',...Array.from({length:13},(_,i)=>'L'+i),'غير موزعة']){
+  const th=node('th','',label);th.scope='col';heading.append(th)
+ }
+ head.append(heading);table.append(head);
+ const tbody=node('tbody');
+ for(const s of students){
+  const tr=node('tr');
+  const nameCell=node('td');
+  const open=node('button','matrixStudentName',s.name);open.type='button';
+  open.setAttribute('aria-label','عرض تفاصيل '+s.name);
+  open.addEventListener('click',()=>studentDetails(s));
+  nameCell.append(open);tr.append(nameCell);
+  tr.append(node('td','matrixTotal','⭐ '+s.stars));
+  for(let i=0;i<=12;i++){
+   const v=levelStars(s,i);
+   const td=node('td',v>0?'matrixEarned':(v===null?'matrixUnavailable':'matrixZero'),v===null?'—':v);
+   td.title=v===null?'لا تتوفر بيانات المستوى '+i:'المستوى '+i+': '+v+' نجمة من 200';
+   tr.append(td)
+  }
+  const extra=otherStars(s);
+  tr.append(node('td',extra>0?'matrixExtra':'',extra===null?'—':extra===0?'0':extra>0?'+'+extra:String(extra)));
+  tbody.append(tr)
+ }
+ table.append(tbody);host.append(table)
+}
 function getGroupMax(g){return Math.max(0,...g.students.map(s=>s.stars))}
 function makeClassButton(g){
  const b=node('button','classCard');b.type='button';
@@ -197,7 +259,15 @@ function openClass(name){
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
 }
 function sortedStudents(students){
- const mode=$('sortStudents').value==='level'?'level':'stars';
+ const mode=$('sortStudents').value;
+ const match=/^stars-level-(\d{1,2})$/.exec(mode);
+ if(match&&Number(match[1])<=12){
+  const level=Number(match[1]);
+  return [...students].sort((a,b)=>
+   (levelStars(b,level)??-1)-(levelStars(a,level)??-1)||
+   b.stars-a.stars||b.level-a.level||
+   String(a.name||'').localeCompare(String(b.name||''),'ar'))
+ }
  const primary=mode==='level'?'level':'stars';
  const secondary=mode==='level'?'stars':'level';
  return [...students].sort((a,b)=>
@@ -214,11 +284,13 @@ function renderList(students){
    const b=node('button','student');b.type='button';
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
    b.append(node('span','', 'المستوى '+s.level+' · ⭐ '+s.stars+' · نشاط الأسبوع '+s.weekly));
+   b.append(levelPills(s));
    const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,s.mastered/200*100))+'%';
    track.append(fill);b.append(track);
    b.onclick=()=>studentDetails(s);host.append(b)
  }
  if(!shown.length)host.append(node('p','notice','لا توجد نتائج مطابقة.'));
+ renderLevelComparison(shown);
 }
 function studentDetails(s){
  $('studentDetail').hidden=false;$('studentTitle').textContent=s.name;
@@ -229,15 +301,19 @@ function studentDetails(s){
  if(s.kind==='trial')lines.push(['إتقان المستوى',s.mastery+'%'],['مصدر السجل',s.sourceTab]);
  else lines.push(['المحاولات',s.attempts],['الإجابات الصحيحة',s.correct],['دقة الإجابات',s.score===null?'—':s.score+'%'],['العناصر المتقنة',s.mastered],['أنجز التشخيص',s.diagnostic?'نعم':'لا'],['آخر مزامنة',s.updated?new Date(s.updated).toLocaleString('ar-OM'):'—']);
  for(const [a,b] of lines){const tr=node('tr');tr.append(node('td','',a),node('td','',safe(b)));t.append(tr)}host.append(t);
- if(s.levelStats.length){
-  const div=section('الإتقان بحسب المستوى');
-  for(const v of s.levelStats){
-   const r=node('div','chartRow'),bar=node('div','bar'),fill=node('i');
-   const n=percent(v.masteryPercent??(Number(v.mastered||0)/200*100));
-   fill.style.width=n+'%';bar.append(fill);
-   r.append(node('span','','L'+v.level),bar,node('span','',Math.round(n)+'%'));div.append(r)
-  }host.append(div)
- }
+ if(s.kind==='live'&&s.levelStats.length){
+  const total=section('توزيع نجوم الطالب');
+  const assigned=assignedStars(s),difference=otherStars(s);
+  total.append(node('p','notice','المجموع الكلي: '+s.stars+' ⭐ · نجوم المستويات: '+assigned+' ⭐'+(difference>0?' · غير موزعة: '+difference+' ⭐':difference<0?' · يوجد اختلاف بين السجل والمجموع':''));
+  const div=section('نجوم كل مستوى (من 200)');
+  for(let level=0;level<=12;level++){
+   const value=levelStars(s,level),r=node('div','chartRow');
+   const bar=node('div','bar'),fill=node('i');
+   fill.style.width=(value===null?0:value/200*100)+'%';bar.append(fill);
+   r.append(node('span','','L'+level),bar,node('strong','',value===null?'—':value+' / 200'));div.append(r)
+  }
+  host.append(total,div)
+ }else host.append(node('p','notice','لا تتوفر بيانات النجوم بحسب المستوى لهذا السجل.'));
  $('studentDetail').scrollIntoView({behavior:'smooth',block:'start'})
 }
 async function refresh(){
@@ -252,6 +328,10 @@ async function refresh(){
   if(/JWT|LOGIN|AUTH|403|401/.test(e.message)){sessionStorage.removeItem(SESSION);app.token=null;return auth('انتهت صلاحية تسجيل الدخول. اختر حساب Google مجددًا.')}
   message('تعذر تحميل البيانات: '+e.message+'. جرّب زر تحديث.');$('overview').hidden=true
  }
+}
+for(let level=0;level<=12;level++){
+ const option=node('option','', 'نجوم المستوى '+level+' أولاً');
+ option.value='stars-level-'+level;$('sortStudents').append(option)
 }
 $('back').addEventListener('click',()=>{history.replaceState(null,'',location.pathname);$('detail').hidden=true;$('overview').hidden=false;window.scrollTo(0,0)});
 $('closeStudent').addEventListener('click',()=>{$('studentDetail').hidden=true});

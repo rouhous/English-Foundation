@@ -304,7 +304,7 @@ function studentDetails(s){
  if(s.kind==='live'&&s.levelStats.length){
   const total=section('توزيع نجوم الطالب');
   const assigned=assignedStars(s),difference=otherStars(s);
-  total.append(node('p','notice','المجموع الكلي: '+s.stars+' ⭐ · نجوم المستويات: '+assigned+' ⭐'+(difference>0?' · غير موزعة: '+difference+' ⭐':difference<0?' · يوجد اختلاف بين السجل والمجموع':''));
+  total.append(node('p','notice','المجموع الكلي: '+s.stars+' ⭐ · نجوم المستويات: '+assigned+' ⭐'+(difference>0?' · غير موزعة: '+difference+' ⭐':difference<0?' · يوجد اختلاف بين السجل والمجموع':'')));
   const div=section('نجوم كل مستوى (من 200)');
   for(let level=0;level<=12;level++){
    const value=levelStars(s,level),r=node('div','chartRow');

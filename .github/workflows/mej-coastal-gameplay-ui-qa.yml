@@ -5,6 +5,8 @@ on:
     paths:
       - 'coastal-arcade/index.html'
       - 'scripts/qa-coastal-gameplay-ui.mjs'
+      - 'scripts/qa-hidden-precision-ui.mjs'
+      - 'hidden-objects/**'
       - '.github/workflows/mej-coastal-gameplay-ui-qa.yml'
   workflow_dispatch:
 permissions:
@@ -27,16 +29,20 @@ jobs:
       - name: Validate source JavaScript and gameplay interaction on 390px phone
         run: |
           node --check scripts/qa-coastal-gameplay-ui.mjs
+          node --check scripts/qa-hidden-precision-ui.mjs
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/coastal-local-qa.log 2>&1 &
           for n in 1 2 3 4 5 6 7 8 9 10; do
             if curl -fsS http://127.0.0.1:8765/coastal-arcade/index.html >/dev/null; then break; fi
             sleep 1
           done
           node scripts/qa-coastal-gameplay-ui.mjs
+          node scripts/qa-hidden-precision-ui.mjs
       - name: Retain gameplay screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mej-coastal-phone-grid-screenshots
-          path: arcade-qa-*-mobile.png
+          path: |
+            arcade-qa-*-mobile.png
+            hidden-precision-*.png
           if-no-files-found: ignore

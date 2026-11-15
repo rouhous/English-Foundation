@@ -16,9 +16,9 @@
  // Exact game inventory recovered from the owner's MEJ_Coastal_Badges_Arcade_v11_1_FIXED.zip.
  // Metadata for design review only: this file must not grant unlocks or awards.
  const gradeBandGames=Object.freeze({
-   junior:Object.freeze(["moving","match","memory","word","hidden","falling","sentence","safari","maze","story"]),
-   middle:Object.freeze(["flip","match","word","memory","hidden","falling","vocab","sentence","grammar","mission"]),
-   upper:Object.freeze(["flip","grammar","vocab","sentence","falling","evidence","detective","mission","argument","escape"])
+   junior:Object.freeze(["hidden","moving","match","memory","word","falling","sentence","safari","maze","story"]),
+   middle:Object.freeze(["hidden","flip","match","word","memory","falling","vocab","sentence","grammar","mission"]),
+   upper:Object.freeze(["hidden","flip","grammar","vocab","sentence","falling","evidence","detective","argument","escape"])
  });
  const policy=Object.freeze({
    masteryStarsPerBadge:20,

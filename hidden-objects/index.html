@@ -18,6 +18,7 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .photo-target.found{pointer-events:auto;cursor:default}
 .photo-target.found::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;font:900 25px system-ui;color:white;background:#168665c7;border:2px solid #ccf3d7;border-radius:50%;text-shadow:0 1px 3px #002}
 .photo-board.show-hotspots .photo-target:not(.found){background:#e5c64255;border:2px solid #ffe667}
+.photo-found-check{position:absolute;z-index:3;display:grid;place-items:center;min-width:21px;height:21px;padding:0 3px;border:2px solid #e6ffda;border-radius:999px;background:#16865ddf;color:white;font:900 15px system-ui;box-shadow:0 1px 5px #0019;transform:translate(-50%,-50%);pointer-events:none;direction:ltr}
 @media(max-width:710px){.scene.photo-active{aspect-ratio:auto;min-height:215px}.photo-board{width:100%;height:auto}.photo-target{width:max(32px,6%);height:max(32px,7%)}}
 .spot{position:absolute;border:0;background:none;padding:0;width:clamp(31px,5.8vw,62px);height:clamp(31px,5.8vw,64px);transform:translate(-50%,-50%);cursor:pointer;filter:drop-shadow(1px 2px 2px #2c342887) saturate(.88);opacity:.93;mix-blend-mode:normal;border-radius:12px;transition:filter .15s,opacity .15s}
 .spot img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
@@ -164,6 +165,16 @@ function board(){
      }});canvas.append(svg);
    }
    if(previewCandidate&&!photoScene.targets?.length){const msg=document.createElement('div');msg.className='precision-pending';msg.textContent=reviewMessage;canvas.append(msg);}
+   // A small tick appears by the object's edge only AFTER it has been found.
+   photoScene.targets.forEach((target,i)=>{
+     if(!session.found.includes(session.targets[i]))return;
+     const poly=target.regions?.[0];if(!Array.isArray(poly)||!poly.length)return;
+     const xs=poly.map(pt=>pt[0]),ys=poly.map(pt=>pt[1]);
+     const x=clamp(Math.max(...xs)-9,14,1585),y=clamp(Math.min(...ys)+10,14,886);
+     const check=document.createElement('span');check.className='photo-found-check';check.textContent='✓';
+     check.style.left=(x/1599*100)+'%';check.style.top=(y/900*100)+'%';
+     canvas.append(check);
+   });
    canvas.addEventListener('click',ev=>{
      if(completed||previewCandidate&&!photoScene.targets?.length)return;
      const rect=canvas.getBoundingClientRect(),px=(ev.clientX-rect.left)*1599/rect.width,py=(ev.clientY-rect.top)*900/rect.height;

@@ -1,0 +1,29 @@
+name: Generate teacher diagnostic question catalog
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/build-teacher-diagnostic-catalog.cjs"
+      - ".github/workflows/build-teacher-diagnostic-catalog.yml"
+      - "index.html"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Generate question ID to skill metadata
+        run: node scripts/build-teacher-diagnostic-catalog.cjs
+      - name: Verify JSON and commit catalog if changed
+        run: |
+          node -e "const x=require('./assets/diagnostic-question-catalog.json');if(Object.keys(x).length<500)process.exit(1)"
+          if ! git diff --quiet -- assets/diagnostic-question-catalog.json || test -n "$(git ls-files --others --exclude-standard -- assets/diagnostic-question-catalog.json)"; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/diagnostic-question-catalog.json
+            git commit -m "Generate teacher question diagnostic metadata"
+            git push origin HEAD:main
+          fi

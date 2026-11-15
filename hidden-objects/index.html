@@ -276,7 +276,12 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
    photoScene={file:candidate.image,reviewSource:true,targets:reviewPlayable?provisional:[]};
    reviewMessage=previewAccess?'هذا المشهد محفوظ للمراجعة، لكن مناطق أغراضه لم تعتمد بعد. افتح محرر Precision Hotspots لإكمالها.':'هذه الصورة قيد المراجعة التعليمية، وستتاح لعبة البحث بعد اعتماد أغراضها.';
    const img=new Image();img.onload=start;img.onerror=()=>{
-     photoScene=null;previewCandidate=null;el('notice').textContent='تعذر عرض صورة المشهد. تحقق من تنزيل ملفات اللعبة.';start();
+     practiceOnly=true;session.targets=[];session.remaining=null;photoScene=null;
+     reviewMessage='تعذر تنزيل الصورة الأصلية. لا يمكن تشغيل جولة غير مطابقة دون صورتها.';
+     el('notice').textContent=reviewMessage;
+     const field=el('scene');field.replaceChildren();field.style.backgroundImage='none';
+     const msg=document.createElement('div');msg.className='precision-unavailable';msg.textContent=reviewMessage;field.append(msg);
+     el('words').replaceChildren();el('timerToggle').hidden=true;
    };img.src=candidate.image;
  }else{
    practiceOnly=true;previewCandidate={image:null};photoScene=null;session.targets=[];reviewMessage='لا توجد صورة معتمدة لهذا الموضوع بعد. لم تُستخدم صورة غير مناسبة بدلًا منها.';

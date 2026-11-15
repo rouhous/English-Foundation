@@ -1,0 +1,42 @@
+name: Coastal games - phone layout and falling basket QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'coastal-arcade/index.html'
+      - 'scripts/qa-coastal-gameplay-ui.mjs'
+      - '.github/workflows/mej-coastal-gameplay-ui-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual-gameplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless browser support
+        run: |
+          npm install --no-save --no-package-lock playwright-core@1.56.1
+          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null; then
+            npx playwright-core install chromium
+          fi
+      - name: Validate source JavaScript and gameplay interaction on 390px phone
+        run: |
+          node --check scripts/qa-coastal-gameplay-ui.mjs
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/coastal-local-qa.log 2>&1 &
+          for n in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS http://127.0.0.1:8765/coastal-arcade/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/qa-coastal-gameplay-ui.mjs
+      - name: Retain gameplay screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mej-coastal-phone-grid-screenshots
+          path: arcade-qa-*-mobile.png
+          if-no-files-found: ignore

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Cache-Control" content="no-store">
+<title>التقارير التشخيصية | بوابة المعلم — رحلتي مع الإنجليزية</title>
+<style>
+:root{--blue:#0a568d;--deep:#063b66;--sea:#0a81a9;--gold:#c89435;--line:#d1e5f1;--pale:#f0f9ff;--muted:#55738c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Segoe UI",Tahoma,sans-serif;background:linear-gradient(150deg,#e4f6ff,#f5fbff);color:var(--deep);min-height:100dvh}
+header{background:linear-gradient(135deg,#064070,#0b7eb6);color:white;padding:22px clamp(15px,3vw,34px)}header .inner{max-width:1200px;margin:auto}
+h1{margin:6px 0;font-size:clamp(23px,4vw,33px)}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}
+header p{font-size:13px;color:#d9effe;line-height:1.7;margin:5px 0 14px}
+main{max-width:1200px;margin:auto;padding:18px 14px 45px}.sheet{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 7px 20px #174a6c0e;padding:18px;margin:0 0 16px}
+.actions,.filters,.scopeTabs{display:flex;flex-wrap:wrap;gap:9px;align-items:center}button,.nav{font:inherit;border-radius:11px;min-height:39px;padding:9px 14px;cursor:pointer;border:1px solid #b7d6e9;background:white;color:var(--blue);font-weight:650;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button.primary,.scopeTabs button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:white}
+button:disabled{opacity:.5;cursor:wait}button:focus-visible,select:focus-visible{outline:3px solid #d7ad59} .notice{font-size:13px;line-height:1.8;color:var(--muted)}
+.filters{align-items:end;gap:12px}.filter{flex:1;min-width:170px}.filter label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.filter select{width:100%;padding:12px 10px;border:1px solid #bad8e9;border-radius:10px;background:#f6fbff;color:var(--deep);font:inherit}
+.scopeTabs{margin:10px 0 17px}.scopeTabs[hidden]{display:none}.scopeTabs button{flex:1;min-width:120px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.metric{background:linear-gradient(130deg,#f3fbff,#e6f5ff);border:1px solid #d4e8f5;border-radius:12px;padding:15px}.metric strong{display:block;color:var(--blue);font-size:26px;direction:ltr;text-align:right}.metric span{font-size:12px;color:var(--muted);line-height:1.7}
+.skillGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px}
+.skill{border:1px solid #d6e7f0;border-radius:12px;padding:13px;background:#faffff}.skill .top{display:flex;gap:12px;justify-content:space-between;font-size:13px;font-weight:750}.skill .track{height:9px;background:#e2eff7;overflow:hidden;border-radius:9px;margin:10px 0 7px}.skill .fill{background:linear-gradient(90deg,#0d84ba,#0ba7ad);height:100%;display:block;border-radius:9px}.skill small{color:var(--muted)}
+.tableScroll{overflow-x:auto;max-width:100%;border:1px solid #e2ecf4;border-radius:11px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:790px;font-size:13px}th{background:#e8f5fd;color:#07446e;text-align:right;padding:11px;white-space:nowrap}td{border-top:1px solid #e3edf6;padding:11px;vertical-align:top}tbody tr:nth-child(even){background:#f9fcff}td strong{color:#07518b}
+.questionText{max-width:440px;min-width:150px;white-space:normal;direction:auto;font-size:13px;line-height:1.55}
+.badge{display:inline-flex;border-radius:6px;background:#fdf0d7;color:#815618;padding:3px 7px;font-size:11px;font-weight:750}.badge.ok{background:#e4f5ed;color:#24774c}.badge.neutral{background:#edf3f8;color:#536d83}
+#message[hidden],#content[hidden],#ownerScopes[hidden]{display:none!important}#message{font-size:14px;font-weight:700;line-height:2}
+#message.error{color:#a12020}.small{font-size:12px}.rowTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+footer{text-align:center;color:#5e819a;font-size:12px;padding:10px 20px 25px}
+@media(max-width:560px){.sheet{padding:13px}.filter{flex:1 1 100%}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.metric strong{font-size:23px}.skillGrid{grid-template-columns:1fr}.actions button,.actions .nav{flex:1;font-size:13px}}
+@media print{body{background:white}header{background:white;color:var(--deep);padding:10px}header p{color:var(--muted)}main{padding:0 4px}.actions,.filters,.scopeTabs,#message,.noPrint{display:none!important}.sheet{box-shadow:none;border:1px solid #d7e1eb;break-inside:avoid;padding:9px;margin:8px 0}table{font-size:9px;min-width:0}.tableScroll{overflow:visible}td,th{padding:5px}footer{font-size:10px}}
+</style>
+</head>
+<body>
+<header><div class="inner">
+<div class="small">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div>
+<h1>التقارير التشخيصية للطلاب</h1>
+<p>تحليل الأخطاء المتكررة بحسب الطالب أو الصف أو جميع طلاب المعلم، مع تحديد نوع المهارة والسؤال المرتبط بها.</p>
+<div class="actions noPrint">
+<a class="nav" href="./teacher-dashboard.html">العودة إلى لوحة المعلم</a>
+<button id="refresh" class="primary" type="button">تحديث البيانات</button>
+<button id="print" type="button">طباعة التقرير / PDF</button>
+<button id="export" type="button">تصدير CSV</button>
+</div>
+</div></header>
+<main>
+<section class="sheet">
+<h2>نطاق التقرير</h2>
+<div id="ownerScopes" class="scopeTabs" hidden>
+<button id="privateBtn" type="button" aria-pressed="true">طلابي في الخاص</button>
+<button id="schoolBtn" type="button" aria-pressed="false">طلابي في المدرسة</button>
+</div>
+<div class="filters">
+<div class="filter"><label for="classFilter">الصف أو القسم</label><select id="classFilter"><option value="">جميع الصفوف</option></select></div>
+<div class="filter"><label for="studentFilter">الطالب</label><select id="studentFilter"><option value="">جميع الطلاب</option></select></div>
+<div class="filter"><label for="skillFilter">نوع النشاط</label><select id="skillFilter"><option value="">جميع المهارات</option></select></div>
+</div>
+<p class="notice">«خطأ متكرر» يعني خطأين أو أكثر في السؤال نفسه. «يحتاج إلى تدريب» يعني أن الطالب أخطأ ولم يصل بعد إلى إجابتين صحيحتين للسؤال. يتغير نطاق التقرير فور اختيار الصف أو الطالب.</p>
+</section>
+<section class="sheet" id="message" role="status" aria-live="polite">جار التحقق من جلسة المعلم...</section>
+<div id="content" hidden>
+<section class="sheet"><div class="rowTitle"><h2 id="summaryTitle">الملخص العام</h2><span id="recordLabel" class="notice"></span></div><div id="stats" class="stats"></div></section>
+<section class="sheet"><h2>توزيع الأخطاء بحسب نوع النشاط</h2><p class="notice">الأعداد التالية تمثل محاولات الإجابة الخاطئة المسجلة، وليست درجات إتقان أو نسب نجاح لجميع المهارات.</p><div id="skills" class="skillGrid"></div></section>
+<section class="sheet"><div class="rowTitle"><h2 id="questionsTitle">الأسئلة والأنشطة التي حدثت فيها أخطاء</h2><span id="itemsCount" class="notice"></span></div><div class="tableScroll"><table><thead><tr><th>السؤال / النشاط</th><th>المهارة</th><th>المستوى</th><th>الأخطاء</th><th>عدد الطلاب</th><th>التكرار</th><th>الحالة / آخر خطأ</th></tr></thead><tbody id="questionRows"></tbody></table></div><p class="notice" id="rowLimit"></p></section>
+<section class="sheet" id="studentListBox"><h2>مقارنة الطلاب</h2><div class="tableScroll"><table><thead><tr><th>الطالب</th><th>القسم</th><th>النجوم</th><th>المحاولات</th><th>محاولات الخطأ</th><th>أسئلة بخطأ متكرر</th><th>أسئلة تحتاج إلى تدريب</th><th>التقرير</th></tr></thead><tbody id="studentRows"></tbody></table></div></section>
+<section class="sheet"><h3>ملاحظات حول دقة التقرير</h3><p class="notice">البيانات متزامنة من تطبيق الطلاب ومبلّغ عنها من أجهزتهم، وليست تصحيحًا معتمدًا على الخادم. عدّاد الأخطاء المتراكم مأخوذ من سجل السؤال، أما آخر تاريخ خطأ وتوزيع المحاولات زمنياً فيعتمدان على أحدث 1500 حدث يحتفظ بها التطبيق لكل طالب. لا تدخل سجلات الطلاب التجريبية المستوردة ضمن هذا التقرير.</p></section>
+</div>
+</main>
+<footer>رحلتي مع الإنجليزية · تقارير خاصة بالمعلم المعتمد فقط</footer>
+<script>
+(function(){
+'use strict';
+const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-learning-reports';
+const SESSION='MEJ_STAFF_LOGIN_V2';
+const $=id=>document.getElementById(id);
+const app={token:'',owner:false,scope:'private',reports:[],catalog:{},loaded:false,skillLabels:{
+ Listening:'الإنصات',Reading:'القراءة',Match:'ربط الكلمات بالصور',Vocabulary:'معاني المفردات',Grammar:'القواعد اللغوية',
+ Spelling:'التهجئة والإملاء',Phonics:'الأصوات والحروف',Blend:'دمج الأصوات',Writing:'الكتابة',
+ 'Writing Builder':'بناء الجمل والكتابة',Order:'ترتيب الكلمات والجمل',Describe:'الوصف'}};
+function el(tag,cls,value){const x=document.createElement(tag);if(cls)x.className=cls;if(value!==undefined)x.textContent=String(value);return x}
+function clear(id){const x=$(id);x.replaceChildren();return x}
+function message(s,error){$('message').textContent=s;$('message').classList.toggle('error',!!error);$('message').hidden=false}
+function integer(n){return Number.isFinite(Number(n))?Math.max(0,Math.trunc(Number(n))):0}
+function catalog(id){return app.catalog[id]||{}}
+function category(item){const c=catalog(item.id);return app.skillLabels[c.type]||c.type||'غير مصنف'}
+function prompt(item){const c=catalog(item.id);return (c.prompt||c.word||item.id).slice(0,400)}
+function selected(){return app.reports.filter(x=>(!$('classFilter').value||x.className===$('classFilter').value)&&(!$('studentFilter').value||x.studentRef===$('studentFilter').value))}
+function option(v,label){const o=document.createElement('option');o.value=String(v);o.textContent=String(label);return o}
+function fillClasses(){
+ const select=$('classFilter'),old=select.value;select.replaceChildren(option('','جميع الصفوف'));
+ const names=[...new Set(app.reports.map(x=>x.className||'غير محدد'))].sort((a,b)=>a.localeCompare(b,'ar',{numeric:true}));
+ for(const name of names)select.append(option(name,name));
+ if(names.includes(old))select.value=old;else select.value='';
+ fillStudents()
+}
+function fillStudents(){
+ const select=$('studentFilter'),old=select.value;select.replaceChildren(option('','جميع الطلاب'));
+ const rows=app.reports.filter(x=>!$('classFilter').value||x.className===$('classFilter').value);
+ rows.sort((a,b)=>String(a.studentName).localeCompare(String(b.studentName),'ar'));
+ for(const row of rows)select.append(option(row.studentRef,row.studentName));
+ if(rows.some(x=>x.studentRef===old))select.value=old;else select.value='';
+ fillSkills()
+}
+function fillSkills(){
+ const select=$('skillFilter'),old=select.value;select.replaceChildren(option('','جميع المهارات'));
+ const types=new Set();
+ for(const row of selected())for(const item of row.items||[])types.add(category(item));
+ for(const type of [...types].sort((a,b)=>a.localeCompare(b,'ar')))select.append(option(type,type));
+ if(types.has(old))select.value=old;else select.value=''
+}
+function statusFor(row){
+ if(!row)return '';
+ if(row.students===1){
+  const i=row._single;
+  return i.mastered?'تم إتقان السؤال لاحقاً':'يحتاج إلى تدريب'
+ }
+ return row.unresolvedStudents?'يحتاج '+row.unresolvedStudents+' طالب إلى تدريب':'تم إتقان السؤال بعد الأخطاء'
+}
+function gather(reports){
+ const byId=new Map();
+ for(const report of reports)for(const item of report.items||[]){
+  const skill=category(item);
+  if($('skillFilter').value&&skill!==$('skillFilter').value)continue;
+  let entry=byId.get(item.id);
+  if(!entry){entry={id:item.id,level:item.level,skill,prompt:prompt(item),wrong:0,students:0,repeated:0,unresolvedStudents:0,lastError:null,_single:null};byId.set(item.id,entry)}
+  entry.wrong+=integer(item.wrong);entry.students++;
+  if(integer(item.wrong)>=2)entry.repeated++;
+  if(!item.mastered)entry.unresolvedStudents++;
+  if(item.lastError&&(!entry.lastError||item.lastError>entry.lastError))entry.lastError=item.lastError;
+  if(reports.length===1)entry._single=item
+ }
+ return [...byId.values()].sort((a,b)=>b.wrong-a.wrong||b.students-a.students||String(a.id).localeCompare(String(b.id)))
+}
+function renderCards(reports,entries){
+ const host=clear('stats');
+ const sum=(name)=>reports.reduce((a,r)=>a+integer(r[name]),0);
+ const metrics=[
+ ['الطلاب في التقرير',reports.length],['المحاولات المسجلة',sum('attempts')],
+ ['محاولات الإجابة الخاطئة',sum('wrongAttempts')],['أسئلة شهدت خطأً متكرراً',sum('repeatItems')],
+ ['أسئلة تحتاج إلى تدريب',sum('unresolved')],['أسئلة أُتقنت بعد أخطاء',sum('masteredAfter')],
+ ['أنشطة مختلفة حدثت فيها أخطاء',entries.length]
+ ];
+ for(const [label,val] of metrics){
+  const div=el('div','metric');div.append(el('strong','',val),el('span','',label));host.append(div)
+ }
+}
+function renderSkills(entries){
+ const host=clear('skills'),tot=entries.reduce((x,e)=>x+e.wrong,0),groups=new Map();
+ for(const e of entries){
+  const item=groups.get(e.skill)||{name:e.skill,wrong:0,questions:0,students:0};
+  item.wrong+=e.wrong;item.questions++;item.students+=e.students;groups.set(e.skill,item)
+ }
+ if(!groups.size){host.append(el('p','notice','لا توجد أخطاء مسجلة ضمن المرشحات الحالية.'));return}
+ for(const v of [...groups.values()].sort((a,b)=>b.wrong-a.wrong)){
+  const div=el('div','skill'),top=el('div','top');
+  top.append(el('span','',v.name),el('strong','',v.wrong+' خطأ'));
+  const track=el('div','track'),fill=el('span','fill');
+  fill.style.width=(tot?Math.round(v.wrong/tot*100):0)+'%';track.append(fill);
+  div.append(top,track,el('small','',v.questions+' أسئلة مختلفة · '+(tot?Math.round(v.wrong/tot*100):0)+'% من الأخطاء المعروضة'));
+  host.append(div)
+ }
+}
+function tableCell(text,className){return el('td',className||'',text)}
+function renderQuestions(entries,reports){
+ const host=clear('questionRows'),max=450;
+ $('itemsCount').textContent=entries.length+' أسئلة لها أخطاء';
+ for(const item of entries.slice(0,max)){
+  const row=el('tr'),description=el('td','');
+  description.append(el('strong','',item.id),el('div','questionText',item.prompt));
+  const status=item.repeated>=1?el('span','badge',item.repeated+' حالة تكرار'):el('span','badge neutral','خطأ واحد لكل طالب');
+  const state=el('td','');
+  state.append(el('span','badge '+(item.unresolvedStudents?'':'ok'),statusFor(item)));
+  if(item.lastError)state.append(el('div','small',item.lastError));
+  row.append(description,tableCell(item.skill),tableCell('L'+item.level),tableCell(item.wrong),
+   tableCell(item.students),el('td',''),state);
+  row.children[5].append(status);
+  host.append(row)
+ }
+ if(!entries.length){const row=el('tr'),td=tableCell('لا توجد أسئلة خاطئة متزامنة ضمن هذا النطاق.');td.colSpan=7;row.append(td);host.append(row)}
+ $('rowLimit').textContent=entries.length>max?'للحفاظ على سرعة الصفحة، يعرض الجدول أول '+max+' سؤال. يتضمن ملف CSV جميع النتائج.':'';
+ $('questionsTitle').textContent=reports.length===1?'الأنشطة التي أخطأ فيها الطالب':'الأسئلة الأكثر تسبباً في أخطاء الطلاب';
+}
+function renderStudents(reports){
+ const host=clear('studentRows');
+ $('studentListBox').hidden=reports.length===1;
+ if(reports.length===1)return;
+ const list=[...reports].sort((a,b)=>integer(b.repeatItems)-integer(a.repeatItems)||integer(b.wrongAttempts)-integer(a.wrongAttempts));
+ for(const s of list){
+  const tr=el('tr');
+  for(const value of [s.studentName,s.className,s.stars,s.attempts,s.wrongAttempts,s.repeatItems,s.unresolved])tr.append(tableCell(value));
+  const td=el('td'),b=el('button','', 'عرض تقرير الطالب');
+  b.type='button';b.addEventListener('click',()=>{$('classFilter').value=s.className;fillStudents();$('studentFilter').value=s.studentRef;fillSkills();render();window.scrollTo({top:0,behavior:'smooth'})});
+  td.append(b);tr.append(td);host.append(tr)
+ }
+ if(!list.length){const tr=el('tr'),td=tableCell('لا توجد بيانات طلاب.');td.colSpan=8;tr.append(td);host.append(tr)}
+}
+function render(){
+ const reports=selected(),entries=gather(reports);
+ const name=reports.length===1?reports[0].studentName:($('classFilter').value?'الصف '+$('classFilter').value:'جميع الصفوف');
+ $('summaryTitle').textContent='التقرير التشخيصي — '+name;
+ $('recordLabel').textContent='الطلاب: '+reports.length+' · '+(app.owner?(app.scope==='private'?'الخاص':'المدرسة'):'طلاب المعلم');
+ renderCards(reports,entries);renderSkills(entries);renderQuestions(entries,reports);renderStudents(reports)
+}
+function csv(){
+ const reports=selected(),entries=gather(reports);
+ const quote=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
+ const lines=[['نوع السجل','الطالب/النطاق','القسم','معرّف النشاط','المهارة','السؤال','المستوى','مرات الخطأ','عدد الطلاب','تكرار الأخطاء','بحاجة إلى تدريب','آخر خطأ']];
+ for(const r of reports){
+  for(const i of r.items||[]){
+   const cat=category(i);
+   if($('skillFilter').value&&cat!==$('skillFilter').value)continue;
+   lines.push(['طالب',r.studentName,r.className,i.id,cat,prompt(i),'L'+i.level,i.wrong,1,i.wrong>=2?'نعم':'لا',i.mastered?'لا':'نعم',i.lastError||''])
+  }
+ }
+ if(reports.length!==1)for(const e of entries)lines.push(['ملخص المجموعة','مجموع الطلاب',$('classFilter').value||'جميع الصفوف',e.id,e.skill,e.prompt,'L'+e.level,e.wrong,e.students,e.repeated,e.unresolvedStudents,e.lastError||'']);
+ const content='\uFEFF'+lines.map(line=>line.map(quote).join(',')).join('\r\n');
+ const blob=new Blob([content],{type:'text/csv;charset=utf-8;'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='my-english-journey-diagnostic-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),3000)
+}
+async function loadCatalog(){
+ try{
+  const response=await fetch('../assets/diagnostic-question-catalog.json?v=20261115',{cache:'no-cache'});
+  if(!response.ok)throw Error('NO_CATALOG');
+  const value=await response.json();
+  if(value&&typeof value==='object'&&!Array.isArray(value))app.catalog=value
+ }catch(_){app.catalog={}}
+}
+async function load(){
+ if(!app.token){message('سجّل الدخول أولاً من لوحة المعلم لفتح تقارير طلابك.',true);$('content').hidden=true;return}
+ $('refresh').disabled=true;message('جار قراءة السجلات وحساب الأنشطة المتكررة...');
+ try{
+  const response=await fetch(API,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+   headers:{'Content-Type':'application/json','Authorization':'Bearer '+app.token},
+   body:JSON.stringify({action:'teacher_diagnostics',scope:app.owner?app.scope:'teacher'}),signal:AbortSignal.timeout(25000)});
+  const data=await response.json();
+  if(!response.ok||data.ok!==true)throw Error(data.error||'FAILED');
+  app.reports=Array.isArray(data.reports)?data.reports:[];await loadCatalog();
+  fillClasses();$('content').hidden=false;$('message').hidden=true;render()
+ }catch(error){message('تعذر تحميل التقرير: '+String(error.message||error)+'. تحقق من تسجيل Google والاتصال ثم أعد المحاولة.',true);$('content').hidden=true}
+ finally{$('refresh').disabled=false}
+}
+function init(){
+ let s=null;try{s=JSON.parse(sessionStorage.getItem(SESSION)||'null')}catch(_){}
+ if(s&&typeof s.token==='string'&&Date.now()-Number(s.at)<45*60*1000){
+  app.token=s.token;app.owner=s.role==='owner'
+ }
+ $('ownerScopes').hidden=!app.owner;
+ $('privateBtn').addEventListener('click',()=>{app.scope='private';$('privateBtn').setAttribute('aria-pressed','true');$('schoolBtn').setAttribute('aria-pressed','false');$('classFilter').value='';$('studentFilter').value='';load()});
+ $('schoolBtn').addEventListener('click',()=>{app.scope='school';$('privateBtn').setAttribute('aria-pressed','false');$('schoolBtn').setAttribute('aria-pressed','true');$('classFilter').value='';$('studentFilter').value='';load()});
+ $('classFilter').addEventListener('change',()=>{fillStudents();render()});
+ $('studentFilter').addEventListener('change',()=>{fillSkills();render()});
+ $('skillFilter').addEventListener('change',render);
+ $('refresh').addEventListener('click',load);
+ $('print').addEventListener('click',()=>window.print());
+ $('export').addEventListener('click',csv);
+ load()
+}
+init()
+})();
+</script>
+</body>
+</html>

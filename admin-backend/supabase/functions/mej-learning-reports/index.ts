@@ -19,7 +19,7 @@ async function fetchDb(query:string){
 async function identity(req:Request){
  const h=req.headers.get('authorization')||'';
  if(!/^Bearer [^ ]+$/.test(h)||h.length>8200)throw Error('GOOGLE_LOGIN_REQUIRED');
- const {payload}=await jwtVerify(h.slice(7),JWKS,{audience:AUD,issuer:['accounts.google.com','https://accounts.google.com'],algorithms:['RS256'],clockTolerance:'30 seconds'});
+ let payload;try{({payload}=await jwtVerify(h.slice(7),JWKS,{audience:AUD,issuer:['accounts.google.com','https://accounts.google.com'],algorithms:['RS256'],clockTolerance:'30 seconds'}))}catch(_){throw Error('GOOGLE_LOGIN_REQUIRED')}
  if(payload.email_verified!==true||typeof payload.sub!=='string'||typeof payload.email!=='string')throw Error('GOOGLE_LOGIN_REQUIRED');
  return {email:payload.email.toLowerCase(),sub:payload.sub};
 }

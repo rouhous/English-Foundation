@@ -54,7 +54,7 @@ button.back{background:#e8c875;border:0;border-radius:12px;font:800 15px system-
 <div class="play"><div id="scene" class="scene" aria-label="مشهد البحث عن الأغراض" role="group"></div><aside class="words"><h2>Find these objects:</h2><ul id="words"></ul></aside></div>
 <footer class="foot"><span id="notice" role="status">اختر الغرض الذي يطابق كلمة في القائمة.</span><button class="back" id="back">↩ العودة إلى الرحلة</button></footer>
 </main>
-<script src="./assets.js"></script><script src="./photo-scenes.js"></script><script src="./precision-v3-client.js"></script>
+<script src="./assets.js"></script><script src="./photo-scenes.js"></script><script src="./precision-v3-client.js"></script><script src="./first-badge-practice.js"></script>
 <script>
 (()=>{'use strict';
 const ART=window.MEJHiddenArt;const PHOTO=window.MEJRealPhotoScenes;const el=id=>document.getElementById(id);
@@ -249,7 +249,7 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
    &&sc.targets.filter(t=>!known.has(norm(t.word))&&level.has(norm(t.word))).length===1)||null;
  const candidate=window.MEJPrecisionLibrary?.sceneSlots?.find(s=>s.stage===phase&&s.badge===Number(d.badge))||null;
  previewCandidate=!mapped?candidate:null;
- const previewAccess=d.preview===true&&practiceOnly;
+ const previewAccess=practiceOnly&&(d.preview===true||(phase===0&&Number(d.badge)===1));
  const estimate=previewCandidate?.assetId?window.MEJPrecisionLibrary?.hotspots?.[previewCandidate.assetId]||{}:{};
  const provisional=Object.entries(estimate).filter(([w,v])=>Array.isArray(v.points)&&v.points.length>=3)
   .map(([word,v])=>({word,regions:[v.points.map(([x,y])=>[x*15.99,y*9])]}));

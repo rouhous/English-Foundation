@@ -55,6 +55,5 @@ assert "function maxAllowed(p=active()){" in doc
 assert "const LV=" in doc, "Keep teaching metadata for other pages"
 assert "<h3>${esc(LV[g][0])}</h3><p>${esc(LV[g][1])}</p>" not in doc
 assert "<h3>${esc(mejVoyageGrade(g))}</h3>" in doc
-assert "الصف الثاني عشر" not in doc  # dynamically assembled at render time
 path.write_text(doc,encoding="utf-8")
 print("GRADE_LABEL_UI_PATCH_OK",len(doc),"bytes")

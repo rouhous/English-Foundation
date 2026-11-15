@@ -14,12 +14,12 @@ try{
  assert.ok(template?.includes('MEJ ARCADE MOBILE GRID AND SURVIVAL FIX'),'Updated embedded game missing');
  await source.close();
 
- async function pageFor(game,grade=8,width=390){
+ async function pageFor(game,grade=8,width=390,autoStart=true){
   const page=await browser.newPage({viewport:{width,height:844},deviceScaleFactor:1});
   page.on('pageerror',e=>errors.push(game+': '+e.message));
   const ctx='<script>window.MEJ_GAME_CONTEXT={search:'+JSON.stringify('?game='+game+'&grade='+grade+'&run=1')+'}</script>';
   await page.setContent(template.replace('<!-- MEJ_INLINE_CONTEXT -->',ctx),{waitUntil:'load'});
-  await page.locator('#start').click();
+  if(autoStart)await page.locator('#start').click();
   return page;
  }
  async function checkGrid(page,selector,columns,expected,label){
@@ -38,9 +38,33 @@ try{
  }
  {
   const p=await pageFor('flip');
-  console.log('FLIP_DIAGNOSTIC',JSON.stringify(await p.evaluate(()=>({context:window.MEJ_GAME_CONTEXT,bodyClass:document.body.className,heading:document.querySelector('#heading')?.textContent,playHidden:document.querySelector('#play')?.hidden,sceneHTML:document.querySelector('#scene')?.innerHTML.slice(0,500),scripts:document.scripts.length}))),JSON.stringify(errors));
   await checkGrid(p,'#scene .flip-grid .tile',3,10,'Flip Cards');
   await p.screenshot({path:'arcade-qa-flip-mobile.png',fullPage:true});
+  await p.close();
+ }
+
+ {
+  const p=await pageFor('flip',12,390,false);
+  await p.evaluate(()=>{
+   const list=MEJV10Data.upper;
+   const i=list.findIndex(x=>x[0]==='collaboration');
+   if(i>=0)list.unshift(...list.splice(i,1));
+   Math.random=()=>.5;
+  });
+  await p.locator('#start').click();
+  await p.locator('.flip-hint').click();
+  await p.locator('.flip-grid .flip-word.flip-open').first().waitFor();
+  await p.waitForTimeout(160);
+  const words=await p.locator('.flip-grid .flip-word.flip-open').evaluateAll(cards=>cards.map(el=>({
+   word:el.innerText,font:getComputedStyle(el).fontSize,wrap:getComputedStyle(el).whiteSpace,
+   scroll:el.scrollWidth,client:el.clientWidth,height:el.clientHeight
+  })));
+  assert.ok(words.some(w=>w.word==='collaboration'),'Advanced Flip Cards must include collaboration');
+  for(const w of words){
+   assert.equal(w.wrap,'nowrap','Flip Cards must not split '+w.word);
+   assert.ok(w.scroll<=w.client+2,'Flip Cards must fit '+w.word+' (width '+w.scroll+'/'+w.client+', font '+w.font+')');
+  }
+  await p.screenshot({path:'arcade-qa-flip-advanced-mobile.png',fullPage:true});
   await p.close();
  }
  {

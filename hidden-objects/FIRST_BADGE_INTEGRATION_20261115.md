@@ -34,3 +34,17 @@ Before turning on scoring for a particular stage/level, verify all 10 scene obje
 - 12/12 source and data structural checks passed on GitHub after the changes: 2 pilot scenes, 10 targets per pilot, bounded coordinates, never approved for rewards, correct page script order, badge gate, offline precache, 47/130 manifest counts, unaltered certification flags, first-game order for all three bands.
 - 47/47 source image Git object SHAs match the deployed repository inventory.
 - **Not verified:** real Android/iPhone/iPad playback, actual student login/state, cloud synchronization, GitHub Pages cache propagation, or production learner reward settlement. No field-test or comprehensive release claim is made.
+
+## 15 November follow-up — screenshot bug: Stage 5 first badge showed 0/0
+
+Reported symptom (Android): Khasab / Hidden Objects within Stage 5 displayed the unblocked picture, empty "Find these objects" list and `0/0` with a pending-approval notice.
+
+Cause: The **stage 5 / badge 1** candidate `variant_souq_harbour.webp` had no non-scoring polygon map, and the stage-0/1-only pilot guard excluded stage 5, even though this image was already present in the repository.
+
+Fix committed:
+- `first-badge-practice.js`: ten non-scoring, individually drawn object polygons on the correct 1599×900 Omani waterfront image (lantern, hat, bicycle, apple, bananas, camera, fish, bottle, basket, coffee pot).
+- `index.html`: explicit Stage 5 first-badge practice gate; starts 10-target round with image-aligned hints and no pending placeholder. Other unverified scenes continue failing closed.
+- `sw.js`: pre-caches stage 5 artwork and practice script; network-first refresh for Hidden Objects navigation and scripts, offline fallback retained; cache bumped so installed PWA upgrades.
+- The existing main-app badge unlock of 20 academic stars and route through the coastal arcade is unchanged; **no academic star or bonus reward writes are enabled**.
+
+QA: 15/15 source-level checks passed; object centers map one-to-one into ten non-overlapping polygons, and script compilation, stage gate, offline cache and iframe bridge were confirmed. The image was visually inspected against the exact embedded WebP and its Git blob `afb2923c70303c40e91bf28f82be485121942e50`. **This is not a live Android/iPad/browser acceptance test**, and not teacher approval of the 9-mastered+1-new curriculum requirement. Production scoring remains blocked.

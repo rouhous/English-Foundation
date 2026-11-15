@@ -10,6 +10,7 @@ assert.match(worker,/coastal-arcade\/index\.html/,'Arcade missing from offline s
 assert.match(oldGate,/MEJArcadeRelease\s*=\s*false/,'Old four-game preview must remain gated');
 assert.match(bridge,/countMaster\(stage/,'Use actual mastery to unlock');
 assert.match(bridge,/mej:coastal-init/,'Student grade and stage handshake missing');
+assert.match(bridge,/grade=stage===0\?1:Math\.max\(1,Math\.min\(12,stage\)\)/,'Game content must use active learning stage instead of registered school grade');
 assert.match(bridge,/MEJ_STUDENT_ACCESS_V1/,'Student identity linkage missing');
 assert.ok(!/service_role|SUPABASE_SERVICE_ROLE_KEY/.test(bridge),'Server secret must stay off client');
 assert.match(arcade,/mej:coastal-ready/,'Coastal iframe handshake missing');

@@ -68,7 +68,9 @@ try{
    const f=document.createElement('iframe');f.id='h';f.title='Hidden Objects review';f.style.cssText='width:100%;height:760px;border:0';f.src='/hidden-objects/index.html';document.body.append(f);
   },{stage,badge,preview});
   const frame=page.frameLocator('#h');
-  await frame.locator('.photo-board').waitFor({timeout:20000});
+  await frame.locator('.photo-board,.precision-unavailable').first().waitFor({timeout:20000}).catch(e=>{
+    throw new Error('Scene launch failed: stage='+stage+' badge='+badge+' preview='+preview+'; errors='+JSON.stringify(failures)+'; '+e.message);
+  });
   return frame;
  }
  // The reference draft contains exactly 10 preliminary polygons for the bedroom scene.

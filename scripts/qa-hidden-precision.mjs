@@ -77,7 +77,7 @@ try {
   });
   const box=await f.locator('.photo-board').boundingBox();
   await f.locator('.photo-board').click({position:{x:box.width*pos.x/100,y:box.height*pos.y/100}});
-  assert.match(await f.locator('#found').innerText(),/1 \\/ 10/,'space observation object click');
+  assert.equal((await f.locator('#found').innerText()).trim(),'1 / 10','space observation object click');
   await page.screenshot({path:'hidden-qa-space-station.png',fullPage:true});
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');

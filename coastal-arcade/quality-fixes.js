@@ -6,7 +6,7 @@
 const d=document, w=window;
 if(w.__MEJ_COASTAL_QUALITY_V1)return;
 w.__MEJ_COASTAL_QUALITY_V1=true;
-const bad=/^(?:q{3,}|x(?:yz|{2,})|z{3,}|abc|asdf|test\d*)$/i;
+const bad=/^(?:q{3,}|(?:xyz|x{3,})|z{3,}|abc|asdf|test\d*)$/i;
 const common=[
 ['معلم','teacher'],['معلمة','teacher'],['أب','father'],['أم','mother'],
 ['شمس','sun'],['قطة','cat'],['كلب','dog'],['كتاب','book'],['قلم','pen'],

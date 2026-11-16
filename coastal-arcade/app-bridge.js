@@ -1,4 +1,4 @@
-/* My English Journey — coastal badge integration v11.2 (student iframe, no mastery writes). */
+/* My English Journey — coastal badge integration v11.2 / coastal live portal v2 (student iframe, no mastery writes). */
 (()=>{'use strict';
 const places=[['خصب','Khasab'],['صحار','Sohar'],['ميناء صحار','Port of Sohar'],['مسقط','Muscat'],['ميناء مطرح','Muttrah Port'],['صور','Sur'],['الدقم','Duqm'],['جزيرة مصيرة','Masirah Island'],['جزر الديمانيات','Daymaniyat Islands'],['صلالة','Salalah']];
 const badgeRoot=new URL('./coastal-arcade/badges/',document.baseURI).href;let activeProfile=null;
@@ -84,7 +84,7 @@ function focusSelectedCoastalBadge(frame,badge){
  function apply(){
   scheduled=false;if(!frame.isConnected)return;
   // Only change the destination introduction, never the badge grid or game screens.
-  const ar=leaf(/^العربية(?:\\s|$)/),en=leaf(/^English(?:\\s|$)/);
+  const ar=leaf(/^العربية(?:\s|$)/),en=leaf(/^English(?:\s|$)/);
   const startButton=[...doc.querySelectorAll('button,a')].find(e=>/ابدأ لعبة|ابدأ اللعب|Start (?:game|playing)/i.test(label(e))&&label(e).length<115);
   if(!ar||!en||!startButton||doc.querySelector('.mej-compact-badge-intro'))return;
   const arPanel=panelFor(ar,en),enPanel=panelFor(en,ar);
@@ -129,40 +129,116 @@ function focusSelectedCoastalBadge(frame,badge){
 }
 
 /* MEJ_STUDENT_QUICKPLAY_20261116: live iframe layout only, no game/ledger changes. */
+/* MEJ_LIVE_COASTAL_PORTAL_V2 — the real coastal-arcade iframe used by students.
+   Layout only: no game engine, score ledger, pictures or theme are replaced. */
 function installStudentQuickplay(frame,clicked){
- try{
-  const doc=frame.contentDocument,win=frame.contentWindow;
-  if(!doc||!win||doc.getElementById('mej-student-quickplay-v1'))return;
-  const shell=doc.querySelector('main.shell'),games=doc.getElementById('games'),grid=doc.getElementById('gamesGrid');
-  if(!shell||!games||!grid)return;
-  const st=doc.createElement('style');st.id='mej-student-quickplay-v1';st.textContent=".topbar,.hero,.preview-tools,.summary-stats,.stations-section,.explainer,footer,#resetDemo{display:none!important}\n.shell{max-width:960px;padding:8px 10px 24px!important}\n.games-section{margin:10px 0 0!important;padding:12px!important}\n.games-section .section-head{margin-bottom:5px}.games-section .section-head .eyebrow{display:none}.games-section .section-head h2{font-size:19px}\n.games-toolbar{padding:5px 0 8px}.games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:9px}\n.games-grid .game-card.locked{display:none!important}.games-grid .game-card{padding:10px;min-height:70px}.games-grid .game-record{font-size:10px}\n.mej-quick-portal{display:flex;align-items:center;gap:11px;background:linear-gradient(120deg,#10546a,#0b354b);border:1px solid #f2d083;border-radius:16px;padding:12px}\n.mej-quick-portal img{width:105px;height:105px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 8px 7px #0008)}\n.mej-quick-text{flex:1;min-width:0}.mej-quick-text h2{font-size:clamp(19px,5vw,25px);color:#ffdf9b;margin:3px 0}.mej-quick-text p{font-size:12px;color:#d7eae6;line-height:1.5;margin:3px 0 8px}\n.mej-quick-sub{font-size:12px;color:#f9d389;font-weight:800}.mej-quick-actions{display:flex;flex-wrap:wrap;gap:6px}\n.mej-quick-actions button{border:1px solid #efcf88;background:#f5d18b;color:#1a3b45;border-radius:9px;min-height:39px;padding:7px 11px;font-size:12px;font-weight:800}\n.mej-quick-actions button:last-child{background:#ffffff13;color:#e7e4d0;border-color:#7aa9a9}.mej-quick-actions button:disabled{opacity:.5}\n@media(max-width:510px){.games-grid{grid-template-columns:1fr}.mej-quick-portal{padding:9px;gap:8px}.mej-quick-portal img{width:88px;height:88px}.games-section{padding:10px!important}.game-card .game-emoji{font-size:23px;flex-basis:43px;padding:6px 2px}}";doc.head.append(st);
-  const panel=doc.createElement('section');panel.className='mej-quick-portal';
-  const img=doc.createElement('img');img.src=badgeRoot+'coast-'+String(clicked).padStart(2,'0')+'.webp';img.alt=places[clicked-1][0];
+ const win=frame.contentWindow;
+ let doc;try{doc=frame.contentDocument}catch(_){return}
+ if(!doc||!win)return;
+ const badge=places[clicked-1];if(!badge)return;
+ let ready=false;
+ function attach(){
+  if(!frame.isConnected||!doc.documentElement)return false;
+  if(doc.getElementById('mej-student-quickplay-v2'))return true;
+  const shell=doc.querySelector('main.shell')||doc.querySelector('.shell')||doc.querySelector('main');
+  const games=doc.getElementById('games')||doc.querySelector('.games-section');
+  const grid=doc.getElementById('gamesGrid')||games?.querySelector('.games-grid');
+  if(!shell||!games||!grid||!shell.contains(games))return false;
+  ready=true;
+  const css=doc.createElement('style');css.id='mej-student-quickplay-v2';
+  css.textContent=[
+   'body.mej-student-portal .topbar,body.mej-student-portal .hero,body.mej-student-portal .preview-tools,body.mej-student-portal .summary-stats,body.mej-student-portal .stations-section,body.mej-student-portal .explainer,body.mej-student-portal footer,body.mej-student-portal #resetDemo{display:none!important}',
+   'body.mej-student-portal .shell{max-width:960px!important;padding:8px 10px 24px!important}',
+   'body.mej-student-portal .games-section{display:block!important;margin:7px 0 0!important;padding:10px!important}',
+   'body.mej-student-portal .games-section .section-head{margin-bottom:5px!important}',
+   'body.mej-student-portal .games-section .section-head .eyebrow{display:none!important}',
+   'body.mej-student-portal .games-section .section-head h2{font-size:19px!important}',
+   'body.mej-student-portal .games-toolbar{padding:3px 0 7px!important}',
+   'body.mej-student-portal .games-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))!important;gap:9px!important}',
+   'body.mej-student-portal .games-grid .game-card.locked{display:none!important}',
+   'body.mej-student-portal .games-grid .game-card{padding:9px!important;min-height:70px!important}',
+   'body.mej-student-portal .games-grid .game-record{font-size:10px!important}',
+   '.mej-quick-portal{display:flex!important;direction:rtl;align-items:center;gap:10px;background:linear-gradient(120deg,#10546a,#0b354b);border:1px solid #f2d083;border-radius:16px;padding:10px;color:#f5faf9}',
+   '.mej-quick-portal img{width:100px;height:100px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 8px 7px #0008)}',
+   '.mej-quick-text{flex:1;min-width:0}.mej-quick-text h2{font-size:clamp(17px,4.5vw,24px);color:#ffdf9b;margin:2px 0 5px}',
+   '.mej-quick-text p{font-size:12px;color:#d7eae6;line-height:1.42;margin:3px 0}',
+   '.mej-quick-text p[lang=en]{direction:ltr;text-align:left}',
+   '.mej-quick-sub{font-size:11px;color:#f9d389;font-weight:800}',
+   '.mej-quick-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}',
+   '.mej-quick-actions button{border:1px solid #efcf88;background:#f5d18b;color:#1a3b45;border-radius:9px;min-height:38px;padding:6px 11px;font-size:12px;font-weight:800;cursor:pointer}',
+   '.mej-quick-actions button:last-child{background:#ffffff13;color:#e7e4d0;border-color:#7aa9a9}',
+   '.mej-quick-actions button:disabled{opacity:.5;cursor:not-allowed}',
+   '@media(max-width:510px){body.mej-student-portal .games-grid{grid-template-columns:1fr!important}.mej-quick-portal{padding:8px;gap:8px}.mej-quick-portal img{width:83px;height:83px}body.mej-student-portal .games-section{padding:9px!important}body.mej-student-portal .game-card .game-emoji{font-size:23px}}'
+  ].join('\n');
+  doc.head.append(css);
+  const panel=doc.createElement('section');panel.className='mej-quick-portal';panel.id='mej-live-selected-badge';
+  panel.setAttribute('aria-label','الشارة المحددة والألعاب المفتوحة');
+  const img=doc.createElement('img');img.src=badgeRoot+'coast-'+String(clicked).padStart(2,'0')+'.webp';img.alt=badge[0];
   const info=doc.createElement('div');info.className='mej-quick-text';
-  const sub=doc.createElement('div');sub.className='mej-quick-sub';sub.textContent='🏅 شارتك الساحلية';
-  const h=doc.createElement('h2');h.textContent=places[clicked-1][0];
-  const p=doc.createElement('p');p.textContent='اكتشف شارتك وابدأ اللعب!';
+  const sub=doc.createElement('div');sub.className='mej-quick-sub';sub.textContent='🏅 الشارة التي اخترتها';
+  const title=doc.createElement('h2');title.textContent=badge[0]+' · '+badge[1];
+  const ar=doc.createElement('p');ar.textContent='مرحبًا بك في '+badge[0]+'! استكشف المكان أو ابدأ اللعب.';
+  const en=doc.createElement('p');en.lang='en';en.textContent='Welcome to '+badge[1]+'! Explore this destination or start playing.';
   const actions=doc.createElement('div');actions.className='mej-quick-actions';
-  const play=doc.createElement('button');play.type='button';play.textContent='🎮 العب الآن';
-  const more=doc.createElement('button');more.type='button';more.textContent='📖 اعرف عن المكان';
-  play.onclick=()=>{const api=win.MEJV11Review,s=api?.getState();if(api&&s?.unlocked>0)api.openGame(Math.min(clicked,s.unlocked))};
+  const play=doc.createElement('button');play.type='button';play.textContent='🎮 ابدأ اللعب';
+  const more=doc.createElement('button');more.type='button';more.textContent='📖 استكشف المكان';
+  play.onclick=()=>{
+   const api=win.MEJV11Review,s=api?.getState();
+   if(!api||!s||Number(s.unlocked)<clicked)return;
+   api.openGame(clicked);
+  };
   more.onclick=()=>win.MEJV11Review?.openBadge(clicked);
-  actions.append(play,more);info.append(sub,h,p,actions);panel.append(img,info);
-  shell.insertBefore(panel,shell.firstChild);shell.insertBefore(games,panel.nextSibling);
-  let busy=false;
+  actions.append(play,more);info.append(sub,title,ar,en,actions);panel.append(img,info);
+  shell.insertBefore(panel,shell.firstChild);
+  shell.insertBefore(games,panel.nextSibling);
+  doc.body.classList.add('mej-student-portal');
+  frame.dataset.mejPortal='coastal-live-v2';
   function refresh(){
-   const s=win.MEJV11Review?.getState();if(!s)return;
-   const n=Math.max(0,Math.min(10,Number(s.unlocked)||0));
-   sub.textContent=clicked<=n?'🏅 شارة مكتسبة':'🏅 وجهتك القادمة';
-   p.textContent=n?'أحسنت! لديك '+n+' '+(n===1?'لعبة مفتوحة':'ألعاب مفتوحة')+'. اختر أي لعبة.':'اجمع 20 نجمة إتقان لفتح أول لعبة.';
-   play.disabled=!n;play.textContent=n?'🎮 العب الآن':'🔒 لم تُفتح الألعاب';
-   doc.getElementById('gamesTitle').textContent='🎮 الألعاب المفتوحة';
-   [...grid.children].forEach((card,i)=>card.style.order=String(10-i));
+   if(!frame.isConnected)return;
+   const api=win.MEJV11Review,state=api?.getState();
+   if(!state)return;
+   const n=Math.max(0,Math.min(10,Number(state.unlocked)||0));
+   const allowed=clicked<=n;
+   sub.textContent=allowed?'🏅 شارة مكتسبة':'🏅 شارة للمعاينة';
+   play.disabled=!allowed;
+   play.textContent=allowed?'🎮 ابدأ اللعب':'🔒 اللعبة مقفلة';
+   const gTitle=doc.getElementById('gamesTitle');
+   if(gTitle&&gTitle.textContent!=='🎮 ألعابك المفتوحة')gTitle.textContent='🎮 ألعابك المفتوحة';
+   // The student sees the real live arcade's unlocked game cards, newest first.
+   [...grid.children].forEach((card,i)=>{
+    if(card.style.order!==String(-i))card.style.order=String(-i);
+   });
+   const empty=doc.getElementById('mej-live-no-games');
+   if(n===0&&!empty){
+    const tip=doc.createElement('p');tip.id='mej-live-no-games';
+    tip.textContent='اجمع 20 نجمة إتقان لفتح أول لعبة.';
+    games.insertBefore(tip,grid);
+   }else if(n>0&&empty)empty.remove();
   }
-  new MutationObserver(()=>{if(busy)return;busy=true;win.requestAnimationFrame(()=>{busy=false;refresh()})}).observe(grid,{childList:true});
-  win.addEventListener('message',e=>{if(e.source===win.parent&&e.origin===win.location.origin&&e.data?.type==='mej:coastal-init')win.setTimeout(refresh,90)});
-  refresh();win.setTimeout(refresh,250);win.setTimeout(refresh,1100);
- }catch(err){console.warn('Student quickplay: ',err)}
+  let pending=false;
+  new win.MutationObserver(()=>{
+   if(pending)return;
+   pending=true;win.requestAnimationFrame(()=>{pending=false;refresh()});
+  }).observe(grid,{childList:true,subtree:true});
+  win.addEventListener('message',e=>{
+   if(e.source===win.parent&&e.origin===win.location.origin&&e.data?.type==='mej:coastal-init')
+    win.setTimeout(refresh,80);
+  });
+  refresh();
+  // State can arrive asynchronously after the iframe is loaded.
+  for(const delay of [180,500,1000,1800,3000])win.setTimeout(refresh,delay);
+  try{win.scrollTo(0,0)}catch(_){}
+  return true;
+ }
+ if(attach())return;
+ // The new arcade may render its game grid after iframe load. Wait for that
+ // real screen instead of silently failing and leaving the old presentation.
+ const observer=new win.MutationObserver(()=>{
+  if(ready||!frame.isConnected){observer.disconnect();return}
+  if(attach())observer.disconnect();
+ });
+ observer.observe(doc.documentElement,{childList:true,subtree:true});
+ win.setTimeout(()=>{observer.disconnect();if(!ready&&frame.isConnected)console.warn('Live coastal game grid was not found')},15000);
 }
 
 function close(){const e=document.getElementById('mejCoastalOverlay');if(!e)return;e.remove();activeProfile=null;document.body.style.removeProperty('overflow')}
@@ -175,7 +251,7 @@ function open(stage,badge){
  const header=document.createElement('header');header.className='mej-coastal-top';
  const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
- const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2&quickplay=20261116-v1';
+ const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2&quickplay=20261116-v2';
  frame.addEventListener('load',()=>{
    focusSelectedCoastalBadge(frame,badge);
    installStudentQuickplay(frame,badge);

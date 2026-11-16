@@ -175,7 +175,7 @@ function open(stage,badge){
  const header=document.createElement('header');header.className='mej-coastal-top';
  const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
- const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2';
+ const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2&quickplay=20261116-v1';
  frame.addEventListener('load',()=>{
    focusSelectedCoastalBadge(frame,badge);
    installStudentQuickplay(frame,badge);

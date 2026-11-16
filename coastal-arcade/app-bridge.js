@@ -44,57 +44,88 @@ function compactJourney(){
  mejFoldPanel(root.querySelector('.j23-history'),'🏝️ مراحلي السابقة');
 }
 
-/* Badge arcade layout only. Reuse the existing badge art, theme, games and scoring. */
+/* Badge detail layout V2: DOM-only rearrangement, original art/theme and handlers intact. */
 function focusSelectedCoastalBadge(frame,badge){
  let doc;try{doc=frame.contentDocument}catch(_){return}
  if(!doc||!doc.body)return;
  const names=['خصب','صحار','ميناء صحار','مسقط','ميناء مطرح','صور','الدقم','جزيرة مصيرة','جزر الديمانيات','صلالة'];
  const chosen=names[badge-1];if(!chosen)return;
- let finished=false,tries=0;
- function apply(){
-  if(finished||!frame.isConnected)return;
-  tries++;
-  const headings=[...doc.querySelectorAll('h1,h2,h3,h4')];
-  const arcadeTitle=headings.find(e=>e.textContent.trim().includes('جزيرة الألعاب التفاعلية'));
-  if(!arcadeTitle){if(tries>100)done();return}
-  let games=arcadeTitle.closest('section,article,[class*="panel"],[class*="section"]')||arcadeTitle.parentElement;
-  if(!games||games===doc.body){done();return}
-  const gameButtons=[...games.querySelectorAll('button,a')].filter(e=>/العب|play/i.test((e.textContent||'').trim()));
-  if(!gameButtons.length){if(tries>100)done();return}
-  // The badge selection is already registered by the host; keep the existing game objects intact.
-  const badgePhotos=[...doc.querySelectorAll('img')].filter(e=>(e.alt||'').trim()===chosen || (e.alt||'').includes(chosen));
-  const badgePhoto=badgePhotos.find(e=>!games.contains(e))||badgePhotos[0];
-  if(!doc.getElementById('mej-arcade-layout-note')){
-   const note=doc.createElement('div');note.id='mej-arcade-layout-note';
-   note.setAttribute('dir','rtl');
-   note.style.cssText='display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid currentColor;border-radius:15px;max-width:100%;';
-   if(badgePhoto){
-    const img=badgePhoto.cloneNode(false);img.removeAttribute('id');
-    img.style.cssText='width:84px;height:84px;max-width:25%;object-fit:contain;flex-shrink:0;';
-    note.appendChild(img);
-   }
-   const copy=doc.createElement('div');
-   copy.innerHTML='<strong style="display:block;font-size:1.15em">🏅 '+safe(chosen)+'</strong><span style="display:block;margin-top:5px">🎮 مغامرتك تبدأ هنا! اختر لعبتك وابدأ.</span>';
-   note.append(copy);games.insertBefore(note,games.firstChild);
+ const style=doc.createElement('style');style.id='mej-coastal-badge-layout-v2';
+ style.textContent=`
+  .mej-compact-badge-intro{display:grid;grid-template-columns:minmax(84px,25%) minmax(0,1fr);gap:10px;align-items:start;direction:rtl;margin:4px 0 10px}
+  .mej-badge-portrait{width:100%;height:auto;max-height:155px;object-fit:contain}
+  .mej-badge-summary{display:flex;flex-direction:column;gap:7px;min-width:0}
+  .mej-badge-summary>*{min-width:0;width:100%;margin:0!important;padding:8px!important}
+  .mej-badge-summary p{font-size:clamp(12px,3.1vw,15px)!important;line-height:1.45!important;margin:4px 0!important}
+  .mej-badge-summary h2,.mej-badge-summary h3,.mej-badge-summary h4{font-size:clamp(13px,3.5vw,17px)!important;line-height:1.3!important;margin:0 0 5px!important}
+  .mej-badge-summary button{min-height:32px!important;padding:5px 9px!important;font-size:12px!important}
+  .mej-compact-game-entry{margin:10px 0!important;padding:10px 12px!important;min-height:52px!important;width:100%!important}
+  .mej-badge-detail-compact h1{font-size:clamp(19px,5vw,25px)!important;margin:0 0 7px!important;line-height:1.2!important}
+  .mej-badge-detail-compact h2{font-size:clamp(16px,4vw,20px)!important;margin:4px 0 7px!important}
+  .mej-badge-detail-compact>*,.mej-badge-detail-compact section{margin-block:8px!important}
+  .mej-badge-extras{margin-top:10px!important}
+  .mej-badge-extras>summary{cursor:pointer;padding:8px 0;font-weight:700}
+  @media(max-width:370px){.mej-compact-badge-intro{grid-template-columns:78px minmax(0,1fr);gap:7px}.mej-badge-summary>*{padding:6px!important}}
+ `;
+ doc.head.append(style);
+ let scheduled=false;
+ const label=(e)=>String(e?.textContent||'').replace(/\\s+/g,' ').trim();
+ const leaf=(pattern)=>[...doc.querySelectorAll('h1,h2,h3,h4,strong,b,span,div,p')].find(e=>e.children.length<3&&pattern.test(label(e))&&label(e).length<90);
+ function panelFor(node,exclude){
+  if(!node)return null;
+  let best=node.parentElement;
+  for(let n=node.parentElement;n&&n!==doc.body;n=n.parentElement){
+   if(exclude&&n.contains(exclude))break;
+   if(n.querySelector('button')&&label(n).length<700)best=n;
+   if(n.matches('section,article,[class*="card"],[class*="panel"]')&&label(n).length<700){best=n;break}
   }
-  // Hide navigation-heavy introductory panels on this selected-badge screen only.
-  const content=doc.querySelector('main')||doc.body;
-  const panels=[...content.querySelectorAll('section,article')];
-  for(const p of panels){
-   if(p===games||p.contains(games)||games.contains(p))continue;
-   const headingsText=[...p.querySelectorAll('h1,h2,h3')].slice(0,3).map(h=>h.textContent.trim()).join(' ');
-   if(/رحلة الشارات الساحلية|DISCOVER OMAN|رحلة تفاعلية في سواحل عُمان|مجموع مكافآت الحساب/i.test(headingsText))p.style.display='none';
-  }
-  // Bring the already-rendered games directly into view, without recreating their buttons.
-  games.style.scrollMarginTop='12px';
-  games.scrollIntoView({block:'start',behavior:'instant'});
-  done();
+  return best;
  }
- function done(){finished=true;observer.disconnect()}
- const observer=new MutationObserver(()=>queueMicrotask(apply));
+ function apply(){
+  scheduled=false;if(!frame.isConnected)return;
+  // Only change the destination introduction, never the badge grid or game screens.
+  const ar=leaf(/^العربية(?:\\s|$)/),en=leaf(/^English(?:\\s|$)/);
+  const startButton=[...doc.querySelectorAll('button,a')].find(e=>/ابدأ لعبة|ابدأ اللعب|Start (?:game|playing)/i.test(label(e))&&label(e).length<115);
+  if(!ar||!en||!startButton||doc.querySelector('.mej-compact-badge-intro'))return;
+  const arPanel=panelFor(ar,en),enPanel=panelFor(en,ar);
+  if(!arPanel||!enPanel||arPanel===enPanel||arPanel.contains(enPanel)||enPanel.contains(arPanel))return;
+  const ancestors=[];for(let n=arPanel;n;n=n.parentElement)ancestors.push(n);
+  const holder=ancestors.find(n=>n.contains(enPanel)&&n.contains(startButton)&&n!==doc.body);
+  if(!holder)return;
+  const wrapper=doc.createElement('div');wrapper.className='mej-compact-badge-intro';
+  const portrait=doc.createElement('img');portrait.className='mej-badge-portrait';
+  portrait.alt=chosen;portrait.src=badgeRoot+'coast-'+String(badge).padStart(2,'0')+'.webp';
+  const summary=doc.createElement('div');summary.className='mej-badge-summary';
+  // Preserve listening controls by moving the existing bilingual panels, not copying text.
+  arPanel.before(wrapper);wrapper.append(portrait,summary);summary.append(arPanel,enPanel);
+  holder.classList.add('mej-badge-detail-compact');
+  const title=leaf(/اكتشف هذه الوجهة/);if(title)title.style.fontSize='clamp(17px,4.5vw,23px)';
+  const ctaPanel=panelFor(startButton);
+  if(ctaPanel && ctaPanel!==holder && !ctaPanel.contains(wrapper) && !wrapper.contains(ctaPanel)){
+   ctaPanel.classList.add('mej-compact-game-entry');
+   wrapper.after(ctaPanel);
+  }else{
+   startButton.classList.add('mej-compact-game-entry');
+   wrapper.after(startButton);
+  }
+  // Information beyond the two introductory paragraphs remains accessible but collapsed.
+  const more=leaf(/أعرف أكثر عن المكان/),vocab=leaf(/مفردات من هذه المحطة/);
+  const extras=[more,vocab].map(e=>e&&panelFor(e,wrapper)).filter(e=>e&&e!==holder&&!e.contains(wrapper)&&!e.contains(startButton));
+  if(extras.length){
+   const fold=doc.createElement('details');fold.className='mej-badge-extras';
+   const caption=doc.createElement('summary');caption.textContent='📖 معلومات ومفردات إضافية';
+   fold.append(caption);
+   const target=doc.querySelector('.mej-compact-game-entry');target?.after(fold);
+   for(const e of [...new Set(extras)])fold.append(e);
+  }
+  wrapper.scrollIntoView({block:'start',behavior:'instant'});
+ }
+ const observer=new MutationObserver(()=>{if(!scheduled){scheduled=true;queueMicrotask(apply)}});
  observer.observe(doc.body,{childList:true,subtree:true});
  apply();
- setTimeout(done,12000);
+ // The observer intentionally remains active because the frame first renders the badge list,
+ // and the student chooses the destination afterwards.
+ frame.addEventListener('pagehide',()=>observer.disconnect(),{once:true});
 }
 function close(){const e=document.getElementById('mejCoastalOverlay');if(!e)return;e.remove();activeProfile=null;document.body.style.removeProperty('overflow')}
 function open(stage,badge){

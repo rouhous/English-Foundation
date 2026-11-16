@@ -8,7 +8,7 @@ const library=window.MEJPrecisionLibrary;
 if(!library||library.approvedForScoring===true)return;
 const image='assets/stage04-badge03_museum.webp', assetId='stage04-badge03_museum';
 const targetRects=[
-['carved door',20,34,21,63],
+['carved door',11,31,18,58],
 ['lantern',31,17,10,27],
 ['fort painting',52,16,24,27],
 ['historical photo',72,24,15,19],
@@ -16,7 +16,7 @@ const targetRects=[
 ['khanjar',90,30,16,32],
 ['clay pot',91,72,15,24],
 ['woven basket',66,70,17,20],
-['map',42,84,25,12],
+['map',42,86,27,19],
 ['ticket',77,88,13,9]
 ];
 const pct=n=>Math.max(.05,Math.min(99.95,+n.toFixed(3)));

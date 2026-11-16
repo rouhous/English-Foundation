@@ -62,10 +62,24 @@ try {
   assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage uses text hints');
  }
  {
-  const f=await load(12,10);
-  await f.locator('.precision-unavailable').waitFor();
-  assert.equal(await f.locator('#words li').count(),0,'genuinely missing topic image remains blocked');
+  const newScenePairs=[[8,1],[8,7],[9,8],[9,10],[10,9],[11,2],[11,6],[12,2],[12,3],[12,4],[12,5],[12,8],[12,10]];
+  for(const [stage,badge] of newScenePairs){
+   const f=await load(stage,badge);
+   assert.equal(await f.locator('#words li').count(),10,'new photo '+stage+'/'+badge+' contains ten practice objects');
+   assert.equal(await f.locator('.precision-pending').count(),0,'new scene '+stage+'/'+badge+' shows playable photo');
+   assert.match(await f.locator('#bonus').innerText(),/تدريب/,'unapproved new scene cannot credit stars');
+  }
+  const f=page.frameLocator('#qa-frame');
+  const pos=await f.locator('.photo-board').evaluate(()=>{
+   const slot=window.MEJPrecisionLibrary.sceneSlots.find(x=>x.stage===12&&x.badge===10);
+   const first=Object.values(window.MEJPrecisionLibrary.hotspots[slot.assetId])[0].points;
+   return first.reduce((a,p)=>({x:a.x+p[0]/first.length,y:a.y+p[1]/first.length}),{x:0,y:0});
+  });
+  const box=await f.locator('.photo-board').boundingBox();
+  await f.locator('.photo-board').click({position:{x:box.width*pos.x/100,y:box.height*pos.y/100}});
+  assert.match(await f.locator('#found').innerText(),/1 \\/ 10/,'space observation object click');
+  await page.screenshot({path:'hidden-qa-space-station.png',fullPage:true});
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');
- console.log('HIDDEN_PRECISION_QA_PASS: 47 original source assets; 130 scene slots; 117 practice slots; museum and airport included; 13 missing slots safely blocked');
+ console.log('HIDDEN_PRECISION_QA_PASS: 47 original + 15 new images; 130 practice slots; ten object polygons each; rewards disabled');
 }finally{await browser.close()}

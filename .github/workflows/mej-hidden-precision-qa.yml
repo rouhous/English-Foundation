@@ -20,8 +20,9 @@ jobs:
           node-version: '22'
       - name: Install browser test dependency
         run: |
-          npm install --no-save --no-package-lock playwright-core@1.56.1
-          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null; then npx playwright-core install chromium; fi
+          set -o pipefail
+          npm install --no-save --no-package-lock playwright-core@1.56.1 2>&1 | tee /tmp/mej-hidden-qa-install.log
+          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null; then npx playwright-core install chromium 2>&1 | tee -a /tmp/mej-hidden-qa-install.log; fi
       - name: Validate precision studio, original assets, and stage-specific preview
         run: |
           node --check scripts/qa-hidden-precision.mjs
@@ -46,10 +47,11 @@ jobs:
         if: failure()
         run: |
           python3 - <<'PY'
-          import json,pathlib,datetime
+          import json,pathlib,datetime,os
           logfile=pathlib.Path('/tmp/mej-hidden-qa-output.log')
-          content=logfile.read_text(errors='replace') if logfile.exists() else 'No browser test logs were captured'
-          result={'status':'failed','checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'outputTail':content[-7000:],'rewardsEnabled':False}
+          install=pathlib.Path('/tmp/mej-hidden-qa-install.log')
+          content=logfile.read_text(errors='replace') if logfile.exists() else (install.read_text(errors='replace') if install.exists() else 'No dependency or browser logs were captured')
+          result={'status':'failed','runId':os.environ.get('GITHUB_RUN_ID'),'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'outputTail':content[-7000:],'rewardsEnabled':False}
           pathlib.Path('hidden-objects/qa-preview').mkdir(exist_ok=True)
           pathlib.Path('hidden-objects/qa-preview/browser-qa-failure.json').write_text(json.dumps(result,indent=2))
           PY

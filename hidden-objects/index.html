@@ -36,6 +36,8 @@ h1{font-size:clamp(21px,4vw,32px);margin:0}.status{font-size:15px;font-weight:80
 .words li .guide-art img{width:31px;height:31px;object-fit:contain}
 .words li.guide-silhouette .guide-art{background:#d9e0d9}
 .words li.guide-silhouette .guide-art img{filter:grayscale(1) brightness(0);opacity:.88}
+.words li.guide-silhouette .guide-art .guide-emoji{filter:grayscale(1) brightness(0);opacity:1}
+.words li.guide-word-only .guide-art{display:none}
 .words li.guide-word-only{min-height:35px}
 .words li.found .guide-art{opacity:.52}
 @media(max-width:710px){.words li{flex-direction:column;gap:2px}.words li .guide-art{width:28px;height:28px;flex-basis:28px}.words li .guide-art img{width:24px;height:24px}.words li .guide-art .guide-emoji{font-size:21px}}
@@ -96,25 +98,27 @@ function guideFor(id){
  art.append(img);return art;
 }
 
+// Never use a cropped fragment of the scene for a hint.
+const HINT_ALIASES={'bananas':'banana','apples':'apple','books':'book','pencils':'pencil','bottle':'water bottle','coffee pot':'dallah','bike':'bicycle','orange juice':'juice','teddy':'teddy bear'};
+function referenceImage(word){
+ const name=String(word||'').toLowerCase().trim().replace(/[-_]+/g,' ');
+ let bank=window.MEJ_APPROVED_IMAGES;
+ try{if(!bank&&parent&&parent!==window&&parent.location.origin===location.origin)bank=parent.MEJ_APPROVED_IMAGES}catch(e){}
+ for(const key of [name,HINT_ALIASES[name],String(word||'').trim().toLowerCase()]){
+  const value=bank?.[key];const items=Array.isArray(value)?value:[value];
+  const entry=items.find(v=>v&&typeof v.src==='string'&&(v.src.startsWith('data:image/')||v.src.startsWith('./assets/')||v.src.startsWith('../assets/')));
+  if(entry)return entry.src;
+ }
+ return null;
+}
 function draftCue(id){
  if(guideMode==='word')return null;
- const candidate=photoScene?.targets?.[id],poly=candidate?.regions?.[0];
- if(!photoScene?.reviewSource||!Array.isArray(poly)||poly.length<3)return null;
- const shell=document.createElement('span');shell.className='guide-art draft-guide';shell.setAttribute('aria-hidden','true');
- const x=poly.map(p=>p[0]),y=poly.map(p=>p[1]);
- const x0=Math.min(...x),x1=Math.max(...x),y0=Math.min(...y),y1=Math.max(...y);
- const regionW=Math.max(8,x1-x0),regionH=Math.max(8,y1-y0);
- const scale=Math.min(35/regionW,35/regionH)*.82;
- const offX=(35-regionW*scale)/2,offY=(35-regionH*scale)/2;
- const mask=document.createElement('span');mask.className='draft-guide-image';
- mask.style.backgroundImage='url("'+photoScene.file+'")';
- mask.style.backgroundSize=(1599*scale)+'px '+(900*scale)+'px';
- mask.style.backgroundPosition=(offX-x0*scale)+'px '+(offY-y0*scale)+'px';
- if(guideMode==='silhouette'){
-   const pts=poly.map(([px,py])=>((offX+(px-x0)*scale)/35*100).toFixed(2)+'% '+((offY+(py-y0)*scale)/35*100).toFixed(2)+'%').join(',');
-   mask.style.clipPath='polygon('+pts+')';mask.style.filter='brightness(0)';
- }
- shell.append(mask);return shell;
+ const shell=document.createElement('span');shell.className='guide-art independent-guide';shell.setAttribute('aria-hidden','true');
+ const src=referenceImage(words[id]),symbol=visualCue(words[id],id);
+ const addSymbol=()=>{if(symbol){const span=document.createElement('span');span.className='guide-emoji';span.textContent=symbol;shell.append(span)}else{const span=document.createElement('span');span.className='guide-emoji';span.textContent='❔';shell.append(span)}};
+ if(src){const img=document.createElement('img');img.src=src;img.alt='';img.loading='lazy';img.onerror=()=>{img.remove();addSymbol()};shell.append(img)}
+ else addSymbol();
+ return shell;
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const shuffle=(arr,seed)=>{let t=seed>>>0;const rand=()=>{t=(Math.imul(t,1664525)+1013904223)>>>0;return t/4294967296};const a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -127,25 +131,25 @@ function polyDistance(x,y,p){if(polyInside(x,y,p))return 0;let min=Infinity;
  let t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/Math.max(1,dx*dx+dy*dy)));
  min=Math.min(min,Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy))}
  return min}
-function photoHit(px,py){if(!photoScene)return -1;const w=Math.max(300,el('scene').clientWidth),tolerance=Math.min(17,Math.max(6,10/Math.max(.3,w/1599))),found=new Set(session.found);
- const options=[];
+function photoHit(px,py){
+ if(!photoScene)return -1;
+ const box=el('scene').querySelector('.photo-board')?.getBoundingClientRect();
+ const tolerance=Math.min(12,Math.max(3,5*1599/Math.max(250,box?.width||600)));
+ const found=new Set(session.found),inside=[],near=[];
  photoScene.targets.forEach((target,i)=>{
-  const polys=target.regions||[];
-  const d=Math.min(...polys.map(poly=>polyDistance(px,py,poly)));
-  if(d<=tolerance){
-   const center=Math.min(...polys.map(poly=>{
-    const cx=poly.reduce((n,p)=>n+p[0],0)/poly.length,cy=poly.reduce((n,p)=>n+p[1],0)/poly.length;
-    return Math.hypot(px-cx,py-cy);
-   }));
-   options.push({i,d,center,done:found.has(session.targets[i])});
-  }
+  const polys=target.regions||[];if(!polys.length)return;
+  let direct=false,d=Infinity;
+  for(const poly of polys){if(polyInside(px,py,poly))direct=true;d=Math.min(d,polyDistance(px,py,poly))}
+  const center=Math.min(...polys.map(poly=>{
+   const cx=poly.reduce((v,p)=>v+p[0],0)/poly.length,cy=poly.reduce((v,p)=>v+p[1],0)/poly.length;
+   return Math.hypot(px-cx,py-cy)
+  }));
+  const entry={i,d,center,done:found.has(session.targets[i])};
+  if(direct)inside.push(entry);else if(d<=tolerance)near.push(entry);
  });
- // Adjacent school objects may have touching candidate rectangles.
- // The nearest object centre breaks ties, avoiding arbitrary source-order picks.
- options.sort((a,b)=>a.d-b.d||a.center-b.center||Number(a.done)-Number(b.done));
- // Do not let tapping the same found object collect a neighbouring target.
- if(options[0]?.done)return -2;
- return options[0]?.i??-1;
+ const best=a=>a.sort((x,y)=>x.center-y.center||x.d-y.d)[0];
+ const choice=best(inside)||best(near);
+ return !choice?-1:choice.done?-2:choice.i;
 }
 function board(){
  const field=el('scene');field.replaceChildren();field.className='scene mode-'+guideMode;
@@ -211,7 +215,7 @@ function renderListAndScores(){
  for(const id of session.targets){
    const li=document.createElement('li'),done=session.found.includes(id);
    li.className=(done?'found ':'')+(guideMode==='picture'?'guide-picture':guideMode==='silhouette'?'guide-silhouette':'guide-word-only');
-   const guide=photoScene?.reviewSource?draftCue(id):guideFor(id);if(guide)li.append(guide);
+   const guide=photoScene?draftCue(id):guideFor(id);if(guide)li.append(guide);
    const label=document.createElement('span');label.textContent=(done?'✓ ':'')+words[id];li.append(label);list.append(li);
  }
 
@@ -245,7 +249,8 @@ window.addEventListener('message',e=>{if(window.parent===window||e.origin!==loca
  practiceOnly=d.practice===true||d.preview===true;
  // Stage is the learner's actual island level, not merely their registered grade.
  const phase=Math.max(0,Math.min(12,Math.floor(Number(d.stage)||0)));
- guideMode=phase<=4?'picture':phase<=8?'silhouette':'word';
+ const grade=Number(d.grade)>=1&&Number(d.grade)<=12?Math.floor(Number(d.grade)):(phase===0?1:phase);
+ guideMode=grade<=4?'picture':grade<=9?'silhouette':'word';
  el('instruction').textContent=guideMode==='picture'?'🔎 ابحث عن 10 أغراض بمساعدة صورها. ثلاث محاولات للأخطاء.':guideMode==='silhouette'?'🔎 ابحث عن 10 أغراض بمساعدة الظلال والكلمات. ثلاث محاولات للأخطاء.':'🔎 اقرأ الكلمات الإنجليزية وحدد 10 أغراض داخل المشهد. ثلاث محاولات للأخطاء.';
  if(Array.isArray(d.items)&&d.items.length===16){
    words=ART.words.map((word,i)=>typeof d.items[i]?.word==='string'?d.items[i].word:word);

@@ -109,12 +109,12 @@ function fillSkills(){
  if(types.has(old))select.value=old;else select.value=''
 }
 function statusFor(row){
- if(!row)return '';
- if(row.students===1){
-  const i=row._single;
-  return i.mastered?'تم إتقان السؤال لاحقاً':'يحتاج إلى تدريب'
+ if(!row||!Number.isFinite(Number(row.students))||Number(row.students)<1)return 'بيانات غير متاحة';
+ const unresolved=Math.max(0,Math.min(Number(row.students),Number(row.unresolvedStudents)||0));
+ if(Number(row.students)===1){
+  return unresolved>0?'يحتاج إلى تدريب':'تم إتقان السؤال لاحقاً';
  }
- return row.unresolvedStudents?'يحتاج '+row.unresolvedStudents+' طالب إلى تدريب':'تم إتقان السؤال بعد الأخطاء'
+ return unresolved>0?'يحتاج '+unresolved+' طالب إلى تدريب':'تم إتقان السؤال بعد الأخطاء';
 }
 function gather(reports){
  const byId=new Map();

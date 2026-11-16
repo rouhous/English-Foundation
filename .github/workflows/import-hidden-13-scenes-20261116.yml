@@ -1,0 +1,49 @@
+name: Install 13 generated Hidden Objects scenes (practice-only)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hidden-objects/GENERATED_13_SCENES_SOURCE_20261116.json'
+      - 'scripts/import-hidden-13-scenes.py'
+      - '.github/workflows/import-hidden-13-scenes-20261116.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mej-import-hidden-13-scenes
+  cancel-in-progress: false
+jobs:
+  import-scene-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install 'Pillow>=10,<13'
+      - name: Import, resize and verify new original photos
+        run: python scripts/import-hidden-13-scenes.py
+      - name: Verify all thirteen game images
+        run: |
+          python - <<'PY'
+          import json,pathlib
+          from PIL import Image
+          base=pathlib.Path('hidden-objects/assets')
+          d=json.loads(pathlib.Path('hidden-objects/GENERATED_13_IMPORTED_AUDIT_20261116.json').read_text())
+          assert d['count']==13
+          for s in d['scenes']:
+              with Image.open(base/s['filename']) as im:assert im.size==(1599,900)
+          print('ALL_13_HIDDEN_IMAGE_FILES_VALID')
+          PY
+      - name: Commit validated scene assets without replacing original art
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hidden-objects/assets/stage*-badge*_*.webp hidden-objects/GENERATED_13_IMPORTED_AUDIT_20261116.json
+          if git diff --cached --quiet; then echo "Scene assets already installed"; exit 0; fi
+          git commit -m "assets(hidden): install 13 original Omani scene images for practice"
+          git push

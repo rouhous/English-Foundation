@@ -88,9 +88,10 @@ try{
  {
   const frame=await launch(1,2,false);
   await frame.locator('.photo-board').waitFor();
-  assert.equal(await frame.locator('#words li').count(),0,'unapproved content hidden from student');
-  assert.equal(await frame.locator('.precision-pending').count(),1,'student shown review status');
-  await page.screenshot({path:'hidden-precision-student-pending.png',fullPage:true});
+  // Practice-only sessions may use provisional scenes, but MUST NOT give mastery/bonus stars.
+  assert.equal(await frame.locator('#words li').count(),10,'ten unscored practice object clues available');
+  assert.ok((await frame.locator('#bonus').innerText()).includes('تدريب'),'provisional student practice never awards stars');
+  await page.screenshot({path:'hidden-precision-student-practice.png',fullPage:true});
  }
  for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'silhouette'],[10,'word'],[12,'word']]){
   const frame=await launch(stage,1,true);
@@ -100,9 +101,10 @@ try{
  }
  {
   const frame=await launch(8,1,true);
-  await frame.locator('.precision-unavailable').waitFor();
+  await frame.locator('.photo-board').waitFor();
   assert.ok((await frame.locator('#scene').getAttribute('class')).includes('mode-silhouette'),'stage 8 hint mode');
-  assert.equal(await frame.locator('#words li').count(),0,'do not substitute random words for unavailable scene');
+  assert.equal(await frame.locator('#words li').count(),10,'generated sustainable-city scene has ten practice-only objects');
+  assert.ok((await frame.locator('#bonus').innerText()).includes('تدريب'),'generated scene is not reward eligible');
  }
  assert.deepEqual(failures,[],'No uncaught browser errors');
  console.log('MEJ_HIDDEN_PRECISION_QA_PASS: 47 original embedded images verified; 130 slots; 30 draft polygons; ten object taps; 3 stage clue modes; no rewards');

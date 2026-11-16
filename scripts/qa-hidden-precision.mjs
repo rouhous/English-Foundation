@@ -23,7 +23,7 @@ try {
     }
     window.addEventListener('message',onReady);document.body.append(f);f.src='/hidden-objects/index.html';
    },{stage,badge});
-   const f=page.frameLocator('#qa-frame');await f.locator('.photo-board').waitFor({timeout:14000});return f;
+   const f=page.frameLocator('#qa-frame');await f.locator('.photo-board, .precision-unavailable').first().waitFor({timeout:14000});return f;
  }
  {
   const f=await load(1,2);
@@ -38,16 +38,27 @@ try {
  }
  {
   const f=await load(3,1);
-  await f.locator('.precision-pending').waitFor();
-  assert.equal(await f.locator('.spot').count(),0,'no incorrect floating art');
-  assert.equal(await f.locator('#words li').count(),0,'no invented object list');
-  await page.screenshot({path:'hidden-qa-stage3-pending.png',fullPage:true});
+  assert.equal(await f.locator('#words li').count(),10,'stage 3 source photo has ten practice objects');
+  assert.equal(await f.locator('.precision-pending').count(),0,'stage 3 no longer pending');
+  await page.screenshot({path:'hidden-qa-stage3-practice.png',fullPage:true});
+ }
+ {
+  const f=await load(4,3);
+  assert.equal(await f.locator('#words li').count(),10,'new museum photo provides ten objects');
+  assert.equal(await f.locator('.precision-pending').count(),0,'new museum photo playable');
+  assert.match(await f.locator('#bonus').innerText(),/تدريب/,'museum is practice-only');
+  await page.screenshot({path:'hidden-qa-museum-new.png',fullPage:true});
  }
  {
   const f=await load(9,1);
-  await f.locator('.precision-pending').waitFor();
-  assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage text hints');
+  assert.equal(await f.locator('#words li').count(),10,'upper-stage practice objects mapped');
+  assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage uses text hints');
+ }
+ {
+  const f=await load(12,10);
+  await f.locator('.precision-unavailable').waitFor();
+  assert.equal(await f.locator('#words li').count(),0,'genuinely missing topic image remains blocked');
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');
- console.log('HIDDEN_PRECISION_QA_PASS: 47 image assets; 130 scene slots; 3 draft mapping images; grade hints; safe unapproved scenes');
+ console.log('HIDDEN_PRECISION_QA_PASS: 47 original source assets; 130 scene slots; 115 practice slots; museum included; 15 missing slots safely blocked');
 }finally{await browser.close()}

@@ -7,6 +7,16 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
  const html=fs.readFileSync('reviews/teacher-reports.html','utf8');
  const js=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
  assert.ok(js,'Report script missing');new Function(js);
+ // Regression for the null "mastered" crash: a class-level report may have
+ // many students but only ONE respondent to a given question.
+ const statusSource=js.slice(js.indexOf('function statusFor(row){'),js.indexOf('function gather(reports){'));
+ assert.ok(statusSource.includes('function statusFor'), 'Missing diagnostic status renderer');
+ const statusFor=new Function(statusSource+';return statusFor')();
+ assert.equal(statusFor({students:1,unresolvedStudents:1,_single:null}),'يحتاج إلى تدريب');
+ assert.equal(statusFor({students:1,unresolvedStudents:0,_single:null}),'تم إتقان السؤال لاحقاً');
+ assert.equal(statusFor({students:4,unresolvedStudents:2,_single:null}),'يحتاج 2 طالب إلى تدريب');
+ assert.equal(statusFor({students:4,unresolvedStudents:0}),'تم إتقان السؤال بعد الأخطاء');
+ assert.equal(statusFor(null),'بيانات غير متاحة');
  for(const id of ['classFilter','studentFilter','skillFilter','stats','questionRows','studentRows'])assert.ok(html.includes('id="'+id+'"'));
  const dashboard=fs.readFileSync('reviews/teacher-dashboard.html','utf8');
  assert.ok(dashboard.includes('href="./teacher-reports.html"'));

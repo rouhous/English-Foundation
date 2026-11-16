@@ -87,7 +87,7 @@ let words=ART.words,images=ART.images;
 const GUIDE_EMOJI=['🍎','📚','✏️','🍌','🐚','🪢','🗝️','🍊','🧭','🏮','🍼','🗺️','🔔','🔭','🛶','👝'];
 // An independent symbol must match the *current word*; IDs can be rebound
 // to curriculum vocabulary, so the old fixed-index emojis were misleading.
-const GUIDE_ICONS={
+const GUIDE_ICONS={'water bottle':'🧴',
 apple:'🍎',book:'📖',pencil:'✏️',banana:'🍌',shell:'🐚',rope:'🪢',key:'🗝️',orange:'🍊',compass:'🧭',lantern:'🏮',bottle:'🍼',map:'🗺️',bell:'🔔',telescope:'🔭',oar:'🛶',pouch:'👝',
 pen:'🖊️',school:'🏫',teacher:'🧑‍🏫',student:'🎒',bag:'👜',backpack:'🎒',table:'🪑',chair:'🪑',desk:'🪑',door:'🚪',window:'🪟',clock:'🕰️',watch:'⌚',camera:'📷',phone:'📱',computer:'💻',laptop:'💻',tablet:'📱',keyboard:'⌨️',mouse:'🖱️',headphones:'🎧',
 ball:'⚽','football':'⚽','soccer ball':'⚽',basketball:'🏀',bike:'🚲',bicycle:'🚲',car:'🚗',bus:'🚌',train:'🚆',plane:'✈️',airplane:'✈️',boat:'⛵',ship:'🚢',dhow:'⛵',
@@ -152,7 +152,10 @@ const EXTRA_CUES={
 function draftCue(id){
  if(guideMode==='word')return null;
  const shell=document.createElement('span');shell.className='guide-art independent-guide';shell.setAttribute('aria-hidden','true');
- const src=referenceImage(words[id]),name=String(words[id]||'').toLowerCase().trim(),symbol=EXTRA_CUES[name]||visualCue(words[id],id);
+ const name=String(words[id]||'').toLowerCase().trim(),symbol=EXTRA_CUES[name]||visualCue(words[id],id);
+ // Some approved vocabulary scenes illustrate an action/person rather than the actual object.
+ // For these exact pictured objects, prefer an accurate independent symbol.
+ const src=(name==='football'||name==='water bottle')?null:referenceImage(words[id]);
  const addSymbol=()=>{if(symbol){const span=document.createElement('span');span.className='guide-emoji';span.textContent=symbol;shell.append(span)}else{const span=document.createElement('span');span.className='guide-emoji';span.textContent='❔';shell.append(span)}};
  if(src){const img=document.createElement('img');img.src=src;img.alt='';img.loading='lazy';img.onerror=()=>{img.remove();addSymbol()};shell.append(img)}
  else addSymbol();

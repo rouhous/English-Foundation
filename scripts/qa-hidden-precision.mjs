@@ -62,13 +62,19 @@ try {
   assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage uses text hints');
  }
  {
-  const newScenePairs=[[8,1],[8,7],[9,8],[9,10],[10,9],[11,2],[11,6],[12,2],[12,3],[12,4],[12,5],[12,8],[12,10]];
-  for(const [stage,badge] of newScenePairs){
-   const f=await load(stage,badge);
-   assert.equal(await f.locator('#words li').count(),10,'new photo '+stage+'/'+badge+' contains ten practice objects');
-   assert.equal(await f.locator('.precision-pending').count(),0,'new scene '+stage+'/'+badge+' shows playable photo');
-   assert.match(await f.locator('#bonus').innerText(),/تدريب/,'unapproved new scene cannot credit stars');
+  // Exhaustive visible-game coverage: all 13 stages × 10 badges, not just selected samples.
+  let checked=0;
+  for(let stage=0;stage<=12;stage++){
+   for(let badge=1;badge<=10;badge++){
+    const f=await load(stage,badge);
+    assert.equal(await f.locator('#words li').count(),10,'stage '+stage+' badge '+badge+' has ten clickable words');
+    assert.equal(await f.locator('.precision-pending').count(),0,'stage '+stage+' badge '+badge+' is not pending');
+    assert.equal(await f.locator('.precision-unavailable').count(),0,'stage '+stage+' badge '+badge+' has a valid photo');
+    assert.match(await f.locator('#bonus').innerText(),/تدريب/,'unapproved stage '+stage+' badge '+badge+' must not award stars');
+    checked++;
+   }
   }
+  assert.equal(checked,130,'all 130 planned badge scenes tested');
   const f=page.frameLocator('#qa-frame');
   const pos=await f.locator('.photo-board').evaluate(()=>{
    const slot=window.MEJPrecisionLibrary.sceneSlots.find(x=>x.stage===12&&x.badge===10);
@@ -81,5 +87,5 @@ try {
   await page.screenshot({path:'hidden-qa-space-station.png',fullPage:true});
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');
- console.log('HIDDEN_PRECISION_QA_PASS: 47 original + 15 new images; 130 practice slots; ten object polygons each; rewards disabled');
+ console.log('HIDDEN_PRECISION_QA_PASS: all 130 stage/badge iframe scenes loaded, ten target words each, original artwork intact, no rewards');
 }finally{await browser.close()}

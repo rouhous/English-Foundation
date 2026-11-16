@@ -1,0 +1,100 @@
+{
+  "version": "2026-11-16",
+  "source": "13 distinct generated Omani educational 3D images",
+  "status": "generated-source-staged-for-binary-import",
+  "scoringApproved": false,
+  "note": "Only image installation; ten target object masks remain unverified. Do not award academic or bonus stars.",
+  "scenes": [
+    {
+      "scene_id": "stage08-badge01",
+      "filename": "stage08-badge01_sustainable-city.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_033730_990212a4-4b09-4191-8716-8c4557087a51.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage08-badge07",
+      "filename": "stage08-badge07_industrial-port.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_033730_f0af7f60-4318-410e-a4c5-533b1b5d8690.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage09-badge08",
+      "filename": "stage09-badge08_medical-clinic.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_033826_b482f40a-13e8-494c-907e-00a033329b55.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage09-badge10",
+      "filename": "stage09-badge10_transport-hub.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_033730_1c67360b-d314-4918-bd58-877e3d7878a1.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage10-badge09",
+      "filename": "stage10-badge09_field-expedition.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034019_14d71049-6688-4268-ba5f-9b7afe3a2059.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage11-badge02",
+      "filename": "stage11-badge02_architecture-studio.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034055_f124bb9f-d666-433b-931e-fdff22bb19c4.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage11-badge06",
+      "filename": "stage11-badge06_astronomy-observatory.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034055_0ce52a84-d10c-4c39-b06a-afeb6d7154c8.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge02",
+      "filename": "stage12-badge02_sustainability-summit.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034055_62c86ccc-685c-4754-879f-10442a7f9d01.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge03",
+      "filename": "stage12-badge03_environmental-lab.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034141_48e4785f-b757-445a-b30c-8eb42e593e33.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge04",
+      "filename": "stage12-badge04_historical-archives.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034141_b08a2a38-c8a8-45e5-b502-dab235c41af1.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge05",
+      "filename": "stage12-badge05_smart-city-control.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034220_6375c4b3-2e14-43bb-b62c-9260bf81bef9.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge08",
+      "filename": "stage12-badge08_medical-research.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034314_8c74aaa6-c641-4fc7-8e63-cdb747056dcd.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    },
+    {
+      "scene_id": "stage12-badge10",
+      "filename": "stage12-badge10_space-station.webp",
+      "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LjgSjsDOc1ZWwUMzxLSagTlMwW/hf_20261116_034314_477249c1-c252-41ac-b723-0ac7b8cfd89f.png",
+      "role": "practice-photo",
+      "authoring_status": "generated-pending-hotspot-QA"
+    }
+  ]
+}

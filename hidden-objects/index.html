@@ -111,10 +111,27 @@ function referenceImage(word){
  }
  return null;
 }
+// Independent pictograms for the original G1–G4 target set (never scene crops).
+const EXTRA_CUES={
+'balloon':'🎈','beach ball':'🏐','beach chair':'🪑','bench':'🪑','blue bird':'🐦','blue mug':'☕','bucket':'🪣','carved door':'🚪',
+'clay pot':'🏺','coffee cup':'☕','coffee pot':'🫖','cone':'🚧','cookies':'🍪','cooking pot':'🍲','cooler':'🧊',
+'crab':'🦀','cushion':'🛋️','desk lamp':'💡','dhow model':'⛵','duck':'🦆','elephant':'🐘','faucet':'🚰','flip-flops':'🩴',
+'flower vase':'💐','fort painting':'🏰','fridge':'🧊','frisbee':'🥏','fruit basket':'🧺','fruit bowl':'🍎','giraffe':'🦒',
+'glove':'🧤','goat':'🐐','hanger':'🪝','historical photo':'🖼️','hose':'🚿','juice glass':'🧃','jump rope':'➰',
+'kettle':'🫖','khanjar':'🗡️','kite':'🪁','lifeguard tower':'🏖️','lion':'🦁','lunchbox':'🍱','menu':'📖',
+'monkey':'🐒','notebook':'📓','orange juice':'🧃','paint jars':'🎨','paintbrush':'🖌️','palette':'🎨','parrot':'🦜',
+'pencil cup':'✏️','pencil holder':'✏️','pig':'🐖','pineapple':'🍍','pink mug':'☕','pink pencil case':'🖍️',
+'puzzle':'🧩','rabbit':'🐇','red backpack':'🎒','rooster':'🐓','sandcastle':'🏰','scale':'⚖️','seashell':'🐚',
+'sheep':'🐑','ship painting':'⛵','shovel':'🛠️','slippers':'🩴','snorkel mask':'🥽','sports shoe':'👟',
+'starfish':'⭐','stopwatch':'⏱️','sunflower':'🌻','sunglasses':'🕶️','tennis racket':'🎾','ticket':'🎟️',
+'tomatoes':'🍅','toy car':'🚗','toy train':'🚂','tractor':'🚜','trophy':'🏆','vegetable basket':'🥕',
+'volleyball':'🏐','wagon':'🛒','water bottle':'🧴','watering can':'🚿','watering hose':'🚿','wheelbarrow':'🛒',
+'woven basket':'🧺','bananas':'🍌','apples':'🍎','books':'📚','pencils':'✏️'
+};
 function draftCue(id){
  if(guideMode==='word')return null;
  const shell=document.createElement('span');shell.className='guide-art independent-guide';shell.setAttribute('aria-hidden','true');
- const src=referenceImage(words[id]),symbol=visualCue(words[id],id);
+ const src=referenceImage(words[id]),name=String(words[id]||'').toLowerCase().trim(),symbol=EXTRA_CUES[name]||visualCue(words[id],id);
  const addSymbol=()=>{if(symbol){const span=document.createElement('span');span.className='guide-emoji';span.textContent=symbol;shell.append(span)}else{const span=document.createElement('span');span.className='guide-emoji';span.textContent='❔';shell.append(span)}};
  if(src){const img=document.createElement('img');img.src=src;img.alt='';img.loading='lazy';img.onerror=()=>{img.remove();addSymbol()};shell.append(img)}
  else addSymbol();

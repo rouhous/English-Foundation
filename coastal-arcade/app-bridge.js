@@ -145,7 +145,7 @@ function installStudentQuickplay(frame,clicked){
   const actions=doc.createElement('div');actions.className='mej-quick-actions';
   const play=doc.createElement('button');play.type='button';play.textContent='🎮 العب الآن';
   const more=doc.createElement('button');more.type='button';more.textContent='📖 اعرف عن المكان';
-  play.onclick=()=>{const api=win.MEJV11Review,s=api?.getState();if(api&&s?.unlocked>0)api.openGame(s.unlocked)};
+  play.onclick=()=>{const api=win.MEJV11Review,s=api?.getState();if(api&&s?.unlocked>0)api.openGame(Math.min(clicked,s.unlocked))};
   more.onclick=()=>win.MEJV11Review?.openBadge(clicked);
   actions.append(play,more);info.append(sub,h,p,actions);panel.append(img,info);
   shell.insertBefore(panel,shell.firstChild);shell.insertBefore(games,panel.nextSibling);

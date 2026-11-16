@@ -29,7 +29,8 @@ try {
   const f=await load(1,2);
   await f.locator('#words li').first().waitFor({timeout:14000});
   assert.equal(await f.locator('#words li').count(),10,'mapped words');
-  assert.equal(await f.locator('.draft-guide').count(),10,'picture hints match source');
+  assert.equal(await f.locator('.independent-guide').count(),10,'ten independent pictures, never scene crops');
+  assert.equal(await f.locator('.draft-guide-image').count(),0,'no fragments copied from the original scene');
   const box=await f.locator('.photo-board').boundingBox();
   await f.locator('.photo-board').click({position:{x:box.width*.135,y:box.height*.66}});
   await page.waitForTimeout(260);
@@ -59,7 +60,24 @@ try {
  {
   const f=await load(9,1);
   assert.equal(await f.locator('#words li').count(),10,'upper-stage practice objects mapped');
-  assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage uses text hints');
+  assert.match(await f.locator('#scene').getAttribute('class'),/mode-silhouette/,'grade 9 uses silhouettes');
+  assert.equal(await f.locator('.independent-guide').count(),10,'all grade 9 hints are independent silhouettes');
+ }
+ {
+  const f=await load(4,1);
+  assert.match(await f.locator('#scene').getAttribute('class'),/mode-picture/,'grade 4 uses separate picture hints');
+  assert.equal(await f.locator('.independent-guide').count(),10,'grade 4 uses alternative cues');
+  assert.equal(await f.locator('.draft-guide-image').count(),0,'never crop the scene');
+ }
+ {
+  const f=await load(5,1);
+  assert.match(await f.locator('#scene').getAttribute('class'),/mode-silhouette/,'grade 5 uses silhouettes');
+  assert.equal(await f.locator('.independent-guide').count(),10,'grade 5 silhouette hints present');
+ }
+ {
+  const f=await load(10,1);
+  assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'grade 10 uses word hints only');
+  assert.equal(await f.locator('.guide-art').count(),0,'grade 10 has no picture or silhouette');
  }
  {
   // Exhaustive visible-game coverage: all 13 stages × 10 badges, not just selected samples.
@@ -87,5 +105,5 @@ try {
   await page.screenshot({path:'hidden-qa-space-station.png',fullPage:true});
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');
- console.log('HIDDEN_PRECISION_QA_PASS: all 130 stage/badge iframe scenes loaded, ten target words each, original artwork intact, no rewards');
+ console.log('HIDDEN_PRECISION_QA_PASS: all 130 scenes; grades 1-4 alternate imagery, 5-9 silhouettes, 10-12 words; no photo-crop hints or rewards');
 }finally{await browser.close()}

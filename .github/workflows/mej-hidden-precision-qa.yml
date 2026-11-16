@@ -27,19 +27,36 @@ jobs:
           node --check scripts/qa-hidden-precision.mjs
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-hidden-qa-http.log 2>&1 &
           for n in 1 2 3 4 5 6 7 8 9 10; do if curl -fsS http://127.0.0.1:8765/hidden-objects/index.html >/dev/null; then break; fi; sleep 1; done
-          node scripts/qa-hidden-precision.mjs
+          set -o pipefail
+          node scripts/qa-hidden-precision.mjs 2>&1 | tee /tmp/mej-hidden-qa-output.log
       - name: Record all-scene headless browser pass in repository
         if: success()
         run: |
           python3 - <<'PY'
           import json,pathlib,datetime
           data={'version':'2026-11-16','status':'passed','scope':'All 130 hidden-object stage/badge scenes, including all 13 newly generated photos','qa':'Chromium/Playwright mobile viewport 390x844','deviceTesting':'not completed','rewardsEnabled':False,'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat()}
-          pathlib.Path('hidden-objects/BROWSER_QA_ALL130_20261116.json').write_text(json.dumps(data,indent=2)+'\\n')
+          pathlib.Path('hidden-objects/BROWSER_QA_ALL130_20261116.json').write_text(json.dumps(data,indent=2))
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add hidden-objects/BROWSER_QA_ALL130_20261116.json
           git commit -m "test(hidden): verify 130 scene browser practice [skip ci]" || true
+          git push || true
+      - name: Record browser QA failure diagnostics
+        if: failure()
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,datetime
+          logfile=pathlib.Path('/tmp/mej-hidden-qa-output.log')
+          content=logfile.read_text(errors='replace') if logfile.exists() else 'No browser test logs were captured'
+          result={'status':'failed','checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'outputTail':content[-7000:],'rewardsEnabled':False}
+          pathlib.Path('hidden-objects/qa-preview').mkdir(exist_ok=True)
+          pathlib.Path('hidden-objects/qa-preview/browser-qa-failure.json').write_text(json.dumps(result,indent=2))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hidden-objects/qa-preview/browser-qa-failure.json
+          git commit -m "test(hidden): browser QA failure log for diagnostics [skip ci]" || true
           git push || true
       - name: Save original-scene review screenshots
         if: always()

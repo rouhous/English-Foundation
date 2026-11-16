@@ -43,18 +43,71 @@ function compactJourney(){
  mejFoldPanel(recs,'🎯 تدريبات إضافية');
  mejFoldPanel(root.querySelector('.j23-history'),'🏝️ مراحلي السابقة');
 }
+
+/* Badge arcade layout only. Reuse the existing badge art, theme, games and scoring. */
+function focusSelectedCoastalBadge(frame,badge){
+ let doc;try{doc=frame.contentDocument}catch(_){return}
+ if(!doc||!doc.body)return;
+ const names=['خصب','صحار','ميناء صحار','مسقط','ميناء مطرح','صور','الدقم','جزيرة مصيرة','جزر الديمانيات','صلالة'];
+ const chosen=names[badge-1];if(!chosen)return;
+ let finished=false,tries=0;
+ function apply(){
+  if(finished||!frame.isConnected)return;
+  tries++;
+  const headings=[...doc.querySelectorAll('h1,h2,h3,h4')];
+  const arcadeTitle=headings.find(e=>e.textContent.trim().includes('جزيرة الألعاب التفاعلية'));
+  if(!arcadeTitle){if(tries>100)done();return}
+  let games=arcadeTitle.closest('section,article,[class*="panel"],[class*="section"]')||arcadeTitle.parentElement;
+  if(!games||games===doc.body){done();return}
+  const gameButtons=[...games.querySelectorAll('button,a')].filter(e=>/العب|play/i.test((e.textContent||'').trim()));
+  if(!gameButtons.length){if(tries>100)done();return}
+  // The badge selection is already registered by the host; keep the existing game objects intact.
+  const badgePhotos=[...doc.querySelectorAll('img')].filter(e=>(e.alt||'').trim()===chosen || (e.alt||'').includes(chosen));
+  const badgePhoto=badgePhotos.find(e=>!games.contains(e))||badgePhotos[0];
+  if(!doc.getElementById('mej-arcade-layout-note')){
+   const note=doc.createElement('div');note.id='mej-arcade-layout-note';
+   note.setAttribute('dir','rtl');
+   note.style.cssText='display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid currentColor;border-radius:15px;max-width:100%;';
+   if(badgePhoto){
+    const img=badgePhoto.cloneNode(false);img.removeAttribute('id');
+    img.style.cssText='width:84px;height:84px;max-width:25%;object-fit:contain;flex-shrink:0;';
+    note.appendChild(img);
+   }
+   const copy=doc.createElement('div');
+   copy.innerHTML='<strong style="display:block;font-size:1.15em">🏅 '+safe(chosen)+'</strong><span style="display:block;margin-top:5px">🎮 مغامرتك تبدأ هنا! اختر لعبتك وابدأ.</span>';
+   note.append(copy);games.insertBefore(note,games.firstChild);
+  }
+  // Hide navigation-heavy introductory panels on this selected-badge screen only.
+  const content=doc.querySelector('main')||doc.body;
+  const panels=[...content.querySelectorAll('section,article')];
+  for(const p of panels){
+   if(p===games||p.contains(games)||games.contains(p))continue;
+   const headingsText=[...p.querySelectorAll('h1,h2,h3')].slice(0,3).map(h=>h.textContent.trim()).join(' ');
+   if(/رحلة الشارات الساحلية|DISCOVER OMAN|رحلة تفاعلية في سواحل عُمان|مجموع مكافآت الحساب/i.test(headingsText))p.style.display='none';
+  }
+  // Bring the already-rendered games directly into view, without recreating their buttons.
+  games.style.scrollMarginTop='12px';
+  games.scrollIntoView({block:'start',behavior:'instant'});
+  done();
+ }
+ function done(){finished=true;observer.disconnect()}
+ const observer=new MutationObserver(()=>queueMicrotask(apply));
+ observer.observe(doc.body,{childList:true,subtree:true});
+ apply();
+ setTimeout(done,12000);
+}
 function close(){const e=document.getElementById('mejCoastalOverlay');if(!e)return;e.remove();activeProfile=null;document.body.style.removeProperty('overflow')}
 function open(stage,badge){
  if(typeof active!=='function'||typeof permitted!=='function')return;
  stage=Number(stage);badge=Number(badge);
  if(!Number.isInteger(stage)||stage<0||stage>12||!permitted(stage)||!Number.isInteger(badge)||badge<1||badge>10||(!ownerPreview()&&count(stage)<badge*20)){if(typeof toast==='function')toast('الشارة مقفلة حتى تحقق نجوم الإتقان المطلوبة.');return}
  close();const student=active();activeProfile=String(student.id||'');
- const dialog=document.createElement('div');dialog.id='mejCoastalOverlay';dialog.dataset.stage=String(stage);dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','رحلة الشارات الساحلية');
+ const dialog=document.createElement('div');dialog.id='mejCoastalOverlay';dialog.dataset.stage=String(stage);dialog.dataset.badge=String(badge);dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','رحلة الشارات الساحلية');
  const header=document.createElement('header');header.className='mej-coastal-top';
  const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
- const back=document.createElement('button');back.type='button';back.textContent='↩ العودة إلى رحلتي';back.onclick=close;header.append(name,back);
+ const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
  const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2';
- dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
+ frame.addEventListener('load',()=>focusSelectedCoastalBadge(frame,badge),{once:true});dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
 }
 window.addEventListener('mej-owner-verified',()=>{const grid=document.querySelector('#app .j23-badge-grid');if(grid)grid.removeAttribute('data-coastal-ready');repaint()});
 window.mejCoastalOpen=open;window.mejCoastalClose=close;
@@ -64,7 +117,7 @@ window.addEventListener('message',event=>{
  const stage=Number(box.dataset.stage),grade=stage===0?1:Math.max(1,Math.min(12,stage)),token=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'':'';
  const owner=ownerPreview();
  // The selected learning stage (0-12), not the student's registered school grade, sets game difficulty.
- f.contentWindow.postMessage({type:'mej:coastal-init',stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
+ f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('mejCoastalOverlay')){e.preventDefault();close()}});
 function init(){

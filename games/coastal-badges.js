@@ -31,5 +31,12 @@
    cashRewards:false,
    boatAndGemGameIncluded:false
  });
- window.MEJCoastalBadgeReference=Object.freeze({version:'2026-11-14-v11.1-reconciled',badges,gradeBands,gradeBandGames,policy});
+ function availableGamesForBadge(rawBadge,rawGrade){
+   const badge=Math.max(0,Math.min(10,Math.floor(Number(rawBadge)||0)));
+   const grade=Math.max(1,Math.min(12,Math.floor(Number(rawGrade)||1)));
+   const band=grade<=4?'junior':grade<=9?'middle':'upper';
+   // Every newly reached badge adds one game; previously unlocked games stay accessible.
+   return Object.freeze(gradeBandGames[band].slice(0,badge));
+ }
+ window.MEJCoastalBadgeReference=Object.freeze({version:'2026-11-16-cumulative-games',badges,gradeBands,gradeBandGames,availableGamesForBadge,policy});
 })();

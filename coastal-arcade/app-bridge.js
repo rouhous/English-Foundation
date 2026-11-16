@@ -168,6 +168,12 @@ function installStudentQuickplay(frame,clicked){
    '.mej-quick-actions button{border:1px solid #efcf88;background:#f5d18b;color:#1a3b45;border-radius:9px;min-height:38px;padding:6px 11px;font-size:12px;font-weight:800;cursor:pointer}',
    '.mej-quick-actions button:last-child{background:#ffffff13;color:#e7e4d0;border-color:#7aa9a9}',
    '.mej-quick-actions button:disabled{opacity:.5;cursor:not-allowed}',
+   'body.mej-student-portal #gameShade.game-shade{padding:3px!important}',
+   'body.mej-student-portal #gameShade .game-dialog{height:min(99dvh,990px)!important;max-height:99dvh!important}',
+   'body.mej-student-portal #gameShade .game-dialog-head{min-height:37px!important;padding:4px 8px!important;gap:5px!important}',
+   'body.mej-student-portal #gameShade .game-dialog-head strong{font-size:12px!important;line-height:1.2!important}',
+   'body.mej-student-portal #gameShade .game-dialog-head small{display:none!important}',
+   'body.mej-student-portal #gameShade .game-dialog-head button{min-height:30px!important;padding:5px 7px!important;font-size:11px!important}',
    '@media(max-width:510px){body.mej-student-portal .games-grid{grid-template-columns:1fr!important}.mej-quick-portal{padding:8px;gap:8px}.mej-quick-portal img{width:83px;height:83px}body.mej-student-portal .games-section{padding:9px!important}body.mej-student-portal .game-card .game-emoji{font-size:23px}}'
   ].join('\n');
   doc.head.append(css);
@@ -249,7 +255,7 @@ function open(stage,badge){
  close();const student=active();activeProfile=String(student.id||'');
  const dialog=document.createElement('div');dialog.id='mejCoastalOverlay';dialog.dataset.stage=String(stage);dialog.dataset.badge=String(badge);dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','رحلة الشارات الساحلية');
  const header=document.createElement('header');header.className='mej-coastal-top';
- const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
+ const name=document.createElement('strong');name.textContent='🏅 شارات عُمان · '+stage+' · ⭐ '+count(stage)+'/200'+(ownerPreview()?' · 🔓 معاينة':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
  const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2&quickplay=20261116-v2';
  frame.addEventListener('load',()=>{
@@ -325,6 +331,12 @@ function init(){
 #app .mej-compact-journey .mej-journey-fold:not([open])>.j23-heading,#app .mej-compact-journey .mej-journey-fold:not([open])>h2{display:none!important}
 #app .mej-compact-journey .j23-recs{margin-top:6px!important}
 @media(max-width:380px){#app .mej-compact-journey .j23-links{grid-template-columns:repeat(2,minmax(0,1fr))!important}#app .mej-compact-journey .j26-brand-title strong{font-size:14px!important}}
+`;
+ style.textContent+=`
+#mejCoastalOverlay .mej-coastal-top{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:5px!important;padding:5px 8px!important;min-height:40px!important;max-height:60px!important;flex-wrap:nowrap!important}
+#mejCoastalOverlay .mej-coastal-top strong{font-size:clamp(11px,2.8vw,14px)!important;line-height:1.25!important;margin:0!important;min-width:0}
+#mejCoastalOverlay .mej-coastal-top button{min-height:31px!important;padding:4px 8px!important;font-size:12px!important;white-space:nowrap!important}
+#mejCoastalOverlay #mejCoastalFrame{min-height:0!important}
 `;
  document.head.append(style);const app=document.getElementById('app');if(!app)return;repaint();new MutationObserver(()=>queueMicrotask(repaint)).observe(app,{childList:true,subtree:false})
 }

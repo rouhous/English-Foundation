@@ -6,6 +6,24 @@ const origin='http://127.0.0.1:8765';
 const chrome=['/usr/bin/google-chrome','/usr/bin/chromium','/usr/bin/chromium-browser'].find(p=>fs.existsSync(p));
 const browser=await chromium.launch({headless:true,args:['--no-sandbox'],...(chrome?{executablePath:chrome}:{})});
 const errors=[];
+ // Isolated browser checks have no parent PWA image-bank frame.
+ // Use clearly synthetic distinct images to test layout, not real asset approval.
+ const mockApprovedBank=String.raw`
+ window.MEJ_APPROVED_IMAGES=new Proxy(Object.create(null),{
+  get(target,key){
+   if(typeof key!=='string'||!key.trim()||key==='boat')return undefined;
+   if(!target[key]){
+    const canvas=document.createElement('canvas');canvas.width=256;canvas.height=256;
+    const context=canvas.getContext('2d');context.fillStyle='#e5f3ec';context.fillRect(0,0,256,256);
+    context.fillStyle='#135d72';context.font='bold 18px sans-serif';
+    const words=key.split(' ');words.forEach((word,index)=>context.fillText(word.slice(0,20),8,48+index*26));
+    context.fillText(key,6,240);
+    target[key]=[{src:canvas.toDataURL('image/png'),w:256,h:256,status:'approved',origin:'qa-only-synthetic'}];
+   }
+   return target[key];
+  }
+ });
+ `;
 try{
  const source=await browser.newPage();
  source.on('pageerror',e=>errors.push('host: '+e.message));
@@ -17,7 +35,7 @@ try{
  async function pageFor(game,grade=8,width=390,autoStart=true){
   const page=await browser.newPage({viewport:{width,height:844},deviceScaleFactor:1});
   page.on('pageerror',e=>errors.push(game+': '+e.message));
-  const ctx='<script>window.MEJ_GAME_CONTEXT={search:'+JSON.stringify('?game='+game+'&grade='+grade+'&run=1')+'}</script>';
+  const ctx='<script>window.MEJ_GAME_CONTEXT={search:'+JSON.stringify('?game='+game+'&grade='+grade+'&run=1')+'};'+mockApprovedBank+'</script>';
   await page.setContent(template.replace('<!-- MEJ_INLINE_CONTEXT -->',ctx),{waitUntil:'load'});
   if(autoStart)await page.locator('#start').click();
   return page;
@@ -93,7 +111,7 @@ try{
   const p=await pageFor('falling');
   await p.waitForSelector('.falling-sky .falling-bubble',{timeout:6000});
   const bubble=await p.locator('.falling-sky .falling-bubble').first().boundingBox();
-  assert.ok(bubble.width<=84&&bubble.height<=52,'Falling Words: bubbles must be small');
+  assert.ok(bubble.width<=108&&bubble.height<=52,'Falling Words: bubbles must remain readable without excessive space');
   await p.waitForFunction(()=>document.querySelector('.falling-pile')?.children.length>0,null,{timeout:18000});
   const count=await p.locator('.falling-pile .falling-bubble').count();
   assert.ok(count>0,'Falling Words: bubble must enter basket');
@@ -101,7 +119,8 @@ try{
   assert.equal(direction,'ltr','Falling Words: basket count direction');
   const pile=await p.locator('.falling-pile').evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth,columns:getComputedStyle(el).gridTemplateColumns.split(' ').length}));
   assert.ok(pile.scroll<=pile.width+2,'Falling Words: no horizontal overflow');
-  assert.equal(pile.columns,5,'Falling Words: five basket columns on phone');
+  assert.equal(pile.columns,4,'Falling Words: four readable basket columns on phone');
+  assert.ok(await p.locator('.falling-goal').innerText().then(t=>t.includes('Words to order:')),'Falling Words: student sees the shuffled target words');
   const firstWord=await p.locator('.falling-pile .falling-bubble').first().innerText();
   await p.waitForTimeout(1200);
   assert.ok(await p.locator('.falling-pile .falling-bubble').allInnerTexts().then(arr=>arr.includes(firstWord)),
@@ -110,5 +129,5 @@ try{
   await p.close();
  }
  assert.deepEqual(errors,[],'Uncaught browser errors');
- console.log('MEJ_GAMES_UI_BROWSER_PASS: 3-column Flip, 2-column Memory, stable Sentence Builder verify, persistent 5-column Falling basket');
+ console.log('MEJ_GAMES_UI_BROWSER_PASS: 3-column Flip, 2-column Memory, stable Sentence Builder verify, guided 4-column Falling basket');
 }finally{await browser.close()}

@@ -138,7 +138,19 @@ function open(stage,badge){
  const name=document.createElement('strong');name.textContent='🏅 رحلة شارات عُمان · المرحلة '+stage+' · '+count(stage)+'/200 ⭐'+(ownerPreview()?' · 🔓 Admin Preview':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
  const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2';
- frame.addEventListener('load',()=>focusSelectedCoastalBadge(frame,badge),{once:true});dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
+ frame.addEventListener('load',()=>{
+   focusSelectedCoastalBadge(frame,badge);
+   // Add quality repairs inside the same-origin arcade without altering its scoring logic.
+   try{
+     const doc=frame.contentDocument;
+     if(doc&&!doc.querySelector('script[data-mej-quality]')){
+       const script=doc.createElement('script');
+       script.dataset.mejQuality='yes';
+       script.src=new URL('./coastal-arcade/quality-fixes.js',document.baseURI).href;
+       doc.head.append(script);
+     }
+   }catch(_){}
+ },{once:true});dialog.append(header,frame);document.body.append(dialog);document.body.style.overflow='hidden';back.focus()
 }
 window.addEventListener('mej-owner-verified',()=>{const grid=document.querySelector('#app .j23-badge-grid');if(grid)grid.removeAttribute('data-coastal-ready');repaint()});
 window.mejCoastalOpen=open;window.mejCoastalClose=close;

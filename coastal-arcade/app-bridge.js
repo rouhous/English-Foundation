@@ -149,7 +149,7 @@ function installStudentQuickplay(frame,clicked){
   css.textContent=[
    'body.mej-student-portal .topbar,body.mej-student-portal .hero,body.mej-student-portal .preview-tools,body.mej-student-portal .summary-stats,body.mej-student-portal .stations-section,body.mej-student-portal .explainer,body.mej-student-portal footer,body.mej-student-portal #resetDemo{display:none!important}',
    'body.mej-student-portal .shell{max-width:960px!important;padding:8px 10px 24px!important}',
-   'body.mej-student-portal .games-section{display:block!important;margin:7px 0 0!important;padding:10px!important}',
+   'body.mej-student-portal .games-section{margin:7px 0 0!important;padding:10px!important}',
    'body.mej-student-portal .games-section .section-head{margin-bottom:5px!important}',
    'body.mej-student-portal .games-section .section-head .eyebrow{display:none!important}',
    'body.mej-student-portal .games-section .section-head h2{font-size:19px!important}',

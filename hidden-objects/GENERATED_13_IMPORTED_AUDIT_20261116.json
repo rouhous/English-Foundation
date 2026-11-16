@@ -1,0 +1,125 @@
+{
+  "version": "2026-11-16",
+  "count": 13,
+  "originals_preserved": true,
+  "bonus_scoring_enabled": false,
+  "scenes": [
+    {
+      "scene_id": "stage08-badge01",
+      "filename": "stage08-badge01_sustainable-city.webp",
+      "sha256": "df0b860ab5be84250998f388bd2d48345c46e07e80e544a3e0380012cc916213",
+      "size_bytes": 211496,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage08-badge07",
+      "filename": "stage08-badge07_industrial-port.webp",
+      "sha256": "70688a1c062858ae2cc943926b9384ac8a0308fa5fc2748752efa20ae960d52f",
+      "size_bytes": 179822,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage09-badge08",
+      "filename": "stage09-badge08_medical-clinic.webp",
+      "sha256": "f7672f37a6bb465c9efe9cdd0c399a8f712089bb4fcbf9c7f561a8490f51462b",
+      "size_bytes": 98716,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage09-badge10",
+      "filename": "stage09-badge10_transport-hub.webp",
+      "sha256": "1e5b332d4c791f75ad66a8e6b87819617195d640c44a4aa35ef1aba316ef470a",
+      "size_bytes": 153090,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage10-badge09",
+      "filename": "stage10-badge09_field-expedition.webp",
+      "sha256": "e814780864605c72d11d3bdf72442af2f6205d6e20deff5fe20453412137855e",
+      "size_bytes": 205510,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage11-badge02",
+      "filename": "stage11-badge02_architecture-studio.webp",
+      "sha256": "ccf08ce18c4ee94fe40aa3442236dcdca5e68b1bc86cc66eb5c00fa750b00683",
+      "size_bytes": 143678,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage11-badge06",
+      "filename": "stage11-badge06_astronomy-observatory.webp",
+      "sha256": "70efb9d9b426388a119dcce6b03b855ba34b104fd8b5ac34eaf5fd2a5265385e",
+      "size_bytes": 140772,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge02",
+      "filename": "stage12-badge02_sustainability-summit.webp",
+      "sha256": "1f23ea28c714e083860b64761d5062d563f6d5f344a9fa41f6a4c7cf55d647b2",
+      "size_bytes": 110246,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge03",
+      "filename": "stage12-badge03_environmental-lab.webp",
+      "sha256": "fe9f2daaadbab8e1461db97ce7fb4328e35f649730858f5a40ee1c63d519c9bd",
+      "size_bytes": 117734,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge04",
+      "filename": "stage12-badge04_historical-archives.webp",
+      "sha256": "8773ebf917b1bd454f3f41a856b7da7702c7f348e35824c4d89d4676da57d91a",
+      "size_bytes": 193568,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge05",
+      "filename": "stage12-badge05_smart-city-control.webp",
+      "sha256": "9d333db8d733fb42c945137f6e72ebd1d8719a33ad224eb5140d843f119904de",
+      "size_bytes": 137972,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge08",
+      "filename": "stage12-badge08_medical-research.webp",
+      "sha256": "9de89a3aa4eff55e44033dcd818471a9c899e6c2b2ba7fe904f9ef19024f69ca",
+      "size_bytes": 102658,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    },
+    {
+      "scene_id": "stage12-badge10",
+      "filename": "stage12-badge10_space-station.webp",
+      "sha256": "3829c484a216ce76e3700069a6344bdcbb1466c17870d454d6d70b64c82c2356",
+      "size_bytes": 140906,
+      "width": 1599,
+      "height": 900,
+      "review_status": "image-installed-hotspots-unverified"
+    }
+  ]
+}

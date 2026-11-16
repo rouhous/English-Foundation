@@ -35,7 +35,7 @@ assert.ok(Object.values(draft.hotspots).every(o=>Object.values(o).every(x=>x.sta
 const exec=fs.readFileSync(root+'/hidden-objects/precision-v3-client.js','utf8');
 assert.ok(exec.includes('approvedForScoring'), 'Review-only imported library');
 const source=fs.readFileSync(root+'/hidden-objects/index.html','utf8');
-assert.ok(source.includes("guideMode=phase<=4?'picture':phase<=8?'silhouette':'word'"),'Stage-dependent picture / silhouette / word modes');
+assert.ok(source.includes("guideMode=grade<=4?'picture':grade<=9?'silhouette':'word'"),'Stage-dependent picture / silhouette / word modes');
 const arcade=fs.readFileSync(root+'/coastal-arcade/index.html','utf8');
 assert.ok(arcade.includes("lower:[['hidden'"),'Hidden Objects first for lower stages');
 assert.ok(arcade.includes("middle:[['hidden'"),'Hidden Objects first for middle stages');
@@ -92,7 +92,7 @@ try{
   assert.equal(await frame.locator('.precision-pending').count(),1,'student shown review status');
   await page.screenshot({path:'hidden-precision-student-pending.png',fullPage:true});
  }
- for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'word'],[12,'word']]){
+ for(const [stage,kind] of [[3,'picture'],[5,'silhouette'],[9,'silhouette'],[10,'word'],[12,'word']]){
   const frame=await launch(stage,1,true);
   const className=await frame.locator('#scene').getAttribute('class');
   assert.ok(className.includes('mode-'+kind),'stage '+stage+' hint '+kind);

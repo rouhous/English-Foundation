@@ -2,10 +2,10 @@
   "version": "2026-11-16",
   "status": "passed",
   "testedScenes": 130,
-  "sourceCommit": "5499f5c029ce926f9f38d7ce903ba3b92949d25e",
+  "sourceCommit": "cf303f07a6d7a5cdcf3fd4846ec0fb48029a0b6e",
   "scope": "Every one of the 130 hidden-object stage/badge scenes in Chromium at 390x844",
   "qa": "Chromium/Playwright viewport 390x844",
   "deviceTesting": "not completed",
   "rewardsEnabled": false,
-  "checkedAt": "2026-11-16T04:08:45.131747+00:00"
+  "checkedAt": "2026-11-16T15:59:24.047404+00:00"
 }

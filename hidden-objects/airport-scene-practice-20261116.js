@@ -5,7 +5,7 @@
  const lib=window.MEJPrecisionLibrary;if(!lib||lib.approvedForScoring===true)return;
  const assetId='stage08-badge05_airport',image='assets/stage08-badge05_airport.webp';
  const rects=[
- ['airplane',37,43,28,18],
+ ['airplane',40,39,19,12],
  ['control tower',19,28,8,23],
  ['boarding pass',22,85,14,9],
  ['passport',30,92,17,12],
@@ -14,7 +14,7 @@
  ['security scanner',91,52,17,30],
  ['departure board',84,14,24,22],
  ['check-in desk',81,39,20,23],
- ['backpack',43,55,8,14]
+ ['backpack',45,55,6,14]
  ];
  const clip=v=>Math.max(.05,Math.min(99.95,+v.toFixed(3)));const map={};
  for(const [word,x,y,w,h] of rects){

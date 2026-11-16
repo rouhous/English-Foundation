@@ -1,0 +1,453 @@
+{
+  "version": "2026-11-16",
+  "total": 15,
+  "preexistingScenes": 130,
+  "sourceImagesKept": 47,
+  "newMuseumAsset": "assets/stage04-badge03_museum.webp",
+  "museumSlotsRecovered": 3,
+  "remainingScenes": [
+    {
+      "sceneId": "stage08-badge01",
+      "stage": 8,
+      "badge": 1,
+      "theme": "sustainable city",
+      "setting": "A modern sustainable Omani coastal city with low-carbon transport and green infrastructure",
+      "requiredVisibleObjects": [
+        "solar panel",
+        "electric bus",
+        "bicycle",
+        "wind turbine",
+        "recycling bin",
+        "water tank",
+        "charging station",
+        "tree",
+        "smart streetlight",
+        "roof garden"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage08-badge05",
+      "stage": 8,
+      "badge": 5,
+      "theme": "airport",
+      "setting": "A contemporary Oman airport terminal with a wide view of an airplane at the gate",
+      "requiredVisibleObjects": [
+        "suitcase",
+        "airplane",
+        "boarding pass",
+        "departure board",
+        "check-in desk",
+        "passport",
+        "luggage trolley",
+        "security scanner",
+        "chair",
+        "gate sign"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage08-badge07",
+      "stage": 8,
+      "badge": 7,
+      "theme": "industrial port",
+      "setting": "A modern industrial seaport in Sohar with safely separated dockside equipment",
+      "requiredVisibleObjects": [
+        "cargo crane",
+        "shipping container",
+        "safety helmet",
+        "cargo ship",
+        "forklift",
+        "life jacket",
+        "dock",
+        "warning sign",
+        "truck",
+        "radio"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage09-badge07",
+      "stage": 9,
+      "badge": 7,
+      "theme": "airport operations",
+      "setting": "Omani airport aircraft ground-operation area viewed from the terminal safely",
+      "requiredVisibleObjects": [
+        "control tower",
+        "airplane",
+        "fuel truck",
+        "radio headset",
+        "luggage cart",
+        "runway lights",
+        "boarding stairs",
+        "safety vest",
+        "departure board",
+        "traffic cone"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage09-badge08",
+      "stage": 9,
+      "badge": 8,
+      "theme": "medical centre",
+      "setting": "A bright friendly health clinic and medical examination room in Oman",
+      "requiredVisibleObjects": [
+        "stethoscope",
+        "wheelchair",
+        "medical chart",
+        "thermometer",
+        "blood pressure monitor",
+        "examination bed",
+        "first aid kit",
+        "medicine cabinet",
+        "hand sanitiser",
+        "gloves"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage09-badge10",
+      "stage": 9,
+      "badge": 10,
+      "theme": "urban transport hub",
+      "setting": "An accessible clean urban bus and transport station in Oman",
+      "requiredVisibleObjects": [
+        "bus stop",
+        "ticket machine",
+        "electric bus",
+        "bicycle rack",
+        "route map",
+        "information screen",
+        "charging station",
+        "crosswalk",
+        "traffic light",
+        "bench"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage10-badge09",
+      "stage": 10,
+      "badge": 9,
+      "theme": "scientific expedition",
+      "setting": "Scientific field researchers' base camp in an Omani wadi",
+      "requiredVisibleObjects": [
+        "compass",
+        "field notebook",
+        "sample container",
+        "magnifying glass",
+        "GPS device",
+        "backpack",
+        "camera",
+        "binoculars",
+        "water bottle",
+        "measuring tape"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage11-badge02",
+      "stage": 11,
+      "badge": 2,
+      "theme": "sustainable architecture",
+      "setting": "An Omani architecture studio showing sustainable green building design",
+      "requiredVisibleObjects": [
+        "scale model",
+        "blueprint",
+        "solar panel",
+        "ruler",
+        "tablet",
+        "material sample",
+        "insulation board",
+        "wind model",
+        "recycled brick",
+        "measuring tape"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage11-badge06",
+      "stage": 11,
+      "badge": 6,
+      "theme": "astronomy observatory",
+      "setting": "A nighttime astronomy observatory in the Omani mountains with equipment indoors",
+      "requiredVisibleObjects": [
+        "telescope",
+        "star chart",
+        "moon model",
+        "camera",
+        "tripod",
+        "control screen",
+        "meteorite sample",
+        "lens",
+        "astronomy book",
+        "planet model"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge02",
+      "stage": 12,
+      "badge": 2,
+      "theme": "global sustainability summit",
+      "setting": "An international sustainability summit exhibition hosted in Oman",
+      "requiredVisibleObjects": [
+        "conference badge",
+        "microphone",
+        "world map",
+        "presentation screen",
+        "recycling symbol",
+        "nameplate",
+        "report",
+        "solar panel model",
+        "reusable bottle",
+        "translation headset"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge03",
+      "stage": 12,
+      "badge": 3,
+      "theme": "environmental engineering",
+      "setting": "Environmental engineering lab with water treatment experiment",
+      "requiredVisibleObjects": [
+        "air quality sensor",
+        "water sample",
+        "filtration unit",
+        "solar model",
+        "microcontroller",
+        "pH meter",
+        "safety goggles",
+        "lab report",
+        "recycling bin",
+        "microscope"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge04",
+      "stage": 12,
+      "badge": 4,
+      "theme": "historical archives",
+      "setting": "Historical archive preservation and manuscript restoration workshop in Oman",
+      "requiredVisibleObjects": [
+        "manuscript",
+        "archive box",
+        "magnifying glass",
+        "document scanner",
+        "gloves",
+        "catalogue",
+        "restoration brush",
+        "historical map",
+        "photograph",
+        "lamp"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge05",
+      "stage": 12,
+      "badge": 5,
+      "theme": "smart city command room",
+      "setting": "Smart-city operations command room with infrastructure monitoring",
+      "requiredVisibleObjects": [
+        "control dashboard",
+        "traffic camera",
+        "city map",
+        "energy monitor",
+        "weather sensor",
+        "server rack",
+        "transport screen",
+        "emergency button",
+        "tablet",
+        "network router"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge08",
+      "stage": 12,
+      "badge": 8,
+      "theme": "medical science laboratory",
+      "setting": "Medical-science research laboratory with diagnostic instruments",
+      "requiredVisibleObjects": [
+        "microscope",
+        "test tubes",
+        "centrifuge",
+        "lab coat",
+        "pipette",
+        "sample tray",
+        "safety goggles",
+        "medical monitor",
+        "syringe",
+        "laboratory notebook"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    },
+    {
+      "sceneId": "stage12-badge10",
+      "stage": 12,
+      "badge": 10,
+      "theme": "space observation station",
+      "setting": "Omani desert space and astronomy observation facility",
+      "requiredVisibleObjects": [
+        "telescope",
+        "star tracker",
+        "satellite model",
+        "lunar map",
+        "computer screen",
+        "camera lens",
+        "astronomy chart",
+        "antenna",
+        "planet model",
+        "observatory dome"
+      ],
+      "technical": {
+        "minWidth": 1600,
+        "minHeight": 900,
+        "aspectRatio": "16:9",
+        "noTextOnImage": true,
+        "allTargetsSpatiallySeparated": true
+      },
+      "status": "awaiting-original-art",
+      "curriculumApproved": false,
+      "studentScoringAllowed": false
+    }
+  ],
+  "qualityGates": [
+    "Create a distinct topic-matched scene",
+    "Visually confirm all ten target objects are actually visible",
+    "Draw exact polygon regions against final exported pixels",
+    "Check 9 already learned plus one new challenge word against the exact learner and curriculum",
+    "Check Android and iOS tapping offline",
+    "Only after authoritative server confirmation may bonus stars be granted"
+  ]
+}

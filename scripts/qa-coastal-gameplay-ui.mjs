@@ -87,11 +87,11 @@ try{
  }
  {
   const p=await pageFor('memory');
-  await checkGrid(p,'#scene .memory-grid .tile',2,6,'Memory Cards');
+  await checkGrid(p,'#scene .memory-grid .tile',2,3,'Memory Cards');
   await p.locator('.memory-start').click();
   const first=await p.locator('.memory-grid .memory-number').first().innerText();
   assert.equal(first,'1','Memory: reveal numbered backs');
-  await checkGrid(p,'#scene .memory-grid .tile',2,6,'Memory Cards hidden');
+  await checkGrid(p,'#scene .memory-grid .tile',2,3,'Memory Cards hidden');
   await p.screenshot({path:'arcade-qa-memory-mobile.png',fullPage:true});
   await p.close();
  }

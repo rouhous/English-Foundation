@@ -1,0 +1,9 @@
+{
+  "version": "2026-11-16",
+  "status": "passed",
+  "scope": "All 130 hidden-object stage/badge scenes, including all 13 newly generated photos",
+  "qa": "Chromium/Playwright mobile viewport 390x844",
+  "deviceTesting": "not completed",
+  "rewardsEnabled": false,
+  "checkedAt": "2026-11-16T04:04:55.639209+00:00"
+}

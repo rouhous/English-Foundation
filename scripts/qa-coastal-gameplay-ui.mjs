@@ -125,6 +125,28 @@ try{
   await p.waitForTimeout(1200);
   assert.ok(await p.locator('.falling-pile .falling-bubble').allInnerTexts().then(arr=>arr.includes(firstWord)),
    'Falling Words: unselected bubbles remain in the basket');
+  // Gameplay acceptance regression: complete a real curriculum sentence using
+  // the same on-screen word buttons as the student (no scoring shortcuts).
+  const targetWords=await p.evaluate(()=>{
+   const goal=document.querySelector('.falling-goal')?.textContent||'';
+   const requested=goal.replace(/^Words to order:\s*/,'').split('•').map(w=>w.trim()).filter(Boolean);
+   const compare=a=>[...a].sort().join('\u0001');
+   const clean=x=>String(x).replace(/[.?!,;:]/g,'').split(/\s+/).filter(Boolean);
+   return window.MEJGradeBanks.forGrade(8).sentences
+    .map(clean).find(words=>compare(words)===compare(requested))||null;
+  });
+  assert.ok(targetWords?.length>=3,'Falling Words: shuffled clue must match a real curriculum sentence');
+  for(const word of targetWords){
+   await p.waitForFunction(w=>[...document.querySelectorAll('.falling-bubble')]
+    .some(el=>el.textContent.trim()===w),word,{timeout:30000});
+   await p.evaluate(w=>{
+    const button=[...document.querySelectorAll('.falling-bubble')]
+      .find(el=>el.textContent.trim()===w);
+    button.click();
+   },word);
+  }
+  assert.ok((await p.locator('.falling-round').innerText()).includes('2 / 10'),
+    'A correctly ordered Falling Words sentence must be accepted and advance to sentence 2');
   await p.screenshot({path:'arcade-qa-falling-mobile.png',fullPage:true});
   await p.close();
  }

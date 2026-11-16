@@ -6,6 +6,8 @@ on:
       - 'hidden-objects/GENERATED_13_SCENES_SOURCE_20261116.json'
       - 'scripts/import-hidden-13-scenes.py'
       - 'scripts/export-hidden-13-qa.py'
+      - 'scripts/export-hidden-13-overlay-qa.py'
+      - 'hidden-objects/GENERATED_13_TARGET_DRAFTS_20261116.json'
       - '.github/workflows/import-hidden-13-scenes-20261116.yml'
   workflow_dispatch:
 permissions:
@@ -30,6 +32,8 @@ jobs:
         run: python scripts/import-hidden-13-scenes.py
       - name: Build four compact scene review sheets
         run: python scripts/export-hidden-13-qa.py
+      - name: Render tentative object rectangles for image review
+        run: python scripts/export-hidden-13-overlay-qa.py
       - name: Verify all thirteen game images
         run: |
           python - <<'PY'

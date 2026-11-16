@@ -50,6 +50,13 @@ try {
   await page.screenshot({path:'hidden-qa-museum-new.png',fullPage:true});
  }
  {
+  const f=await load(8,5);
+  assert.equal(await f.locator('#words li').count(),10,'new airport picture has ten practice targets');
+  assert.equal(await f.locator('.precision-pending').count(),0,'airport scene is not pending');
+  assert.match(await f.locator('#bonus').innerText(),/تدريب/,'airport awards blocked');
+  await page.screenshot({path:'hidden-qa-airport-new.png',fullPage:true});
+ }
+ {
   const f=await load(9,1);
   assert.equal(await f.locator('#words li').count(),10,'upper-stage practice objects mapped');
   assert.match(await f.locator('#scene').getAttribute('class'),/mode-word/,'upper stage uses text hints');
@@ -60,5 +67,5 @@ try {
   assert.equal(await f.locator('#words li').count(),0,'genuinely missing topic image remains blocked');
  }
  assert.deepEqual(errors,[],'no browser JS exceptions');
- console.log('HIDDEN_PRECISION_QA_PASS: 47 original source assets; 130 scene slots; 115 practice slots; museum included; 15 missing slots safely blocked');
+ console.log('HIDDEN_PRECISION_QA_PASS: 47 original source assets; 130 scene slots; 117 practice slots; museum and airport included; 13 missing slots safely blocked');
 }finally{await browser.close()}

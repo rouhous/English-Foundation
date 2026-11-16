@@ -8,7 +8,7 @@ on:
       - '.github/workflows/mej-hidden-precision-qa.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -28,6 +28,19 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mej-hidden-qa-http.log 2>&1 &
           for n in 1 2 3 4 5 6 7 8 9 10; do if curl -fsS http://127.0.0.1:8765/hidden-objects/index.html >/dev/null; then break; fi; sleep 1; done
           node scripts/qa-hidden-precision.mjs
+      - name: Record all-scene headless browser pass in repository
+        if: success()
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,datetime
+          data={'version':'2026-11-16','status':'passed','scope':'All 130 hidden-object stage/badge scenes, including all 13 newly generated photos','qa':'Chromium/Playwright mobile viewport 390x844','deviceTesting':'not completed','rewardsEnabled':False,'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+          pathlib.Path('hidden-objects/BROWSER_QA_ALL130_20261116.json').write_text(json.dumps(data,indent=2)+'\\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hidden-objects/BROWSER_QA_ALL130_20261116.json
+          git commit -m "test(hidden): verify 130 scene browser practice [skip ci]" || true
+          git push || true
       - name: Save original-scene review screenshots
         if: always()
         uses: actions/upload-artifact@v4

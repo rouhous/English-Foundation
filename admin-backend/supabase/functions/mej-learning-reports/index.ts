@@ -24,11 +24,32 @@ async function identity(req:Request){
  return {email:payload.email.toLowerCase(),sub:payload.sub};
 }
 function getPart(item:unknown,id:string){return item&&typeof item==='object'&&!Array.isArray(item)?(item as Record<string,unknown>)[id]:null}
+// Read-only activity for the current Oman school week. Existing day-only
+// records are approximate at Sunday midnight; new "at" timestamps are exact.
+function omanWeek(now=Date.now()){
+ const off=4*60*60*1000,d=new Date(now+off);
+ const start=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-d.getUTCDay(),0,1)-off;
+ return {start,end:start+7*86400000-60000,
+  first:new Date(start+off).toISOString().slice(0,10),
+  last:new Date(start+off+6*86400000).toISOString().slice(0,10)};
+}
+function withinOmanWeek(item:unknown,week:ReturnType<typeof omanWeek>){
+ if(!item||typeof item!=='object'||Array.isArray(item))return false;
+ const x=item as Record<string,unknown>;
+ if(typeof x.at==='string'){const ms=Date.parse(x.at);return Number.isFinite(ms)&&ms>=week.start&&ms<week.end}
+ return typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)&&x.day>=week.first&&x.day<=week.last;
+}
+
 function studentReport(row:Record<string,unknown>){
  const state=(row.private_state&&typeof row.private_state==='object'&&!Array.isArray(row.private_state)?row.private_state:{}) as Record<string,unknown>;
  const wrong=(state.wrong&&typeof state.wrong==='object'&&!Array.isArray(state.wrong)?state.wrong:{}) as Record<string,unknown>;
  const correct=(state.correct&&typeof state.correct==='object'&&!Array.isArray(state.correct)?state.correct:{}) as Record<string,unknown>;
  const log=Array.isArray(state.activity)?state.activity.slice(-1500):[];
+ const window=omanWeek();
+ const currentWeek=log.filter(x=>withinOmanWeek(x,window));
+ const weeklyCorrect=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===true).length;
+ const weeklyWrong=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===false).length;
+
  const lastMistake=new Map<string,string>();
  const days=new Map<string,{day:string,wrong:number,correct:number}>();
  let loggedWrong=0,loggedCorrect=0;
@@ -60,6 +81,9 @@ function studentReport(row:Record<string,unknown>){
  return {studentRef:row.student_ref,studentName:String(row.student_name||'طالب').slice(0,120),
   className:String(row.class_name||'').slice(0,40),grade:max(row.grade,12),
   stars:max(row.stars,3250),attempts:max(row.attempts,10000000),
+  weeklyAttempts:currentWeek.length,weeklyCorrect,weeklyWrong,
+  weeklyStart:window.first,weeklyEnd:window.last,
+  weeklyLegacyApproximate:currentWeek.some(x=>!(x as Record<string,unknown>)?.at),
   correctAnswers:max(row.correct_answers,10000000),updatedAt:row.updated_at||null,
   wrongAttempts,repeatItems,unresolved,masteredAfter,
   loggedWrong,loggedCorrect,historyCoverage:'latest_1500_events_max',

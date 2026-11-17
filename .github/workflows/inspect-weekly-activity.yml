@@ -1,0 +1,24 @@
+name: Inspect MEJ weekly activity hooks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/inspect-weekly-activity.cjs"
+      - ".github/workflows/inspect-weekly-activity.yml"
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inspect-weekly-activity.cjs
+      - name: Commit inspection
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/mej-week-activity-inspection.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Inspect app weekly activity timestamp hooks"
+            git push origin HEAD:main
+          fi

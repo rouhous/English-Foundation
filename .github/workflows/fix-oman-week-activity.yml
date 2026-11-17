@@ -23,5 +23,9 @@ jobs:
           git add index.html
           if ! git diff --staged --quiet; then
             git commit -m "Use Oman Sunday-to-Saturday weekly activity and precise attempt timestamps"
+            # Other updates may land while this workflow is running.
+            # Rebase without forcing or overwriting their commits.
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi

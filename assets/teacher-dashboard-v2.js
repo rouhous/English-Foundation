@@ -49,14 +49,14 @@ function normalize(data){
  const live=(data.students||[]).map(x=>({
    id:'live:'+x.student_ref,kind:'live',name:String(x.student_name||'طالب'),className:key(x.class_name),
    grade:integer(x.grade),level:integer(x.highest_level),stars:integer(x.stars),attempts:integer(x.attempts),
-   correct:integer(x.correct_answers),mastered:integer(x.mastered_items),weekly:integer(x.weekly_attempts),
+   correct:integer(x.correct_answers),mastered:integer(x.mastered_items),weekly:integer(x.weekly_attempts),weekStart:x.weekly_window_start||'',weekEnd:x.weekly_window_end||'',weekApproximate:x.weekly_legacy_dates_approximate===true,
    score:integer(x.attempts)?Math.round(100*Number(x.correct_answers||0)/Number(x.attempts)):null,
    levelStats:Array.isArray(x.level_stats)?x.level_stats:[],updated:x.updated_at||'',diagnostic:x.diagnostic_done===true
  }));
  const imports=(data.importedTrialStudents||[]).map(x=>({
    id:'import:'+x.id,kind:'trial',name:String(x.student_name||'STAGING TEST'),className:key(x.class_name),
    grade:integer(x.grade),level:integer(x.highest_level),stars:integer(x.stars),attempts:0,correct:0,
-   mastered:0,weekly:integer(x.weekly_attempts),score:null,mastery:percent(x.mastery_percent),
+   mastered:0,weekly:null,score:null,mastery:percent(x.mastery_percent),
    levelStats:[],updated:'',sourceTab:x.source_tab||'',diagnostic:false
  }));
  return [...live,...imports]
@@ -73,6 +73,8 @@ function groupClasses(students){
 function metric(name,value){const e=node('div','metric');e.append(node('strong','',safe(value)),node('small','',name));return e}
 function metrics(target,items){clear(target);items.forEach(([title,value])=>target.append(metric(title,value)))}
 function studentLabel(s){return s.kind==='trial'?'تجريبي مستورد':'متزامن من التطبيق'}
+function currentWeekLabel(s){return s.weekStart&&s.weekEnd?s.weekStart+' — '+s.weekEnd:'الأحد 00:01 — السبت 23:59 (توقيت عُمان)'}
+function weeklyText(s){return s.weekly===null?'غير متاح':String(s.weekly)+' محاولة'}
 // The cloud snapshot stores per-stage mastery as "mastered" (out of 200).
 // Never infer an individual stage from the overall stars; the total may
 // include awards that have not been attributed to a particular stage.
@@ -283,7 +285,7 @@ function renderList(students){
  for(const s of shown){
    const b=node('button','student');b.type='button';
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
-   b.append(node('span','', 'المستوى '+s.level+' · ⭐ '+s.stars+' · نشاط الأسبوع '+s.weekly));
+   b.append(node('span','', 'المستوى '+s.level+' · ⭐ '+s.stars+' · نشاط الأسبوع الحالي '+weeklyText(s)));
    b.append(levelPills(s));
    const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,s.mastered/200*100))+'%';
    track.append(fill);b.append(track);
@@ -297,7 +299,7 @@ function studentDetails(s){
  const host=clear($('studentDetails'));
  if(s.kind==='trial')host.append(node('div','warning','سجل STAGING قديم للمعاينة، وليس حساب طالب نشطًا. لا تتوفر تفاصيل الإجابات أو مزامنة جهاز الطالب في هذا السجل.'));
  const t=node('table','detailTable');
- const lines=[['القسم',s.className],['الصف الدراسي',s.grade],['المستوى الحالي',s.level],['النجوم',s.stars],['أنشطة هذا الأسبوع',s.weekly]];
+ const lines=[['القسم',s.className],['الصف الدراسي',s.grade],['المستوى الحالي',s.level],['النجوم',s.stars],['نشاط الأسبوع الحالي (عدد المحاولات)',weeklyText(s)],['الفترة الأسبوعية',currentWeekLabel(s)]];
  if(s.kind==='trial')lines.push(['إتقان المستوى',s.mastery+'%'],['مصدر السجل',s.sourceTab]);
  else lines.push(['المحاولات',s.attempts],['الإجابات الصحيحة',s.correct],['دقة الإجابات',s.score===null?'—':s.score+'%'],['العناصر المتقنة',s.mastered],['أنجز التشخيص',s.diagnostic?'نعم':'لا'],['آخر مزامنة',s.updated?new Date(s.updated).toLocaleString('ar-OM'):'—']);
  for(const [a,b] of lines){const tr=node('tr');tr.append(node('td','',a),node('td','',safe(b)));t.append(tr)}host.append(t);

@@ -1574,7 +1574,7 @@ function maxAllowed(p=active()){
 }
 function permitted(g){
  if(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true)return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12;
- const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
+ const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:4;
  return Number(g)===0 || (active().diagnosed&&Number(g)<=limit&&Number(g)<=maxAllowed());
 }
 function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
@@ -1931,7 +1931,7 @@ if(teacherCode && !/^(?:[1-9]|1[0-2])$/.test(grade)){toast('اختر صفًا م
 function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
 async function addUser(){if(!await mejPilotMayCreateStudent())return;mejCapture(db.active);let p=newProfile();db.profiles[p.id]=p;db.active=p.id;mejSwitch(p.id);activeSession=null;persist(false);home();document.getElementById('studentName')?.focus();toast('أضف اسم الطالب الجديد واحفظ بياناته')}
 function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}mejCapture(db.active);db.active=id;mejSwitch(id);activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}
-function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>3?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'هذه المحطة مقفلة. أكمل التشخيص وأتقن أنشطة المحطات السابقة.');return false}return true}
+function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>4?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'هذه المحطة مقفلة. أكمل التشخيص وأتقن أنشطة المحطات السابقة.');return false}return true}
 // MEJ_PORT_12_ISLANDS_ARRIVAL_DEPARTURE_20261115
 // These are display labels ONLY. The underlying g=0..12 and part=1..2 remain stable.
 function mejVoyagePlace(g){
@@ -2204,7 +2204,7 @@ function skills(){
  const host=document.getElementById('app');if(!host)return;
  try{
   const p=active(),cap=maxAllowed(p);
-  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:3;
+  const limit=window.__MEJ_ACCESS_ROLE==='owner'||window.__MEJ_ACCESS_ROLE==='student'?12:4;
   const maxG=(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true||p.diagnosed)?Math.min(cap,limit):0;
   const counts=Object.create(null);
   for(let g=0;g<=maxG;g++){

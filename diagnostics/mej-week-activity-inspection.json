@@ -1,0 +1,83 @@
+{
+  "bytes": 3228046,
+  "snippets": {
+    "activity.push(": [
+      {
+        "offset": 3103868,
+        "context": "actice'){\n  p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}\ndocument.getElementById('feedback').innerHTML=`<div class"
+      },
+      {
+        "offset": 3105296,
+        "context": "iagnostic')mejSaveDiagnostic(activeSession.index+1);}\nfunction skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}\nfunction stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}\nfunction endSession(){let s=activeSession;if(!s)return;const returnTar"
+      }
+    ],
+    ".activity.push(": [
+      {
+        "offset": 3103867,
+        "context": "ractice'){\n  p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}\ndocument.getElementById('feedback').innerHTML=`<div clas"
+      },
+      {
+        "offset": 3105295,
+        "context": "diagnostic')mejSaveDiagnostic(activeSession.index+1);}\nfunction skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}\nfunction stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}\nfunction endSession(){let s=activeSession;if(!s)return;const returnTa"
+      }
+    ],
+    "day:new Date": [
+      {
+        "offset": 3103883,
+        "context": "ttempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}\ndocument.getElementById('feedback').innerHTML=`<div class=\"${ok?'correct"
+      },
+      {
+        "offset": 3105311,
+        "context": "aveDiagnostic(activeSession.index+1);}\nfunction skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}\nfunction stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}\nfunction endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==="
+      }
+    ],
+    "new Date().toISOString().slice(0,10)": [
+      {
+        "offset": 3103887,
+        "context": "pts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}\ndocument.getElementById('feedback').innerHTML=`<div class=\"${ok?'correct':'i"
+      },
+      {
+        "offset": 3105315,
+        "context": "iagnostic(activeSession.index+1);}\nfunction skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}\nfunction stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}\nfunction endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='ski"
+      },
+      {
+        "offset": 3205378,
+        "context": "t blob=new Blob([JSON.stringify({app:'wadi-english-explorer',version:1,savedAt:new Date().toISOString(),profiles:Object.fromEntries(Object.entries(db.profiles).map(([id,profile])=>[id,{...profile,teacherCode:''}])),active:db.active},null,2)],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='My_English_Journey_Progress_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('✅ تم تنزيل نسخة التقدّم الاحتياطية. احتفظ بها في مكان آمن.') }\n// Validate a student backup before it can replace locally saved progress.\n// Keep only known fields and question IDs; an imported file must never overwrite\n// healthy data with malformed values or prototype keys.\nfunction normalizeBackupProfile(id,raw){\n if(!raw||typeof raw!=='object'||Array.isArray(raw)||typeof id!=='string'||\n    !/^([a-zA-Z0-9_-]{1,90})$/.test(id)||['__proto__','constructor','prototype'].include"
+      }
+    ],
+    "weekStart.setDate": [
+      {
+        "offset": 3191248,
+        "context": "entById('writingFeedback').innerHTML=`<b>مراجعة مبدئية للكتابة</b><p>عدد الكلمات: ${w} • روابط الأفكار: ${hasTransition?'✓':'تحتاج إضافة'} • علامات الترقيم: ${punct?'✓':'راجعها'} • الفقرات: ${pars}</p><small>تحقق بنفسك: هل لديك مقدمة وفكرتان واضحتان وخاتمة؟ هذه المراجعة ليست تصحيحًا آليًا للنحو أو تقييمًا رسميًا.</small>`}\nfunction reports(){\n const p=active();\n let weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+1)%7));weekStart.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=weekStart),wright=weekly.filter(x=>x.ok).length;\n const g=Math.min(12,Math.max(0,maxAllowed(p)));const mastered=countMaster(g,p);\n document.getElementById('app').innerHTML=`<section class=\"card student-summary\"><h1 class=\"section-title\">📊 معاينة تقدّم الطالب</h1><p class=\"caption\">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—')}</p><div class=\"student-summary-grid\"><div class=\"info\"><b>⭐ $"
+      }
+    ],
+    "currentWeek.setDate": [
+      {
+        "offset": 3192686,
+        "context": "light\" onclick=\"route('journey')\">⛵ رحلتي الحالية</button><button class=\"btn light\" onclick=\"route('home')\">🏠 الرئيسية</button></div></section>`;\n}\nfunction payload(p,event='progress',reportId=''){\n let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teach"
+      }
+    ],
+    "weeklyAttempts:": [
+      {
+        "offset": 3193766,
+        "context": "iagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};\n}\nfunction makeReportId(){\n let random='';try{let values=new Uint8Array(16);crypto.getRandomValues(values);random=Array.from(values,b=>b.toString(16).padStart(2,'0')).join('')}catch(e){random=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}\n return 'wadi-'+Date.now().toString(36)+'-'+random;\n}\n// A separate anonymous acknowledgement check: only a random receipt ID is sent, never a student's name.\nconst pendingReceipts=new Map();\nconst RECEIVER_EXPECTED_VERSION='2026-10-23-verifi"
+      },
+      {
+        "offset": 3200359,
+        "context": "r(profile.attempts)||0));\n  const snapshot={\n   studentName:String(profile.name).slice(0,120),className:String(profile.className||'').slice(0,35),\n   grade:Number(profile.grade),stars:Math.max(0,Math.min(3250,Number(profile.stars)||0)),\n   attempts,correctAnswers:Math.min(attempts,Math.max(0,Number(profile.right)||0)),\n   masteredItems:Math.max(0,Math.min(2600,totalMaster(profile))),\n   weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,\n   diagnosticDone:profile.diagnosed===true,\n   diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,\n   highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,\n   /* MEJ_STUDENT_PRIVATE_CLOUD_BACKUP_V1: only learning state; never teacher code or auth secrets */\n   privateState:{\n    correct:profile.correct||{},wrong:profile.wrong||{},\n    writing:profile.writing||{},\n    activity:(profile.activity||[]).slice(-1500),\n    diagnosticScore:profile.diagnostic"
+      }
+    ],
+    "function reports()": [
+      {
+        "offset": 3191183,
+        "context": "),pars=s.split(/\\n\\s*\\n/).filter(Boolean).length;document.getElementById('writingFeedback').innerHTML=`<b>مراجعة مبدئية للكتابة</b><p>عدد الكلمات: ${w} • روابط الأفكار: ${hasTransition?'✓':'تحتاج إضافة'} • علامات الترقيم: ${punct?'✓':'راجعها'} • الفقرات: ${pars}</p><small>تحقق بنفسك: هل لديك مقدمة وفكرتان واضحتان وخاتمة؟ هذه المراجعة ليست تصحيحًا آليًا للنحو أو تقييمًا رسميًا.</small>`}\nfunction reports(){\n const p=active();\n let weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+1)%7));weekStart.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=weekStart),wright=weekly.filter(x=>x.ok).length;\n const g=Math.min(12,Math.max(0,maxAllowed(p)));const mastered=countMaster(g,p);\n document.getElementById('app').innerHTML=`<section class=\"card student-summary\"><h1 class=\"section-title\">📊 معاينة تقدّم الطالب</h1><p class=\"caption\">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—"
+      }
+    ],
+    "function payload(": [
+      {
+        "offset": 3192445,
+        "context": "iv><div class=\"info\"><b>${p.diagnosed?esc(p.assigned):'—'}</b><small>مستوى التشخيص</small></div></div><div class=\"week\"><b>📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class=\"actions\"><button class=\"btn light\" onclick=\"route('journey')\">⛵ رحلتي الحالية</button><button class=\"btn light\" onclick=\"route('home')\">🏠 الرئيسية</button></div></section>`;\n}\nfunction payload(p,event='progress',reportId=''){\n let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));\n const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);\n const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);\n return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').re"
+      }
+    ]
+  }
+}

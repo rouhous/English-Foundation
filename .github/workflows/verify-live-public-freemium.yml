@@ -20,8 +20,8 @@ jobs:
               grep -q 'MEJ_FREEMIUM_PUBLIC_THREE_STAGES_20261107' /tmp/page.html
               grep -q "window.__MEJ_ACCESS_ROLE='public'" /tmp/page.html
               grep -q 'activate_short' /tmp/page.html
-              grep -q '?12:3' /tmp/page.html
-              echo 'PUBLIC THREE STAGES AND SIX DIGIT STUDENT REGISTRATION AVAILABLE'
+              grep -q '?12:4' /tmp/page.html
+              echo 'PUBLIC FOUR STAGES AND SIX DIGIT STUDENT REGISTRATION AVAILABLE'
             fi
             if [ "$p" = /reviews/teacher-portal.html ]; then
               grep -q 'schoolManagerName' /tmp/page.html

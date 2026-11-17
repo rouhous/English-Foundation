@@ -154,6 +154,23 @@
   const g=p.companion?.kind==='girl'?'girl':'boy',name=p.companion?.name||'اختر رفيقك';
   if(b.dataset.id!==String(p.id)||b.dataset.kind!==g||b.dataset.name!==name){b.dataset.id=String(p.id);b.dataset.kind=g;b.dataset.name=name;b.replaceChildren(avatar(g));b.title='تغيير رفيق الرحلة: '+name;b.setAttribute('aria-label',b.title)}
  }
+ // MEJ_COMPANION_VISIBILITY_TOGGLE_20261117 — student controls the floating friend.
+ function setVisibility(visible){
+  const show=!!visible;
+  try{if(show)localStorage.removeItem('MEJ_COMPANION_HIDE');else localStorage.setItem('MEJ_COMPANION_HIDE','1')}catch(_){}
+  const btn=$('mej-companion-visibility');
+  if(btn){
+   btn.textContent=show?'👁️ إخفاء الرفيق المتحرك':'🙈 إظهار الرفيق المتحرك';
+   btn.setAttribute('aria-pressed',String(!show));
+   btn.setAttribute('aria-label',show?'إخفاء الرفيق المتحرك':'إظهار الرفيق المتحرك');
+  }
+  if(!show){
+   stop();
+   try{window.speechSynthesis?.cancel()}catch(_){}
+   const host=$('mej-companion-actor');
+   if(host){host.hidden=true;host.style.display='none'}
+  }else queue();
+ }
  function settings(){
    const m=$('journeySettingsModal');if(!m)return;
    const dest=m.querySelector('.journey-modal-inner');if(!dest)return;
@@ -161,6 +178,16 @@
      const b=document.createElement('button');b.id='mej-companion-settings';b.type='button';
      b.className='btn light';b.textContent='🎒 تغيير الرفيق واسمه';
      b.onclick=()=>{m.remove();open(true)};dest.append(b);
+   }
+   if(!m.querySelector('#mej-companion-visibility')){
+    const b=document.createElement('button');b.id='mej-companion-visibility';b.type='button';
+    b.className='btn light';
+    const visible=enabled();
+    b.textContent=visible?'👁️ إخفاء الرفيق المتحرك':'🙈 إظهار الرفيق المتحرك';
+    b.setAttribute('aria-pressed',String(!visible));
+    b.setAttribute('aria-label',visible?'إخفاء الرفيق المتحرك':'إظهار الرفيق المتحرك');
+    b.onclick=()=>setVisibility(!enabled());
+    dest.append(b);
    }
    if(!m.querySelector('#mej-companion-sound')){
      const b=document.createElement('button');b.id='mej-companion-sound';b.type='button';

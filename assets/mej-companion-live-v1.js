@@ -574,7 +574,40 @@
    clearTimeout(hideTimer);const token=++animationNo;
    hideTimer=setTimeout(()=>{if(token===animationNo){h.dataset.reacting='0';h.classList.remove('mej-c-bounce','mej-c-explaining')}},ok?2100:7300);
  }
- function check(){updateAvatar();homeCheck();refreshActor();}
+ // MEJ_COMPACT_BLEND_QUESTION_20261117: accessible single-line picture and audio prompt.
+ const compactBlendStyle=document.createElement('style');
+ compactBlendStyle.id='mej-compact-blend-style';
+ compactBlendStyle.textContent=`
+  #app .quiz.mej-compact-audio .mej-audio-question-row{display:flex;align-items:center;gap:12px;padding:10px 12px;margin:8px 0 12px;border:2px solid #a0cadc;border-radius:15px;background:#f4fbff;direction:ltr;box-sizing:border-box}
+  #app .quiz.mej-compact-audio .mej-audio-question-row .question{flex:1;min-width:0;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;font:800 clamp(18px,4.4vw,25px)/1.45 system-ui,Arial,sans-serif!important;text-align:left!important;color:#154369!important}
+  #app .quiz.mej-compact-audio .mej-audio-question-row .quiz-visual{width:clamp(75px,23vw,112px)!important;min-width:75px!important;max-width:112px!important;max-height:118px!important;flex:0 0 auto;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+  #app .quiz.mej-compact-audio .mej-audio-question-row .quiz-visual img{display:block;width:100%!important;height:auto!important;max-height:112px!important;object-fit:contain!important;margin:auto!important}
+  #app .quiz.mej-compact-audio .bi-guide,#app .quiz.mej-compact-audio .mej-v2-skill,#app .quiz.mej-compact-audio .mej-audio-extraneous{display:none!important}
+  #app .quiz.mej-compact-audio .choices{margin-top:10px}
+  @media(max-width:380px){#app .quiz.mej-compact-audio .mej-audio-question-row{gap:8px;padding:8px}#app .quiz.mej-compact-audio .mej-audio-question-row .quiz-visual{width:82px!important;min-width:70px!important}}
+ `;
+ if(!document.getElementById(compactBlendStyle.id))document.head.appendChild(compactBlendStyle);
+ function compactBlendQuestion(){
+  const quiz=$('app')?.querySelector('.quiz');
+  if(!quiz||quiz.classList.contains('mej-compact-audio'))return;
+  const question=quiz.querySelector('.question');
+  const visual=quiz.querySelector('.quiz-visual');
+  if(!question||!visual||!visual.querySelector('img'))return;
+  const raw=String(question.textContent||'').trim();
+  if(!/Which written word matches what you hear\?/i.test(raw))return;
+  question.textContent='What do you hear?';
+  question.setAttribute('lang','en');
+  question.setAttribute('dir','ltr');
+  const line=document.createElement('div');line.className='mej-audio-question-row';
+  question.before(line);line.append(question,visual);
+  quiz.classList.add('mej-compact-audio');
+  const redundant=quiz.querySelectorAll('h1,h2,h3,h4,p,.mej-vocab-instruction,.actions .badge');
+  redundant.forEach(el=>{
+   const t=String(el.textContent||'').trim();
+   if(/^Listen to the word\.?$/i.test(t)||/Say, blend\s*&\s*read/i.test(t))el.classList.add('mej-audio-extraneous');
+  });
+ }
+ function check(){updateAvatar();homeCheck();refreshActor();compactBlendQuestion();}
  function queue(){if(tickQueued)return;tickQueued=true;requestAnimationFrame(()=>{tickQueued=false;try{check()}catch(e){console.warn('Companion UI skipped',e)}})}
  function boot(){
   const app=$('app');if(!app)return;

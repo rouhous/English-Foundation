@@ -1,0 +1,27 @@
+name: Fix Oman current week in student activity
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/fix-oman-week-activity.cjs"
+      - ".github/workflows/fix-oman-week-activity.yml"
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node scripts/fix-oman-week-activity.cjs
+      - name: Commit current-week student activity fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Use Oman Sunday-to-Saturday weekly activity and precise attempt timestamps"
+            git push origin HEAD:main
+          fi

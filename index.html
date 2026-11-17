@@ -2131,10 +2131,10 @@ function mejGrammarCorrection(q){
 }
 function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
   p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
-  p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
+  p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
 if(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;if(normalize(e.dataset.answer)===normalize(q.answer))e.classList.add('right')});if(q.mode==='type'){let field=document.getElementById('typed');if(field)field.disabled=true;if(isWordBuilder(q))renderWordTiles();}
 document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incorrect'}"><b>${ok?'أحسنت! إجابة صحيحة ✨':'حاول مجددًا في المرة القادمة 🌟'}</b><div>${ok?'':`الإجابة الصحيحة: <b dir="auto">${esc(q.answer)}</b>`}</div>${q.tip?`<small>${esc(q.tip)}</small>`:''}${!ok?mejGrammarCorrection(q):''}</div>`;document.getElementById('skipBtn').style.display='none';document.getElementById('nextBtn').style.display='inline-block';try{window.MEJCompanion?.react(ok)}catch(_){}if(activeSession?.kind==='diagnostic')mejSaveDiagnostic(activeSession.index+1);}
-function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:new Date().toISOString().slice(0,10),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
+function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
 function nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}
 function stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
 function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
@@ -2370,17 +2370,40 @@ function loadDraft(){document.getElementById('essay').value=active().writing[dra
 let writingTimer;function writingAutosave(){clearTimeout(writingTimer);let key=draftKey(),text=document.getElementById('essay').value,p=active();writingTimer=setTimeout(()=>{p.writing[key]=text;persist(false)},600)}
 function saveDraft(){active().writing[draftKey()]=document.getElementById('essay').value;persist();toast('حُفظت مسودتك في ملف الطالب')}
 function checkDraft(){saveDraft();let s=document.getElementById('essay').value.trim(),w=s?s.split(/\s+/).length:0;let hasTransition=/\b(first|second|also|however|because|therefore|finally|in conclusion|for example)\b/i.test(s),punct=/[.!?]/.test(s),pars=s.split(/\n\s*\n/).filter(Boolean).length;document.getElementById('writingFeedback').innerHTML=`<b>مراجعة مبدئية للكتابة</b><p>عدد الكلمات: ${w} • روابط الأفكار: ${hasTransition?'✓':'تحتاج إضافة'} • علامات الترقيم: ${punct?'✓':'راجعها'} • الفقرات: ${pars}</p><small>تحقق بنفسك: هل لديك مقدمة وفكرتان واضحتان وخاتمة؟ هذه المراجعة ليست تصحيحًا آليًا للنحو أو تقييمًا رسميًا.</small>`}
+/* MEJ_OMAN_CURRENT_WEEK_ACTIVITY_20261117
+ * Oman fixed UTC+04; Sunday 00:01 to Saturday 23:59:59.999 inclusive.
+ * Day-only historical entries are approximate at the boundary.
+ */
+function mejOmanDayNow(){return new Date(Date.now()+4*60*60*1000).toISOString().slice(0,10)}
+function mejOmanWeekWindow(at=Date.now()){
+ const oman=new Date(at+4*60*60*1000),day=oman.getUTCDay();
+ const start=Date.UTC(oman.getUTCFullYear(),oman.getUTCMonth(),oman.getUTCDate()-day,0,1)-4*60*60*1000;
+ const end=start+7*24*60*60*1000-60*1000;
+ return {start,end,
+  first:new Date(start+4*60*60*1000).toISOString().slice(0,10),
+  last:new Date(start+4*60*60*1000+6*24*60*60*1000).toISOString().slice(0,10)};
+}
+function mejIsCurrentWeekEvent(x,window=mejOmanWeekWindow()){
+ if(!x||typeof x!=='object')return false;
+ if(typeof x.at==='string'){
+  const stamp=Date.parse(x.at);
+  return Number.isFinite(stamp)&&stamp>=window.start&&stamp<window.end;
+ }
+ return typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)&&x.day>=window.first&&x.day<=window.last;
+}
+function mejCurrentWeekAttempts(items){
+ const win=mejOmanWeekWindow();
+ return (Array.isArray(items)?items:[]).filter(x=>mejIsCurrentWeekEvent(x,win)).length;
+}
 function reports(){
  const p=active();
- let weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+1)%7));weekStart.setHours(0,0,0,0);
- const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=weekStart),wright=weekly.filter(x=>x.ok).length;
+ const weekWindow=mejOmanWeekWindow();const weekly=(p.activity||[]).filter(x=>mejIsCurrentWeekEvent(x,weekWindow)),wright=weekly.filter(x=>x.ok).length;
  const g=Math.min(12,Math.max(0,maxAllowed(p)));const mastered=countMaster(g,p);
  document.getElementById('app').innerHTML=`<section class="card student-summary"><h1 class="section-title">📊 معاينة تقدّم الطالب</h1><p class="caption">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—')}</p><div class="student-summary-grid"><div class="info"><b>⭐ ${fmt(p.stars)}</b><small>النجوم</small></div><div class="info"><b>${mastered}/200</b><small>الإتقان في المستوى الحالي ${g}</small></div><div class="info"><b>${pct(p.right,p.attempts)}%</b><small>دقة التدريب</small></div><div class="info"><b>${p.diagnosed?esc(p.assigned):'—'}</b><small>مستوى التشخيص</small></div></div><div class="week"><b>📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class="actions"><button class="btn light" onclick="route('journey')">⛵ رحلتي الحالية</button><button class="btn light" onclick="route('home')">🏠 الرئيسية</button></div></section>`;
 }
 function payload(p,event='progress',reportId=''){
  let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));
- const currentWeek=new Date();currentWeek.setDate(currentWeek.getDate()-((currentWeek.getDay()+1)%7));currentWeek.setHours(0,0,0,0);
- const weekly=(p.activity||[]).filter(x=>new Date(x.day)>=currentWeek);
+ const weekWindow=mejOmanWeekWindow();const weekly=(p.activity||[]).filter(x=>mejIsCurrentWeekEvent(x,weekWindow));
  return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};
 }
 function makeReportId(){
@@ -2481,14 +2504,14 @@ async function sendReport(manual=false){
    const mastered=Math.max(0,Math.min(200,countMaster(g,profile)));
    return {level:g,mastered,total:200,masteryPercent:Math.round(mastered*100/200)};
   });
-  const week=new Date();week.setDate(week.getDate()-((week.getDay()+1)%7));week.setHours(0,0,0,0);
+  const weekWindow=mejOmanWeekWindow();
   const attempts=Math.max(0,Math.min(10000000,Number(profile.attempts)||0));
   const snapshot={
    studentName:String(profile.name).slice(0,120),className:String(profile.className||'').slice(0,35),
    grade:Number(profile.grade),stars:Math.max(0,Math.min(3250,Number(profile.stars)||0)),
    attempts,correctAnswers:Math.min(attempts,Math.max(0,Number(profile.right)||0)),
    masteredItems:Math.max(0,Math.min(2600,totalMaster(profile))),
-   weeklyAttempts:(profile.activity||[]).filter(x=>new Date(x.day)>=week).length,
+   weeklyAttempts:(profile.activity||[]).filter(x=>mejIsCurrentWeekEvent(x,weekWindow)).length,
    diagnosticDone:profile.diagnosed===true,
    diagnosticLevel:profile.diagnosed?Math.max(0,Math.min(12,Number(profile.assigned)||0)):null,
    highestLevel:Math.max(0,Math.min(12,maxAllowed(profile))),levelStats,

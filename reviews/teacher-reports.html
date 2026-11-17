@@ -60,10 +60,10 @@ footer{text-align:center;color:#5e819a;font-size:12px;padding:10px 20px 25px}
 <section class="sheet" id="message" role="status" aria-live="polite">جار التحقق من جلسة المعلم...</section>
 <div id="content" hidden>
 <section class="sheet"><div class="rowTitle"><h2 id="summaryTitle">الملخص العام</h2><span id="recordLabel" class="notice"></span></div><div id="stats" class="stats"></div></section>
-<section class="sheet"><h2>توزيع الأخطاء بحسب نوع النشاط</h2><p class="notice">الأعداد التالية تمثل محاولات الإجابة الخاطئة المسجلة، وليست درجات إتقان أو نسب نجاح لجميع المهارات.</p><div id="skills" class="skillGrid"></div></section>
+<section class="sheet"><h2>توزيع الأخطاء بحسب نوع النشاط</h2><p class="notice">الأعداد التالية تمثل جميع محاولات الإجابة الخاطئة تاريخياً، وليست مقصورة على الأسبوع الحالي. ملخص نشاط الأسبوع الحالي يظهر في الأعلى.</p><div id="skills" class="skillGrid"></div></section>
 <section class="sheet"><div class="rowTitle"><h2 id="questionsTitle">الأسئلة والأنشطة التي حدثت فيها أخطاء</h2><span id="itemsCount" class="notice"></span></div><div class="tableScroll"><table><thead><tr><th>السؤال / النشاط</th><th>المهارة</th><th>المستوى</th><th>الأخطاء</th><th>عدد الطلاب</th><th>التكرار</th><th>الحالة / آخر خطأ</th></tr></thead><tbody id="questionRows"></tbody></table></div><p class="notice" id="rowLimit"></p></section>
-<section class="sheet" id="studentListBox"><h2>مقارنة الطلاب</h2><div class="tableScroll"><table><thead><tr><th>الطالب</th><th>القسم</th><th>النجوم</th><th>المحاولات</th><th>محاولات الخطأ</th><th>أسئلة بخطأ متكرر</th><th>أسئلة تحتاج إلى تدريب</th><th>التقرير</th></tr></thead><tbody id="studentRows"></tbody></table></div></section>
-<section class="sheet"><h3>ملاحظات حول دقة التقرير</h3><p class="notice">البيانات متزامنة من تطبيق الطلاب ومبلّغ عنها من أجهزتهم، وليست تصحيحًا معتمدًا على الخادم. عدّاد الأخطاء المتراكم مأخوذ من سجل السؤال، أما آخر تاريخ خطأ وتوزيع المحاولات زمنياً فيعتمدان على أحدث 1500 حدث يحتفظ بها التطبيق لكل طالب. لا تدخل سجلات الطلاب التجريبية المستوردة ضمن هذا التقرير.</p></section>
+<section class="sheet" id="studentListBox"><h2>مقارنة الطلاب</h2><div class="tableScroll"><table><thead><tr><th>الطالب</th><th>القسم</th><th>النجوم</th><th>نشاط الأسبوع الحالي</th><th>المحاولات الإجمالية</th><th>محاولات الخطأ</th><th>أسئلة بخطأ متكرر</th><th>أسئلة تحتاج إلى تدريب</th><th>التقرير</th></tr></thead><tbody id="studentRows"></tbody></table></div></section>
+<section class="sheet"><h3>ملاحظات حول دقة التقرير</h3><p class="notice">البيانات متزامنة من تطبيق الطلاب ومبلّغ عنها من أجهزتهم، وليست تصحيحًا معتمدًا على الخادم. عدّاد الأخطاء المتراكم مأخوذ من سجل السؤال، بينما نشاط الأسبوع الحالي وآخر تاريخ خطأ يعتمدان على أحدث 1500 حدث يحتفظ بها التطبيق لكل طالب. السجلات القديمة لا تحتوي ساعة المحاولة وقد تكون تقريبية عند بداية الأسبوع، أما المحاولات الجديدة فتُحسب بدقة زمنية. لا تدخل سجلات الطلاب التجريبية المستوردة ضمن هذا التقرير.</p></section>
 </div>
 </main>
 <footer>رحلتي مع الإنجليزية · تقارير خاصة بالمعلم المعتمد فقط</footer>
@@ -140,7 +140,9 @@ function renderCards(reports,entries){
  const countUnresolved=skillFilterActive?entries.reduce((a,x)=>a+x.unresolvedStudents,0):sum('unresolved');
  const countMastered=skillFilterActive?entries.reduce((a,x)=>a+x.students-x.unresolvedStudents,0):sum('masteredAfter');
  const metrics=[
- ['الطلاب في التقرير',reports.length],['المحاولات المسجلة (كل المهارات)',sum('attempts')],
+ ['الطلاب في التقرير',reports.length],['نشاط الأسبوع الحالي (محاولات)',sum('weeklyAttempts')],
+ ['إجابات صحيحة هذا الأسبوع',sum('weeklyCorrect')],['إجابات خاطئة هذا الأسبوع',sum('weeklyWrong')],
+ ['كل المحاولات منذ التسجيل',sum('attempts')],
  ['محاولات الإجابة الخاطئة',countWrong],['أسئلة شهدت خطأً متكرراً',countRepeated],
  ['أسئلة تحتاج إلى تدريب',countUnresolved],['أسئلة أُتقنت بعد أخطاء',countMastered],
  ['أنشطة مختلفة حدثت فيها أخطاء',entries.length]
@@ -192,18 +194,18 @@ function renderStudents(reports){
  const list=[...reports].sort((a,b)=>integer(b.repeatItems)-integer(a.repeatItems)||integer(b.wrongAttempts)-integer(a.wrongAttempts));
  for(const s of list){
   const tr=el('tr');
-  for(const value of [s.studentName,s.className,s.stars,s.attempts,s.wrongAttempts,s.repeatItems,s.unresolved])tr.append(tableCell(value));
+  for(const value of [s.studentName,s.className,s.stars,s.weeklyAttempts,s.attempts,s.wrongAttempts,s.repeatItems,s.unresolved])tr.append(tableCell(value));
   const td=el('td'),b=el('button','', 'عرض تقرير الطالب');
   b.type='button';b.addEventListener('click',()=>{$('classFilter').value=s.className;fillStudents();$('studentFilter').value=s.studentRef;fillSkills();render();window.scrollTo({top:0,behavior:'smooth'})});
   td.append(b);tr.append(td);host.append(tr)
  }
- if(!list.length){const tr=el('tr'),td=tableCell('لا توجد بيانات طلاب.');td.colSpan=8;tr.append(td);host.append(tr)}
+ if(!list.length){const tr=el('tr'),td=tableCell('لا توجد بيانات طلاب.');td.colSpan=9;tr.append(td);host.append(tr)}
 }
 function render(){
  const reports=selected(),entries=gather(reports);
  const name=reports.length===1?reports[0].studentName:($('classFilter').value?'الصف '+$('classFilter').value:'جميع الصفوف');
  $('summaryTitle').textContent='التقرير التشخيصي — '+name;
- $('recordLabel').textContent='الطلاب: '+reports.length+' · '+(app.owner?(app.scope==='private'?'الخاص':'المدرسة'):'طلاب المعلم');
+ $('recordLabel').textContent='الطلاب: '+reports.length+' · نشاط الأسبوع الحالي: الأحد 00:01 — السبت 23:59 بتوقيت عُمان'+' · '+(app.owner?(app.scope==='private'?'الخاص':'المدرسة'):'طلاب المعلم');
  renderCards(reports,entries);renderSkills(entries);renderQuestions(entries,reports);renderStudents(reports)
 }
 function csv(){

@@ -1,4 +1,4 @@
-.sea-scene{position:relative;margin:auto;direction:ltr;isolation:isolate}.sea-chart{width:min(100%,150vh)}.sea-castle{width:min(100%,45vh)}.sea-art{display:block;width:100%;height:auto}.sea-boat{position:absolute;width:5.8%;transform:translate(-50%,-80%);pointer-events:none}.sea-hit{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:transparent;border-radius:24%;cursor:pointer}.sea-hit:focus-visible{outline:3px solid gold}.sea-open{box-shadow:inset 0 -3px 0 #9dffae}.sea-door span{color:white;background:#4b2a16df;padding:.2em .45em;border-radius:.45em;font:bold clamp(14px,3vw,23px) system-ui}@media(orientation:portrait){.sea-chart{width:100%}.sea-boat{width:11%}}
+.sea-scene{position:relative;margin:auto;direction:ltr;isolation:isolate}.sea-chart{width:min(100%,150vh)}.sea-castle{width:min(100%,45vh)}.sea-art{display:block;width:100%;height:auto}.sea-boat{position:absolute;width:5.8%;transform:translate(-50%,12%);pointer-events:none}.sea-hit{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:transparent;border-radius:24%;cursor:pointer}.sea-hit:focus-visible{outline:3px solid gold}.sea-door span{color:white;background:#4b2a16df;padding:.2em .45em;border-radius:.45em;font:bold clamp(14px,3vw,23px) system-ui}@media(orientation:portrait){.sea-chart{width:100%}.sea-boat{width:11%}}
 
 body:has(#app > :is(.sea-chart, .sea-castle)) { overflow: hidden; }
 body:has(#app > :is(.sea-chart, .sea-castle)) > header,
@@ -57,3 +57,16 @@ body #app.container:has(> :is(.sea-chart, .sea-castle)) {
 }
 .sea-castle-home svg { width: 54%; height: 54%; }
 .sea-castle-home:focus-visible { outline: 3px solid gold; }
+
+.sea-open::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 56%;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: #9dffae;
+  pointer-events: none;
+}

@@ -52,7 +52,7 @@
       }
       sailing=true;
       const lengths=points.slice(1).map((p,i)=>Math.hypot((p[0]-points[i][0])*scene.clientWidth/100,(p[1]-points[i][1])*scene.clientHeight/100));
-      const total=lengths.reduce((a,b)=>a+b,0),duration=matchMedia('(prefers-reduced-motion:reduce)').matches?0:Math.min(3500,total*2.2);
+      const total=lengths.reduce((a,b)=>a+b,0),duration=matchMedia('(prefers-reduced-motion:reduce)').matches?0:Math.min(4500,total*2.8);
       const start=performance.now();
       function advance(t){
         if(!scene.isConnected)return;

@@ -423,9 +423,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 
 
-/* 2026-11-09: Quiz return goes to its parent skills screen, not the home/levels exit.
- * Delegated listener survives question rerenders; no answers/progress are modified. */
-(function installQuizReturnToSkills(){
+/* Label the quiz exit consistently. Native quizzes use their own return route. */
+(function installQuizReturn(){
  'use strict';
  const root=()=>document.getElementById('app');
  const labelOf=el=>(el?.textContent||'').replace(/\s+/g,' ').trim();
@@ -444,6 +443,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  document.addEventListener('click',function(event){
   const button=event.target?.closest?.('[data-mej-quiz-return="1"]');
   if(!button||!isQuiz())return;
+  if(button.getAttribute('onclick')?.trim()==='stopQuiz()')return;
   event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
   if(typeof window.route==='function')window.route('skills');
   else if(typeof window.history?.back==='function')window.history.back();

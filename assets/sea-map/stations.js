@@ -19,10 +19,10 @@
   }
   function castle(g,part){
     const app=document.getElementById('app');
-    app.innerHTML='<div class="sea-tools"><button class="btn light" id="sea-back">العودة للخريطة</button><strong></strong></div><div class="sea-scene sea-castle"><img class="sea-art" src="'+base+'castle.webp" alt="قلعة عُمانية ببوابتين"></div>';
-    app.querySelector('strong').textContent=mejVoyagePlace(g)+' · '+mejVoyageLeg(part);
-    app.querySelector('#sea-back').onclick=levels;
-    const scene=app.querySelector('.sea-scene');
+    app.innerHTML='<div class="sea-scene sea-castle"><img class="sea-art" src="'+base+'castle.webp" alt="قلعة عُمانية ببوابتين"><h1 class="sea-castle-title" dir="rtl"></h1><button type="button" class="sea-castle-home" aria-label="العودة إلى المحطات"><svg aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 1 11h3v10h6v-6h4v6h6V11h3z"/></svg></button></div>';
+    const scene=app.querySelector('.sea-castle');
+    scene.querySelector('h1').textContent=mejVoyagePlace(g)+' · '+mejVoyageLeg(part);
+    scene.querySelector('.sea-castle-home').onclick=()=>route('levels');
     button(scene,'تعلّم',312/941*100,800/1672*100,265/941*100,380/1672*100,()=>learnLevel(g,part),true);
     button(scene,'العب',635/941*100,800/1672*100,270/941*100,380/1672*100,()=>beginStagePart(g,part),true);
   }

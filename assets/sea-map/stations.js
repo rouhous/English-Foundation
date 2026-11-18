@@ -12,7 +12,9 @@
   }
   function boatPosition(n, portrait) {
     const [x, y] = position(n, portrait);
-    return n ? [x, y + (portrait ? 1.8 : 2.8)] : [x, y];
+    if (!n) return [x, y + (portrait ? 2.8 : 3.2)];
+    const side = n % 2 ? -1 : 1;
+    return [x + side * (portrait ? 5.2 : 2.7), y + (portrait ? .55 : .2)];
   }
 
   function course(from, target, portrait) {
@@ -26,11 +28,12 @@
         const harbourChannel = [[40, 75], [27, 73]];
         points.push(...(direction > 0 ? harbourChannel : harbourChannel.reverse()));
       } else if (lower && lower % rowSize === 0) {
-        const [right, lowerY] = boatPosition(lower, portrait);
-        const [left, upperY] = boatPosition(lower + 1, portrait);
-        const lane = upperY + (portrait ? 2.1 : 3);
-        const edge = portrait ? 93 : 95;
-        const turn = [[Math.max(right, edge), lowerY], [edge, lane], [left, lane]];
+        const [right] = boatPosition(lower, portrait);
+        const [, firstDockY] = boatPosition(lower - rowSize + 1, portrait);
+        const [, upperY] = boatPosition(lower + 1, portrait);
+        const lane = firstDockY + (portrait ? 3.2 : 4);
+        const edge = portrait ? 7 : 24;
+        const turn = [[right, lane], [edge, lane], [edge, upperY]];
         points.push(...(direction > 0 ? turn : turn.reverse()));
       }
       points.push(boatPosition(next, portrait));
@@ -77,7 +80,12 @@
     const scene=app.querySelector('.sea-chart'),boat=scene.querySelector('.sea-boat');
     scene.querySelector('.sea-art').src=base+(portrait?'phone':'desktop')+'.webp';
     function place([x,y]){boat.style.left=x+'%';boat.style.top=y+'%'}
-    place(boatPosition(lastStop,portrait));
+    function dock(n) {
+      place(boatPosition(n, portrait));
+      boat.dataset.heading = n && n % 2 === 0 ? 'left' : 'right';
+      boat.classList.remove('is-sailing');
+    }
+    dock(lastStop);
     let sailing=false;
     function visit(g,part){
       if(sailing||!checkAccess(g))return;
@@ -96,7 +104,13 @@
       const start=performance.now();
       function advance(t){
         if(!scene.isConnected)return;
-        if(!duration||t-start>=duration){lastStop=target;castle(g,part);return}
+        if (!duration || t - start >= duration) {
+          lastStop = target;
+          dock(target);
+          if (!duration) castle(g, part);
+          else setTimeout(() => { if (scene.isConnected) castle(g, part); }, 320);
+          return;
+        }
         let distance=total*Math.max(0,t-start)/duration,i=0;
         while(i<lengths.length-1&&distance>lengths[i])distance-=lengths[i++];
         const f = lengths[i] ? distance / lengths[i] : 0;

@@ -75,7 +75,7 @@ body #app.container:has(> :is(.sea-chart, .sea-castle)) {
   position: absolute;
   z-index: 3;
   width: 6.5%;
-  transform: translate(-50%, -13%);
+  transform: translate(-50%, -82%);
   pointer-events: none;
 }
 .sea-boat img {

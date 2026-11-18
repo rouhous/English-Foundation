@@ -2,8 +2,8 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-compact-student-profile-20261118-v6';
-const isFreshShellAsset=path=>/\/assets\/(?:sea-map\/stations\.(?:js|css)|mej-mobile-ui-v2\.css)$/.test(path);
+const CACHE='mej-compact-student-profile-20261118-v7';
+const isFreshShellAsset=path=>/(?:\/assets\/sea-map\/stations\.(?:js|css)|\/mobile-home-fix\.css)$/.test(path);
 const CORE=['./assets/sea-map/boat.webp','./assets/sea-map/castle.webp','./assets/sea-map/desktop.webp','./assets/sea-map/phone.webp','./assets/sea-map/stations.css','./assets/sea-map/stations.js','./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./coastal-arcade/quality-fixes.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./hidden-objects/precision-v3-client.js','./hidden-objects/first-badge-practice.js','./hidden-objects/practice-region-library-a.js','./hidden-objects/practice-region-library-b.js','./hidden-objects/practice-region-library-c.js','./hidden-objects/practice-region-loader.js','./hidden-objects/museum-scene-practice-20261116.js','./hidden-objects/assets/stage04-badge03_museum.webp','./hidden-objects/airport-scene-practice-20261116.js','./hidden-objects/assets/stage08-badge05_airport.webp','./hidden-objects/generated-13-scene-practice-20261116.js','./hidden-objects/assets/base_classroom.webp','./hidden-objects/assets/variant_classroom.webp','./hidden-objects/assets/variant_souq_harbour.webp','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/mej-spelling-skills-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
  './assets/mej-user-voyage.png','./assets/background%20PC.png','./assets/class-ranking-v1.css','./assets/class-ranking-v1.js',
@@ -100,7 +100,9 @@ self.addEventListener('fetch',event=>{
    const controller=new AbortController();
    const timeout=setTimeout(()=>controller.abort(),3500);
    try{
-    const response=await fetch(request,{cache:'no-store',signal:controller.signal});
+    const freshUrl=new URL(request.url);
+    freshUrl.searchParams.set('mej-build',CACHE);
+    const response=await fetch(freshUrl,{cache:'no-store',signal:controller.signal});
     if(response.ok){
      try{await cache.put(request,response.clone())}catch(_){}
      return response;

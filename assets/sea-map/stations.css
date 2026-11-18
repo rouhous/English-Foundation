@@ -114,7 +114,17 @@ body #app.container:has(> :is(.sea-chart, .sea-castle)) {
     radial-gradient(ellipse 12% 12% at 45% 92%, black, transparent);
   animation: sea-ripple 6s ease-in-out infinite alternate;
 }
-.sea-wildlife { display: none; }
+.sea-wildlife i {
+  position: absolute;
+  inset: 0;
+  background: url("desktop.webp") center / 100% 100% no-repeat;
+  animation: sea-swim 5s ease-in-out infinite alternate;
+}
+.sea-turtle { mask-image: radial-gradient(ellipse 5.2% 5% at 80% 92.5%, black 70%, transparent 99%); }
+.sea-wildlife .sea-fish {
+  mask-image: radial-gradient(ellipse 4.7% 4.6% at 84.2% 88.5%, black 70%, transparent 99%);
+  animation-delay: -1.8s;
+}
 @media (orientation: portrait) {
   .sea-chart .sea-boat { width: 12.3%; }
   .sea-water {
@@ -122,17 +132,10 @@ body #app.container:has(> :is(.sea-chart, .sea-castle)) {
       radial-gradient(ellipse 11% 23% at 4% 53%, black, transparent),
       radial-gradient(ellipse 16% 11% at 50% 89%, black, transparent);
   }
-  .sea-wildlife { display: block; }
-  .sea-wildlife i {
-    position: absolute;
-    inset: 0;
-    background: url("phone.webp") center / 100% 100% no-repeat;
-    animation: sea-swim 5s ease-in-out infinite alternate;
-  }
+  .sea-wildlife i { background-image: url("phone.webp"); }
   .sea-turtle { mask-image: radial-gradient(ellipse 8.3% 3% at 89% 74.5%, black 72%, transparent 99%); }
-  .sea-fish {
+  .sea-wildlife .sea-fish {
     mask-image: radial-gradient(ellipse 7% 3.1% at 82% 76.8%, black 72%, transparent 99%);
-    animation-delay: -1.8s !important;
   }
 }
 @keyframes sea-bob { 50% { transform: translateY(-3px) rotate(2deg); } }

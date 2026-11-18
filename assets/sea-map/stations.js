@@ -28,11 +28,9 @@
   }
   window.levels=function(){
     const app=document.getElementById('app'),portrait=phone.matches;
-    app.innerHTML='<div class="sea-tools"><button class="btn light" id="sea-diagnose">🧭 التشخيص</button><small></small></div><div class="sea-scene sea-chart"><img class="sea-art" alt="خريطة التعلّم البحرية"><img class="sea-boat" alt="" src="'+base+'boat.webp"></div>';
+    app.innerHTML='<div class="sea-scene sea-chart"><img class="sea-art" alt="خريطة التعلّم البحرية"><img class="sea-boat" alt="" src="'+base+'boat.webp"></div>';
     const scene=app.querySelector('.sea-chart'),boat=scene.querySelector('.sea-boat');
     scene.querySelector('.sea-art').src=base+(portrait?'phone':'desktop')+'.webp';
-    app.querySelector('#sea-diagnose').onclick=()=>route('diagnostic');
-    if(!active().diagnosed&&!permitted(1))app.querySelector('small').textContent='ابدأ بالتشخيص لتحديد محطتك.';
     function place([x,y]){boat.style.left=x+'%';boat.style.top=y+'%'}
     place(position(lastStop,portrait));
     let sailing=false;
@@ -67,7 +65,7 @@
     }
     button(scene,'العودة إلى رحلتي',portrait?94:96,portrait?3:7,8,8,()=>route('journey'));
     const start=portrait?[[26,88],[73,88]]:[[11.5,70],[11,88]];
-    start.forEach(([x,y],i)=>button(scene,i?'انطلق':'ابدأ',x,y,portrait?23:10,8,()=>visit(0,i+1)));
+    start.forEach(([x,y],i)=>button(scene,i?'انطلق':'ابدأ',x,y,portrait?23:10,8,()=>!active().diagnosed&&!permitted(1)?route('diagnostic'):visit(0,i+1)));
     for(let n=1;n<=24;n++){
       const i=Math.floor((n-1)/2),part=(n-1)%2+1,[x,y]=position(n,portrait);
       const b=button(scene,mejVoyagePlace(i+1)+' · '+mejVoyageLeg(part),x,y-(portrait?2.5:3),portrait?9:5.2,portrait?4.7:7,()=>visit(i+1,part));

@@ -138,6 +138,7 @@ function tidy(){
  card.append(bubble,title,info,action);cards.append(card);
 }
 // Keep the live skill selectors and bank gates as the market's practice entry points.
+const souqRoomCss=new URL('skills-souq/room.css',document.currentScript.src).href;
 const souqTypes={phonics:'Phonics',blend:'Blend',vocabulary:'Vocabulary',spelling:'Spelling',
  listening:'Listening',grammar:'Grammar',reading:'Reading',describe:'Describe'};
 const souqRoutes={
@@ -146,7 +147,93 @@ const souqRoutes={
  'advanced-writing':()=>window.writingStudio(),
  ...Object.fromEntries(Object.entries(souqTypes).map(([skill,type])=>[skill,()=>nativeSelect(type)]))
 };
-let souqFrame;
+const souqRooms={
+ speaking:['ركن النطق','Speaking',20,38],phonics:['مدرسة الحروف','Phonics',38.5,41],
+ writing:['دكان الكاتب','Writing',57.5,39],grammar:['ورشة القواعد','Grammar',77.5,40],
+ reading:['المكتبة','Reading',98,41],'advanced-writing':['استوديو الكتابة المتقدمة','Advanced Writing',9.4,91],
+ blend:['ورشة تركيب الأصوات','Blend',31,91],spelling:['ورشة الإملاء','Spelling',52,92],
+ vocabulary:['متجر الكلمات','Vocabulary',73,92],listening:['مجلس الاستماع','Listening',94,92]
+};
+let souqFrame,souqSelection;
+const lastLevels=new Map();
+
+function renderSouqRoom(){
+ const root=app(), surface=root?.querySelector(':scope > .card, :scope > .quiz, :scope > #mej-writing-practice');
+ if(!root)return;
+ const controls=surface?.querySelectorAll('button[onclick]');
+ const levelButtons=controls&&Array.from(controls).filter(el=>el.getAttribute('onclick').startsWith('beginLevel('));
+ const question=surface?.querySelector('.quiz-top')&&activeSession?.origin==='skills';
+ const result=surface?.classList.contains('center')&&surface.querySelector('.score')&&
+   Array.from(controls).some(el=>el.getAttribute('onclick')==="route('skills')");
+ const skillLevels=Boolean(levelButtons?.length&&surface.querySelector(':scope > .grid'));
+ const speaking=surface?.querySelector('#speakingGrade');
+ const advanced=surface?.querySelector('#essay');
+ const writing=surface?.id==='mej-writing-practice';
+ let skill=question?Object.keys(souqTypes).find(key=>souqTypes[key]===activeSession.skillType):
+   speaking?'speaking':advanced?'advanced-writing':writing?'writing':souqSelection;
+ if(question&&skill)souqSelection=skill;
+ if(skill==='describe')skill='writing';
+ const room=souqRooms[skill];
+ if(!room||!(question||result||skillLevels||speaking||advanced||writing)){
+  delete root.dataset.souqRoom;
+  delete root.dataset.souqView;
+  root.querySelector(':scope > .souq-room-header')?.remove();
+  return;
+ }
+ if(surface.classList.contains('souq-room-surface'))return;
+ const [arabic,english,x,y]=room;
+ root.dataset.souqRoom=skill;
+ root.dataset.souqView=question?'practice':result?'result':skillLevels?'levels':'studio';
+ surface.classList.add('souq-room-surface');
+ const header=E('header');
+ header.className='souq-room-header';
+ header.style.setProperty('--souq-art-x',x+'%');
+ header.style.setProperty('--souq-art-y',y+'%');
+ const nav=E('nav');
+ nav.className='souq-room-nav';
+ nav.setAttribute('aria-label','التنقل في الدكان');
+ const back=E('button','← السوق');
+ back.type='button';
+ back.onclick=question?()=>window.stopQuiz():()=>window.route('skills');
+ const name=E('bdi',english);
+ name.lang='en';
+ nav.append(back,name);
+ const art=E('div');
+ art.className='souq-room-art';
+ art.setAttribute('aria-hidden','true');
+ header.append(nav,art);
+ if(skillLevels){
+  const shopTitle=E('h1',arabic);
+  shopTitle.className='souq-room-title';
+  header.append(shopTitle);
+  const heading=surface.querySelector('.section-title');
+  if(heading)heading.textContent='اختر المستوى';
+  const list=surface.querySelector(':scope > .grid');
+  list.classList.add('souq-levels');
+  for(const button of levelButtons){
+   const match=button.textContent.trim().match(/^(المستوى (\d+))\s+—\s+(.*)$/);
+   if(!match)continue;
+   button.classList.add('souq-level-row');
+   if(lastLevels.get(skill)===match[2])button.dataset.last='';
+   const count=E('span',match[3]);
+   count.className='souq-count';
+   button.replaceChildren(E('span',match[1]),count);
+   button.addEventListener('click',()=>lastLevels.set(skill,match[2]));
+  }
+ }
+ for(const button of controls){
+  if(["route('skills')",'stopQuiz()'].includes(button.getAttribute('onclick')))button.classList.add('souq-replaced-action');
+ }
+ if(writing){
+  const originalBack=Array.from(surface.querySelectorAll('button')).find(button=>button.onclick===goBack);
+  originalBack?.classList.add('souq-replaced-action');
+ }
+ if(question){
+  const label=surface.querySelector('.quiz-top b');
+  if(label)label.textContent='المستوى '+activeSession.grade;
+ }
+ root.prepend(header);
+}
 function souqAccess(){
  const grades=Array.from({length:13},(_,g)=>g).filter(permittedGrade);
  const types=new Map(Object.values(souqTypes).map(type=>[type,0]));
@@ -169,6 +256,7 @@ function sizeSouq(){
  souqFrame.style.height='max(220px, calc(100dvh - '+Math.max(0,Math.ceil(top))+'px))';
 }
 function openSouq(fallback,args){
+ souqSelection=null;
  const root=app();
  if(!root||location.protocol==='file:')return fallback.apply(window,args);
  const frame=E('iframe');
@@ -195,17 +283,23 @@ window.addEventListener('message',event=>{
  if(event.data?.type!=='mej-souq:practice')return;
  const skill=event.data.skill;
  if(!Object.hasOwn(souqRoutes,skill)||!souqAccess()[skill]?.enabled)return;
+ souqSelection=skill;
  souqRoutes[skill]();
+ renderSouqRoom();
  window.scrollTo({top:0,behavior:'instant'});
 });
 function boot(){
+ const roomStyles=E('link');roomStyles.rel='stylesheet';roomStyles.href=souqRoomCss;document.head.append(roomStyles);
  if(!document.getElementById('mej-writing-skills-css')){const st=E('style',css);st.id='mej-writing-skills-css';document.head.append(st)}
  if(typeof window.selectSkill==='function')nativeSelect=window.selectSkill;
  const native=window.skills;
  if(typeof native==='function'&&!native.__mejWritingWrapped){
   const patched=function(...args){return openSouq(native,args)};patched.__mejWritingWrapped=true;window.skills=patched;
  }
- const root=app();if(root){let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;try{if(root.querySelector('.skill-cards'))tidy()}catch(e){console.warn('Writing skill card refresh:',e)}})}).observe(root,{childList:true,subtree:false})}
+ const root=app();if(root)new MutationObserver(()=>{
+  if(root.querySelector('.skill-cards'))tidy();
+  renderSouqRoom();
+ }).observe(root,{childList:true});
  tidy();
 }
 window.MEJWritingSkillV1={choose,practice,chart};

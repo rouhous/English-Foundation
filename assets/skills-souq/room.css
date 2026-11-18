@@ -1,0 +1,159 @@
+/* Skills interiors use colors and artwork from the market. */
+body:has(#app[data-souq-room]) {
+  background: radial-gradient(ellipse at 50% 9%, #ebcf9d, #dcb783 68%, #c29764) !important;
+}
+body:has(#app[data-souq-room]) #journeyNav { display: none !important; }
+
+#app[data-souq-room][data-souq-view] {
+  --souq-ink: #17392e;
+  --souq-teal: #125649;
+  --souq-paper: #fff3dc;
+  --souq-line: #be955e;
+  --souq-rule: #e1c89f;
+  width: min(100%, 840px);
+  min-height: 100svh;
+  display: block;
+  padding: clamp(9px, 2.4vw, 24px) !important;
+  color: var(--souq-ink);
+}
+#app[data-souq-room] .souq-room-header {
+  margin: 0 auto;
+  position: relative;
+}
+#app[data-souq-room] .souq-room-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 .75rem;
+  min-height: 48px;
+  padding: 0 .6rem;
+  border: 1px solid #e0b576;
+  border-radius: 11px 11px 5px 5px;
+  background: var(--souq-teal);
+  color: #fff3d7;
+  box-shadow: 0 3px 6px #3f2a294a;
+}
+#app[data-souq-room] .souq-room-nav button {
+  background: transparent;
+  border: 0;
+  min-height: 44px;
+  padding: 0 .25rem;
+  color: inherit;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+#app[data-souq-room] .souq-room-nav bdi { font-weight: 750; }
+#app[data-souq-room] .souq-room-art {
+  margin: -5px 1px 0;
+  height: clamp(73px, 15vw, 125px);
+  background-color: #543517;
+  background-image: url('./computer.webp');
+  background-size: 620% 565%;
+  background-position: var(--souq-art-x) var(--souq-art-y);
+  border: 1px solid #ab7c48;
+  border-radius: 0 0 10px 10px;
+}
+#app[data-souq-view="practice"] .souq-room-art { height: clamp(55px, 10vw, 93px); }
+#app[data-souq-room] .souq-room-title {
+  margin: -1.1rem auto 0;
+  position: relative;
+  width: max-content;
+  max-width: 95%;
+  padding: .2rem .85rem .35rem;
+  background: var(--souq-paper);
+  border: 1px solid var(--souq-line);
+  border-radius: 11px 11px 0 0;
+  color: var(--souq-ink);
+  text-align: center;
+  font-size: clamp(1.05rem, 4vw, 1.45rem);
+  line-height: 1.4;
+}
+#app[data-souq-room] :is(.souq-room-surface, .souq-room-surface > .card) {
+  margin: 0 auto !important;
+  border: 1px solid var(--souq-line) !important;
+  border-radius: 15px !important;
+  background: linear-gradient(155deg, #fff7e7, var(--souq-paper)) !important;
+  box-shadow: 0 4px 13px #59370f37 !important;
+  color: var(--souq-ink) !important;
+}
+#app[data-souq-room] .souq-room-surface:has(> .card) {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+#app[data-souq-room] :is(.souq-room-surface, .souq-room-surface > .card) {
+  padding: clamp(12px, 3vw, 24px) !important;
+}
+#app[data-souq-room] .souq-room-surface:has(> .card) { padding: 0 !important; }
+#app[data-souq-room] .souq-room-surface :is(.section-title, h2, h3, p, small, label, .question, .score, .ministats) {
+  color: var(--souq-ink) !important;
+  text-shadow: none !important;
+}
+#app[data-souq-room] .souq-room-surface :is(.btn, .choice, .order-tile, .letter-tile, .chips button, .grids button, .controls button) {
+  min-height: 44px !important;
+  border: 1px solid #a98453 !important;
+  border-radius: 9px;
+  box-shadow: none !important;
+  color: var(--souq-ink) !important;
+  background: #fff7e7 !important;
+  text-shadow: none !important;
+}
+#app[data-souq-room] .souq-room-surface :is(.btn.mint, #nextBtn) {
+  color: #fffdf4 !important;
+  background: var(--souq-teal) !important;
+  border-color: var(--souq-teal) !important;
+}
+#app[data-souq-room] :is(button, select, textarea, input):focus-visible {
+  outline: 3px solid #16816f;
+  outline-offset: 2px;
+}
+#app[data-souq-room] .souq-room-nav button:focus-visible { outline-color: #ffdc88; }
+#app[data-souq-room] .souq-room-surface .choice.right { color: #164c34 !important; background: #d8efd7 !important; border-color: #4d8a55 !important; }
+#app[data-souq-room] .souq-room-surface .choice.wrong { color: #7b251b !important; background: #f9dfd5 !important; border-color: #ac5344 !important; }
+#app[data-souq-room] .quiz .meter { background: #c9ddd0 !important; border: none !important; }
+#app[data-souq-room] .quiz .meter i { background: #118271 !important; }
+#app[data-souq-room] .quiz-top .badge { color: var(--souq-ink) !important; background: #e3efe3 !important; }
+#app[data-souq-room] .quiz .mej-focus-word {
+  background: transparent !important;
+  color: var(--souq-ink) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+#app[data-souq-room] .souq-room-surface :is(.passage, .bi-guide, .speech-guide, .letter-builder, .sentence-builder) {
+  background: #fffaf1 !important;
+  border-color: var(--souq-rule) !important;
+}
+#app[data-souq-room] .souq-room-surface :is(input:not([type="range"]), textarea, select) {
+  color: var(--souq-ink) !important;
+  background: #fffaf1 !important;
+  border-color: var(--souq-line) !important;
+}
+#app[data-souq-room] .quiz .passage {
+  max-height: min(40svh, 20rem) !important;
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+}
+#app[data-souq-room] .quiz #skipBtn { background: transparent !important; border: 0 !important; text-decoration: underline; }
+#app[data-souq-room] .souq-room-surface .souq-replaced-action { display: none !important; }
+#app[data-souq-room] .souq-room-surface .souq-levels { display: grid !important; grid-template-columns: 1fr !important; gap: 0 !important; }
+#app[data-souq-room] .souq-levels button.souq-level-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  width: 100%;
+  text-align: start;
+  padding: .55rem .65rem !important;
+  min-height: 48px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--souq-rule) !important;
+  border-radius: 0;
+  background: transparent !important;
+}
+#app[data-souq-room] .souq-levels button.souq-level-row:is(:hover, :focus-visible, [data-last]) { background: #d9ede1 !important; }
+#app[data-souq-room] .souq-level-row .souq-count { color: #2e5145; font-size: .86em; font-weight: 600; }

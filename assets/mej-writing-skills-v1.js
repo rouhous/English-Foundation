@@ -138,7 +138,7 @@ function tidy(){
  card.append(bubble,title,info,action);cards.append(card);
 }
 // Keep the live skill selectors and bank gates as the market's practice entry points.
-const souqRoomCss=new URL('skills-souq/room.css',document.currentScript.src).href;
+const souqRoomCss='./assets/skills-souq/room.css';
 const souqTypes={phonics:'Phonics',blend:'Blend',vocabulary:'Vocabulary',spelling:'Spelling',
  listening:'Listening',grammar:'Grammar',reading:'Reading',describe:'Describe'};
 const souqRoutes={

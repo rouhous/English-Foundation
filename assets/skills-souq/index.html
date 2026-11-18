@@ -247,7 +247,7 @@ function chooseShop(id) {
 }
 
 function walk(now) {
-  const dt = Math.min(.04,Math.max(0,(now-travel.previousTime)/1000));
+  const dt = Math.min(.25,Math.max(0,(now-travel.previousTime)/1000));
   travel.previousTime = now;
   const [first,...rest] = travel.route;
   const remaining = rest.reduce((total,node,index) =>

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سوق المهارات العماني</title>
+<style>
+:root {color-scheme:light;--cream:#fff4dc;--ink:#16372f;--teal:#084a43}
+* {box-sizing:border-box}
+body {margin:0;background:#16372f;color:var(--ink);font:600 1rem system-ui,sans-serif}
+button,a {font:inherit}
+[hidden] {display:none!important}
+#market {min-height:100vh;min-height:100dvh;display:grid;place-items:center}
+#map {position:relative;isolation:isolate;width:min(100vw,56.25dvh);aspect-ratio:9/16;container-type:inline-size;direction:ltr;background:#e8bd82}
+#map picture {position:absolute;inset:0;display:block}
+#art {display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+@media (orientation:landscape) {#map {width:min(100vw,177.7778dvh);aspect-ratio:16/9}}
+.hotspot {position:absolute;z-index:1;display:block;min-width:44px;min-height:44px;transform:translate(-50%,-50%);border:2px solid transparent;border-radius:10%;background:transparent;cursor:pointer;touch-action:manipulation;transition:box-shadow .18s,transform .18s}
+.hotspot:focus-visible,#student:focus-visible,.return:focus-visible,.start:focus-visible {outline:3px solid #fff4ae;outline-offset:2px}
+.hotspot:focus-visible,.hotspot:active,.hotspot[data-selected] {box-shadow:0 0 22px 4px #ffe595a0,inset 0 0 18px #fff0a061;transform:translate(-50%,-50%) scale(1.025)}
+@media (hover:hover) {.hotspot:hover {box-shadow:0 0 22px 4px #ffe595a0,inset 0 0 18px #fff0a061;transform:translate(-50%,-50%) scale(1.025)}}
+#student {position:absolute;z-index:2;left:0;top:0;transform:translate(-50%,-100%);min-height:44px;min-width:44px;width:var(--student-width);height:var(--student-height);border:0;padding:0;background:transparent;cursor:pointer;touch-action:manipulation}
+#student::before {content:"";position:absolute;left:27%;right:27%;bottom:1px;height:8%;border-radius:50%;background:#32201955;filter:blur(2px)}
+#figure {position:absolute;bottom:0;left:50%;width:var(--student-width);height:var(--student-height);background-image:var(--sprite);background-size:500% 100%;background-position:var(--frame,100%) top;background-repeat:no-repeat;transform:translate(-50%,var(--bounce,0px)) scaleX(var(--flip,1));pointer-events:none}
+#student[data-behind] {clip-path:inset(100%)}
+#speech {position:absolute;z-index:3;transform:translateX(-50%);padding:.38rem .65rem;max-width:90%;white-space:nowrap;background:var(--cream);border:1px solid #876437;border-radius:.65rem;box-shadow:0 3px 9px #0003;pointer-events:none}
+#shop {min-height:100vh;min-height:100dvh;padding:1rem max(1rem,env(safe-area-inset-right));background:radial-gradient(ellipse at 50% 14%,#fff3d7,#edcb92);text-align:center}
+.return,.start {display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.55rem 1rem;border-radius:.6rem;border:0;background:var(--teal);color:#fff;text-decoration:none;cursor:pointer}
+#shop nav {text-align:right}
+#shop h1 {margin:clamp(1rem,6vh,4rem) 0 .25rem;font-size:clamp(1.7rem,5vw,2.6rem)}
+#shop p {margin:.5rem 0 1.4rem}
+#front {display:block;width:min(68vw,340px);aspect-ratio:1.23;margin:1.2rem auto;background-repeat:no-repeat;border:2px solid #ad7846;border-radius:.85rem;box-shadow:0 8px 22px #614c2e45}
+body {transition:opacity 140ms ease}
+body[data-fading] {opacity:0}
+@media (prefers-reduced-motion:reduce) {*,*::before {transition:none!important}}
+</style>
+</head>
+<body>
+<main id="market" aria-label="سوق المهارات العماني">
+  <div id="map">
+    <picture><source media="(orientation: landscape)" srcset="computer.webp"><img id="art" src="phone.webp" alt="سوق عماني يضم عشرة محلات"></picture>
+    <button id="student" type="button" aria-label="الطالب" style="--sprite:url('student.webp')"><span id="figure" aria-hidden="true"></span></button>
+    <span id="speech" role="status" lang="en" hidden>Choose a shop!</span>
+  </div>
+</main>
+<main id="shop" hidden>
+  <nav><a class="return" id="back" href="#market"><bdi>← السوق</bdi></a></nav>
+  <h1 id="shop-name" tabindex="-1"></h1>
+  <p id="shop-skill" lang="en" dir="ltr"></p>
+  <div id="front" aria-hidden="true"></div>
+  <button class="start" id="start-practice" type="button" hidden>ابدأ التدريب</button>
+  <button class="start" id="describe-practice" type="button" hidden>Describe</button>
+  <p id="availability" role="status" hidden></p>
+  <p id="placeholder">مساحة تدريب المهارة</p>
+</main>
+<script>
+'use strict';
+
+/*
+ * Adjust the market here. All map coordinates are percentages of the visible artwork.
+ * shops: [left, top, width, height, doorX, doorY, connecting waypoint index].
+ * waypoints: [x, y, indexes of neighboring waypoints]. Keep every segment on cobblestones.
+ * student: width as a % of map width, far/near scale, speed as % of map width per second.
+ */
+const MARKET = {
+  portrait: {
+    student: {width:12, far:.69, near:1, speed:25},
+    waypoints: [
+      [49,97,[1]], [49,92,[0,2]], [49,76,[1,3]], [49.8,60.6,[2,4]],
+      [49.8,45.8,[3,5]], [49.4,30.1,[4]]
+    ],
+    shops: {
+      speaking:[8,17.1,28,13.7,40.6,30.1,5],
+      phonics:[7,32.1,29,13.8,40.6,45.8,4],
+      writing:[7,47,29,14.5,40.6,60.6,3],
+      grammar:[7,63,29,13.7,40.6,76,2],
+      reading:[7,79,29,15.2,40.6,92,1],
+      'advanced-writing':[64,17.1,30,13.7,59.1,30.1,5],
+      blend:[64,32.1,30,13.8,59.1,45.8,4],
+      spelling:[64,47,30,14.5,59.1,60.6,3],
+      vocabulary:[64,63,30,13.7,59.1,76,2],
+      listening:[64,79,30,15.5,59.1,92,1]
+    }
+  },
+  landscape: {
+    student: {width:4.6, far:.74, near:1, speed:11.8},
+    waypoints: [
+      [92,91,[1,6]], [86.5,91,[0,2]], [68.6,92,[1,3]], [51.2,92,[2,4]],
+      [33.8,92,[3,5]], [16,92,[4]], [98.0,86,[0,7]], [98.2,60,[6,8]],
+      [96.5,53,[7,9]], [90,53,[8,10]], [73,53,[9,11]], [56,53,[10,12]],
+      [40,53,[11,13]], [24,53,[12]]
+    ],
+    shops: {
+      speaking:[17.5,19,13.5,28,24,48,13],
+      phonics:[33.3,19,13.5,28,40,48,12],
+      writing:[49,19,14,28,56,48,11],
+      grammar:[65.5,19,14.5,28,73,48,10],
+      reading:[82,19,15.5,28,90,48,9],
+      'advanced-writing':[6.4,60,17,28.5,16,89.7,5],
+      blend:[25.6,60,16,28.5,33.8,89.7,4],
+      spelling:[43.7,60,15.5,28.5,51.2,89.7,3],
+      vocabulary:[60.9,60,15,28.5,68.6,89.7,2],
+      listening:[78,60,16.2,28.5,86.5,89.7,1]
+    }
+  }
+};
+
+const SHOPS = {
+  speaking:['ركن النطق','Speaking'],
+  phonics:['مدرسة الحروف','Phonics'],
+  writing:['دكان الكاتب','Writing'],
+  grammar:['ورشة القواعد','Grammar'],
+  reading:['المكتبة','Reading'],
+  'advanced-writing':['استوديو الكتابة المتقدمة','Advanced Writing'],
+  blend:['ورشة تركيب الأصوات','Blend'],
+  spelling:['ورشة الإملاء','Spelling'],
+  vocabulary:['متجر الكلمات','Vocabulary'],
+  listening:['مجلس الاستماع','Listening']
+};
+
+const orientation = matchMedia('(orientation: landscape)');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const query = new URLSearchParams(location.search);
+const embedded = parent !== window && query.get('embedded') === '1';
+const physicalPages = false;
+const routeName = id => id + '.html';
+const directPage = physicalPages ? location.pathname.split('/').pop().replace(/\.html$/,'') : '';
+const get = id => document.getElementById(id);
+const art = get('art'), map = get('map'), student = get('student'), figure = get('figure');
+const market = get('market'), shop = get('shop'), speech = get('speech');
+const buttons = new Map();
+const storageKey = 'mej.souq.lastDoor';
+let lastShop = Object.hasOwn(SHOPS, query.get('from')) ? query.get('from') : '';
+try { lastShop ||= sessionStorage.getItem(storageKey) || ''; } catch {}
+if (!Object.hasOwn(SHOPS, lastShop)) lastShop = '';
+
+let config, nodes, position, edge, dimensions;
+let travel = null, frameRequest = 0, arrivalTimer = 0, fadeTimer = 0, bubbleTimer = 0;
+let target = '', activeShop = '', walkingSpeed = 0, access = null;
+const delay = () => reduced.matches ? 0 : 140;
+
+for (const [id, [arabic, english]] of Object.entries(SHOPS)) {
+  const anchor = document.createElement('a');
+  anchor.className = 'hotspot';
+  anchor.href = physicalPages && !embedded ? routeName(id) : '#' + routeName(id);
+  anchor.setAttribute('aria-label', arabic + ' – ' + english);
+  anchor.addEventListener('click', event => {
+    if (event.button || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    chooseShop(id);
+  });
+  map.insertBefore(anchor, student);
+  buttons.set(id, anchor);
+}
+
+function measure() {
+  const rect = map.getBoundingClientRect();
+  if (rect.width && rect.height) dimensions = [rect.width,rect.height];
+}
+
+function configure() {
+  config = orientation.matches ? MARKET.landscape : MARKET.portrait;
+  nodes = config.waypoints.map(([x,y,links]) => ({x,y,links:[...links]}));
+  for (const [id, anchor] of buttons) {
+    const [x,y,w,h,doorX,doorY,waypoint] = config.shops[id];
+    nodes[waypoint].links.push(nodes.length);
+    anchor.dataset.door = nodes.length;
+    nodes.push({x:doorX,y:doorY,links:[waypoint]});
+    Object.assign(anchor.style,{left:x+w/2+'%',top:y+h/2+'%',width:w+'%',height:h+'%'});
+  }
+  const index = lastShop ? Number(buttons.get(lastShop).dataset.door) : 0;
+  position = {...nodes[index]};
+  edge = [index,index];
+  measure();
+  pose();
+  if (activeShop) showFront(activeShop);
+}
+
+function pose(frame = 4, flip = 1, bounce = 0) {
+  const size = config.student;
+  const depth = size.far + (size.near-size.far)*position.y/100;
+  const width = dimensions ? dimensions[0]*size.width*depth/100 : 35;
+  Object.assign(student.style,{left:position.x+'%',top:position.y+'%'});
+  student.style.setProperty('--student-width',width+'px');
+  student.style.setProperty('--student-height',width*1.5625+'px');
+  // On the wide map the right passage continues behind the foreground bougainvillea.
+  student.toggleAttribute('data-behind',orientation.matches && position.x>92 && position.y>86);
+  figure.style.setProperty('--frame',frame*25+'%');
+  figure.style.setProperty('--flip',flip);
+  figure.style.setProperty('--bounce',bounce+'px');
+  if (!speech.hidden) {
+    speech.style.left = Math.max(21,Math.min(79,position.x))+'%';
+    speech.style.top = 'max(2px,calc('+position.y+'% - '+(width*1.5625+35)+'px))';
+  }
+}
+
+function distance(a,b) {
+  return Math.hypot((a.x-b.x)*dimensions[0]/100,(a.y-b.y)*dimensions[1]/100);
+}
+
+// Seed both ends of the current segment so re-targeting never cuts across a building.
+function pathTo(destination) {
+  const cost = nodes.map(() => Infinity), previous = nodes.map(() => -1);
+  const unsettled = new Set(nodes.keys());
+  for (const index of edge) cost[index] = distance(position,nodes[index]);
+  while (unsettled.size) {
+    let next = -1;
+    for (const index of unsettled) if (next < 0 || cost[index] < cost[next]) next = index;
+    if (next === destination) break;
+    unsettled.delete(next);
+    for (const neighbor of nodes[next].links) {
+      const through = cost[next]+distance(nodes[next],nodes[neighbor]);
+      if (through < cost[neighbor]) {
+        cost[neighbor] = through;
+        previous[neighbor] = next;
+      }
+    }
+  }
+  const route = [];
+  for (let index=destination;index >= 0;index=previous[index]) route.unshift(index);
+  return route;
+}
+
+function chooseShop(id) {
+  if (!market.hidden && dimensions) {
+    const wasWalking = Boolean(travel);
+    cancelAnimationFrame(frameRequest);
+    clearTimeout(arrivalTimer);
+    clearTimeout(fadeTimer);
+    delete document.body.dataset.fading;
+    if (target) buttons.get(target).removeAttribute('data-selected');
+    target = id;
+    const button = buttons.get(id);
+    button.setAttribute('data-selected','');
+    const destination = Number(button.dataset.door);
+    if (!wasWalking) walkingSpeed = 0;
+    const route = pathTo(destination);
+    const first = route[0];
+    const from = edge[0] === first ? edge[1] : edge[0];
+    travel = {route,from,previousTime:performance.now(),steps:wasWalking ? travel.steps : 0};
+    if (reduced.matches) {
+      position = {...nodes[destination]};
+      edge = [destination,destination];
+      arrive();
+    } else frameRequest = requestAnimationFrame(walk);
+  }
+}
+
+function walk(now) {
+  const dt = Math.min(.04,Math.max(0,(now-travel.previousTime)/1000));
+  travel.previousTime = now;
+  const [first,...rest] = travel.route;
+  const remaining = rest.reduce((total,node,index) =>
+    total+distance(nodes[index ? rest[index-1] : first],nodes[node]),distance(position,nodes[first]));
+  const cruise = Math.min(150,dimensions[0]*config.student.speed/100);
+  const acceleration = cruise*3.8;
+  walkingSpeed = Math.max(cruise*.06,Math.min(cruise,walkingSpeed+acceleration*dt,Math.sqrt(2*acceleration*remaining)));
+  let budget = walkingSpeed*dt;
+  const start = {...position};
+  while (travel.route.length) {
+    const next = travel.route[0], point = nodes[next];
+    const span = distance(position,point);
+    edge = [travel.from,next];
+    if (span > budget && span > .001) {
+      position.x += (point.x-position.x)*budget/span;
+      position.y += (point.y-position.y)*budget/span;
+      break;
+    }
+    position = {...point};
+    budget -= span;
+    travel.from = next;
+    travel.route.shift();
+  }
+  if (!travel.route.length) {
+    edge = [travel.from,travel.from];
+    arrive();
+    return;
+  }
+  const dx = (position.x-start.x)*dimensions[0], dy = (position.y-start.y)*dimensions[1];
+  travel.steps += distance(start,position)/Math.max(12,dimensions[0]*.015);
+  const alternate = Math.floor(travel.steps)%2;
+  const backwards = dy < 0 && -dy > Math.abs(dx)*.65;
+  const bounce = -Math.abs(Math.sin(travel.steps*Math.PI))*Math.min(2.5,dimensions[0]*.005);
+  pose((backwards ? 2 : 0)+alternate,backwards || dx >= 0 ? 1 : -1,bounce);
+  frameRequest = requestAnimationFrame(walk);
+}
+
+function arrive() {
+  travel = null;
+  walkingSpeed = 0;
+  pose();
+  const landed = target;
+  arrivalTimer = setTimeout(() => {
+    lastShop = landed;
+    try { sessionStorage.setItem(storageKey,lastShop); } catch {}
+    document.body.dataset.fading = '';
+    fadeTimer = setTimeout(() => {
+      if (physicalPages && !embedded) {
+        location.assign(routeName(landed));
+      } else {
+        if (!embedded) history.pushState(null,'','#'+routeName(landed));
+        showShop(landed);
+        requestAnimationFrame(() => delete document.body.dataset.fading);
+      }
+    },delay());
+  },reduced.matches ? 40 : 500);
+}
+
+function showFront(id) {
+  const [x,y,w,h] = config.shops[id];
+  const front = get('front');
+  front.style.backgroundImage = 'url('+art.currentSrc+')';
+  front.style.backgroundSize = (10000/w)+'% '+(10000/h)+'%';
+  front.style.backgroundPosition = (100*x/(100-w))+'% '+(100*y/(100-h))+'%';
+}
+
+function showShop(id) {
+  activeShop = id;
+  buttons.get(id).removeAttribute('data-selected');
+  target = '';
+  market.hidden = true;
+  shop.hidden = false;
+  get('shop-name').textContent = SHOPS[id][0];
+  get('shop-skill').textContent = SHOPS[id][1];
+  showAvailability();
+  get('placeholder').hidden = embedded;
+  get('back').href = physicalPages && !embedded ? 'index.html?from='+id : '#market';
+  showFront(id);
+  get('shop-name').focus();
+}
+
+function showAvailability() {
+  const start = get('start-practice');
+  const note = get('availability');
+  const entry = access?.[activeShop];
+  const enabled = Boolean(entry?.enabled);
+  start.hidden = !embedded || !enabled;
+  get('describe-practice').hidden = !embedded || activeShop !== 'writing' || !access?.describe?.enabled;
+  note.hidden = !embedded || !entry || (enabled && !entry.count);
+  note.textContent = !enabled ? entry?.message || '' : entry.count + ' عنصر';
+}
+
+function showMarket(restoreFocus = true) {
+  const previous = activeShop;
+  activeShop = '';
+  shop.hidden = true;
+  market.hidden = false;
+  configure();
+  if (restoreFocus && previous) buttons.get(previous).focus({preventScroll:true});
+}
+
+function syncRoute() {
+  const id = decodeURIComponent(location.hash.slice(1)).replace(/\.html$/,'');
+  if (Object.hasOwn(SHOPS,id)) showShop(id);
+  else showMarket();
+}
+
+get('back').addEventListener('click',event => {
+  if (physicalPages && !embedded) return;
+  event.preventDefault();
+  if (!embedded) history.replaceState(null,'','#market');
+  showMarket();
+});
+function requestPractice(skill) {
+  if (embedded && access?.[skill]?.enabled) parent.postMessage({type:'mej-souq:practice',skill},location.origin);
+}
+get('start-practice').addEventListener('click',() => requestPractice(activeShop));
+get('describe-practice').addEventListener('click',() => requestPractice('describe'));
+if (embedded) window.addEventListener('message',event => {
+  if (event.origin !== location.origin || event.source !== parent || event.data?.type !== 'mej-souq:access') return;
+  access = event.data.access;
+  if (activeShop) showAvailability();
+});
+student.addEventListener('click',() => {
+  clearTimeout(bubbleTimer);
+  speech.hidden = false;
+  pose();
+  bubbleTimer = setTimeout(() => speech.hidden=true,2200);
+});
+orientation.addEventListener('change',() => {
+  const destination = target;
+  cancelAnimationFrame(frameRequest);
+  clearTimeout(arrivalTimer);
+  clearTimeout(fadeTimer);
+  delete document.body.dataset.fading;
+  travel = null;
+  configure();
+  if (destination) chooseShop(destination);
+});
+new ResizeObserver(() => {measure(); if (!travel) pose();}).observe(map);
+art.addEventListener('load',() => {if (activeShop) showFront(activeShop);});
+window.addEventListener('pageshow',() => {delete document.body.dataset.fading;});
+if (!embedded) window.addEventListener('popstate',syncRoute);
+
+configure();
+if (Object.hasOwn(SHOPS,directPage)) showShop(directPage);
+else if (!embedded) syncRoute();
+</script>
+</body>
+</html>

@@ -38,7 +38,7 @@ const CH={
 {title:"Renewable electricity — fictional practice data",values:[["2021",8],["2022",12],["2023",18],["2024",25]],minimum:100,help:"Write a data summary: describe the overall trend, compare highest and lowest percentages, and finish with a short overview. Figures are invented for training."},
 {title:"Science fair visitors — fictional practice data",values:[["Monday",120],["Tuesday",150],["Wednesday",200],["Thursday",180]],minimum:100,help:"Write a data summary: identify the highest and lowest figures, compare the days and describe the change. Figures are invented for training."}
 ]};
-const css='#mej-writing-practice{max-width:760px;margin:8px auto;padding:12px;border:2px solid #95d5ed;border-radius:16px;background:#ebf8ff;color:#164264;direction:rtl}#mej-writing-practice *{box-sizing:border-box}#mej-writing-practice h2{font-size:clamp(18px,4.5vw,24px)}#mej-writing-practice button{padding:10px;font:700 clamp(13px,3.4vw,16px) Tahoma,Arial;border-radius:9px;border:1px solid #82b4d0;background:#087ba9;color:#fff;cursor:pointer}#mej-writing-practice button:disabled{opacity:.35}#mej-writing-practice .grids{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px}#mej-writing-practice .controls{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}#mej-writing-practice .chips{display:flex;flex-wrap:wrap;gap:7px;direction:ltr}#mej-writing-practice .chips button{background:#fff;color:#174766;line-height:1.5}#mej-writing-practice .answer{background:white;border:2px dashed #a2c9db;border-radius:10px;padding:12px;min-height:65px;direction:ltr;text-align:left;font-size:clamp(16px,3.8vw,20px);line-height:1.7;white-space:pre-wrap;margin:9px 0}#mej-writing-practice textarea{width:100%;min-height:180px;font:500 16px/1.7 Arial;padding:12px;border:1px solid #9ec6df;border-radius:10px;direction:ltr}#mej-writing-practice .chart{background:white;border:1px solid #9dd2ec;border-radius:12px;padding:10px}#mej-writing-practice p{line-height:1.65}';
+const css='#app:has(>#mej-skills-souq){width:100%;max-width:none;padding:0!important}#mej-skills-souq{display:block;width:100%;height:100dvh;border:0;background:#16372f}#mej-writing-practice{max-width:760px;margin:8px auto;padding:12px;border:2px solid #95d5ed;border-radius:16px;background:#ebf8ff;color:#164264;direction:rtl}#mej-writing-practice *{box-sizing:border-box}#mej-writing-practice h2{font-size:clamp(18px,4.5vw,24px)}#mej-writing-practice button{padding:10px;font:700 clamp(13px,3.4vw,16px) Tahoma,Arial;border-radius:9px;border:1px solid #82b4d0;background:#087ba9;color:#fff;cursor:pointer}#mej-writing-practice button:disabled{opacity:.35}#mej-writing-practice .grids{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px}#mej-writing-practice .controls{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}#mej-writing-practice .chips{display:flex;flex-wrap:wrap;gap:7px;direction:ltr}#mej-writing-practice .chips button{background:#fff;color:#174766;line-height:1.5}#mej-writing-practice .answer{background:white;border:2px dashed #a2c9db;border-radius:10px;padding:12px;min-height:65px;direction:ltr;text-align:left;font-size:clamp(16px,3.8vw,20px);line-height:1.7;white-space:pre-wrap;margin:9px 0}#mej-writing-practice textarea{width:100%;min-height:180px;font:500 16px/1.7 Arial;padding:12px;border:1px solid #9ec6df;border-radius:10px;direction:ltr}#mej-writing-practice .chart{background:white;border:1px solid #9dd2ec;border-radius:12px;padding:10px}#mej-writing-practice p{line-height:1.65}';
 const app=()=>document.getElementById('app');
 const E=(tag,t)=>{const node=document.createElement(tag);if(t!=null)node.textContent=t;return node};
 const shuffle=a=>{const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x};
@@ -137,12 +137,73 @@ function tidy(){
  const action=E('button','تدرّب');action.className='btn small';action.onclick=choose;
  card.append(bubble,title,info,action);cards.append(card);
 }
+// Keep the live skill selectors and bank gates as the market's practice entry points.
+const souqTypes={phonics:'Phonics',blend:'Blend',vocabulary:'Vocabulary',spelling:'Spelling',
+ listening:'Listening',grammar:'Grammar',reading:'Reading',describe:'Describe'};
+const souqRoutes={
+ speaking:()=>window.speakingStudio(),
+ writing:choose,
+ 'advanced-writing':()=>window.writingStudio(),
+ ...Object.fromEntries(Object.entries(souqTypes).map(([skill,type])=>[skill,()=>nativeSelect(type)]))
+};
+let souqFrame;
+function souqAccess(){
+ const grades=Array.from({length:13},(_,g)=>g).filter(permittedGrade);
+ const types=new Map(Object.values(souqTypes).map(type=>[type,0]));
+ for(const grade of grades){
+  for(const question of byGrade[grade]||[]){
+   if(types.has(question.type))types.set(question.type,types.get(question.type)+1);
+  }
+ }
+ const access={speaking:{enabled:true},writing:{enabled:true},
+  'advanced-writing':{enabled:grades.includes(8),message:'الكتابة المتقدمة متاحة بعد فتح المستوى الثامن.'}};
+ for(const [skill,type] of Object.entries(souqTypes)){
+  const count=types.get(type);
+  access[skill]={enabled:count>0,count,message:'لا توجد تدريبات لهذه المهارة في مستوياتك المفتوحة.'};
+ }
+ return access;
+}
+function sizeSouq(){
+ if(!souqFrame?.isConnected)return;
+ const top=souqFrame.getBoundingClientRect().top+window.scrollY;
+ souqFrame.style.height='max(220px, calc(100dvh - '+Math.max(0,Math.ceil(top))+'px))';
+}
+function openSouq(fallback,args){
+ const root=app();
+ if(!root||location.protocol==='file:')return fallback.apply(window,args);
+ const frame=E('iframe');
+ frame.id='mej-skills-souq';
+ frame.title='سوق المهارات العماني';
+ frame.src='./assets/skills-souq/index.html?embedded=1';
+ frame.addEventListener('load',()=>{
+  if(!frame.isConnected)return;
+  if(!frame.contentDocument?.getElementById('map')){
+   fallback.apply(window,args);
+   queueMicrotask(tidy);
+   return;
+  }
+  frame.contentWindow.postMessage({type:'mej-souq:access',access:souqAccess()},location.origin);
+  sizeSouq();
+ });
+ souqFrame=frame;
+ root.replaceChildren(frame);
+ sizeSouq();
+}
+window.addEventListener('resize',sizeSouq);
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||!souqFrame?.isConnected||event.source!==souqFrame.contentWindow)return;
+ if(event.data?.type!=='mej-souq:practice')return;
+ const skill=event.data.skill;
+ if(!Object.hasOwn(souqRoutes,skill)||!souqAccess()[skill]?.enabled)return;
+ souqRoutes[skill]();
+ window.scrollTo({top:0,behavior:'instant'});
+});
 function boot(){
  if(!document.getElementById('mej-writing-skills-css')){const st=E('style',css);st.id='mej-writing-skills-css';document.head.append(st)}
  if(typeof window.selectSkill==='function')nativeSelect=window.selectSkill;
  const native=window.skills;
  if(typeof native==='function'&&!native.__mejWritingWrapped){
-  const patched=function(...args){const v=native.apply(this,args);queueMicrotask(tidy);return v};patched.__mejWritingWrapped=true;window.skills=patched;
+  const patched=function(...args){return openSouq(native,args)};patched.__mejWritingWrapped=true;window.skills=patched;
  }
  const root=app();if(root){let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;try{if(root.querySelector('.skill-cards'))tidy()}catch(e){console.warn('Writing skill card refresh:',e)}})}).observe(root,{childList:true,subtree:false})}
  tidy();

@@ -10,6 +10,51 @@
     const i=Math.floor((n-1)/2), side=(n-1)%2;
     return portrait?[phoneX[i][side],phoneY[i]+2.5]:[desktopX[i%4][side],[82,58,35][Math.floor(i/4)]];
   }
+  function boatPosition(n, portrait) {
+    const [x, y] = position(n, portrait);
+    return n ? [x, y + (portrait ? 1.8 : 2.8)] : [x, y];
+  }
+
+  function course(from, target, portrait) {
+    const points = [boatPosition(from, portrait)];
+    const direction = Math.sign(target - from);
+    const rowSize = portrait ? 6 : 8;
+    for (let n = from; n !== target; n += direction) {
+      const lower = Math.min(n, n + direction);
+      const next = n + direction;
+      if (lower === 0 && portrait) {
+        const harbourChannel = [[40, 75], [27, 73]];
+        points.push(...(direction > 0 ? harbourChannel : harbourChannel.reverse()));
+      } else if (lower && lower % rowSize === 0) {
+        const [right, lowerY] = boatPosition(lower, portrait);
+        const [left, upperY] = boatPosition(lower + 1, portrait);
+        const lane = upperY + (portrait ? 2.1 : 3);
+        const edge = portrait ? 93 : 95;
+        const turn = [[Math.max(right, edge), lowerY], [edge, lane], [left, lane]];
+        points.push(...(direction > 0 ? turn : turn.reverse()));
+      }
+      points.push(boatPosition(next, portrait));
+    }
+    return points;
+  }
+
+  function roundTurns(points) {
+    const rounded = [points[0]];
+    const mix = (a, b, f) => a.map((value, i) => value + (b[i] - value) * f);
+    for (let i = 1; i < points.length - 1; i++) {
+      const corner = points[i];
+      const before = mix(corner, points[i - 1], .25);
+      const after = mix(corner, points[i + 1], .25);
+      rounded.push(before);
+      for (let s = 1; s <= 5; s++) {
+        const t = s / 5;
+        rounded.push(mix(mix(before, corner, t), mix(corner, after, t), t));
+      }
+    }
+    if (points.length > 1) rounded.push(points.at(-1));
+    return rounded;
+  }
+
   function button(scene,label,x,y,w,h,action,visible=false){
     const b=document.createElement('button');
     b.type='button'; b.className='sea-hit'+(visible?' sea-door':''); b.setAttribute('aria-label',label); b.title=label;
@@ -28,44 +73,49 @@
   }
   window.levels=function(){
     const app=document.getElementById('app'),portrait=phone.matches;
-    app.innerHTML='<div class="sea-scene sea-chart"><img class="sea-art" alt="خريطة التعلّم البحرية"><img class="sea-boat" alt="" src="'+base+'boat.webp"></div>';
+    app.innerHTML='<div class="sea-scene sea-chart"><img class="sea-art" alt="خريطة التعلّم البحرية"><div class="sea-water" aria-hidden="true"></div><div class="sea-wildlife" aria-hidden="true"><i class="sea-turtle"></i><i class="sea-fish"></i></div><div class="sea-boat" aria-hidden="true"><img alt="" src="'+base+'boat.webp"></div></div>';
     const scene=app.querySelector('.sea-chart'),boat=scene.querySelector('.sea-boat');
     scene.querySelector('.sea-art').src=base+(portrait?'phone':'desktop')+'.webp';
     function place([x,y]){boat.style.left=x+'%';boat.style.top=y+'%'}
-    place(position(lastStop,portrait));
+    place(boatPosition(lastStop,portrait));
     let sailing=false;
     function visit(g,part){
       if(sailing||!checkAccess(g))return;
       if(!mejPartUnlocked(g,part)){toast('أكمل الوصول أولًا لفتح المغادرة.');return}
       const target=g?(g-1)*2+part:0;
-      const points=[position(lastStop,portrait)];
-      const step=Math.sign(target-lastStop);
-      for(let n=lastStop;n!==target;n+=step){
-        const a=Math.min(n,n+step), from=position(n,portrait),to=position(n+step,portrait);
-        const rowEnd=portrait?6:8;
-        if(a>0&&a%rowEnd===0){
-          const lo=position(a,portrait),hi=position(a+1,portrait),lane=hi[1]+(portrait?1.8:3);
-          const turn=[[portrait?97:95,lo[1]],[portrait?97:95,lane],[hi[0],lane]];
-          points.push(...(step>0?turn:turn.reverse()));
-        }else if(!a&&portrait)points.push([40,74]);
-        points.push(to);
-      }
-      sailing=true;
-      const lengths=points.slice(1).map((p,i)=>Math.hypot((p[0]-points[i][0])*scene.clientWidth/100,(p[1]-points[i][1])*scene.clientHeight/100));
-      const total=lengths.reduce((a,b)=>a+b,0),duration=matchMedia('(prefers-reduced-motion:reduce)').matches?0:Math.min(4500,total*2.8);
+      const points = roundTurns(course(lastStop, target, portrait));
+      sailing = true;
+      const lengths = points.slice(1).map((p, i) => Math.hypot(
+        (p[0] - points[i][0]) * scene.clientWidth / 100,
+        (p[1] - points[i][1]) * scene.clientHeight / 100
+      ));
+      const total = lengths.reduce((sum, length) => sum + length, 0);
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const duration = reduceMotion || !total ? 0 : Math.min(7800, Math.max(720, total * 4.5));
+      if (duration) boat.classList.add('is-sailing');
       const start=performance.now();
       function advance(t){
         if(!scene.isConnected)return;
         if(!duration||t-start>=duration){lastStop=target;castle(g,part);return}
         let distance=total*Math.max(0,t-start)/duration,i=0;
         while(i<lengths.length-1&&distance>lengths[i])distance-=lengths[i++];
-        const f=distance/lengths[i],p=points[i],q=points[i+1];place(p.map((v,k)=>v+(q[k]-v)*f));requestAnimationFrame(advance);
+        const f = lengths[i] ? distance / lengths[i] : 0;
+        const p = points[i], q = points[i + 1];
+        if (Math.abs(q[0] - p[0]) > .12) boat.dataset.heading = q[0] > p[0] ? 'right' : 'left';
+        place(p.map((v, k) => v + (q[k] - v) * f));
+        requestAnimationFrame(advance);
       }
       requestAnimationFrame(advance);
     }
     button(scene,'العودة إلى رحلتي',portrait?94:96,portrait?3:7,8,8,()=>route('journey'));
-    const start=portrait?[[26,88],[73,88]]:[[11.5,70],[11,88]];
-    start.forEach(([x,y],i)=>button(scene,i?'انطلق':'ابدأ',x,y,portrait?23:10,8,()=>!active().diagnosed&&!permitted(1)?route('diagnostic'):visit(0,i+1)));
+    const start = portrait ? [[26, 88], [73, 88]] : [[11.5, 70.4], [11, 88]];
+    start.forEach(([x, y], index) => {
+      const entry = button(scene, index ? 'ابدأ' : 'تأسّس', x, y,
+        portrait ? (index ? 22.5 : 20.5) : 9.5, portrait ? 5.8 : 13,
+        () => !active().diagnosed && !permitted(1) ? route('diagnostic') : visit(0, index + 1));
+      entry.classList.add('sea-entry');
+      entry.textContent = index ? 'ابدأ' : 'تأسّس';
+    });
     for(let n=1;n<=24;n++){
       const i=Math.floor((n-1)/2),part=(n-1)%2+1,[x,y]=position(n,portrait);
       const b=button(scene,mejVoyagePlace(i+1)+' · '+mejVoyageLeg(part),x,y-(portrait?2.5:3),portrait?9:5.2,portrait?4.7:7,()=>visit(i+1,part));

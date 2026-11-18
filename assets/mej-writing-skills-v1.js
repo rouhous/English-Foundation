@@ -138,7 +138,7 @@ function tidy(){
  card.append(bubble,title,info,action);cards.append(card);
 }
 // Keep the live skill selectors and bank gates as the market's practice entry points.
-const souqRoomCss='./assets/skills-souq/room.css';
+const souqRoomCss='./assets/skills-souq/room.css?v=20261119-voyage';
 const souqTypes={phonics:'Phonics',blend:'Blend',vocabulary:'Vocabulary',spelling:'Spelling',
  listening:'Listening',grammar:'Grammar',reading:'Reading',describe:'Describe'};
 const souqRoutes={
@@ -162,19 +162,26 @@ function renderSouqRoom(){
  if(!root)return;
  const controls=surface?.querySelectorAll('button[onclick]');
  const levelButtons=controls&&Array.from(controls).filter(el=>el.getAttribute('onclick').startsWith('beginLevel('));
- const question=surface?.querySelector('.quiz-top')&&activeSession?.origin==='skills';
- const result=surface?.classList.contains('center')&&surface.querySelector('.score')&&
-   Array.from(controls).some(el=>el.getAttribute('onclick')==="route('skills')");
- const skillLevels=Boolean(levelButtons?.length&&surface.querySelector(':scope > .grid'));
+ const actions=Array.from(controls||[],button=>button.getAttribute('onclick'));
+ const question=Boolean(surface?.querySelector('.quiz-top')&&activeSession?.kind==='practice');
+ const skillQuestion=question&&activeSession.origin==='skills';
+ const roundResult=Boolean(surface?.classList.contains('center')&&surface.querySelector('.score')&&levelButtons?.length);
+ const skillResult=roundResult&&actions.includes("route('skills')");
+ const stationResult=roundResult&&actions.includes("route('levels')");
+ const stationLearning=Boolean(surface?.querySelector('.learning')||
+   actions.includes("route('levels')")&&actions.some(action=>action.startsWith('beginStagePart(')));
+ const station=question&&!skillQuestion||stationLearning||stationResult;
+ const result=skillResult||stationResult;
+ const skillLevels=Boolean(!station&&levelButtons?.length&&surface.querySelector(':scope > .grid'));
  const speaking=surface?.querySelector('#speakingGrade');
  const advanced=surface?.querySelector('#essay');
  const writing=surface?.id==='mej-writing-practice';
- let skill=question?Object.keys(souqTypes).find(key=>souqTypes[key]===activeSession.skillType):
+ let skill=station?'station':skillQuestion?Object.keys(souqTypes).find(key=>souqTypes[key]===activeSession.skillType):
    speaking?'speaking':advanced?'advanced-writing':writing?'writing':souqSelection;
- if(question&&skill)souqSelection=skill;
+ if(skillQuestion&&skill)souqSelection=skill;
  if(skill==='describe')skill='writing';
- const room=souqRooms[skill];
- if(!room||!(question||result||skillLevels||speaking||advanced||writing)){
+ const room=station?['المحطات',stationLearning?'بوابة التعلّم':stationResult?'نتيجة الجولة':'بوابة الألعاب']:souqRooms[skill];
+ if(!room||!(question||result||skillLevels||speaking||advanced||writing||stationLearning)){
   delete root.dataset.souqRoom;
   delete root.dataset.souqView;
   root.querySelector(':scope > .souq-room-header')?.remove();
@@ -183,20 +190,22 @@ function renderSouqRoom(){
  if(surface.classList.contains('souq-room-surface'))return;
  const [arabic,english,x,y]=room;
  root.dataset.souqRoom=skill;
- root.dataset.souqView=question?'practice':result?'result':skillLevels?'levels':'studio';
+ root.dataset.souqView=question?'practice':result?'result':stationLearning?'learning':skillLevels?'levels':'studio';
  surface.classList.add('souq-room-surface');
  const header=E('header');
  header.className='souq-room-header';
- header.style.setProperty('--souq-art-x',x+'%');
- header.style.setProperty('--souq-art-y',y+'%');
+ if(!station){
+  header.style.setProperty('--souq-art-x',x+'%');
+  header.style.setProperty('--souq-art-y',y+'%');
+ }
  const nav=E('nav');
  nav.className='souq-room-nav';
- nav.setAttribute('aria-label','التنقل في الدكان');
- const back=E('button','← السوق');
+ nav.setAttribute('aria-label',station?'التنقل في المحطة':'التنقل في الدكان');
+ const back=E('button',station?'← المحطات':'← السوق');
  back.type='button';
- back.onclick=question?()=>window.stopQuiz():()=>window.route('skills');
+ back.onclick=question?()=>window.stopQuiz():()=>window.route(station?'levels':'skills');
  const name=E('bdi',english);
- name.lang='en';
+ name.lang=station?'ar':'en';
  nav.append(back,name);
  const art=E('div');
  art.className='souq-room-art';
@@ -222,13 +231,13 @@ function renderSouqRoom(){
   }
  }
  for(const button of controls){
-  if(["route('skills')",'stopQuiz()'].includes(button.getAttribute('onclick')))button.classList.add('souq-replaced-action');
+  if([station?"route('levels')":"route('skills')",'stopQuiz()'].includes(button.getAttribute('onclick')))button.classList.add('souq-replaced-action');
  }
  if(writing){
   const originalBack=Array.from(surface.querySelectorAll('button')).find(button=>button.onclick===goBack);
   originalBack?.classList.add('souq-replaced-action');
  }
- if(question){
+ if(skillQuestion){
   const label=surface.querySelector('.quiz-top b');
   if(label)label.textContent='المستوى '+activeSession.grade;
  }

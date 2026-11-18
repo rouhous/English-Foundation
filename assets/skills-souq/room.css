@@ -157,3 +157,130 @@ body:has(#app[data-souq-room]) #journeyNav { display: none !important; }
 }
 #app[data-souq-room] .souq-levels button.souq-level-row:is(:hover, :focus-visible, [data-last]) { background: #d9ede1 !important; }
 #app[data-souq-room] .souq-level-row .souq-count { color: #2e5145; font-size: .86em; font-weight: 600; }
+
+/* The castle artwork also identifies learning and practice launched from a station. */
+#app[data-souq-room="station"] .souq-room-art {
+  background-image: url('../sea-map/castle.webp');
+  background-size: cover;
+  background-position: center 40%;
+}
+#app[data-souq-view="learning"] .souq-room-surface .learning {
+  background: #fffaf1 !important;
+  color: var(--souq-ink) !important;
+  border-color: var(--souq-rule) !important;
+  box-shadow: none !important;
+}
+#app[data-souq-view="learning"] .souq-room-surface .muted {
+  color: #455a49 !important;
+}
+#app[data-souq-room="station"] .souq-room-surface .question {
+  background: #fff7e7 !important;
+  border-color: var(--souq-rule) !important;
+}
+#app[data-souq-room="station"] .souq-room-surface .guide-ar { color: #125649; }
+
+/* Two real door targets share the teal-and-brass navigation of the rooms. */
+body #app > .sea-castle > .sea-castle-title {
+  background: #fff3dc;
+  color: #17392e;
+  border: 2px solid #bd945b;
+  box-shadow: 0 3px 12px #412c1f55;
+}
+body #app > .sea-castle > .sea-castle-home {
+  background: #125649;
+  color: #fff3dc;
+  border-color: #dfba80;
+  box-shadow: 0 3px 9px #412c1f70;
+}
+#app > .sea-castle > .sea-door {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  outline-offset: 1px;
+  touch-action: manipulation;
+}
+#app > .sea-castle > .sea-door > span {
+  background: #125649;
+  border: 2px solid #dfba80;
+  color: #fff3dc;
+  padding: .38em .65em;
+  min-width: 62px;
+  border-radius: .65em;
+  box-shadow: 0 3px 9px #38241580;
+}
+#app > .sea-castle > .sea-door:is(:hover,:active,:focus-visible) > span {
+  background: #0a4036;
+  border-color: #ffe2a6;
+}
+
+/* Dashboard text sits on parchment; the original sea and badge art stays visible. */
+body:has(#app > .journey-v23) {
+  background: radial-gradient(ellipse at 52% 0%, #efd8ae, #d8b27d 75%, #c19560) !important;
+}
+#app > .journey-dashboard.journey-v23 {
+  --journey-teal: #125649;
+  --journey-paper: #fff3dc;
+  --journey-ink: #17392e;
+  --journey-brass: #bd945b;
+  color: var(--journey-ink);
+}
+#app .journey-v23 > .j26-head {
+  background: linear-gradient(110deg,#0d3f36f5,#155749eb 60%,#174f43df), url('../sea-map/desktop.webp') center 43% / cover !important;
+  border: 2px solid var(--journey-brass) !important;
+  box-shadow: 0 4px 12px #59370f44;
+  color: #fff6e1 !important;
+}
+#app .journey-v23 .j26-brand { border-color: #e1bb825c; }
+#app .journey-v23 .j26-detail > span {
+  border-color: #efcf9299 !important;
+  background: #103a31 !important;
+  color: #fff6e1 !important;
+}
+#app .journey-v23 .j23-avatar { background-color: var(--journey-paper) !important; border-color: #e1b469 !important; }
+#app .journey-v23 .j23-progress {
+  background: #0b3029 !important;
+  border-color: #d8b570;
+}
+#app .journey-v23 .j23-progress i { background: #f5cc78 !important; }
+
+#app .journey-v23 > .j23-panel {
+  background: linear-gradient(150deg,#fff9eb,var(--journey-paper)) !important;
+  border: 1.5px solid var(--journey-brass) !important;
+  color: var(--journey-ink) !important;
+  box-shadow: 0 4px 12px #59370f35;
+}
+#app .journey-v23 > .j23-panel :is(h2,p,summary,.caption,.j23-medal strong,.j23-medal small,.j23-recs small,.mej-hidden-intro small) {
+  color: var(--journey-ink) !important;
+  text-shadow: none !important;
+}
+#app .journey-v23 .j23-medal.locked .j24-medal-art {
+  filter: saturate(.55) brightness(.88);
+}
+#app .journey-v23 .j23-panel .j23-medal {
+  -webkit-text-fill-color: currentColor !important;
+  color: var(--journey-ink) !important;
+}
+#app .journey-v23 .j23-panel .j23-medal .mej-gate-reward { color: #125649 !important; }
+#app .journey-v23 .mej-hidden-rewards b,
+#app .journey-v23 .journey-history > div {
+  color: var(--journey-ink) !important;
+  background: #f5e2bd !important;
+  border-color: var(--journey-brass) !important;
+}
+#app .journey-v23 :is(.journey-home-mini,.j23-file-buttons button,.j23-recs button,.j23-history .btn,.j23-panel summary) {
+  background: #fff7e7 !important;
+  border-color: var(--journey-brass) !important;
+  color: var(--journey-ink) !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: none;
+}
+#app .journey-v23 .j23-links .j23-link {
+  background: var(--journey-teal) !important;
+  border: 1px solid #b78d56 !important;
+  color: #fff7e7 !important;
+  min-height: 44px;
+  text-shadow: none;
+}
+#app .journey-v23 .journey-home-mini { min-height: 44px !important; }
+#app .journey-v23 :is(button,summary):focus-visible { outline: 3px solid #ac702d; outline-offset: 2px; }

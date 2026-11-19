@@ -138,7 +138,7 @@ function tidy(){
  card.append(bubble,title,info,action);cards.append(card);
 }
 // Keep the live skill selectors and bank gates as the market's practice entry points.
-const souqRoomCss='./assets/skills-souq/room.css?v=20261119-voyage';
+const souqRoomCss='./assets/skills-souq/room.css?v=20261119-full-market';
 const souqTypes={phonics:'Phonics',blend:'Blend',vocabulary:'Vocabulary',spelling:'Spelling',
  listening:'Listening',grammar:'Grammar',reading:'Reading',describe:'Describe'};
 const souqRoutes={
@@ -163,25 +163,26 @@ function renderSouqRoom(){
  const controls=surface?.querySelectorAll('button[onclick]');
  const levelButtons=controls&&Array.from(controls).filter(el=>el.getAttribute('onclick').startsWith('beginLevel('));
  const actions=Array.from(controls||[],button=>button.getAttribute('onclick'));
- const question=Boolean(surface?.querySelector('.quiz-top')&&activeSession?.kind==='practice');
- const skillQuestion=question&&activeSession.origin==='skills';
+ const placement=surface?.dataset.placementView;
+ const question=Boolean(surface?.querySelector('.quiz-top')&&(activeSession?.kind==='practice'||placement==='practice'));
+ const skillQuestion=question&&!placement&&activeSession.origin==='skills';
  const roundResult=Boolean(surface?.classList.contains('center')&&surface.querySelector('.score')&&levelButtons?.length);
  const skillResult=roundResult&&actions.includes("route('skills')");
  const stationResult=roundResult&&actions.includes("route('levels')");
  const stationLearning=Boolean(surface?.querySelector('.learning')||
    actions.includes("route('levels')")&&actions.some(action=>action.startsWith('beginStagePart(')));
- const station=question&&!skillQuestion||stationLearning||stationResult;
+ const station=question&&!skillQuestion&&!placement||stationLearning||stationResult;
  const result=skillResult||stationResult;
  const skillLevels=Boolean(!station&&levelButtons?.length&&surface.querySelector(':scope > .grid'));
  const speaking=surface?.querySelector('#speakingGrade');
  const advanced=surface?.querySelector('#essay');
  const writing=surface?.id==='mej-writing-practice';
- let skill=station?'station':skillQuestion?Object.keys(souqTypes).find(key=>souqTypes[key]===activeSession.skillType):
+ let skill=placement?'placement':station?'station':skillQuestion?Object.keys(souqTypes).find(key=>souqTypes[key]===activeSession.skillType):
    speaking?'speaking':advanced?'advanced-writing':writing?'writing':souqSelection;
  if(skillQuestion&&skill)souqSelection=skill;
  if(skill==='describe')skill='writing';
- const room=station?['المحطات',stationLearning?'بوابة التعلّم':stationResult?'نتيجة الجولة':'بوابة الألعاب']:souqRooms[skill];
- if(!room||!(question||result||skillLevels||speaking||advanced||writing||stationLearning)){
+ const room=placement?['التشخيص',placement==='result'?'نتيجة التشخيص':'تحديد المستوى']:station?['المحطات',stationLearning?'بوابة التعلّم':stationResult?'نتيجة الجولة':'بوابة الألعاب']:souqRooms[skill];
+ if(!room||!(question||result||skillLevels||speaking||advanced||writing||stationLearning||placement)){
   delete root.dataset.souqRoom;
   delete root.dataset.souqView;
   root.querySelector(':scope > .souq-room-header')?.remove();
@@ -190,22 +191,22 @@ function renderSouqRoom(){
  if(surface.classList.contains('souq-room-surface'))return;
  const [arabic,english,x,y]=room;
  root.dataset.souqRoom=skill;
- root.dataset.souqView=question?'practice':result?'result':stationLearning?'learning':skillLevels?'levels':'studio';
+ root.dataset.souqView=placement||(question?'practice':result?'result':stationLearning?'learning':skillLevels?'levels':'studio');
  surface.classList.add('souq-room-surface');
  const header=E('header');
  header.className='souq-room-header';
- if(!station){
+ if(!station&&!placement){
   header.style.setProperty('--souq-art-x',x+'%');
   header.style.setProperty('--souq-art-y',y+'%');
  }
  const nav=E('nav');
  nav.className='souq-room-nav';
- nav.setAttribute('aria-label',station?'التنقل في المحطة':'التنقل في الدكان');
- const back=E('button',station?'← المحطات':'← السوق');
+ nav.setAttribute('aria-label',placement?'التنقل في التشخيص':station?'التنقل في المحطة':'التنقل في الدكان');
+ const back=E('button',placement?(question?'← التشخيص':'← رحلتي'):station?'← المحطات':'← السوق');
  back.type='button';
- back.onclick=question?()=>window.stopQuiz():()=>window.route(station?'levels':'skills');
+ back.onclick=question?()=>window.stopQuiz():()=>window.route(placement?'journey':station?'levels':'skills');
  const name=E('bdi',english);
- name.lang=station?'ar':'en';
+ name.lang=station||placement?'ar':'en';
  nav.append(back,name);
  const art=E('div');
  art.className='souq-room-art';
@@ -231,7 +232,8 @@ function renderSouqRoom(){
   }
  }
  for(const button of controls){
-  if([station?"route('levels')":"route('skills')",'stopQuiz()'].includes(button.getAttribute('onclick')))button.classList.add('souq-replaced-action');
+  const returnAction=placement?"route('journey')":station?"route('levels')":"route('skills')";
+  if([returnAction,'stopQuiz()'].includes(button.getAttribute('onclick')))button.classList.add('souq-replaced-action');
  }
  if(writing){
   const originalBack=Array.from(surface.querySelectorAll('button')).find(button=>button.onclick===goBack);
@@ -259,11 +261,6 @@ function souqAccess(){
  }
  return access;
 }
-function sizeSouq(){
- if(!souqFrame?.isConnected)return;
- const top=souqFrame.getBoundingClientRect().top+window.scrollY;
- souqFrame.style.height='max(220px, calc(100dvh - '+Math.max(0,Math.ceil(top))+'px))';
-}
 function openSouq(fallback,args){
  souqSelection=null;
  const root=app();
@@ -271,7 +268,7 @@ function openSouq(fallback,args){
  const frame=E('iframe');
  frame.id='mej-skills-souq';
  frame.title='سوق المهارات العماني';
- frame.src='./assets/skills-souq/index.html?embedded=1';
+ frame.src='./assets/skills-souq/index.html?embedded=1&v=20261119-full-market';
  frame.addEventListener('load',()=>{
   if(!frame.isConnected)return;
   if(!frame.contentDocument?.getElementById('map')){
@@ -280,15 +277,13 @@ function openSouq(fallback,args){
    return;
   }
   frame.contentWindow.postMessage({type:'mej-souq:access',access:souqAccess()},location.origin);
-  sizeSouq();
  });
  souqFrame=frame;
  root.replaceChildren(frame);
- sizeSouq();
 }
-window.addEventListener('resize',sizeSouq);
 window.addEventListener('message',event=>{
  if(event.origin!==location.origin||!souqFrame?.isConnected||event.source!==souqFrame.contentWindow)return;
+ if(event.data?.type==='mej-souq:journey'){window.route('journey');return}
  if(event.data?.type!=='mej-souq:practice')return;
  const skill=event.data.skill;
  if(!Object.hasOwn(souqRoutes,skill)||!souqAccess()[skill]?.enabled)return;

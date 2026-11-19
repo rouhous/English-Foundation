@@ -284,3 +284,113 @@ body:has(#app > .journey-v23) {
 }
 #app .journey-v23 .journey-home-mini { min-height: 44px !important; }
 #app .journey-v23 :is(button,summary):focus-visible { outline: 3px solid #ac702d; outline-offset: 2px; }
+
+/* Full-screen market uses the map itself as the navigation. */
+body:has(#app > #mej-skills-souq) { overflow: hidden; }
+body:has(#app > #mej-skills-souq) > header,
+body:has(#app > #mej-skills-souq) #journeyNav,
+body:has(#app > #mej-skills-souq) #mej-owner-rights-notice {
+  display: none !important;
+}
+body #app.container:has(> #mej-skills-souq) {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body #app > #mej-skills-souq { width: 100%; height: 100%; }
+
+#app[data-souq-room="placement"] .souq-room-art {
+  background-image: url('../sea-map/desktop.webp');
+  background-size: cover;
+  background-position: center 40%;
+}
+#app[data-souq-room="placement"] .souq-room-surface .notice {
+  background: #f4e6c8 !important;
+  border: 1px solid #c8a775 !important;
+  color: #17392e !important;
+}
+#app[data-souq-room="placement"] .souq-room-surface .notice.green {
+  background: #e0eee3 !important;
+  border-color: #82a189 !important;
+}
+#app[data-souq-room="placement"][data-souq-view="intro"] .souq-room-surface > div:first-child {
+  font-size: clamp(34px, 9vw, 59px) !important;
+}
+
+/* Public student views, with the sea artwork and school branding on the home screen. */
+body:has(#app > :is(.student-summary, #mej-ranking-root)) {
+  background: radial-gradient(ellipse at 50% 0%, #f3ddb4, #d6ae79) !important;
+}
+#journeyNav.open,
+body #app .mobile-ocean-v31 .actual-nav {
+  background: #125649 !important;
+  color: #fff3dc !important;
+  border-color: #bd945b !important;
+}
+#journeyNav.open .navbutton,
+body #app .mobile-ocean-v31 .actual-nav > button:not(.actual-start) {
+  color: #fff3dc !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+#journeyNav.open .navbutton:is(.active,:focus-visible),
+body #app .mobile-ocean-v31 .actual-nav > button:is(.current,:focus-visible):not(.actual-start) {
+  color: #17392e !important;
+  background: #fff3dc !important;
+  border-color: #bd945b !important;
+}
+body #app .mobile-ocean-v31 .actual-nav .actual-start {
+  background: linear-gradient(#fff1cc,#e5bc71) !important;
+  color: #17392e !important;
+  border-color: #f9e0a8 !important;
+  box-shadow: 0 3px 0 #946533 !important;
+}
+body #app .mobile-ocean-v31 .actual-nav .actual-start small { color: #17392e !important; }
+body #app .mobile-ocean-v31 :is(.actual-student,.actual-user-actions button,.actual-student select),
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner {
+  background: #fff3dc !important;
+  color: #17392e !important;
+  border-color: #bd945b !important;
+}
+#app > .student-summary,
+#app #mej-ranking-root :is(.mej-class-ranking,.mej-rank-unavailable),
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner .card {
+  background: #fff6e5 !important;
+  color: #17392e !important;
+  border: 1.5px solid #bd945b !important;
+  box-shadow: 0 4px 12px #59370f35 !important;
+}
+#app > .student-summary :is(h1,.caption,.info b,.info small),
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner :is(h2,h3,p,label) {
+  color: #17392e !important;
+  text-shadow: none !important;
+}
+#app > .student-summary :is(.info,.week),
+#app #mej-ranking-root :is(.mej-ranking-student,.mej-ranking-rank),
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner :is(.notice,input,select) {
+  background: #fffaf1 !important;
+  color: #17392e !important;
+  border-color: #d0af7e !important;
+}
+#app > .student-summary .week,
+#app #mej-ranking-root .mej-ranking-self {
+  background: #e0eee3 !important;
+  border-color: #82a189 !important;
+}
+#app > .student-summary .btn,
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner .btn {
+  background: #fff7e7 !important;
+  color: #17392e !important;
+  border-color: #bd945b !important;
+  box-shadow: none !important;
+}
+body :is(#journeyModal,#journeySettingsModal) .journey-modal-inner .btn.mint {
+  background: #125649 !important;
+  color: #fff6e1 !important;
+}

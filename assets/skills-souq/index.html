@@ -15,6 +15,15 @@ button,a {font:inherit}
 #map picture {position:absolute;inset:0;display:block}
 #art {display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
 @media (orientation:landscape) {#map {width:min(100vw,177.7778dvh);aspect-ratio:16/9}}
+body[data-embedded] #map {width:100%;height:100vh;height:100dvh;aspect-ratio:auto}
+body[data-embedded] #art {object-fit:fill}
+.market-journey {
+  position:absolute;z-index:4;right:max(5px,env(safe-area-inset-right));top:max(5px,1.35%,env(safe-area-inset-top));
+  width:44px;height:44px;padding:9px;display:grid;place-items:center;border:1px solid #e9c98b;
+  border-radius:50%;background:#125649;color:#fff3dc;box-shadow:0 2px 9px #33282075;cursor:pointer;
+}
+.market-journey svg {width:100%;height:100%}
+.market-journey:focus-visible {outline:3px solid #ffe5a2;outline-offset:2px}
 .hotspot {position:absolute;z-index:1;display:block;min-width:44px;min-height:44px;transform:translate(-50%,-50%);border:2px solid transparent;border-radius:10%;background:transparent;cursor:pointer;touch-action:manipulation;transition:box-shadow .18s,transform .18s}
 .hotspot:focus-visible,#student:focus-visible,.return:focus-visible,.start:focus-visible {outline:3px solid #fff4ae;outline-offset:2px}
 .hotspot:focus-visible,.hotspot:active,.hotspot[data-selected] {box-shadow:0 0 22px 4px #ffe595a0,inset 0 0 18px #fff0a061;transform:translate(-50%,-50%) scale(1.025)}
@@ -38,6 +47,9 @@ body[data-fading] {opacity:0}
 <body>
 <main id="market" aria-label="سوق المهارات العماني">
   <div id="map">
+    <button type="button" id="market-journey" class="market-journey" aria-label="العودة إلى رحلتي" title="العودة إلى رحلتي" hidden>
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 1 11h3v10h6v-6h4v6h6V11h3z"/></svg>
+    </button>
     <picture><source media="(orientation: landscape)" srcset="computer.webp"><img id="art" src="phone.webp" alt="سوق عماني يضم عشرة محلات"></picture>
     <button id="student" type="button" aria-label="الطالب" style="--sprite:url('student.webp')"><span id="figure" aria-hidden="true"></span></button>
     <span id="speech" role="status" lang="en" hidden>Choose a shop!</span>
@@ -366,6 +378,12 @@ function requestPractice(skill) {
 }
 get('start-practice').addEventListener('click',() => requestPractice(activeShop));
 get('describe-practice').addEventListener('click',() => requestPractice('describe'));
+if (embedded) {
+  document.body.dataset.embedded = '';
+  const journey = get('market-journey');
+  journey.hidden = false;
+  journey.addEventListener('click', () => parent.postMessage({type:'mej-souq:journey'},location.origin));
+}
 if (embedded) window.addEventListener('message',event => {
   if (event.origin !== location.origin || event.source !== parent || event.data?.type !== 'mej-souq:access') return;
   access = event.data.access;

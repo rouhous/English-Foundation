@@ -112,13 +112,50 @@ function countedThisWeek(item:unknown,window:ReturnType<typeof omanCurrentWeek>)
  return typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)
   &&x.day>=window.first&&x.day<=window.last;
 }
+
+/* WEEKLY_STARS_V1:
+ * Count genuine new stars only when the second correct attempt masters a
+ * question, NOT for every correct answer. Full history allows lossless
+ * reconstruction of existing students' stars; truncated history counts
+ * explicitly recorded awards only and is marked partial.
+ */
+function countWeeklyMasteryStars(events:unknown[], attempts:unknown,
+ week:{start:number,end:number,first:string,last:string},
+ isInWeek:(event:unknown,window:{start:number,end:number,first:string,last:string})=>boolean){
+ const complete=Number.isSafeInteger(Number(attempts))&&Number(attempts)===events.length;
+ const seen=new Map<string,number>();
+ const levels=Array(13).fill(0);
+ let count=0;
+ for(const event of events){
+  if(!event||typeof event!=='object'||Array.isArray(event))continue;
+  const data=event as Record<string,unknown>;
+  if(data.ok!==true)continue;
+  const id=typeof data.id==='string'?data.id:'';
+  const match=/^L(1[0-2]|[0-9])-\d{1,4}$/.exec(id);
+  if(!match)continue;
+  let earned=0;
+  if(complete){
+   const previouslyCorrect=seen.get(id)||0;
+   if(previouslyCorrect<2){
+    seen.set(id,previouslyCorrect+1);
+    if(previouslyCorrect===1)earned=1;
+   }
+  }else if(data.earnedStars===1)earned=1;
+  if(earned&&isInWeek(event,week)){count++;levels[Number(match[1])]++}
+ }
+ return {count,levels,complete,source:complete?'full_attempt_history':'explicit_new_awards'};
+}
+
 function computedWeekly(rows:Record<string,unknown>[]):Record<string,unknown>[]{
  const window=omanCurrentWeek();
  return rows.map(row=>{
   const {activity,...publicRow}=row;
   const events=Array.isArray(activity)?activity:[];
   const hits=events.filter(item=>countedThisWeek(item,window));
-  return {...publicRow,weekly_attempts:hits.length,
+  const earning=countWeeklyMasteryStars(events,row.attempts,window,countedThisWeek);
+  return {...publicRow,weekly_stars:earning.count,weekly_star_levels:earning.levels,
+   weekly_stars_complete:earning.complete,weekly_stars_source:earning.source,
+   weekly_attempts:hits.length,
    weekly_correct:hits.filter(x=>(x as Record<string,unknown>)?.ok===true).length,
    weekly_window_start:window.first,weekly_window_end:window.last,
    weekly_from_activity:true,

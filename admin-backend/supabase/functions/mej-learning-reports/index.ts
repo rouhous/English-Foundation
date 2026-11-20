@@ -40,6 +40,40 @@ function withinOmanWeek(item:unknown,week:ReturnType<typeof omanWeek>){
  return typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)&&x.day>=week.first&&x.day<=week.last;
 }
 
+
+/* WEEKLY_STARS_V1:
+ * Count genuine new stars only when the second correct attempt masters a
+ * question, NOT for every correct answer. Full history allows lossless
+ * reconstruction of existing students' stars; truncated history counts
+ * explicitly recorded awards only and is marked partial.
+ */
+function countWeeklyMasteryStars(events:unknown[], attempts:unknown,
+ week:{start:number,end:number,first:string,last:string},
+ isInWeek:(event:unknown,window:{start:number,end:number,first:string,last:string})=>boolean){
+ const complete=Number.isSafeInteger(Number(attempts))&&Number(attempts)===events.length;
+ const seen=new Map<string,number>();
+ const levels=Array(13).fill(0);
+ let count=0;
+ for(const event of events){
+  if(!event||typeof event!=='object'||Array.isArray(event))continue;
+  const data=event as Record<string,unknown>;
+  if(data.ok!==true)continue;
+  const id=typeof data.id==='string'?data.id:'';
+  const match=/^L(1[0-2]|[0-9])-\d{1,4}$/.exec(id);
+  if(!match)continue;
+  let earned=0;
+  if(complete){
+   const previouslyCorrect=seen.get(id)||0;
+   if(previouslyCorrect<2){
+    seen.set(id,previouslyCorrect+1);
+    if(previouslyCorrect===1)earned=1;
+   }
+  }else if(data.earnedStars===1)earned=1;
+  if(earned&&isInWeek(event,week)){count++;levels[Number(match[1])]++}
+ }
+ return {count,levels,complete,source:complete?'full_attempt_history':'explicit_new_awards'};
+}
+
 function studentReport(row:Record<string,unknown>){
  const state=(row.private_state&&typeof row.private_state==='object'&&!Array.isArray(row.private_state)?row.private_state:{}) as Record<string,unknown>;
  const wrong=(state.wrong&&typeof state.wrong==='object'&&!Array.isArray(state.wrong)?state.wrong:{}) as Record<string,unknown>;
@@ -47,6 +81,7 @@ function studentReport(row:Record<string,unknown>){
  const log=Array.isArray(state.activity)?state.activity.slice(-1500):[];
  const window=omanWeek();
  const currentWeek=log.filter(x=>withinOmanWeek(x,window));
+ const earning=countWeeklyMasteryStars(log,row.attempts,window,withinOmanWeek);
  const weeklyCorrect=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===true).length;
  const weeklyWrong=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===false).length;
 
@@ -82,6 +117,8 @@ function studentReport(row:Record<string,unknown>){
   className:String(row.class_name||'').slice(0,40),grade:max(row.grade,12),
   stars:max(row.stars,3250),attempts:max(row.attempts,10000000),
   weeklyAttempts:currentWeek.length,weeklyCorrect,weeklyWrong,
+  weeklyStars:earning.count,weeklyStarLevels:earning.levels,
+  weeklyStarsComplete:earning.complete,weeklyStarsSource:earning.source,
   weeklyStart:window.first,weeklyEnd:window.last,
   weeklyLegacyApproximate:currentWeek.some(x=>!(x as Record<string,unknown>)?.at),
   correctAnswers:max(row.correct_answers,10000000),updatedAt:row.updated_at||null,

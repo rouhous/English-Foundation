@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "scripts/inspect-stars-earning.cjs"
+      - ".github/workflows/inspect-stars-earning.yml"
 permissions:
   contents: write
 jobs:

@@ -77,7 +77,7 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 @media print{.levelTableScroll{overflow:visible}.levelsMatrix{font-size:9px}.levelsMatrix th,.levelsMatrix td{padding:4px 3px;min-width:0}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="../assets/teacher-dashboard-v2.js?v=20261120-exam-results-1" defer></script>
+<script src="../assets/teacher-dashboard-v2.js?v=20261120-weekly-earned-stars-1" defer></script>
 </head><body>
 <header><div class="inner"><div class="top"><div><div class="brand">MY ENGLISH JOURNEY · رحلتي مع الإنجليزية</div><h1>لوحة المعلم</h1><p class="subtitle" id="identity">تقدم الطلاب والصفوف — مزامنة داخل التطبيق</p></div><div class="actions"><button id="refresh" type="button">↻ تحديث</button><a href="./teacher-reports.html" title="تقارير الأخطاء والمهارات والأنشطة المتكررة">التقارير التشخيصية</a><button id="issueCode" type="button">رمز الطلاب</button><button id="print" type="button">طباعة</button><button id="logout" type="button">تسجيل خروج</button></div></div></div></header>
 <dialog id="codeDialog" aria-labelledby="codeDialogTitle" class="codeDialog">
@@ -107,13 +107,14 @@ footer{text-align:center;color:#426b87;font-size:12px;padding:20px 10px}
 <label for="sortStudents">ترتيب الطلاب</label>
 <select id="sortStudents" aria-label="ترتيب الطلاب">
 <option value="stars">الأكثر نجومًا أولًا</option>
+<option value="weekly-stars">أكثر نجوم هذا الأسبوع أولًا</option>
 <option value="level">الأعلى مستوى أولًا</option>
 </select>
 </div>
 <input id="studentSearch" type="search" placeholder="ابحث عن طالب في هذا الصف" autocomplete="off">
 <div class="levelCompareBox">
 <h3>مقارنة نجوم الطلاب حسب المستوى (L0–L12)</h3>
-<p class="notice">يعرض الجدول النجوم المكتسبة في كل مستوى بشكل منفصل. يمكنك اختيار «نجوم المستوى» من قائمة الترتيب، وتحريك الجدول أفقيًا على الهاتف. الفرق بين المجموع ونجوم المستويات يظهر في «غير موزعة» دون تخمين مصدره. الرمز — يعني أن البيانات غير متوفرة.</p>
+<p class="notice">يعرض الجدول مجموع النجوم والنجوم المكتسبة خلال الأسبوع الحالي (الأحد 00:01 إلى السبت 23:59 بتوقيت عُمان) ثم توزيع النجوم على المستويات. يمكنك اختيار «نجوم المستوى» من قائمة الترتيب، وتحريك الجدول أفقيًا على الهاتف. الفرق بين المجموع ونجوم المستويات يظهر في «غير موزعة» دون تخمين مصدره. الرمز — يعني أن البيانات غير متوفرة.</p>
 <div id="levelsComparison" class="levelTableScroll" role="region" aria-label="جدول مقارنة النجوم حسب المستوى" tabindex="0"></div>
 </div>
 <h3>بطاقات الطلاب</h3><div id="studentList" class="students"></div></div>

@@ -115,7 +115,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 if(window.MEJStudentAccountUI)return;
 window.MEJStudentAccountUI=true;
 const endpoint='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-student-account';
-const oldHome=home, oldRoute=route, oldProfile=openProfile, oldPersist=persist;
+const oldHome=home, oldJourney=journey, oldRoute=route, oldProfile=openProfile, oldPersist=persist;
 const labels=['الاسم الأول','اسم الأب','اسم الجد','اسم العائلة'];
 const profileCode=p=>localStorage.getItem('MEJ_RECOVERY_'+p.id)||'';
 const storeCode=(p,code)=>localStorage.setItem('MEJ_RECOVERY_'+p.id,code);
@@ -162,7 +162,8 @@ function installExamLink(){
  const profile=active();
  const grade=Number(profile?.grade);
  if(!profile?.name||!Number.isInteger(grade)||grade<5||grade>12)return;
- const slots=document.querySelectorAll('#app .m31-head, #app .actual-copy');
+ const links=document.querySelector('#app .journey-v23 .j23-links');
+ if(!links||links.nextElementSibling?.matches('[data-mej-exams-link]'))return;
  async function openExams(event){
   const button=event.currentTarget;
   if(active()?.id!==profile.id)return;
@@ -192,20 +193,14 @@ function installExamLink(){
    if(active()?.id===profile.id)toast(error.message==='GRADE_UNAVAILABLE'?'الاختبارات المتاحة حاليًا للصفوف من الخامس إلى الثاني عشر.':'تعذر فتح اختباراتك المرتبطة. تحقق من اتصالك ومن ربط الحساب بالمعلم.');
   }finally{button.disabled=false}
  }
- for(const slot of slots){
-  if(slot.querySelector('[data-mej-exams-link]'))continue;
-  const row=document.createElement('div');
-  row.style.cssText='display:flex;justify-content:center;margin:8px 0 0';
-  const button=document.createElement('button');
-  button.type='button';
-  button.dataset.mejExamsLink='true';
-  button.textContent='My Exams';
-  button.setAttribute('aria-label','My Exams · اختبارات صفي');
-  button.style.cssText='min-height:44px;border:1px solid #e1bf6c;border-radius:12px;padding:8px 16px;background:#0b4f47;color:white;font:700 15px system-ui;cursor:pointer';
-  button.addEventListener('click',openExams);
-  row.append(button);
-  slot.append(row);
- }
+ const button=document.createElement('button');
+ button.type='button';
+ button.dataset.mejExamsLink='true';
+ button.textContent='تدرب على الاختبار النهائي';
+ button.dir='rtl';
+ button.style.cssText='display:block;box-sizing:border-box;width:100%;min-height:46px;margin:10px 0 2px;padding:10px 14px;border:1px solid #a8751e;border-radius:14px;background:linear-gradient(180deg,#ffe493,#e5b650);color:#302008;font:700 1rem/1.4 system-ui,sans-serif;text-align:center;cursor:pointer';
+ button.addEventListener('click',openExams);
+ links.after(button);
 }
 home=function(){
  if(startRequired())return;
@@ -213,6 +208,9 @@ home=function(){
  document.querySelectorAll('button[onclick="letsGo()"]').forEach(b=>{
   b.disabled=!registered();b.setAttribute('aria-disabled',String(!registered()));b.title=registered()?'':'سجّل الاسم والصف قبل بدء اللعبة'
  });
+};
+journey=function(){
+ oldJourney();
  installExamLink();
 };
 const originalLetsGo=letsGo;

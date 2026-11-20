@@ -1,0 +1,25 @@
+{
+  "p.stars++": [
+    {
+      "at": 3103744,
+      "context": "n.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){\n  p.attempts++;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok});if(p.activity.length>3000)p.a"
+    }
+  ],
+  "p.stars+=": [],
+  "p.stars =": [],
+  "p.stars=": [],
+  "profile.stars++": [],
+  "profile.stars+=": [],
+  "starsAward": [],
+  "earnedStar": [],
+  "p.activity.push": [
+    {
+      "at": 3103967,
+      "context": "t[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2 && p.correct[q.id]===2){p.stars++;const mastered=countMaster(q.g,p);if(mastered%20===0){const badge=JOURNEY_BADGES[mastered/20-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast('⭐ عنصر جديد متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;\n  p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}\nif(node&&node.classList?.contains('choice'))node.classList.add(ok?'right':'wrong');document.querySelectorAll('.choice').forEach(e=>{e.disabled=true;"
+    },
+    {
+      "at": 3105402,
+      "context": "ock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok:false,skipped:true});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}\nfunction nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}\nfunction stopQuiz(){if(activeSessio"
+    }
+  ]
+}

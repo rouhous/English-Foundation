@@ -1,0 +1,23 @@
+name: Weekly Earned Stars Regression Tests
+on:
+  push:
+    paths:
+      - "scripts/test-weekly-earned-stars.cjs"
+      - ".github/workflows/test-weekly-earned-stars.yml"
+      - "assets/teacher-dashboard-v2.js"
+      - "reviews/teacher-dashboard.html"
+      - "reviews/teacher-reports.html"
+      - "admin-backend/supabase/functions/mej-progress/index.ts"
+      - "admin-backend/supabase/functions/mej-learning-reports/index.ts"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node scripts/test-weekly-earned-stars.cjs

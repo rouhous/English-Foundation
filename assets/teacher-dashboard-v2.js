@@ -294,6 +294,61 @@ function renderList(students){
  if(!shown.length)host.append(node('p','notice','لا توجد نتائج مطابقة.'));
  renderLevelComparison(shown);
 }
+const examResultsAPI='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-exam-results';
+function attachStudentExamTab(host, student){
+ const tabs=node('div','subline');
+ const progressTab=node('button','button alt','تقدم الرحلة');
+ const examsTab=node('button','button alt','اختبارات الطالب');
+ const progress=node('div');
+ const exams=node('div');
+ progress.append(...host.childNodes);
+ tabs.append(progressTab,examsTab);
+ host.append(tabs,progress,exams);
+ progressTab.type=examsTab.type='button';
+ let generation=0;
+ function select(showExams){
+  progress.hidden=showExams;
+  exams.hidden=!showExams;
+  progressTab.setAttribute('aria-pressed',String(!showExams));
+  examsTab.setAttribute('aria-pressed',String(showExams));
+ }
+ progressTab.onclick=()=>{generation++;select(false)};
+ examsTab.onclick=async()=>{
+  const requestId=++generation;
+  select(true);
+  exams.replaceChildren(node('p','notice','جارٍ تحميل نتائج My Exams…'));
+  try{
+   const response=await fetch(examResultsAPI,{method:'POST',credentials:'omit',cache:'no-store',
+    headers:{Authorization:'Bearer '+app.token,'Content-Type':'application/json'},
+    body:JSON.stringify({action:'teacher_results',studentRef:student.id.slice(5)}),signal:AbortSignal.timeout(12000)});
+   const result=await response.json();
+   if(!exams.isConnected||generation!==requestId)return;
+   if(!response.ok||!result.ok)throw Error(result.error);
+   if(!result.results.length){
+    exams.replaceChildren(node('p','notice','لا توجد محاولات مرسلة من My Exams لهذا الطالب بعد.'));
+    return;
+   }
+   const modes={unit:'اختبار وحدة',skill:'نشاط مهارة',comprehensive:'اختبار شامل',random:'اختبار عشوائي'};
+   const tracks={core:'أساسي',elective:'اختياري'};
+   exams.replaceChildren(node('p','notice','درجات تدريبية آلية من My Exams. تظهر الكتابة بانتظار التصحيح عند تسليمها.'));
+   const list=node('div');
+   for(const resultRow of result.results){
+    const card=node('div','sheet');
+    const title=[modes[resultRow.mode],resultRow.paper,resultRow.skill].filter(Boolean).join(' · ');
+    const grade=[resultRow.grade,tracks[resultRow.track]].filter(Boolean).join(' · ');
+    const score=Number(resultRow.possible)>0?String(resultRow.earned)+' / '+String(resultRow.possible):'بانتظار التقييم';
+    card.append(node('strong','',title),node('div','','الصف '+grade+' · '+new Date(resultRow.submitted_at).toLocaleString('ar-OM')),
+     node('div','','الدرجة الآلية: '+score+(resultRow.writing_pending?' · الكتابة بانتظار التصحيح':'')));
+    list.append(card);
+   }
+   exams.append(list);
+  }catch(error){
+   if(!exams.isConnected||generation!==requestId)return;
+   exams.replaceChildren(node('p','warning',error.message==='FORBIDDEN'?'النتائج متاحة للمعلم المرتبط بهذا الطالب.':'تعذر تحميل النتائج. اضغط على تبويب اختبارات الطالب لإعادة المحاولة.'));
+  }
+ };
+ select(false);
+}
 function studentDetails(s){
  $('studentDetail').hidden=false;$('studentTitle').textContent=s.name;
  const host=clear($('studentDetails'));
@@ -316,6 +371,7 @@ function studentDetails(s){
   }
   host.append(total,div)
  }else host.append(node('p','notice','لا تتوفر بيانات النجوم بحسب المستوى لهذا السجل.'));
+ if(s.kind==='live')attachStudentExamTab(host,s);
  $('studentDetail').scrollIntoView({behavior:'smooth',block:'start'})
 }
 async function refresh(){

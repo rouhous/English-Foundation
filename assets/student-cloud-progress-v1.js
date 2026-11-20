@@ -156,7 +156,65 @@ function startRequired(){
  }
  if(!pending())return false;if(activeSession?.kind!=='diagnostic'||!document.querySelector('#app .quiz #feedback')){current='diagnostic';document.getElementById('journeyNav')?.classList.remove('open');startDiagnostic()}return true}
 route=function(page){if(!startRequired())return oldRoute(page)};
-home=function(){if(startRequired())return;oldHome();document.querySelectorAll('button[onclick="letsGo()"]').forEach(b=>{b.disabled=!registered();b.setAttribute('aria-disabled',String(!registered()));b.title=registered()?'':'سجّل الاسم والصف قبل بدء اللعبة'})};
+const examSessionKey='MY_EXAMS_JOURNEY_V1';
+const examsAPI='https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-exam-results';
+function installExamLink(){
+ const profile=active();
+ const grade=Number(profile?.grade);
+ if(!profile?.name||!Number.isInteger(grade)||grade<5||grade>12)return;
+ const slots=document.querySelectorAll('#app .m31-head, #app .actual-copy');
+ async function openExams(event){
+  const button=event.currentTarget;
+  if(active()?.id!==profile.id)return;
+  const url=new URL('../My-Exams/grade-skills.html',location.href);
+  url.searchParams.set('grade',String(grade));
+  const track=profile.examTrack;
+  if(grade>=11&&['core','elective'].includes(track))url.searchParams.set('track',track);
+  const token=mejCreds()[profile.id]?.MEJ_STUDENT_ACCESS_V1;
+  if(!token){
+   sessionStorage.removeItem(examSessionKey);
+   location.assign(url.href);
+   return;
+  }
+  button.disabled=true;
+  try{
+   const response=await fetch(examsAPI,{method:'POST',credentials:'omit',cache:'no-store',
+    headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+    body:JSON.stringify({action:'launch'}),signal:AbortSignal.timeout(12000)});
+   const result=await response.json();
+   if(active()?.id!==profile.id)return;
+   if(!response.ok||!result.ok)throw Error(result.error||'UNAVAILABLE');
+   url.searchParams.set('grade',String(result.grade));
+   if(result.grade!==grade)url.searchParams.delete('track');
+   sessionStorage.setItem(examSessionKey,JSON.stringify({grade:result.grade,token:result.token,expiresAt:result.expiresAt}));
+   location.assign(url.href);
+  }catch(error){
+   if(active()?.id===profile.id)toast(error.message==='GRADE_UNAVAILABLE'?'الاختبارات المتاحة حاليًا للصفوف من الخامس إلى الثاني عشر.':'تعذر فتح اختباراتك المرتبطة. تحقق من اتصالك ومن ربط الحساب بالمعلم.');
+  }finally{button.disabled=false}
+ }
+ for(const slot of slots){
+  if(slot.querySelector('[data-mej-exams-link]'))continue;
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;justify-content:center;margin:8px 0 0';
+  const button=document.createElement('button');
+  button.type='button';
+  button.dataset.mejExamsLink='true';
+  button.textContent='My Exams';
+  button.setAttribute('aria-label','My Exams · اختبارات صفي');
+  button.style.cssText='min-height:44px;border:1px solid #e1bf6c;border-radius:12px;padding:8px 16px;background:#0b4f47;color:white;font:700 15px system-ui;cursor:pointer';
+  button.addEventListener('click',openExams);
+  row.append(button);
+  slot.append(row);
+ }
+}
+home=function(){
+ if(startRequired())return;
+ oldHome();
+ document.querySelectorAll('button[onclick="letsGo()"]').forEach(b=>{
+  b.disabled=!registered();b.setAttribute('aria-disabled',String(!registered()));b.title=registered()?'':'سجّل الاسم والصف قبل بدء اللعبة'
+ });
+ installExamLink();
+};
 const originalLetsGo=letsGo;
 letsGo=function(){
  if(!registered()){toast('لا يمكن بدء اللعبة قبل تسجيل اسم الطالب وصفه.');openProfile(!active()?.name);return}

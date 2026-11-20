@@ -325,6 +325,7 @@ saveProfileModal=async function(isNew){
      delete db.profiles[same.id];localStorage.removeItem('MEJ_RECOVERY_'+same.id)
     }
    }
+   if(db.active!==id)sessionStorage.removeItem(examSessionKey);
    db.profiles[id]=p;db.active=id;mejSwitch(id);
    if(teacherCode){p.school=r.schoolName||'';attach(p,r,teacherCode)}
    storeCode(p,r.recoveryCode);activeSession=null;write();if(teacherCode)scheduleReport();
@@ -349,7 +350,13 @@ saveProfileModal=async function(isNew){
  }finally{modal.inert=false;saving=false}
 };
 const oldSwitch=switchUser;
-switchUser=function(id){if(pending())return;oldSwitch(id);resume()};
+switchUser=function(id){
+ if(pending())return;
+ const previous=active()?.id;
+ oldSwitch(id);
+ if(active()?.id!==previous)sessionStorage.removeItem(examSessionKey);
+ resume();
+};
 const oldCheckpoint=mejSaveDiagnostic;
 mejSaveDiagnostic=function(nextIndex){
  oldCheckpoint(nextIndex);

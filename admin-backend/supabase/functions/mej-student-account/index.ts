@@ -128,16 +128,32 @@ Deno.serve(async req=>{
     algorithms:['RS256'],clockTolerance:'30 seconds'
    });
    if(payload.email_verified!==true||typeof payload.email!=='string')throw Error('GOOGLE_LOGIN_REQUIRED');
-   const teachers=await api('mej_verified_teachers?google_email=eq.'+encodeURIComponent(payload.email.toLowerCase())+'&verification_state=eq.verified&select=id,license_id');
-   if(teachers.length!==1)throw Error('NOT_VERIFIED_TEACHER');
-   const teacher=teachers[0];
-   const license=await api('mej_licenses?id=eq.'+encodeURIComponent(teacher.license_id)+'&active=eq.true&select=id');
-   if(license.length!==1)throw Error('LICENSE_INACTIVE');
-   const links=await api('mej_short_student_links?student_ref=eq.'+studentRef+'&teacher_id=eq.'+encodeURIComponent(teacher.id)+'&license_id=eq.'+encodeURIComponent(teacher.license_id)+'&select=student_ref');
-   if(links.length!==1)throw Error('FORBIDDEN');
+   const email=payload.email.toLowerCase();
+   const teachers=await api('mej_verified_teachers?google_email=eq.'+encodeURIComponent(email)+'&verification_state=eq.verified&select=id,license_id');
+   const ownerSub=Deno.env.get('MEJ_OWNER_GOOGLE_SUB');
+   const isOwner=email==='rouhous@gmail.com'&&typeof payload.sub==='string'&&(!ownerSub||ownerSub===payload.sub);
+   if(!isOwner&&teachers.length!==1)throw Error('NOT_VERIFIED_TEACHER');
+   let allowed=false;
+   let actor='';
+   if(isOwner){
+    // Match the signed owner's existing owner_rosters license boundary.
+    const licenses=await api('mej_licenses?license_type=in.(owner_unlimited,wadi_2429)&active=eq.true&select=id,license_type');
+    if(licenses.length!==2||!licenses.some(x=>x.license_type==='owner_unlimited')||!licenses.some(x=>x.license_type==='wadi_2429'))throw Error('LICENSE_INACTIVE');
+    const links=await api('mej_short_student_links?student_ref=eq.'+studentRef+'&select=student_ref,license_id');
+    allowed=links.length===1&&licenses.some(x=>x.id===links[0].license_id);
+    actor='owner';
+   }else{
+    const teacher=teachers[0];
+    const licenses=await api('mej_licenses?id=eq.'+encodeURIComponent(teacher.license_id)+'&active=eq.true&select=id');
+    if(licenses.length!==1)throw Error('LICENSE_INACTIVE');
+    const links=await api('mej_short_student_links?student_ref=eq.'+studentRef+'&teacher_id=eq.'+encodeURIComponent(teacher.id)+'&license_id=eq.'+encodeURIComponent(teacher.license_id)+'&select=student_ref');
+    allowed=links.length===1;
+    actor=teacher.id;
+   }
+   if(!allowed)throw Error('FORBIDDEN');
    const identity=await getIdentity(studentRef);
    if(!identity)throw Error('ACCOUNT_NOT_FOUND');
-   await attempt(req,'teacher-reissue:'+teacher.id+':'+studentRef,false);
+   await attempt(req,'teacher-reissue:'+actor+':'+studentRef,false);
    const recoveryCode=await setCode(studentRef);
    return response(200,{ok:true,recoveryCode,studentRef,changed:true});
   }

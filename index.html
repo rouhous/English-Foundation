@@ -1749,6 +1749,12 @@ function openJourneySettings(){
  <p class="caption">بيانات الطالب والاتصال. لا تُظهر رمز المعلم حفاظًا على خصوصيته.</p>
  <div class="card" style="margin:12px 0;padding:14px"><h3>👤 بيانات الطالب</h3><p><b>${esc(p.name||'غير مسجّل')}</b> · الصف ${esc(p.grade||'—')}</p>
  <button class="btn light" onclick="closeJourneySettings();openProfile(false)">✎ تعديل بيانات الطالب ورمز المعلم</button></div>
+ <div class="card" style="margin:12px 0;padding:14px" id="mej-student-recovery-card"><h3>🔑 رمز استرجاع الطالب</h3>
+ <p class="caption">هذا رمز استرجاع التقدم المحفوظ على هذا الجهاز، وليس رمز المعلم. احتفظ به في مكان آمن؛ يلزم أيضًا التحقق من أسئلة الأمان عند الاستعادة.</p>
+ <div id="mej-student-recovery-value" role="status" aria-live="polite" style="margin:8px 0;font-weight:800;letter-spacing:1px">••••••</div>
+ <div class="actions"><button type="button" class="btn light" onclick="window.eeRevealCurrentCode&&window.eeRevealCurrentCode()">👁️ إظهار الرمز</button>
+ <button type="button" class="btn light" onclick="window.eeCopyCurrentCode&&window.eeCopyCurrentCode()">📋 نسخ الرمز</button>
+ <button type="button" class="btn light" onclick="document.getElementById('ee-recovery-dialog')?.classList.add('open')">🔐 إعداد الاسترجاع</button></div></div>
  <div class="card" style="margin:12px 0;padding:14px"><h3>📡 الاتصال وتقارير المعلم</h3>
  <div class="notice blue" id="journeySettingsStatus">${esc(mejSimpleConnectionStatus(p.syncStatus))}</div>
  <div class="actions"><button class="btn light" onclick="settingsCheckConnection()">🔎 فحص الاتصال</button></div></div></div>`;
@@ -2747,6 +2753,16 @@ let sessions={};try{sessions=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(_
 let ready=false;let pending={};let seq=0;let activeChallenge=null;let saving=false;let timer;
 function setStatus(msg){status.textContent=msg}
 function thisSession(){try{return sessions[active().id]||null}catch(_){return null}}
+function currentRecoveryId(){const v=thisSession();return v&&typeof v.recoveryId==='string'?v.recoveryId:''}
+window.eeRevealCurrentCode=function(){
+ const el=document.getElementById('mej-student-recovery-value');if(!el)return;
+ const code=currentRecoveryId();el.textContent=code||'لم يُنشأ رمز استرجاع لهذا الطالب بعد. استخدم إعداد الاسترجاع.';
+};
+window.eeCopyCurrentCode=async function(){
+ const code=currentRecoveryId();if(!code){window.eeRevealCurrentCode();return;}
+ try{await navigator.clipboard.writeText(code);window.eeRevealCurrentCode();setStatus('✅ نُسخ رمز الاسترجاع. لا تشاركه علناً.')}
+ catch(_){window.eeRevealCurrentCode();setStatus('تعذر النسخ التلقائي؛ يمكنك نسخ الرمز الظاهر يدوياً.')}
+};
 function storeSession(profileId,value){sessions[profileId]=value;localStorage.setItem(KEY,JSON.stringify(sessions));}
 function show(){
  const p=typeof active==='function'?active():null,info=p&&thisSession();

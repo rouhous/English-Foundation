@@ -12,9 +12,15 @@ const full=s=>String(s||'').trim().replace(/\s+/g,' ').toLowerCase();
 const grade=n=>Number.isInteger(Number(n))&&Number(n)>=1&&Number(n)<=12?Number(n):null;
 function response(code,data){return new Response(JSON.stringify(data),{status:code,headers:H})}
 async function sha(s){const b=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)));return Array.from(b,x=>x.toString(16).padStart(2,'0')).join('')}
-function code20(){const ab='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',a=crypto.getRandomValues(new Uint8Array(20));return Array.from(a,x=>ab[x%ab.length]).join('')}
-function formatCode(s){return s.match(/.{1,5}/g).join('-')}
-function cleanCode(s){return String(s||'').toUpperCase().replace(/[\s-]/g,'')}
+function code6(){
+ // Uniform six-digit codes, including leading zeros.
+ const max=4294967296-(4294967296%1000000);
+ let n;do{n=crypto.getRandomValues(new Uint32Array(1))[0]}while(n>=max);
+ return String(n%1000000).padStart(6,'0');
+}
+function formatCode(s){return s}
+function cleanCode(s){return digits(s).toUpperCase().replace(/[\s-]/g,'')}
+function validRecoveryCode(s){return /^[0-9]{6}$/.test(s)||/^[A-HJ-NP-Z2-9]{20}$/.test(s)}
 async function api(path,method='GET',value){
  if(!BASE||!SECRET)throw Error('SERVER_UNAVAILABLE');
  const res=await fetch(BASE+'/rest/v1/'+path,{method,headers:{apikey:SECRET,authorization:'Bearer '+SECRET,'Content-Type':'application/json','Prefer':'return=representation'},...(value===undefined?{}:{body:JSON.stringify(value)}),signal:AbortSignal.timeout(9000)});
@@ -54,7 +60,7 @@ async function getIdentity(studentRef){
  return found[0]||null;
 }
 async function setCode(studentRef,extra={}){
- const raw=code20();
+ const raw=code6();
  const hash=await sha('MEJ-STUDENT-CODE-V1:'+raw);
  const updates=await api('mej_student_identities?student_ref=eq.'+studentRef,'PATCH',{...extra,recovery_hash:hash,updated_at:new Date().toISOString()});
  if(updates.length!==1)throw Error('ACCOUNT_NOT_FOUND');
@@ -73,19 +79,28 @@ Deno.serve(async req=>{
    if(!n||n.length>160||(!grade(g)&&g!=='other')||!hex.test(ref))throw Error('INVALID_PROFILE');
    const where='name_key=eq.'+encodeURIComponent(n)+'&grade=eq.'+g;
    if(action==='free_register'){
-    const raw=code20(),snapshot=input.snapshot||{};
+    const raw=code6(),snapshot=input.snapshot||{};
     await attempt(req,'free-register',false);
     await api('mej_free_profiles','POST',{name_key:n,grade:g,profile_ref:ref,recovery_hash:await sha(raw),snapshot});
     return response(200,{ok:true,recoveryCode:formatCode(raw),revision:0});
    }
    const code=cleanCode(input.recoveryCode);
-   if(!/^[A-HJ-NP-Z2-9]{20}$/.test(code))throw Error('INVALID_RECOVERY_DETAILS');
+   if(!validRecoveryCode(code))throw Error('INVALID_RECOVERY_DETAILS');
    const auth='recovery_hash=eq.'+await sha(code);
    if(action==='free_recover'){
     await attempt(req,'free-recover:'+n,false);
     const rows=await api('mej_free_profiles?'+where+'&'+auth,'PATCH',{profile_ref:ref});
     if(rows.length!==1)throw Error('RECOVERY_CODE_NOT_VALID');
     return response(200,{ok:true,snapshot:rows[0].snapshot,revision:rows[0].revision});
+   }
+   if(action==='free_upgrade'){
+    // Existing free-profile students can exchange their old recovery code
+    // for a six-digit code while still controlling their current profile.
+    await attempt(req,'free-upgrade:'+n,false);
+    const raw=code6();
+    const rows=await api('mej_free_profiles?'+where+'&'+auth+'&profile_ref=eq.'+ref,'PATCH',{recovery_hash:await sha(raw)});
+    if(rows.length!==1)throw Error('RECOVERY_CODE_NOT_VALID');
+    return response(200,{ok:true,recoveryCode:raw,revision:rows[0].revision});
    }
    if(action==='free_save'){
     const rev=input.revision;
@@ -110,7 +125,7 @@ Deno.serve(async req=>{
     if(legacy.length)throw Error('ALREADY_REGISTERED');
    }
    const rand=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,'0')).join('');
-   const st=rand(),access=rand(),raw=code20();
+   const st=rand(),access=rand(),raw=code6();
    const result=await api('rpc/mej_register_named_student','POST',{p_code_hash:await sha(digits(input.teacherCode)),p_student_ref:st,p_profile_ref:ref,p_access_hash:await sha(access),p_name:n,p_grade:g,p_recovery_hash:await sha('MEJ-STUDENT-CODE-V1:'+raw)});
    if(result!=='activated')throw Error(result==='full'?'LICENSE_CAPACITY_REACHED':'INVALID_TEACHER_CODE');
    return response(200,{ok:true,accessToken:access,studentRef:st,recoveryCode:formatCode(raw),schoolName:inv.school_name,teacherLinked:!!inv.teacher_id});
@@ -132,7 +147,7 @@ Deno.serve(async req=>{
   if(input.action==='recover'){
    const n=full(input.name),g=grade(input.grade),code=cleanCode(input.recoveryCode);
    const newProfileRef=String(input.newProfileRef||'');
-   if(!g||n.length<3||!hex.test(newProfileRef)||!/^([A-HJ-NP-Z2-9]{20})$/.test(code))throw Error('INVALID_RECOVERY_DETAILS');
+   if(!g||n.length<3||!hex.test(newProfileRef)||!validRecoveryCode(code))throw Error('INVALID_RECOVERY_DETAILS');
    const inv=await invitation(input.teacherCode);
    await attempt(req,'recover:'+n+':'+String(inv.license_id),true);
    const hash=await sha('MEJ-STUDENT-CODE-V1:'+code);
@@ -166,7 +181,7 @@ Deno.serve(async req=>{
     if(!identity.recovery_hash){const recoveryCode=await setCode(l.student_ref);return response(200,{ok:true,registered:true,recoveryCode,existing:true})}
     return response(200,{ok:true,registered:true,existing:true,hasCode:true});
    }
-   const raw=code20(),hash=await sha('MEJ-STUDENT-CODE-V1:'+raw);
+   const raw=code6(),hash=await sha('MEJ-STUDENT-CODE-V1:'+raw);
    await api('mej_student_identities','POST',{student_ref:l.student_ref,scope_key:key,name_key:n,grade:g,recovery_hash:hash,created_at:time,updated_at:time});
    return response(200,{ok:true,registered:true,existing:false,recoveryCode:formatCode(raw)});
   }

@@ -369,6 +369,35 @@ function attachStudentExamTab(host, student){
  };
  select(false);
 }
+function attachStudentRecovery(host,s){
+ const panel=node('div','sheet');
+ const heading=node('strong','','🔑 رمز استرجاع الطالب');
+ const info=node('p','notice','الرمز الأصلي مشفّر ولا يمكن عرضه. يمكن للمعلم المرتبط بالحساب إصدار رمز جديد من 6 أرقام للحساب نفسه. سيُلغى الرمز السابق دون تغيير النجوم أو المستوى.');
+ const button=node('button','button alt','إصدار رمز استرجاع جديد');
+ button.type='button';
+ const output=node('p','notice','');
+ panel.append(heading,info,button,output);host.append(panel);
+ button.onclick=async()=>{
+  if(!app.token){output.textContent='يرجى تسجيل الدخول مجددًا.';return;}
+  if(!window.confirm('هل تريد إصدار رمز جديد للطالب '+s.name+'؟ الرمز السابق سيتوقف عن العمل. لن يتغير تقدم الطالب.'))return;
+  button.disabled=true;output.textContent='جارٍ التحقق من صلاحية المعلم وإصدار الرمز…';
+  try{
+   const response=await fetch('https://xboracsbzikojobumcke.supabase.co/functions/v1/mej-student-account',{
+    method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+    headers:{Authorization:'Bearer '+app.token,'Content-Type':'application/json'},
+    body:JSON.stringify({action:'teacher_reissue',studentRef:s.id.slice(5),confirm:true}),
+    signal:AbortSignal.timeout(16000)
+   });
+   const result=await response.json();
+   if(!response.ok||!result.ok||!/^[0-9]{6}$/.test(result.recoveryCode||''))throw Error(result.error||'SERVICE_UNAVAILABLE');
+   output.replaceChildren(node('strong','','الرمز الجديد للطالب '+s.name+': '+result.recoveryCode));
+   const copy=node('button','button alt','نسخ الرمز');copy.type='button';
+   copy.onclick=async()=>{try{await navigator.clipboard.writeText(result.recoveryCode);copy.textContent='تم النسخ ✓'}catch(_){copy.textContent='تعذر النسخ؛ انسخ الرمز المعروض'}};
+   output.append(document.createTextNode(' '),copy);
+  }catch(err){output.textContent=err.message==='FORBIDDEN'?'لا تملك صلاحية تعديل رمز هذا الطالب.':err.message==='ACCOUNT_NOT_FOUND'?'لم يُفعّل الاسترجاع للحساب الأصلي.': 'تعذر إصدار الرمز: '+String(err.message||'SERVICE_UNAVAILABLE')}
+  finally{button.disabled=false}
+ };
+}
 function studentDetails(s){
  $('studentDetail').hidden=false;$('studentTitle').textContent=s.name;
  const host=clear($('studentDetails'));
@@ -398,7 +427,7 @@ function studentDetails(s){
   }else weekly.append(node('p','notice','المحاولات القديمة غير مكتملة؛ المعروض من النجوم الأسبوعية حد أدنى فقط.'));
   host.append(weekly)
  }else host.append(node('p','notice','لا تتوفر بيانات النجوم بحسب المستوى لهذا السجل.'));
- if(s.kind==='live')attachStudentExamTab(host,s);
+ if(s.kind==='live'){attachStudentRecovery(host,s);attachStudentExamTab(host,s);}
  $('studentDetail').scrollIntoView({behavior:'smooth',block:'start'})
 }
 async function refresh(){

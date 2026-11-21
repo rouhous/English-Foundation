@@ -119,7 +119,7 @@ const oldHome=home, oldJourney=journey, oldRoute=route, oldProfile=openProfile, 
 const labels=['الاسم الأول','اسم الأب','اسم الجد','اسم العائلة'];
 const profileCode=p=>localStorage.getItem('MEJ_RECOVERY_'+p.id)||'';
 const storeCode=(p,code)=>localStorage.setItem('MEJ_RECOVERY_'+p.id,code);
-const normalizedRecovery=code=>String(code||'').trim().replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).toUpperCase().replace(/[\\s-]/g,'');
+const normalizedRecovery=code=>String(code||'').trim().replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).toUpperCase().replace(/[\s-]/g,'');
 const sixDigits=code=>/^[0-9]{6}$/.test(normalizedRecovery(code));
 const validRecovery=code=>sixDigits(code)||/^[A-HJ-NP-Z2-9]{20}$/.test(normalizedRecovery(code));
 const ownerSession=()=>window.__MEJ_ACCESS_ROLE==='owner';
@@ -379,7 +379,7 @@ saveProfileModal=async function(isNew){
    db.profiles[id]=p;db.active=id;mejSwitch(id);
    if(teacherCode){p.school=r.schoolName||'';attach(p,r,teacherCode)}
    storeCode(p,r.recoveryCode);activeSession=null;write();if(teacherCode)scheduleReport();
-   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\\n'+r.recoveryCode+'\\nاحتفظ به في مكان آمن.');route(p.diagnosed?'journey':'diagnostic');
+   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode+'\nاحتفظ به في مكان آمن.');route(p.diagnosed?'journey':'diagnostic');
   }else{
    const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
    if(placementCeiling(p)!==null)await issue(p);

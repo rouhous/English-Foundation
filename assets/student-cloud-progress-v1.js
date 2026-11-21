@@ -119,6 +119,9 @@ const oldHome=home, oldJourney=journey, oldRoute=route, oldProfile=openProfile, 
 const labels=['الاسم الأول','اسم الأب','اسم الجد','اسم العائلة'];
 const profileCode=p=>localStorage.getItem('MEJ_RECOVERY_'+p.id)||'';
 const storeCode=(p,code)=>localStorage.setItem('MEJ_RECOVERY_'+p.id,code);
+const normalizedRecovery=code=>String(code||'').trim().replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).toUpperCase().replace(/[\\s-]/g,'');
+const sixDigits=code=>/^[0-9]{6}$/.test(normalizedRecovery(code));
+const validRecovery=code=>sixDigits(code)||/^[A-HJ-NP-Z2-9]{20}$/.test(normalizedRecovery(code));
 const ownerSession=()=>window.__MEJ_ACCESS_ROLE==='owner';
 const needsGrade=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())===null;
 const pending=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())!==null;
@@ -246,6 +249,29 @@ document.addEventListener('click',gateEvents,true);
 new MutationObserver(guard).observe(document.body,{childList:true,subtree:true});
 const messages={INVALID_TEACHER_CODE:'تحقق من رمز المعلم.',LICENSE_CAPACITY_REACHED:'بلغ الترخيص الحد المسموح به من الطلاب.',RECOVERY_CODE_NOT_VALID:'رمز الطالب لا يطابق هذا الحساب.',INVALID_RECOVERY_DETAILS:'تحقق من رمز الطالب.',ALREADY_REGISTERED:'لديك حساب مفعّل سابقًا. أدخل رمز الطالب لاستعادة تقدمك.',TOO_MANY_ATTEMPTS:'تكررت المحاولات. حاول مجددًا لاحقًا.'};
 const claims=new Map();
+const rotations=new Map();
+async function upgradeCode(p){
+ if(rotations.has(p.id))return rotations.get(p.id);
+ const job=(async()=>{
+  if(!navigator.onLine)throw Error('OFFLINE');
+  if(linked(p)){
+   const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||(db.active===p.id&&localStorage.getItem('MEJ_STUDENT_ACCESS_V1'));
+   if(!token)throw Error('STUDENT_LOGIN_REQUIRED');
+   const result=await account('rotate',{},token);
+   if(!sixDigits(result.recoveryCode))throw Error('INVALID_NEW_CODE');
+   storeCode(p,result.recoveryCode);
+   return result.recoveryCode;
+  }
+  if(!profileCode(p))return issue(p);
+  if(p.accountDirty||freeJobs.has(p.id))throw Error('SYNC_PENDING');
+  const result=await account('free_upgrade',{name:p.name,grade:p.grade,profileRef:await ref(p),recoveryCode:profileCode(p)});
+  if(!sixDigits(result.recoveryCode))throw Error('INVALID_NEW_CODE');
+  storeCode(p,result.recoveryCode);
+  return result.recoveryCode;
+ })();
+ rotations.set(p.id,job);
+ try{return await job}finally{rotations.delete(p.id)}
+}
 async function issue(p){
  if(profileCode(p))return profileCode(p);
  if(claims.has(p.id))return claims.get(p.id);
@@ -270,12 +296,36 @@ openProfile=function(isNew=false){
  labels.forEach((label,i)=>{const field=document.createElement('label');field.className='field';field.textContent=label+(fresh?' *':i===3?' (اختياري)':'');const input=document.createElement('input');input.dataset.namePart=i;input.maxLength=30;input.required=fresh;input.value=parts[i]||'';field.append(input);orig.parentElement.before(field)});
  const entry=modal.querySelector('#ee-recovery-entry');const panel=document.createElement('div');panel.setAttribute('role','status');panel.className='notice blue';entry.replaceWith(panel);
  if(fresh){
-  const recovery=document.createElement('input');recovery.id='studentRecoveryCode';recovery.placeholder='رمز الطالب';recovery.dir='ltr';recovery.hidden=true;
+  const recovery=document.createElement('input');recovery.id='studentRecoveryCode';recovery.placeholder='رمز الطالب (6 أرقام أو الرمز القديم)';recovery.dir='ltr';recovery.inputMode='text';recovery.autocomplete='off';recovery.maxLength=29;recovery.hidden=true;
   const recover=document.createElement('button');recover.className='btn light';recover.textContent='لديّ حساب سابق';recover.onclick=()=>{recovery.hidden=false;panel.firstChild.textContent='أدخل الاسم المسجّل والصف ورمز المعلم ثم رمز الطالب واضغط حفظ.';recovery.focus()};
   panel.append(document.createTextNode(''),recover,recovery);
  }else{
-  const refresh=()=>issue(p).then(code=>panel.textContent='رمز الطالب لاستعادة التقدم: '+code).catch(()=>panel.textContent='تعذّر جلب رمز الطالب. افتح البيانات عند الاتصال بالإنترنت.');
-  refresh();
+  // The code remains visible only to the student on their already signed-in device.
+  const detail=document.createElement('div'),actions=document.createElement('div');
+  actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:8px';
+  const copy=document.createElement('button');copy.type='button';copy.className='btn light';copy.textContent='📋 نسخ الرمز';
+  const renew=document.createElement('button');renew.type='button';renew.className='btn light';renew.textContent='🔄 إصدار رمز جديد من 6 أرقام';
+  actions.append(copy,renew);panel.append(detail,actions);
+  let shown='';
+  const showCode=code=>{
+   shown=code;detail.textContent='🔐 رمز الطالب لاستعادة التقدم: '+code;
+   detail.style.cssText='font-weight:800;direction:rtl;unicode-bidi:isolate;font-size:clamp(16px,4vw,23px);overflow-wrap:anywhere';
+   renew.hidden=sixDigits(code);
+  };
+  copy.onclick=async()=>{
+   if(!shown)return;
+   try{await navigator.clipboard.writeText(shown);toast('تم نسخ رمز الطالب. احتفظ به في مكان آمن.')}
+   catch(_){toast('تعذر النسخ تلقائيًا. دوّن الرقم الظاهر.')}
+  };
+  renew.onclick=async()=>{
+   // Explicit user action only: rotating invalidates the previous code.
+   if(!confirm('سيُلغى رمز الاستعادة القديم ويُستبدل برمز جديد من 6 أرقام. هل تريد المتابعة؟'))return;
+   renew.disabled=true;detail.textContent='جار إصدار الرمز المختصر...';
+   try{showCode(await upgradeCode(p));toast('تم إصدار رمز الاستعادة الجديد. احتفظ به.')}
+   catch(e){detail.textContent='لم يتغير الرمز السابق. '+(e.message==='SYNC_PENDING'?'انتظر اكتمال المزامنة ثم أعد المحاولة.':'تأكد من اتصال الإنترنت ثم حاول مجددًا.')}
+   finally{renew.disabled=false}
+  };
+  issue(p).then(showCode).catch(()=>{detail.textContent='تعذّر إظهار رمز الطالب. افتح البيانات عند الاتصال بالإنترنت.';renew.hidden=true;copy.hidden=true});
  }
  modal.querySelector('[data-name-part]').focus();
 };
@@ -304,7 +354,9 @@ saveProfileModal=async function(isNew){
    const id=p.id;Object.assign(p,{name,grade,teacherCode,className:grade+(section?'_'+section:''),school:modal.querySelector('#studentSchool').value.trim(),nameParts:parts});
    let r;
    if(recover){
-    const recoveryCode=codeInput.value.trim();r=await account(teacherCode?'recover':'free_recover',{...data,recoveryCode,newProfileRef:profileRef,profileRef});
+    const recoveryCode=normalizedRecovery(codeInput.value);
+    if(!validRecovery(recoveryCode))throw Error('INVALID_RECOVERY_DETAILS');
+    r=await account(teacherCode?'recover':'free_recover',{...data,recoveryCode,newProfileRef:profileRef,profileRef});
     if(r.snapshot?.profile)Object.assign(p,r.snapshot.profile,{id,freeRevision:r.revision});
     if(r.snapshot?.checkpoint)localStorage.setItem('MEJ_DIAGNOSTIC_CHECKPOINT_V1_'+id,JSON.stringify(r.snapshot.checkpoint));
     if(r.progress){const s=r.progress;Object.assign(p,s.private_state||{},{name:s.student_name,grade:String(s.grade),className:s.class_name,stars:s.stars,attempts:s.attempts,right:s.correct_answers,diagnosed:s.diagnostic_done,assigned:s.diagnostic_level||0});
@@ -327,7 +379,7 @@ saveProfileModal=async function(isNew){
    db.profiles[id]=p;db.active=id;mejSwitch(id);
    if(teacherCode){p.school=r.schoolName||'';attach(p,r,teacherCode)}
    storeCode(p,r.recoveryCode);activeSession=null;write();if(teacherCode)scheduleReport();
-   closeProfile();if(!recover)alert('تم التسجيل. احتفظ برمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode);route(p.diagnosed?'journey':'diagnostic');
+   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\\n'+r.recoveryCode+'\\nاحتفظ به في مكان آمن.');route(p.diagnosed?'journey':'diagnostic');
   }else{
    const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
    if(placementCeiling(p)!==null)await issue(p);

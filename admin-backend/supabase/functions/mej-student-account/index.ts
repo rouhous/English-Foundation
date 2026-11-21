@@ -2,6 +2,9 @@
  * This is a custom-token endpoint: verify_jwt=false; all privileges remain server-side.
  * A recovered device replaces the previous device session; stars/progress stay on the same student_ref.
  */
+import {createRemoteJWKSet,jwtVerify} from 'npm:jose@6.1.0';
+const GOOGLE_AUD='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
+const GOOGLE_JWKS=createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 const ORIGIN='https://rouhous.github.io';
 const BASE=Deno.env.get('SUPABASE_URL')||'';
 const SECRET=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||'';
@@ -111,6 +114,33 @@ Deno.serve(async req=>{
    }
    throw Error('INVALID_ACTION');
   }
+  if(input.action==='teacher_reissue'){
+   // The original recovery code is SHA-256 hashed and cannot be revealed.
+   // Only a Google-verified, licensed teacher linked to this specific live student
+   // may explicitly replace it. No student progress or access token is changed.
+   if(input.confirm!==true)throw Error('CONFIRMATION_REQUIRED');
+   const studentRef=String(input.studentRef||'');
+   if(!hex.test(studentRef))throw Error('INVALID_STUDENT');
+   const authorization=req.headers.get('authorization')||'';
+   if(!authorization.startsWith('Bearer ')||authorization.length>8200)throw Error('GOOGLE_LOGIN_REQUIRED');
+   const {payload}=await jwtVerify(authorization.slice(7),GOOGLE_JWKS,{
+    audience:GOOGLE_AUD,issuer:['accounts.google.com','https://accounts.google.com'],
+    algorithms:['RS256'],clockTolerance:'30 seconds'
+   });
+   if(payload.email_verified!==true||typeof payload.email!=='string')throw Error('GOOGLE_LOGIN_REQUIRED');
+   const teachers=await api('mej_verified_teachers?google_email=eq.'+encodeURIComponent(payload.email.toLowerCase())+'&verification_state=eq.verified&select=id,license_id');
+   if(teachers.length!==1)throw Error('NOT_VERIFIED_TEACHER');
+   const teacher=teachers[0];
+   const license=await api('mej_licenses?id=eq.'+encodeURIComponent(teacher.license_id)+'&active=eq.true&select=id');
+   if(license.length!==1)throw Error('LICENSE_INACTIVE');
+   const links=await api('mej_short_student_links?student_ref=eq.'+studentRef+'&teacher_id=eq.'+encodeURIComponent(teacher.id)+'&license_id=eq.'+encodeURIComponent(teacher.license_id)+'&select=student_ref');
+   if(links.length!==1)throw Error('FORBIDDEN');
+   const identity=await getIdentity(studentRef);
+   if(!identity)throw Error('ACCOUNT_NOT_FOUND');
+   await attempt(req,'teacher-reissue:'+teacher.id+':'+studentRef,false);
+   const recoveryCode=await setCode(studentRef);
+   return response(200,{ok:true,recoveryCode,studentRef,changed:true});
+  }
   if(input.action==='register'){
    const parts=input.parts,g=grade(input.grade),ref=String(input.profileRef||'');
    if(!Array.isArray(parts)||parts.length!==4||parts.some(x=>typeof x!=='string'||!x.trim()||x.length>30)||!g||!hex.test(ref))throw Error('INVALID_PROFILE');
@@ -188,7 +218,7 @@ Deno.serve(async req=>{
   throw Error('INVALID_ACTION');
  }catch(e){
   const err=String(e?.message||'SERVICE_UNAVAILABLE');
-  const status=['ALREADY_REGISTERED','LICENSE_CAPACITY_REACHED'].includes(err)?409:err==='TOO_MANY_ATTEMPTS'?429:/INVALID_/.test(err)?400:/LOGIN_REQUIRED|NOT_VALID|REGISTER_FIRST/.test(err)?403:503;
+  const status=['ALREADY_REGISTERED','LICENSE_CAPACITY_REACHED'].includes(err)?409:err==='TOO_MANY_ATTEMPTS'?429:/INVALID_|CONFIRMATION_REQUIRED/.test(err)?400:/LOGIN_REQUIRED|NOT_VALID|REGISTER_FIRST|NOT_VERIFIED_TEACHER|LICENSE_INACTIVE|FORBIDDEN|ACCOUNT_NOT_FOUND/.test(err)?403:503;
   return response(status,{ok:false,error:status===503?'SERVICE_UNAVAILABLE':err});
  }
 });

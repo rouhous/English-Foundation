@@ -100,6 +100,12 @@ function omanCurrentWeek(now=Date.now()){
  return {start,end,first:new Date(start+offset).toISOString().slice(0,10),
   last:new Date(start+offset+6*86400000).toISOString().slice(0,10)};
 }
+
+function omanPreviousWeek(window:{start:number,end:number,first:string,last:string}){
+ const start=window.start-7*86400000;
+ return {start,end:window.start,first:new Date(start+4*60*60*1000).toISOString().slice(0,10),
+  last:new Date(start+4*60*60*1000+6*86400000).toISOString().slice(0,10)};
+}
 function countedThisWeek(item:unknown,window:ReturnType<typeof omanCurrentWeek>){
  if(!item||typeof item!=='object'||Array.isArray(item))return false;
  const x=item as Record<string,unknown>;
@@ -152,9 +158,18 @@ function computedWeekly(rows:Record<string,unknown>[]):Record<string,unknown>[]{
   const {activity,...publicRow}=row;
   const events=Array.isArray(activity)?activity:[];
   const hits=events.filter(item=>countedThisWeek(item,window));
+  const previousWindow=omanPreviousWeek(window);
+  const previousHits=events.filter(item=>countedThisWeek(item,previousWindow));
   const earning=countWeeklyMasteryStars(events,row.attempts,window,countedThisWeek);
+  const previousEarning=countWeeklyMasteryStars(events,row.attempts,previousWindow,countedThisWeek);
   return {...publicRow,weekly_stars:earning.count,weekly_star_levels:earning.levels,
    weekly_stars_complete:earning.complete,weekly_stars_source:earning.source,
+   previous_week_stars:previousEarning.count,previous_week_star_levels:previousEarning.levels,
+   previous_week_stars_complete:previousEarning.complete,
+   previous_week_attempts:previousHits.length,
+   previous_week_correct:previousHits.filter(x=>(x as Record<string,unknown>)?.ok===true).length,
+   previous_week_wrong:previousHits.filter(x=>(x as Record<string,unknown>)?.ok===false).length,
+   previous_week_start:previousWindow.first,previous_week_end:previousWindow.last,
    weekly_attempts:hits.length,
    weekly_correct:hits.filter(x=>(x as Record<string,unknown>)?.ok===true).length,
    weekly_window_start:window.first,weekly_window_end:window.last,

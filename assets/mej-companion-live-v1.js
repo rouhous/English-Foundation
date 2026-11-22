@@ -66,16 +66,16 @@
  #mej-companion-actor[data-kind="girl"].mej-c-scooter .mej-c-action-prop{display:block;left:0;bottom:-13%;width:100%;height:54%;font:normal clamp(43px,7vw,69px)/1 system-ui;text-align:center;filter:drop-shadow(0 4px 2px #163b6a44)}
  #mej-companion-actor[data-kind="girl"].mej-c-scooter .mej-c-action-prop:after{content:'🛴'}
  #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-sprite{animation:mej-skate-glide 1.7s ease-in-out both}
- #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop{display:block;left:14%;bottom:-11%;width:74%;height:36%;font:normal clamp(40px,7vw,65px)/1 system-ui;text-align:center;animation:mej-skate-board .46s ease-in-out 4;filter:drop-shadow(0 4px 2px #163b6a44)}
+ #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop{display:block;left:4%;bottom:-2%;width:92%;height:28%;font:normal clamp(34px,5.8vw,52px)/1 system-ui;text-align:center;animation:mej-skate-board .46s ease-in-out 4;filter:drop-shadow(0 3px 2px #163b6a55);z-index:0}
  #mej-companion-actor[data-kind="boy"].mej-c-skating .mej-c-action-prop:after{content:'🛹'}
  /* Tennis rally: visible racket, a side target and a ball that rebounds to the player. */
  #mej-companion-actor .mej-c-tennis-ball,#mej-companion-actor .mej-c-tennis-target{display:none;pointer-events:none;position:absolute;z-index:3;user-select:none}
  #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-sprite{animation:mej-tennis-swing 1.9s ease-in-out both}
- #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop{display:block;width:22px;height:30px;right:3%;bottom:23%;border:3px solid #e3a34c;background:repeating-linear-gradient(90deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px),repeating-linear-gradient(0deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px);border-radius:48% 48% 46% 46%;transform:rotate(-25deg);animation:mej-tennis-racket 1.9s ease-in-out both}
- #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop:after{content:'';display:block;position:absolute;width:5px;height:28px;left:8px;top:27px;border-radius:5px;background:#875126}
- #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-ball{display:block;left:42%;bottom:12%;font:normal 26px/1 system-ui;animation:mej-tennis-rally 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop{display:block;width:21px;height:29px;right:7%;bottom:34%;border:3px solid #e3a34c;background:repeating-linear-gradient(90deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px),repeating-linear-gradient(0deg,#d7e8f9b0 0px,#d7e8f9b0 1px,transparent 1px,transparent 6px);border-radius:48% 48% 46% 46%;transform:rotate(-18deg);animation:mej-tennis-racket 1.9s ease-in-out both;z-index:4}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-action-prop:after{content:'';display:block;position:absolute;width:5px;height:24px;left:6px;top:24px;border-radius:5px;background:#875126}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-ball{display:block;left:46%;bottom:35%;font:normal 24px/1 system-ui;animation:mej-tennis-rally 1.9s ease-in-out both}
  #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-ball:after{content:'🎾'}
- #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-target{display:block;left:calc(42% + var(--mej-tennis-reach,90px));bottom:20%;font:normal 32px/1 system-ui;animation:mej-tennis-target-hit 1.9s ease-in-out both}
+ #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-target{display:block;left:calc(46% + var(--mej-tennis-reach,90px));bottom:35%;font:normal 29px/1 system-ui;animation:mej-tennis-target-hit 1.9s ease-in-out both}
  #mej-companion-actor[data-kind="boy"].mej-c-tennis .mej-c-tennis-target:after{content:'🎯'}
  @keyframes mej-tennis-swing{0%,100%{transform:rotate(0) translateX(0)}15%{transform:rotate(-7deg)}32%{transform:rotate(9deg)}60%{transform:rotate(0)}}
  @keyframes mej-tennis-racket{0%,100%{transform:rotate(-25deg)}18%{transform:rotate(28deg)}34%{transform:rotate(-42deg)}}

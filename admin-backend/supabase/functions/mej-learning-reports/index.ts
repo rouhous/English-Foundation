@@ -33,6 +33,12 @@ function omanWeek(now=Date.now()){
   first:new Date(start+off).toISOString().slice(0,10),
   last:new Date(start+off+6*86400000).toISOString().slice(0,10)};
 }
+
+function omanPreviousWeek(window:{start:number,end:number,first:string,last:string}){
+ const start=window.start-7*86400000;
+ return {start,end:window.start,first:new Date(start+4*60*60*1000).toISOString().slice(0,10),
+  last:new Date(start+4*60*60*1000+6*86400000).toISOString().slice(0,10)};
+}
 function withinOmanWeek(item:unknown,week:ReturnType<typeof omanWeek>){
  if(!item||typeof item!=='object'||Array.isArray(item))return false;
  const x=item as Record<string,unknown>;
@@ -81,7 +87,10 @@ function studentReport(row:Record<string,unknown>){
  const log=Array.isArray(state.activity)?state.activity.slice(-1500):[];
  const window=omanWeek();
  const currentWeek=log.filter(x=>withinOmanWeek(x,window));
+ const previousWindow=omanPreviousWeek(window);
+ const previousWeek=log.filter(x=>withinOmanWeek(x,previousWindow));
  const earning=countWeeklyMasteryStars(log,row.attempts,window,withinOmanWeek);
+ const previousEarning=countWeeklyMasteryStars(log,row.attempts,previousWindow,withinOmanWeek);
  const weeklyCorrect=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===true).length;
  const weeklyWrong=currentWeek.filter(x=>(x as Record<string,unknown>)?.ok===false).length;
 
@@ -119,6 +128,11 @@ function studentReport(row:Record<string,unknown>){
   weeklyAttempts:currentWeek.length,weeklyCorrect,weeklyWrong,
   weeklyStars:earning.count,weeklyStarLevels:earning.levels,
   weeklyStarsComplete:earning.complete,weeklyStarsSource:earning.source,
+  previousWeekStars:previousEarning.count,previousWeekStarLevels:previousEarning.levels,
+  previousWeekStarsComplete:previousEarning.complete,previousWeekAttempts:previousWeek.length,
+  previousWeekCorrect:previousWeek.filter(x=>(x as Record<string,unknown>)?.ok===true).length,
+  previousWeekWrong:previousWeek.filter(x=>(x as Record<string,unknown>)?.ok===false).length,
+  previousWeekStart:previousWindow.first,previousWeekEnd:previousWindow.last,
   weeklyStart:window.first,weeklyEnd:window.last,
   weeklyLegacyApproximate:currentWeek.some(x=>!(x as Record<string,unknown>)?.at),
   correctAnswers:max(row.correct_answers,10000000),updatedAt:row.updated_at||null,

@@ -36,7 +36,7 @@ function omanWeek(now=Date.now()){
 
 function omanPreviousWeek(window:{start:number,end:number,first:string,last:string}){
  const start=window.start-7*86400000;
- return {start,end:window.start,first:new Date(start+4*60*60*1000).toISOString().slice(0,10),
+ return {start,end:window.start-60000,first:new Date(start+4*60*60*1000).toISOString().slice(0,10),
   last:new Date(start+4*60*60*1000+6*86400000).toISOString().slice(0,10)};
 }
 function withinOmanWeek(item:unknown,week:ReturnType<typeof omanWeek>){

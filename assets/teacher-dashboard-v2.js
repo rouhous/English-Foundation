@@ -49,14 +49,14 @@ function normalize(data){
  const live=(data.students||[]).map(x=>({
    id:'live:'+x.student_ref,kind:'live',name:String(x.student_name||'طالب'),className:key(x.class_name),
    grade:integer(x.grade),level:integer(x.highest_level),stars:integer(x.stars),attempts:integer(x.attempts),
-   correct:integer(x.correct_answers),mastered:integer(x.mastered_items),weekly:integer(x.weekly_attempts),weeklyStars:integer(x.weekly_stars),weeklyStarsComplete:x.weekly_stars_complete===true,weeklyStarLevels:Array.isArray(x.weekly_star_levels)?x.weekly_star_levels:[],weekStart:x.weekly_window_start||'',weekEnd:x.weekly_window_end||'',weekApproximate:x.weekly_legacy_dates_approximate===true,
+   correct:integer(x.correct_answers),mastered:integer(x.mastered_items),weekly:integer(x.weekly_attempts),weeklyStars:integer(x.weekly_stars),weeklyStarsComplete:x.weekly_stars_complete===true,weeklyStarLevels:Array.isArray(x.weekly_star_levels)?x.weekly_star_levels:[],previousWeekStars:integer(x.previous_week_stars),previousWeekStarsComplete:x.previous_week_stars_complete===true,previousWeekStarLevels:Array.isArray(x.previous_week_star_levels)?x.previous_week_star_levels:[],previousWeek:integer(x.previous_week_attempts),previousWeekStart:x.previous_week_start||'',previousWeekEnd:x.previous_week_end||'',weekStart:x.weekly_window_start||'',weekEnd:x.weekly_window_end||'',weekApproximate:x.weekly_legacy_dates_approximate===true,
    score:integer(x.attempts)?Math.round(100*Number(x.correct_answers||0)/Number(x.attempts)):null,
    levelStats:Array.isArray(x.level_stats)?x.level_stats:[],updated:x.updated_at||'',diagnostic:x.diagnostic_done===true
  }));
  const imports=(data.importedTrialStudents||[]).map(x=>({
    id:'import:'+x.id,kind:'trial',name:String(x.student_name||'STAGING TEST'),className:key(x.class_name),
    grade:integer(x.grade),level:integer(x.highest_level),stars:integer(x.stars),attempts:0,correct:0,
-   mastered:0,weekly:null,weeklyStars:null,weeklyStarsComplete:false,weeklyStarLevels:[],score:null,mastery:percent(x.mastery_percent),
+   mastered:0,weekly:null,weeklyStars:null,weeklyStarsComplete:false,weeklyStarLevels:[],previousWeek:null,previousWeekStars:null,previousWeekStarsComplete:false,previousWeekStarLevels:[],score:null,mastery:percent(x.mastery_percent),
    levelStats:[],updated:'',sourceTab:x.source_tab||'',diagnostic:false
  }));
  return [...live,...imports]
@@ -75,6 +75,9 @@ function metrics(target,items){clear(target);items.forEach(([title,value])=>targ
 function studentLabel(s){return s.kind==='trial'?'تجريبي مستورد':'متزامن من التطبيق'}
 function currentWeekLabel(s){return s.weekStart&&s.weekEnd?s.weekStart+' — '+s.weekEnd:'الأحد 00:01 — السبت 23:59 (توقيت عُمان)'}
 function weeklyText(s){return s.weekly===null?'غير متاح':String(s.weekly)+' محاولة'}
+function previousWeekStarsText(s){return s.kind!=='live'?'غير متاح':s.previousWeekStarsComplete?String(s.previousWeekStars)+' ⭐':'≥ '+s.previousWeekStars+' ⭐ (جزئي)'}
+function previousWeekText(s){return s.previousWeek===null?'غير متاح':String(s.previousWeek)+' محاولة'}
+function weekLabel(start,end,fallback){return start&&end?start+' — '+end:fallback}
 function weeklyStarsText(s){
  if(s.kind!=='live'||s.weeklyStars===null)return 'غير متاح';
  return s.weeklyStarsComplete?String(s.weeklyStars)+' ⭐':'≥ '+s.weeklyStars+' ⭐ (سجل جزئي)';
@@ -127,7 +130,7 @@ function renderLevelComparison(students){
  const table=node('table','levelsMatrix');
  table.setAttribute('aria-label','مقارنة نجوم الطلاب من المستوى صفر إلى المستوى الثاني عشر');
  const head=node('thead'),heading=node('tr');
- for(const label of ['الطالب','المجموع','نجوم الأسبوع',...Array.from({length:13},(_,i)=>'L'+i),'غير موزعة']){
+ for(const label of ['الطالب','المجموع','نجوم هذا الأسبوع','محاولات هذا الأسبوع','نجوم الأسبوع الماضي','محاولات الأسبوع الماضي',...Array.from({length:13},(_,i)=>'L'+i),'غير موزعة']){
   const th=node('th','',label);th.scope='col';heading.append(th)
  }
  head.append(heading);table.append(head);
@@ -141,6 +144,9 @@ function renderLevelComparison(students){
   nameCell.append(open);tr.append(nameCell);
   tr.append(node('td','matrixTotal','⭐ '+s.stars));
   tr.append(node('td','matrixEarned',weeklyStarsText(s)));
+  tr.append(node('td','matrixEarned',weeklyText(s)));
+  tr.append(node('td','matrixEarned',previousWeekStarsText(s)));
+  tr.append(node('td','matrixEarned',previousWeekText(s)));
   for(let i=0;i<=12;i++){
    const v=levelStars(s,i);
    const td=node('td',v>0?'matrixEarned':(v===null?'matrixUnavailable':'matrixZero'),v===null?'—':v);
@@ -225,7 +231,7 @@ function renderOwnerScope(){
  $('ownerLinkedStatus').textContent='الطلاب المرتبطون: '+Number(scope.linkedCount||0)+' · بيانات التقدم المتزامنة: '+app.students.length;
  $('dataScope').textContent='تقدم الطلاب — '+scope.label;
  status('متابعة طلابي · '+scope.label);
- metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))],['نجوم الأسبوع الحالي',weeklyClassText(app.students)]]);
+ metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))],['نجوم الأسبوع الحالي',weeklyClassText(app.students)],['نجوم الأسبوع الماضي',weeklyClassText(app.students.map(s=>({...s,weeklyStars:s.previousWeekStars,weeklyStarsComplete:s.previousWeekStarsComplete})))],['محاولات الأسبوع الحالي',app.students.reduce((a,s)=>a+integer(s.weekly),0)],['محاولات الأسبوع الماضي',app.students.reduce((a,s)=>a+integer(s.previousWeek),0)]]);
  $('classCount').textContent=app.groups.length+' صفوف';
  clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
  if(!app.groups.length)$('classes').append(node('p','notice',
@@ -256,7 +262,7 @@ function overall(data){
  }
  const live=app.students.filter(s=>s.kind==='live').length,trial=app.students.length-live;
  $('dataScope').textContent='السجلات المستوردة للتجربة: '+trial+' · النتائج المباشرة: '+live+' (تُعرض منفصلة في تفاصيل الطلاب)';
- metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))],['نجوم الأسبوع الحالي',weeklyClassText(app.students)]]);
+ metrics($('metrics'),[['عدد الصفوف',app.groups.length],['عدد الطلاب',app.students.length],['أعلى مستوى',Math.max(0,...app.students.map(s=>s.level))],['أعلى عدد نجوم',Math.max(0,...app.students.map(s=>s.stars))],['نجوم الأسبوع الحالي',weeklyClassText(app.students)],['نجوم الأسبوع الماضي',weeklyClassText(app.students.map(s=>({...s,weeklyStars:s.previousWeekStars,weeklyStarsComplete:s.previousWeekStarsComplete})))],['محاولات الأسبوع الحالي',app.students.reduce((a,s)=>a+integer(s.weekly),0)],['محاولات الأسبوع الماضي',app.students.reduce((a,s)=>a+integer(s.previousWeek),0)]]);
  $('classCount').textContent=app.groups.length+' صفوف';
  clear($('classes'));app.groups.forEach(g=>$('classes').append(makeClassButton(g)));
  if(!app.groups.length){
@@ -273,12 +279,13 @@ function openClass(name){
  $('overview').hidden=true;$('detail').hidden=false;$('studentDetail').hidden=true;
  $('detailTitle').textContent='طلاب الصف '+g.name;
  $('detailScope').textContent=g.students.filter(s=>s.kind==='trial').length+' سجلات تجريبية · '+g.students.filter(s=>s.kind==='live').length+' متزامنة';
- metrics($('detailMetrics'),[['الصف',g.name],['عدد الطلاب',g.students.length],['أعلى مستوى',Math.max(0,...g.students.map(s=>s.level))],['أعلى عدد نجوم',getGroupMax(g)],['نجوم هذا الأسبوع',weeklyClassText(g.students)]]);
+ metrics($('detailMetrics'),[['الصف',g.name],['عدد الطلاب',g.students.length],['أعلى مستوى',Math.max(0,...g.students.map(s=>s.level))],['أعلى عدد نجوم',getGroupMax(g)],['نجوم هذا الأسبوع',weeklyClassText(g.students)],['نجوم الأسبوع الماضي',weeklyClassText(g.students.map(s=>({...s,weeklyStars:s.previousWeekStars,weeklyStarsComplete:s.previousWeekStarsComplete})))],['محاولات هذا الأسبوع',g.students.reduce((a,s)=>a+integer(s.weekly),0)],['محاولات الأسبوع الماضي',g.students.reduce((a,s)=>a+integer(s.previousWeek),0)]]);
  $('studentSearch').value='';$('sortStudents').value='stars';renderList(g.students);
  history.replaceState(null,'','#class='+encodeURIComponent(name));window.scrollTo({top:0,behavior:'smooth'})
 }
 function sortedStudents(students){
  const mode=$('sortStudents').value;
+ if(mode==='previous-week-stars')return [...students].sort((a,b)=>integer(b.previousWeekStars)-integer(a.previousWeekStars)||b.stars-a.stars||String(a.name||'').localeCompare(String(b.name||''),'ar'));
  if(mode==='weekly-stars')return [...students].sort((a,b)=>
   (b.weeklyStarsComplete?integer(b.weeklyStars):-1)-(a.weeklyStarsComplete?integer(a.weeklyStars):-1)||
   b.stars-a.stars||String(a.name||'').localeCompare(String(b.name||''),'ar'));
@@ -305,7 +312,7 @@ function renderList(students){
  for(const s of shown){
    const b=node('button','student');b.type='button';
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
-   b.append(node('span','', 'المستوى '+s.level+' · ⭐ المجموع '+s.stars+' · ⭐ هذا الأسبوع '+weeklyStarsText(s)+' · النشاط '+weeklyText(s)));
+   b.append(node('span','', 'المستوى '+s.level+' · ⭐ المجموع '+s.stars+' · ⭐ هذا الأسبوع '+weeklyStarsText(s)+' ('+weeklyText(s)+') · ⭐ الأسبوع الماضي '+previousWeekStarsText(s)+' ('+previousWeekText(s)+')'));
    b.append(levelPills(s));
    const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,s.mastered/200*100))+'%';
    track.append(fill);b.append(track);
@@ -403,7 +410,7 @@ function studentDetails(s){
  const host=clear($('studentDetails'));
  if(s.kind==='trial')host.append(node('div','warning','سجل STAGING قديم للمعاينة، وليس حساب طالب نشطًا. لا تتوفر تفاصيل الإجابات أو مزامنة جهاز الطالب في هذا السجل.'));
  const t=node('table','detailTable');
- const lines=[['القسم',s.className],['الصف الدراسي',s.grade],['المستوى الحالي',s.level],['مجموع النجوم',s.stars+' ⭐'],['نجوم الأسبوع الحالي',weeklyStarsText(s)],['نشاط الأسبوع الحالي (عدد المحاولات)',weeklyText(s)],['الفترة الأسبوعية',currentWeekLabel(s)]];
+ const lines=[['القسم',s.className],['الصف الدراسي',s.grade],['المستوى الحالي',s.level],['مجموع النجوم',s.stars+' ⭐'],['نجوم الأسبوع الحالي',weeklyStarsText(s)],['محاولات الأسبوع الحالي',weeklyText(s)],['نجوم الأسبوع الماضي',previousWeekStarsText(s)],['محاولات الأسبوع الماضي',previousWeekText(s)],['فترة الأسبوع الحالي',currentWeekLabel(s)],['فترة الأسبوع الماضي',weekLabel(s.previousWeekStart,s.previousWeekEnd,'الأحد 00:01 — السبت 23:59 (توقيت عُمان)')]];
  if(s.kind==='trial')lines.push(['إتقان المستوى',s.mastery+'%'],['مصدر السجل',s.sourceTab]);
  else lines.push(['المحاولات',s.attempts],['الإجابات الصحيحة',s.correct],['دقة الإجابات',s.score===null?'—':s.score+'%'],['العناصر المتقنة',s.mastered],['أنجز التشخيص',s.diagnostic?'نعم':'لا'],['آخر مزامنة',s.updated?new Date(s.updated).toLocaleString('ar-OM'):'—']);
  for(const [a,b] of lines){const tr=node('tr');tr.append(node('td','',a),node('td','',safe(b)));t.append(tr)}host.append(t);

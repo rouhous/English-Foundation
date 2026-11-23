@@ -47,9 +47,9 @@ body[data-fading] {opacity:0}
 <body>
 <main id="market" aria-label="سوق المهارات العماني">
   <div id="map">
-    <button type="button" id="market-journey" class="market-journey" aria-label="العودة إلى رحلتي" title="العودة إلى رحلتي" hidden>
+    <a id="market-journey" class="market-journey" href="../../" target="_top" aria-label="العودة إلى رحلتي" title="العودة إلى رحلتي" hidden>
       <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 1 11h3v10h6v-6h4v6h6V11h3z"/></svg>
-    </button>
+    </a>
     <picture><source media="(orientation: landscape)" srcset="computer.webp"><img id="art" src="phone.webp" alt="سوق عماني يضم عشرة محلات"></picture>
     <button id="student" type="button" aria-label="الطالب" style="--sprite:url('student.webp')"><span id="figure" aria-hidden="true"></span></button>
     <span id="speech" role="status" lang="en" hidden>Choose a shop!</span>
@@ -58,7 +58,7 @@ body[data-fading] {opacity:0}
 <main id="shop" hidden>
   <nav><a class="return" id="back" href="#market"><bdi>← السوق</bdi></a></nav>
   <h1 id="shop-name" tabindex="-1"></h1>
-  <p id="shop-skill" lang="en" dir="ltr"></p>
+  <p id="shop-skill" dir="auto"></p>
   <div id="front" aria-hidden="true"></div>
   <button class="start" id="start-practice" type="button" hidden>ابدأ التدريب</button>
   <button class="start" id="describe-practice" type="button" hidden>Describe</button>
@@ -118,16 +118,16 @@ const MARKET = {
 };
 
 const SHOPS = {
-  speaking:['ركن النطق','Speaking'],
-  phonics:['مدرسة الحروف','Phonics'],
-  writing:['دكان الكاتب','Writing'],
-  grammar:['ورشة القواعد','Grammar'],
-  reading:['المكتبة','Reading'],
-  'advanced-writing':['استوديو الكتابة المتقدمة','Advanced Writing'],
-  blend:['ورشة تركيب الأصوات','Blend'],
-  spelling:['ورشة الإملاء','Spelling'],
-  vocabulary:['متجر الكلمات','Vocabulary'],
-  listening:['مجلس الاستماع','Listening']
+  speaking:['ركن النطق','Speaking — التحدث'],
+  phonics:['مدرسة الحروف','Phonics — الصوتيات'],
+  writing:['دكان الكاتب','Writing — الكتابة'],
+  grammar:['ورشة القواعد','Grammar — القواعد'],
+  reading:['المكتبة','Reading — القراءة'],
+  'advanced-writing':['استوديو الكتابة المتقدمة','Advanced Writing — الكتابة المتقدمة'],
+  blend:['ورشة تركيب الأصوات','Blend — دمج الأصوات'],
+  spelling:['ورشة الإملاء','Spelling — التهجئة والإملاء'],
+  vocabulary:['متجر الكلمات','Vocabulary — المفردات'],
+  listening:['مجلس الاستماع','Listening — الاستماع']
 };
 
 const orientation = matchMedia('(orientation: landscape)');
@@ -382,7 +382,7 @@ if (embedded) {
   document.body.dataset.embedded = '';
   const journey = get('market-journey');
   journey.hidden = false;
-  journey.addEventListener('click', () => parent.postMessage({type:'mej-souq:journey'},location.origin));
+  // The Home control is a top-level link so iOS Safari does not depend on iframe message handling.
 }
 if (embedded) window.addEventListener('message',event => {
   if (event.origin !== location.origin || event.source !== parent || event.data?.type !== 'mej-souq:access') return;

@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const {buildQueue,intervals}=require('../assets/mej-spaced-review-v1.js');
+const DAY=24*60*60*1000;
 const t=Date.parse('2026-11-28T08:00:00Z');
 const questions={'L1-1':{id:'L1-1',g:1},'L1-2':{id:'L1-2',g:1},'L1-3':{id:'L1-3',g:1}};
 const event=(id,minutes,ok)=>({id,at:new Date(t+minutes*60000).toISOString(),ok});
@@ -16,7 +17,7 @@ assert.deepEqual(buildQueue(profile([event('L1-1',0,false)],{'L1-1':1}),question
 assert.deepEqual(buildQueue(profile([event('L1-1',0,false),event('L1-1',1,true)],{'L1-1':1}),questions,t+10*60000).map(x=>x.id),['L1-1']);
 // Each successful due recall advances to 1 day, 3 days, then 7 days.
 const one=[event('L1-1',0,false),event('L1-1',11,true)];
-assert.equal(buildQueue(profile(one,{'L1-1':1}),questions,t+one[1].at.length*0+11*60000+DAY-1).length,0);
+assert.equal(buildQueue(profile(one,{'L1-1':1}),questions,t+11*60000+DAY-1).length,0);
 assert.equal(buildQueue(profile(one,{'L1-1':1}),questions,t+11*60000+DAY).length,1);
 const two=[...one,event('L1-1',11+24*60+1,true)];
 const twoDue=t+(11+24*60+1)*60000+3*DAY;

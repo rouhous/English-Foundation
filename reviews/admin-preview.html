@@ -84,15 +84,15 @@ async function verifyGoogle(response){
  hideAccess();
  $('googleButton').hidden=false;
  const token=response?.credential;
- if(typeof token!=='string'||token.length>8192){say('تعذر تسجيل الدخول بواسطة Google.');return}
+ if(typeof token!=='string'||token.length>8192){sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('تعذر تسجيل الدخول بواسطة Google.');return}
  say('جار التحقق من حساب المالك...');
  try{
    const r=await fetch(VERIFY,{method:'GET',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(15000)});
    const data=await readJSON(r);
-   if(!r.ok||data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){say('هذا الحساب غير مخوّل بمراجعة التطبيق.');return}
+   if(!r.ok||data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('هذا الحساب غير مخوّل بمراجعة التطبيق.');return}
    credential=token;$('googleButton').hidden=true;$('pinPanel').hidden=false;say('تم التحقق من Google. أدخل رمز Admin الحالي.');
    $('adminCode').focus();
- }catch{say('تعذر الاتصال بخدمة التحقق. تحقق من الإنترنت ثم أعد المحاولة.')}
+ }catch{sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('تعذر الاتصال بخدمة التحقق. تحقق من الإنترنت ثم أعد المحاولة.')}
 }
 async function gate(action,code){
  const res=await fetch(GATE,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
@@ -287,7 +287,7 @@ async function exit(){
 }
 $('exit').addEventListener('click',exit);
 window.addEventListener('pagehide',()=>{sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');});
-const savedCredential=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');
+let savedCredential=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');
 if(savedCredential){$('googleButton').hidden=true;verifyGoogle({credential:savedCredential});}
 let checks=0;
 const loader=setInterval(()=>{

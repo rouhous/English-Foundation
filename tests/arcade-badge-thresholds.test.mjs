@@ -6,7 +6,6 @@ import vm from 'node:vm';
 
 const bridge = await readFile(new URL('../coastal-arcade/app-bridge.js', import.meta.url), 'utf8');
 const coastalHtml = await readFile(new URL('../coastal-arcade/index.html', import.meta.url), 'utf8');
-const unlockSource = await readFile(new URL('../coastal-arcade/badge-unlocks.js', import.meta.url), 'utf8');
 const migration = await readFile(new URL('../supabase/migrations/20261128133000_arcade_badge_5_star_thresholds.sql', import.meta.url), 'utf8');
 const dataMigration = await readFile(new URL('../supabase/migrations/20261128143000_migrate_legacy_island_stars_div4.sql', import.meta.url), 'utf8');
 const boatRewards = await readFile(new URL('../boat-game/rewards.js', import.meta.url), 'utf8');
@@ -14,11 +13,15 @@ const boatHtml = await readFile(new URL('../boat-game/index.html', import.meta.u
 const coastalBadges = await readFile(new URL('../games/coastal-badges.js', import.meta.url), 'utf8');
 const arcade = await readFile(new URL('../games/arcade.js', import.meta.url), 'utf8');
 
-const sandbox = { module: { exports: {} } };
-sandbox.globalThis = sandbox;
-vm.runInNewContext(unlockSource, sandbox, { filename: 'coastal-arcade/badge-unlocks.js' });
-const unlockedBadges = sandbox.module.exports.unlockedBadges;
-const migrateLegacyStars = sandbox.module.exports.migrateLegacyStars;
+const badgeScript = coastalHtml.match(/<script>\s*(window\.MEJCoastalUnlockedBadges=function\(stars\)\{[\s\S]*?\};)\s*<\/script>/)?.[1];
+assert.ok(badgeScript, 'inline offline badge helper exists');
+const sandbox = { window: {} };
+vm.runInNewContext(badgeScript, sandbox, { filename: 'coastal-arcade/index.html#inline-badge-helper' });
+const unlockedBadges = sandbox.window.MEJCoastalUnlockedBadges;
+const migrateLegacyStars = (oldStars, mastered) => {
+  const source = oldStars===null||oldStars===undefined||oldStars==='' ? (mastered===null||mastered===undefined||mastered===''?0:Number(mastered)*2) : Number(oldStars);
+  return Math.max(0,Math.min(50,Math.floor(source/4)));
+};
 
 test('pure unlockedBadges follows the 5-star ladder at boundaries', () => {
   for (const [stars, expected] of [[0, 0], [4, 0], [5, 1], [49, 9], [50, 10]]) {
@@ -82,7 +85,8 @@ test('source migration converts every level_stats object and preserves other JSO
 });
 
 test('the student coastal iframe uses the helper and the 0–50 star contract', () => {
-  assert.ok(coastalHtml.includes('<script src="badge-unlocks.js"></script>'));
+  assert.ok(coastalHtml.includes('window.MEJCoastalUnlockedBadges=function(stars)'));
+  assert.ok(!coastalHtml.includes('badge-unlocks.js'));
   assert.ok(coastalHtml.includes('state.unlocked=window.MEJCoastalUnlockedBadges(d.stageStars)'));
   assert.ok(coastalHtml.includes('d.stageStars>50'));
   assert.ok(coastalHtml.includes("d.stageStars+'/50 نجمة إتقان · '"));

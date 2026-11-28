@@ -3,7 +3,7 @@ import { createRemoteJWKSet, jwtVerify } from 'npm:jose@6.1.0';
 const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleusercontent.com';
 const OWNER_EMAIL='rouhous@gmail.com';
 const ORIGIN='https://rouhous.github.io';
-const SOURCE='https://raw.githubusercontent.com/rouhous/English-Foundation/9049142891a22445522f4c5e8cb089d43adf10f7/index.html';
+const SOURCE='https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates/index.html';
 const JWKS=createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 const encoder=new TextEncoder();
 const API=Deno.env.get('SUPABASE_URL')||'';

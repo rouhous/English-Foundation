@@ -96,7 +96,7 @@
    const g=Number(stage),b=Number(badge);
    if(!Number.isInteger(g)||g<0||g>12||!validIndex(b))return {status:'locked',award:0};
    const person=p||active();
-   if(!person||countMaster(g,person)<b*20)return {status:'locked',award:0};
+   if(!person||stageEffectiveStars(g,person)<b*5)return {status:'locked',award:0};
    const item=sanitized(ledger(person)[key(g,b)],g,b);
    return {status:item?.status==='finished'?'finished':item?.status==='pending'?'pending':'available',award:item?.award||0};
  };
@@ -107,8 +107,8 @@
    const p=active();stage=Number(stage);badge=Number(badge);
    if(!p||!p.id||!Number.isInteger(stage)||stage<0||stage>12||!validIndex(badge))return;
    if(!permitted(stage)){toast('هذه الجزيرة لم تُفتح بعد.');return}
-   const mastered=countMaster(stage,p);
-   if(mastered<20*badge){toast('تفتح اللعبة بعد الحصول على '+(20*badge)+' نجمة أساسية في هذه الجزيرة.');return}
+   const earnedStars=stageEffectiveStars(stage,p);
+   if(earnedStars<5*badge){toast('تفتح اللعبة بعد الحصول على '+(5*badge)+' نجوم أساسية في هذه الجزيرة.');return}
    const k=key(stage,badge),existing=sanitized(ledger(p)[k],stage,badge);
    if(existing?.status==='finished'){toast('أكملت هذه الجولة وحصلت على '+existing.award+' نجوم إضافية. افتح الشارة التالية للمزيد.');return}
    opening=true;
@@ -175,13 +175,32 @@
    frame.title='بوابة الألعاب — رحلتي مع الإنجليزية';
    frame.style.cssText='display:block;width:100%;height:calc(100% - 44px);border:0;background:#092f51';
    frame.setAttribute('allow','fullscreen');
-   frame.src='./games/index.html?grade='+encodeURIComponent(Math.max(1,Math.min(12,Number(learner.grade)||1)));
+   const gameGrade=Math.max(1,Math.min(12,Number(learner.grade)||1));
+   const previewBase=typeof window.__MEJ_PREVIEW_BASE==='string'?window.__MEJ_PREVIEW_BASE:'';
+   const rawBase=previewBase.endsWith('/')?previewBase.slice(0,-1):previewBase;
+   if(rawBase){
+     fetch(rawBase+'/games/index.html',{cache:'no-store'}).then(response=>{
+       if(!response.ok)throw new Error('PREVIEW_GAMES_UNAVAILABLE');
+       return response.text();
+     }).then(documentHtml=>{
+       const gameBase='https://rouhous.github.io/English-Foundation/games/';
+       documentHtml=documentHtml.replace('<head>','<head><base href="'+gameBase+'">');
+       const arcadeTag='<script src="./arcade.js"></script>';
+       if(!documentHtml.includes(arcadeTag))throw new Error('PREVIEW_ARCADE_SCRIPT_MISSING');
+       documentHtml=documentHtml.replace(arcadeTag,'<script src="'+rawBase+'/games/arcade.js"><\/script>');
+       frame.srcdoc=documentHtml;
+     }).catch(()=>{
+       frame.srcdoc='<main dir="rtl" style="font:700 16px system-ui;padding:24px;color:#fff;background:#073b59">تعذر تحميل نسخة الألعاب المحدّثة للمعاينة. أعد المحاولة بعد التحقق من الاتصال.</main>';
+     });
+   }else{
+     frame.src='./games/index.html?grade='+encodeURIComponent(gameGrade);
+   }
    const sendInit=()=>{
      const now=active();
      if(!dialog.open||now?.id!==learner.id)return;
      const stage=currentIsland(now);
-     const stageStars=countMaster(stage,now);
-     frame.contentWindow?.postMessage({type:'mej:arcade-init',stageStars,stage},location.origin);
+     const starsNow=stageEffectiveStars(stage,now);
+     frame.contentWindow?.postMessage({type:'mej:arcade-init',stageStars:starsNow,stage},location.origin);
    };
    const onArcadeMessage=event=>{
      if(event.origin!==location.origin||event.source!==frame.contentWindow||active()?.id!==learner.id)return;

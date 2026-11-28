@@ -69,19 +69,85 @@ test('missing-stars mastered*2 fallback also preserves every earned badge', () =
   }
 });
 
-test('source migration converts every level_stats object and preserves other JSON fields', () => {
+const effectiveLegacyStars = level => {
+  if (level.stars !== null && level.stars !== undefined && level.stars !== '') return Number(level.stars);
+  if (level.mastered !== null && level.mastered !== undefined && level.mastered !== '') return Number(level.mastered) * 2;
+  return 0;
+};
+const simulateHistoricalRowMigration = levelStats => {
+  const hasLegacyScale = levelStats.some(level =>
+    level && typeof level === 'object' && effectiveLegacyStars(level) > 50
+  );
+  if (!hasLegacyScale) return structuredClone(levelStats);
+  return levelStats.map(level => {
+    if (!level || typeof level !== 'object') return level;
+    const stars = Math.max(0, Math.min(50, Math.floor(effectiveLegacyStars(level) / 4)));
+    return {
+      ...level,
+      stars,
+      starTarget: 50,
+      masteryPercent: Math.round(stars / 50 * 100),
+      completed: level.completed === true || stars >= 50
+    };
+  });
+};
+
+test('source migration gates the UPDATE to rows with an effective legacy value above 50', () => {
   assert.ok(dataMigration.includes('update public.mej_student_progress'));
   assert.ok(dataMigration.includes('jsonb_array_elements(progress.level_stats)'));
   assert.ok(dataMigration.includes("(item.value->>'mastered')::numeric * 2"));
   assert.ok(dataMigration.includes("(item.value->>'stars')::numeric"));
   assert.ok(dataMigration.includes('/ 4'));
   assert.match(dataMigration, /least\(\s*50/);
-  assert.ok(dataMigration.includes("jsonb_set("));
   assert.ok(dataMigration.includes("'{stars}'"));
+  assert.ok(dataMigration.includes("'{starTarget}'"));
+  assert.ok(dataMigration.includes("'{masteryPercent}'"));
+  assert.ok(dataMigration.includes("'{completed}'"));
   assert.ok(dataMigration.includes('order by item.ordinality'));
   assert.ok(dataMigration.includes("where jsonb_typeof(progress.level_stats) = 'array'"));
+  assert.match(dataMigration, /and exists\s*\([\s\S]*?\)\s*;/i);
+  assert.match(dataMigration, />\s*50\s*\n\s*\)/);
+  assert.ok(dataMigration.includes('coalesce((item.value->>\'completed\')::boolean, false)'));
+  assert.ok(dataMigration.includes('or converted_stars.new_stars >= 50'));
   assert.ok(!dataMigration.includes('delete from'));
   assert.ok(!dataMigration.includes('truncate'));
+});
+
+test('historical migration is idempotent and leaves new-scale rows untouched', () => {
+  const legacy = [
+    { level: 1, stars: 200, mastered: 100, starTarget: 200, masteryPercent: 100, completed: true, note: 'keep' },
+    { level: 2, stars: 40, mastered: 20, starTarget: 200, masteryPercent: 20, completed: false }
+  ];
+  const first = simulateHistoricalRowMigration(legacy);
+  assert.deepEqual(first[0], {
+    level: 1, stars: 50, mastered: 100, starTarget: 50,
+    masteryPercent: 100, completed: true, note: 'keep'
+  });
+  assert.deepEqual(first[1], {
+    level: 2, stars: 10, mastered: 20, starTarget: 50,
+    masteryPercent: 20, completed: false
+  });
+  const second = simulateHistoricalRowMigration(first);
+  assert.deepEqual(second, first, 'second execution must be a no-op');
+  
+  const alreadyNew = [
+    { level: 1, stars: 40, starTarget: 50, masteryPercent: 80, completed: false },
+    { level: 2, stars: 0, starTarget: 50, masteryPercent: 0, completed: false }
+  ];
+  assert.deepEqual(simulateHistoricalRowMigration(alreadyNew), alreadyNew,
+    'a row whose stars are all <= 50 must remain byte-for-byte equivalent in content');
+});
+
+test('missing-stars mastered*2 fallback is gated by legacy row scale', () => {
+  const oldFallback = [{ level: 1, mastered: 30, starTarget: 200, completed: false }];
+  const converted = simulateHistoricalRowMigration(oldFallback);
+  assert.equal(converted[0].stars, 15);
+  assert.equal(converted[0].starTarget, 50);
+  assert.equal(converted[0].masteryPercent, 30);
+  assert.equal(simulateHistoricalRowMigration(converted)[0].stars, 15);
+
+  const newScaleMissingStars = [{ level: 1, mastered: 20, starTarget: 50, masteryPercent: 40, completed: false }];
+  assert.deepEqual(simulateHistoricalRowMigration(newScaleMissingStars), newScaleMissingStars);
 });
 
 test('the student coastal iframe uses the helper and the 0–50 star contract', () => {

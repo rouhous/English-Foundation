@@ -106,7 +106,7 @@ function prelude(html){
  // Remove the original student-freemium redirect gate only inside this isolated preview.
  const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
  if(!gate.test(html))throw Error('INVALID_OWNER_GATE');
- const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;<'+'/script>';
+ const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;window.__MEJ_PREVIEW_BASE="https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates";<'+'/script>';
  html=html.replace(gate,mark);
  // All learning stages are inspectable by the authenticated owner only inside
  // the temporary preview document. The public student app remains unchanged.
@@ -135,7 +135,7 @@ function prelude(html){
  const appBase=new URL('../',location.href).href;
  if(!/^https:\/\//.test(appBase)||new URL(appBase).origin!==location.origin)throw Error('INVALID_PREVIEW_BASE');
  if(!/<head(?:\s[^>]*)?>/i.test(html))throw Error('INVALID_PREVIEW_HEAD');
- html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'"><script>window.__MEJ_PREVIEW_BASE="'+raw+'";<'+'/script>');
+ html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'">');
  return html;
 }
 function applyScreenMode(){

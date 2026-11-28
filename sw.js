@@ -2,7 +2,7 @@
  * Navigation must never wait for the network when the PWA shell is cached.
  * Never clear localStorage/IndexedDB or intercept remote student reports.
  */
-const CACHE='mej-journey-release-20261128-v4';
+const CACHE='mej-journey-release-20261128-v5';
 const isFreshShellAsset=path=>/(?:\/assets\/(?:student-cloud-progress-v1\.js|mej-companion-(?:art|live)-v1\.js|mej-spelling-skills-v1\.js|mej-spaced-review-v1\.js|mej-grammar-feedback-v1\.js)|teacher-dashboard-v2\.js|\/assets\/sea-map\/stations\.(?:js|css)|\/mobile-home-fix\.css|\/assets\/(?:mej-writing-skills-v1\.js|skills-souq\/(?:room\.css|index\.html))|\/coastal-arcade\/index\.html)$/.test(path);
 const CORE=['./assets/skills-souq/room.css','./assets/skills-souq/index.html','./assets/skills-souq/phone.webp','./assets/skills-souq/computer.webp','./assets/skills-souq/student.webp','./assets/sea-map/boat.webp','./assets/sea-map/castle.webp','./assets/sea-map/desktop.webp','./assets/sea-map/phone.webp','./assets/sea-map/stations.css','./assets/sea-map/stations.js','./coastal-arcade/index.html','./coastal-arcade/app-bridge.js','./coastal-arcade/quality-fixes.js','./assets/mej-sailor-host.js','./assets/mej-hidden-badges-v1.css','./hidden-objects/index.html','./hidden-objects/assets.js','./hidden-objects/photo-scenes.js','./hidden-objects/precision-v3-client.js','./hidden-objects/first-badge-practice.js','./hidden-objects/practice-region-library-a.js','./hidden-objects/practice-region-library-b.js','./hidden-objects/practice-region-library-c.js','./hidden-objects/practice-region-loader.js','./hidden-objects/museum-scene-practice-20261116.js','./hidden-objects/assets/stage04-badge03_museum.webp','./hidden-objects/airport-scene-practice-20261116.js','./hidden-objects/assets/stage08-badge05_airport.webp','./hidden-objects/generated-13-scene-practice-20261116.js','./hidden-objects/assets/base_classroom.webp','./hidden-objects/assets/variant_classroom.webp','./hidden-objects/assets/variant_souq_harbour.webp','./','./index.html','./mobile-home-fix.css','./assets/stage5-responsive.css',
  './manifest.webmanifest','./assets/mej-writing-curriculum-v3.js','./assets/mej-writing-skills-v1.js','./assets/mej-mobile-ui-v2.css','./assets/mej-companion-art-v1.js','./assets/mej-companion-live-v1.js','./assets/mej-skill-expansion-v1.js','./assets/mej-spelling-skills-v1.js','./assets/mej-spaced-review-v1.js','./assets/mej-grammar-feedback-v1.js','./assets/student-cloud-progress-v1.js','./assets/verified-offline-outbox-v1.js','./assets/verified-sync-bridge-v1.js','./icon-192.png','./icon-512.png',
@@ -62,15 +62,26 @@ self.addEventListener('install',event=>{
   await self.skipWaiting();
  })());
 });
+let didNavigateForMaintenanceCleanup = false;
 self.addEventListener('activate',event=>{
  event.waitUntil((async()=>{
+  // Remove only the temporary maintenance cache(s); retain every app/offline cache.
+  const maintenanceCaches=(await caches.keys()).filter(name=>name.startsWith('mej-maintenance-'));
+  let deletedMaintenanceCache=false;
+  for(const name of maintenanceCaches){
+   try{if(await caches.delete(name))deletedMaintenanceCache=true}
+   catch(error){console.warn('Maintenance cache cleanup postponed:',name,error)}
+  }
   await self.clients.claim();
-  // Leave older caches until the new shell is present. Preserve all user data.
-  const current=await caches.open(CACHE);
-  if(!await current.match('./index.html'))return; // Keep an older working offline shell if upgrade was interrupted.
-  const keys=await caches.keys();
-  await Promise.all(keys.filter(k=>k!==CACHE && /^(?:english-explorer-|my-english-journey-|mej-)/.test(k))
-   .map(k=>caches.delete(k)));
+  // Reload controlled windows once, and only when a maintenance cache was actually removed.
+  if(deletedMaintenanceCache && !didNavigateForMaintenanceCleanup){
+   didNavigateForMaintenanceCleanup=true;
+   const windows=await self.clients.matchAll({type:'window',includeUncontrolled:false});
+   await Promise.all(windows.map(async client=>{
+    try{await client.navigate(client.url)}
+    catch(error){console.warn('One-time maintenance exit navigation failed:',error)}
+   }));
+  }
  })());
  // After activation, fill 12 image banks without blocking navigation.
  warmPictures().catch(()=>{});

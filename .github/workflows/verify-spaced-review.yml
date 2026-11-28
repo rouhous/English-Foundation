@@ -1,0 +1,24 @@
+name: Verify four-step spaced review
+on:
+  pull_request:
+    branches: [development/phase2-learning-features]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'assets/mej-spaced-review-v1.js'
+      - 'scripts/test_spaced_review_schedule.cjs'
+      - '.github/workflows/verify-spaced-review.yml'
+  push:
+    branches: [fix/spaced-review-10m-1d-3d-7d]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --check assets/mej-spaced-review-v1.js
+      - run: node scripts/test_spaced_review_schedule.cjs

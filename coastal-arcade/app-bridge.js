@@ -248,6 +248,19 @@ function installStudentQuickplay(frame,clicked){
 }
 
 function close(){const e=document.getElementById('mejCoastalOverlay');if(!e)return;e.remove();activeProfile=null;document.body.style.removeProperty('overflow')}
+// MEJ_MAIN_ISLAND_BANK_TO_ARCADE_V1 — send only the selected island's public questions and mastery flags.
+function mejCoastalBankPayload(stage,profile){
+ const rows=typeof byGrade!=='undefined'&&Array.isArray(byGrade[stage])?byGrade[stage]:[];
+ const correct=profile&&profile.correct&&typeof profile.correct==='object'?profile.correct:{};
+ const clean=rows.filter(q=>q&&typeof q.id==='string'&&Number(q.g)===Number(stage)).map(q=>({
+  id:q.id,g:Number(q.g),type:String(q.type||''),prompt:String(q.prompt||''),answer:String(q.answer||''),
+  options:Array.isArray(q.options)?q.options.map(String):[],audio:String(q.audio||''),word:String(q.word||''),
+  pic:String(q.pic||''),passage:String(q.passage||''),mode:String(q.mode||''),tip:String(q.tip||''),
+  mastered:Number(correct[q.id])>=2
+ }));
+ const shuffle=items=>{const out=[...items];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out};
+ return [...shuffle(clean.filter(q=>!q.mastered)),...shuffle(clean.filter(q=>q.mastered))];
+}
 function open(stage,badge){
  if(typeof active!=='function'||typeof permitted!=='function')return;
  stage=Number(stage);badge=Number(badge);
@@ -281,7 +294,7 @@ window.addEventListener('message',event=>{
  const stage=Number(box.dataset.stage),grade=stage===0?1:Math.max(1,Math.min(12,stage)),token=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'':'';
  const owner=ownerPreview();
  // The selected learning stage (0-12), not the student's registered school grade, sets game difficulty.
- f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
+ f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner,bank:mejCoastalBankPayload(stage,p)},location.origin)
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('mejCoastalOverlay')){e.preventDefault();close()}});
 function init(){

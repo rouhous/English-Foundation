@@ -15,8 +15,7 @@ set level_stats = coalesce((
     case
       when jsonb_typeof(item.value) = 'object'
        and item.value->>'starTarget' is distinct from '50'
-       and effective.effective_stars > 50
-      then
+             then
         jsonb_set(
           jsonb_set(
             jsonb_set(
@@ -73,7 +72,7 @@ set level_stats = coalesce((
   cross join lateral (
     select least(
       50,
-      greatest(0, floor(effective.effective_stars / 4)::integer)
+      greatest(0, ceiling(effective.effective_stars / 4)::integer)
     ) as new_stars
   ) as converted
 ), '[]'::jsonb)
@@ -89,17 +88,6 @@ where jsonb_typeof(progress.level_stats) = 'array'
     ) as legacy_item(value)
     where jsonb_typeof(legacy_item.value) = 'object'
       and legacy_item.value->>'starTarget' is distinct from '50'
-      and coalesce(
-        case
-          when (legacy_item.value->>'stars') ~ '^-?[0-9]+([.][0-9]+)?$'
-            then (legacy_item.value->>'stars')::numeric
-        end,
-        case
-          when (legacy_item.value->>'mastered') ~ '^-?[0-9]+([.][0-9]+)?$'
-            then (legacy_item.value->>'mastered')::numeric * 2
-        end,
-        0
-      ) > 50
   );
 
 commit;

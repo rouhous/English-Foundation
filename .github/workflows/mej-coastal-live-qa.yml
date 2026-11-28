@@ -1,15 +1,14 @@
 name: Coastal Arcade — integration verification
 on:
-  pull_request:
-    branches: [preview/owner-review-updates]
+  push:
     paths:
+      - 'index.html'
+      - 'sw.js'
       - 'coastal-arcade/**'
       - 'scripts/qa-coastal-live.mjs'
-      - 'scripts/qa-coastal-srcdoc-init.mjs'
-      - 'tests/coastal-unmastered-vocabulary.test.mjs'
       - '.github/workflows/mej-coastal-live-qa.yml'
-  push:
-    branches: [fix/arcade-unmastered-vocab-init-20261128]
+  pull_request:
+    branches: [preview/owner-review-updates]
     paths:
       - 'coastal-arcade/**'
       - 'scripts/qa-coastal-live.mjs'

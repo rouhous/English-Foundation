@@ -93,6 +93,8 @@ const cloudContext={Number,Math,Object,JSON};
 vm.runInNewContext(cloudSource.slice(cloudStart,cloudEnd)+';globalThis.__safePayload=safePayload;',cloudContext);
 const cloud=cloudContext.__safePayload({grade:1,studentName:'Synthetic learner',className:'1/1',attempts:2,correctAnswers:2,levelStats:[{level:1,mastered:0,stars:48,starTarget:48,total:200,masteryPercent:100}],privateState:{stageSkillLegacyFloorV1:{1:50,2:38},stageSkillLegacyBaselineV1:{1:24,2:18}}});
 assert.equal(cloud.levelStats[0].starTarget,48,'cloud target round-trip');
+const olderCloud=cloudContext.__safePayload({grade:1,studentName:'Legacy synthetic',className:'1/1',attempts:0,correctAnswers:0,levelStats:[{level:1,mastered:0,stars:0,total:200,masteryPercent:0}]});
+assert.equal(olderCloud.levelStats[0].starTarget,50,'older cloud clients without starTarget retain the legacy default');
 assert.deepEqual(JSON.parse(JSON.stringify(cloud.privateState.stageSkillLegacyFloorV1)),{1:50,2:38},'cloud floor round-trip');
 assert.deepEqual(JSON.parse(JSON.stringify(cloud.privateState.stageSkillLegacyBaselineV1)),{1:24,2:18},'cloud baseline round-trip');
 const edge=fs.readFileSync('admin-backend/supabase/functions/mej-progress/index.ts','utf8');

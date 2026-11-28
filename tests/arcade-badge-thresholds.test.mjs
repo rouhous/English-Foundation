@@ -63,7 +63,7 @@ test('source migration converts every level_stats object and preserves other JSO
   assert.ok(dataMigration.includes("(item.value->>'mastered')::numeric * 2"));
   assert.ok(dataMigration.includes("(item.value->>'stars')::numeric"));
   assert.ok(dataMigration.includes('/ 4'));
-  assert.match(dataMigration, /least\\(\\s*50/);
+  assert.match(dataMigration, /least\(\s*50/);
   assert.ok(dataMigration.includes("jsonb_set("));
   assert.ok(dataMigration.includes("'{stars}'"));
   assert.ok(dataMigration.includes('order by item.ordinality'));

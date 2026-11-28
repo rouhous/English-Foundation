@@ -8,7 +8,7 @@ const marker='window.MEJV11Inline=';
 const at=html.indexOf(marker);
 assert.ok(at>=0,'inline game bundle exists');
 const jsonStart=at+marker.length;
-const jsonEnd=html.indexOf('};\\n</script>',jsonStart)+1;
+const jsonEnd=html.indexOf('};'+String.fromCharCode(10)+'</script>',jsonStart)+1;
 const inline=JSON.parse(html.slice(jsonStart,jsonEnd));
 assert.ok(inline.game.includes('event.origin!==window.origin'),'srcdoc validates inherited parent origin');
 

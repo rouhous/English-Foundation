@@ -1,0 +1,32 @@
+name: Island bank game content regression
+
+on:
+  pull_request:
+    branches: [preview/owner-review-updates]
+    paths:
+      - 'index.html'
+      - 'coastal-arcade/**'
+      - 'hidden-objects/**'
+      - 'tests/island-bank-game-content.test.mjs'
+      - '.github/workflows/island-bank-game-content.yml'
+  push:
+    paths:
+      - 'index.html'
+      - 'coastal-arcade/**'
+      - 'hidden-objects/**'
+      - 'tests/island-bank-game-content.test.mjs'
+      - '.github/workflows/island-bank-game-content.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  island-bank-game-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate island bank game source and session rotation
+        run: node --test tests/island-bank-game-content.test.mjs

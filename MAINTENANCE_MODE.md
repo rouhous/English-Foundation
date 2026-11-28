@@ -1,17 +1,22 @@
 # Temporary maintenance mode — My English Journey
-Date: 2026-11-28
+Date: 2026-11-14
 
-The public app is temporarily replaced by an Arabic maintenance notice. This does **not** delete application code, student progress, localStorage, IndexedDB, or database records.
+The full application is temporarily replaced with an Arabic maintenance notice. **This is not a deletion of application code, stored student progress, or database records.**
 
 - Repository: rouhous/English-Foundation
-- Public app: https://rouhous.github.io/English-Foundation/
-- Pre-maintenance commit: `2f4ca213ca488cf33ddd8b328dde2d9217a2ef11`
-- Original application entry point `index.html` blob SHA: `06dca0ebc9f60cc37d09a46b5f20110371da100a`
-- Original service worker `sw.js` blob SHA: `8a3a016f743590118baf3ac4c042aaabe9d74492`
-- Maintenance notice commit: `9d90b3e215aee3e4dde18273f8f48d413aab6233`
-- Maintenance service-worker commit: `d4bb6baa3d39e777dabdec75f5cf837726fa2ab8`
+- Original application entry point: `index.html`
+- Original `index.html` blob SHA: `5403a68a727665566c81a8af89ee3f754e3a2d0b`
+- Original `sw.js` blob SHA: `b3bb0105f36c33f6cb775122086923c4d2d54f29`
+- Pre-maintenance branch commit: `9049142891a22445522f4c5e8cb089d43adf10f7`
 
-## Reopening the application
-When the owner says maintenance is complete, restore **both** `index.html` and `sw.js` from the pre-maintenance commit above (or their exact original blob SHAs) in new commits. Preserve any newer intended edits to these files by merging them before restoration. Do not revert unrelated files or commits. The latest market bilingual-label update is in commit `2f4ca213ca488cf33ddd8b328dde2d9217a2ef11` and must remain.
+To reopen the application, **restore both `index.html` and `sw.js`** from the pre-maintenance commit (or their documented blob SHAs) in a new commit, preserving all intervening work. Do not revert unrelated changes. If any newer updates to these two files exist, merge them before restoring.
 
-The temporary service worker claims control of the app and serves the maintenance notice for page navigations, including installed PWAs after they receive the updated worker. It does not clear or modify user data. Devices that have not connected since deployment may continue to display an older offline build until they reconnect and receive the service-worker update. As this is a static GitHub Pages deployment, raw source and static asset URLs are not access-controlled by this maintenance notice.
+The maintenance service worker responds to app navigation, including installed PWAs after they receive the updated worker, with the maintenance notice even when offline. It does not delete or modify localStorage, IndexedDB, or persistent data. Devices that have not connected since the change may continue displaying an earlier offline build until they reconnect and receive the update. As this is a static GitHub Pages deployment, server-side authorization/blocking of raw source files is not provided.
+
+## Owner-only preview review path (2026-11-14)
+- A small gear in the maintenance artwork links to `reviews/admin-preview.html`. The whole student site stays in maintenance.
+- The owner must verify their Google identity and enter the **existing** 6-digit Admin code; the Supabase `mej-owner-preview-gate` stores only its salted hash on first owner-only enrollment, and returns a short-lived session.
+- `mej-owner-preview-content` independently verifies the Google ID token and that session before serving the pre-maintenance HTML (source pinned to `9049142891a22445522f4c5e8cb089d43adf10f7`).
+- The client creates a temporary Blob iframe; it never writes the full app back as a normal public `index.html` or into the arcade. The review toolbar also has a games-only preview. Game release remains false for ordinary visitors.
+- GitHub's public source history is still readable. This controls the normal preview UI and its server-backed session, **not access to public source code**. Backend student data still requires its own authorization.
+- The review is not proven to be data-write-safe; avoid changing real student records from the preview. Never claim a complete ten-game release based on the current 4-game subset.

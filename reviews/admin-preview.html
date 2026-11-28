@@ -121,8 +121,12 @@ function prelude(html){
   ["const maxG=p.diagnosed?Math.min(cap,limit):0;","const maxG=(p.diagnosed||window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')?Math.min(cap,limit):0;"]
  ];
  for(const [needle,edited] of reviewUnlocks){
-  if(!html.includes(needle))throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING');
-  html=html.replace(needle,edited);
+  if(html.includes(needle)){html=html.replace(needle,edited);continue;}
+  // PR #21 already contains the owner bypass in its skill ceiling expression.
+  // Accept that exact owner-verified form instead of failing on the obsolete anchor.
+  const ownerSkillCeiling=/const maxG=\([\s\S]{0,220}window\.__MEJ_ACCESS_ROLE==='owner'[\s\S]{0,140}window\.__MEJ_OWNER_VERIFIED_SESSION===true/.test(html);
+  if(needle.startsWith('const maxG=')&&ownerSkillCeiling)continue;
+  throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING');
  }
  // Blob document URLs have no usable relative file hierarchy. Without this
  // absolute base the desktop image and companion/game assets fail to resolve.

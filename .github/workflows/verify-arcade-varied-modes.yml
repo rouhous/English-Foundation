@@ -6,6 +6,9 @@ on:
       - 'games/index.html'
       - 'games/arcade.js'
       - 'scripts/test_arcade_varied_modes.cjs'
+      - 'admin-backend/supabase/functions/mej-class-ranking/index.ts'
+      - 'admin-backend/supabase/functions/mej-progress/index.ts'
+      - 'scripts/test_server_ranking_gate.cjs'
       - '.github/workflows/verify-arcade-varied-modes.yml'
   workflow_dispatch:
 permissions:
@@ -22,3 +25,5 @@ jobs:
         run: node --check games/arcade.js
       - name: Check arcade mode wiring and answer logic
         run: node scripts/test_arcade_varied_modes.cjs
+      - name: Check competition ranking requires server-verified scores
+        run: node scripts/test_server_ranking_gate.cjs

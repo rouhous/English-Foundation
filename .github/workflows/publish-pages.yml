@@ -3,6 +3,7 @@ name: Publish runtime-only GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -35,19 +36,51 @@ jobs:
             cp -a "$source_dir/$file" "$publish_dir/"
           done
 
-          # Runtime asset banks and app/game entry points. Copy recursively so
-          # relative imports, images, audio, CSS, and nested game resources survive.
+          # Copy the seven runtime trees while excluding known development/archive material.
+          # Keep all other extensions and paths so nested runtime imports and media survive.
           for dir in assets coastal-arcade hidden-objects boat-game exam-practice games omani-sailor; do
             test -d "$source_dir/$dir" || { echo "Missing required runtime directory: $dir" >&2; exit 1; }
-            cp -a "$source_dir/$dir" "$publish_dir/"
+            mkdir -p "$publish_dir/$dir"
+            rsync -a \
+              --exclude='*.zip' \
+              --exclude='*.md' \
+              --exclude='*.b64' \
+              --exclude='qa*/' \
+              --exclude='import/' \
+              "$source_dir/$dir/" "$publish_dir/$dir/"
           done
 
-          # Public review/teacher routes explicitly retained for the app.
+          # Public review, teacher, school, and owner routes required by the app.
           mkdir -p "$publish_dir/reviews"
-          for file in teacher-portal.html owner-login.html admin-preview.html pilot-full.html; do
+          for file in \
+            teacher-portal.html owner-login.html admin-preview.html pilot-full.html \
+            admin-levels-catalog.json admin-levels.html portal-manifest.webmanifest \
+            teacher-dashboard.html school-dashboard.html teacher-reports.html activate.html \
+            owner-review.html learning.html; do
             test -f "$source_dir/reviews/$file" || { echo "Missing required public review page: reviews/$file" >&2; exit 1; }
             cp -a "$source_dir/reviews/$file" "$publish_dir/reviews/"
           done
+
+          # Fail closed if any service-worker CORE precache item was omitted.
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const output = process.env.RUNNER_TEMP + '/mej-pages';
+          const sw = fs.readFileSync(path.join(output, 'sw.js'), 'utf8');
+          const match = sw.match(/const\\s+CORE\\s*=\\s*\\[([\\s\\S]*?)\\];/);
+          if (!match) throw new Error('Could not locate the CORE array in sw.js');
+          const entries = [...match[1].matchAll(/(['"])(.*?)\\1/g)].map(m => m[2]);
+          if (!entries.length) throw new Error('The sw.js CORE array is empty or unreadable');
+          const missing = entries.filter(entry => {
+            const relative = decodeURIComponent(entry).replace(/^\\.\\//, '');
+            return !fs.existsSync(path.resolve(output, relative));
+          });
+          if (missing.length) {
+            console.error('Missing sw.js CORE precache entries:', missing.join(', '));
+            process.exit(1);
+          }
+          console.log(`Verified all ${entries.length} sw.js CORE precache entries exist in the assembled output.`);
+          NODE
 
           # GitHub Pages must not apply Jekyll processing to runtime assets.
           : > "$publish_dir/.nojekyll"

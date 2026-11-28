@@ -111,7 +111,6 @@ function prelude(html){
  // Remove the owner-gate stylesheet only from this isolated, authenticated preview.
  // Its html{visibility:hidden} rule otherwise hides the app after the gate script is replaced.
  const ownerGateStyle=/<style\b(?=[^>]*\bid=["']mej-owner-gate-style["'])[^>]*>[\s\S]*?<\/style>/i;
- if(!ownerGateStyle.test(html))throw Error('INVALID_OWNER_GATE_STYLE');
  html=html.replace(ownerGateStyle,'');
  // Server has verified the Google owner, existing Admin PIN and expiring session.
  // Remove the original student-freemium redirect gate only inside this isolated preview.

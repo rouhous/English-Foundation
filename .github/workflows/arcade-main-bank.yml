@@ -1,0 +1,31 @@
+name: Arcade main island bank regression
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'coastal-arcade/app-bridge.js'
+      - 'coastal-arcade/index.html'
+      - 'assets/mej-sailor-host.js'
+      - 'tests/arcade-main-bank.test.mjs'
+      - '.github/workflows/arcade-main-bank.yml'
+  push:
+    branches:
+      - feat/arcade-main-bank-2600-20261128
+    paths:
+      - 'index.html'
+      - 'coastal-arcade/app-bridge.js'
+      - 'coastal-arcade/index.html'
+      - 'assets/mej-sailor-host.js'
+      - 'tests/arcade-main-bank.test.mjs'
+      - '.github/workflows/arcade-main-bank.yml'
+jobs:
+  main-bank:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check coastal-arcade/app-bridge.js
+      - run: node --check assets/mej-sailor-host.js
+      - run: node --test tests/arcade-main-bank.test.mjs

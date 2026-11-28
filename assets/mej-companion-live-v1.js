@@ -210,7 +210,8 @@
   const p=profile();if(!p||p.id==null){close();return}
   if(lastUserId!==String(p.id)){close();lastUserId=String(p.id)}
   if(!p.companion?.name||!['boy','girl'].includes(p.companion?.kind)){
-    const app=$('app');if(app?.querySelector('.j23-avatar')||app?.querySelector('#mej-companion-avatar-button'))open(false);
+    /* phase1: no forced popup; default companion, student can change it from the avatar button */
+    p.companion={kind:'boy',name:'سندباد',configuredAt:new Date().toISOString()};try{persist(false)}catch(e){}
   }
  }
 

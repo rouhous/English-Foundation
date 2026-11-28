@@ -124,7 +124,7 @@ const sixDigits=code=>/^[0-9]{6}$/.test(normalizedRecovery(code));
 const validRecovery=code=>sixDigits(code)||/^[A-HJ-NP-Z2-9]{20}$/.test(normalizedRecovery(code));
 const ownerSession=()=>window.__MEJ_ACCESS_ROLE==='owner';
 const needsGrade=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())===null;
-const pending=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())!==null;
+const pending=()=>false; /* phase1: placement quiz is optional */
 const registered=()=>!!active()?.name&&placementCeiling(active())!==null;
 const linked=p=>!!(p.teacherCode||mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1);
 let saving=false;
@@ -379,7 +379,7 @@ saveProfileModal=async function(isNew){
    db.profiles[id]=p;db.active=id;mejSwitch(id);
    if(teacherCode){p.school=r.schoolName||'';attach(p,r,teacherCode)}
    storeCode(p,r.recoveryCode);activeSession=null;write();if(teacherCode)scheduleReport();
-   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode+'\nاحتفظ به في مكان آمن.');route(p.diagnosed?'journey':'diagnostic');
+   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode+'\nاحتفظ به في مكان آمن.');route('journey');
   }else{
    const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
    if(placementCeiling(p)!==null)await issue(p);

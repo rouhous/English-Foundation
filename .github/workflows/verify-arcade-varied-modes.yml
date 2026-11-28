@@ -1,0 +1,24 @@
+name: Verify Arcade Practice Modes
+on:
+  pull_request:
+    branches: [development/phase1-patch, main]
+    paths:
+      - 'games/index.html'
+      - 'games/arcade.js'
+      - 'scripts/test_arcade_varied_modes.cjs'
+      - '.github/workflows/verify-arcade-varied-modes.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: node --check games/arcade.js
+      - name: Check arcade mode wiring and answer logic
+        run: node scripts/test_arcade_varied_modes.cjs

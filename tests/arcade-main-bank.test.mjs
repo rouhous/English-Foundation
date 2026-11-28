@@ -88,6 +88,8 @@ test('bankDeck returns unique question IDs and puts unmastered questions first',
     { id: 'g-4', type: 'Grammar', mastered: false },
     { id: 'v-1', type: 'Vocabulary', mastered: false },
     { id: 'v-2', type: 'Vocabulary', mastered: false },
+    { id: 'v-4', type: 'Vocabulary', mastered: false },
+    { id: 'v-5', type: 'Vocabulary', mastered: false },
     { id: 'v-3', type: 'Vocabulary', mastered: true },
     { id: 'v-3', type: 'Vocabulary', mastered: false }
   ];

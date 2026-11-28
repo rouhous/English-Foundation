@@ -246,11 +246,11 @@ if(LIVE){
  window.addEventListener('message',async event=>{
   if(event.source!==window.parent||event.origin!==location.origin||event.data?.type!=='mej:coastal-init')return;
   const d=event.data;
-  if(!Number.isInteger(d.grade)||d.grade<1||d.grade>12||!Number.isInteger(d.stage)||d.stage<0||d.stage>12||!Number.isInteger(d.stageStars)||d.stageStars<0||d.stageStars>200)return;
+  if(!Number.isInteger(d.grade)||d.grade<1||d.grade>12||!Number.isInteger(d.stage)||d.stage<0||d.stage>12||!Number.isInteger(d.stageStars)||d.stageStars<0||d.stageStars>50)return;
   liveReady=true;liveStage=d.stage;liveToken=/^[a-f0-9]{64}$/.test(d.accessToken||'')?d.accessToken:'';
-  state.grade=Math.max(1,Math.min(12,d.stage||1));state.unlocked=Math.floor(d.stageStars/20);state.selected=Math.max(1,state.unlocked);
+  state.grade=Math.max(1,Math.min(12,d.stage||1));state.unlocked=window.MEJCoastalUnlockedBadges(d.stageStars);state.selected=Math.max(1,state.unlocked);
   $('grade').value=String(state.grade);
-  const stats=document.querySelector('#mejLiveTotal');if(stats)stats.textContent='المرحلة '+liveStage+' · '+d.stageStars+'/200 نجمة إتقان · '+(liveToken?'مكافآت مرتبطة بحسابك':'تدريب دون مكافأة لغير المرتبطين بمعلم');
+  const stats=document.querySelector('#mejLiveTotal');if(stats)stats.textContent='المرحلة '+liveStage+' · '+d.stageStars+'/50 نجمة إتقان · '+(liveToken?'مكافآت مرتبطة بحسابك':'تدريب دون مكافأة لغير المرتبطين بمعلم');
   try{window.MEJ_APPROVED_IMAGES=window.parent.MEJ_APPROVED_IMAGES||null}catch(_){window.MEJ_APPROVED_IMAGES=null}
   await refreshLiveRecords();
  });

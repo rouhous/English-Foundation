@@ -106,7 +106,7 @@ function prelude(html){
  // Remove the original student-freemium redirect gate only inside this isolated preview.
  const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
  if(!gate.test(html))throw Error('INVALID_OWNER_GATE');
- const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;window.__MEJ_PREVIEW_BASE="https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates";<'+'/script>';
+ const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;window.__MEJ_PREVIEW_BASE="https://cdn.jsdelivr.net/gh/rouhous/English-Foundation@b16d233a3c38dc591457a9379905791eb75952e0";<'+'/script>';
  html=html.replace(gate,mark);
  // All learning stages are inspectable by the authenticated owner only inside
  // the temporary preview document. The public student app remains unchanged.
@@ -122,7 +122,7 @@ function prelude(html){
  }
  // Blob document URLs have no usable relative file hierarchy. Without this
  // absolute base the desktop image and companion/game assets fail to resolve.
- const previewBase='https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates';
+ const previewBase='https://cdn.jsdelivr.net/gh/rouhous/English-Foundation@b16d233a3c38dc591457a9379905791eb75952e0';
  const previewAssets=[
   ['src="./assets/mej-sailor-host.js"','src="'+previewBase+'/assets/mej-sailor-host.js"'],
   ['src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step"','src="'+previewBase+'/assets/mej-spaced-review-v1.js?v=20261128-spaced-4step"'],

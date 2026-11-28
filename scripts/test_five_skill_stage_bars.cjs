@@ -32,7 +32,7 @@ for(let g=1;g<=12;g++){
   targetSum+=expected;
  }
  assert.ok(targetSum<=50,`island ${g} target total must not exceed 50`);
- assert.equal(api.mejStageStarTarget(g,p),targetSum,`island ${g} displayed and reported target`);
+ assert.equal(api.mejStageStarTarget(g,p),targetSum,`island ${g} displayed skill cap`);
  if(g>=1&&g<=5)assert.equal(targetSum,48,`island ${g} temporary target must be 48`);
  assert.ok(api.stageStars(g,p)<=50,`island ${g} stars must not exceed 50`);
  assert.equal(api.achieved(g,p),true,`full mastery must complete island ${g}`);
@@ -58,10 +58,13 @@ const badgeStart=html.indexOf('function islandBadges('),badgeEnd=html.indexOf('f
 assert.ok(badgeStart>=0&&badgeEnd>badgeStart,'island badge logic must exist');
 vm.runInNewContext(html.slice(badgeStart,badgeEnd)+';globalThis.__islandBadges=islandBadges;',context);
 const badge44={correct:{},completed:{},stageSkillLegacyFloorV1:{1:44},stageSkillLegacyBaselineV1:{1:0}};
-assert.equal(context.__islandBadges(1,badge44).filter(b=>b.earned).length,9,'badge 9 must unlock at 44/48');
-assert.equal(context.__islandBadges(1,badge44)[9].earned,false,'badge 10 waits for 48/48');
+assert.equal(context.__islandBadges(1,badge44).filter(b=>b.earned).length,8,'badge 8 is the highest earned at 44 stars');
+const badge45={correct:{},completed:{},stageSkillLegacyFloorV1:{1:45},stageSkillLegacyBaselineV1:{1:0}};
+assert.equal(context.__islandBadges(1,badge45).filter(b=>b.earned).length,9,'badge 9 unlocks at 45 stars');
 const badge48={correct:{},completed:{},stageSkillLegacyFloorV1:{1:48},stageSkillLegacyBaselineV1:{1:0}};
-assert.equal(context.__islandBadges(1,badge48).filter(b=>b.earned).length,10,'badge 10 unlocks at 48/48');
+assert.equal(context.__islandBadges(1,badge48).filter(b=>b.earned).length,9,'badge 10 remains locked at 48/50');
+const badge50={correct:{},completed:{},stageSkillLegacyFloorV1:{1:50},stageSkillLegacyBaselineV1:{1:0}};
+assert.equal(context.__islandBadges(1,badge50).filter(b=>b.earned).length,10,'badge 10 unlocks at 50 stars');
 
 const oldStudent={assigned:1,correct:{},completed:{1:true,2:true,3:true}};
 assert.equal(api.maxAllowed(oldStudent),4,'legacy islands preserve cap before answers');
@@ -91,13 +94,23 @@ const cloudStart=cloudSource.indexOf('function safePayload(value)'),cloudEnd=clo
 assert.ok(cloudStart>=0&&cloudEnd>cloudStart,'cloud sanitizer must exist');
 const cloudContext={Number,Math,Object,JSON};
 vm.runInNewContext(cloudSource.slice(cloudStart,cloudEnd)+';globalThis.__safePayload=safePayload;',cloudContext);
-const cloud=cloudContext.__safePayload({grade:1,studentName:'Synthetic learner',className:'1/1',attempts:2,correctAnswers:2,levelStats:[{level:1,mastered:0,stars:48,starTarget:48,total:200,masteryPercent:100}],privateState:{stageSkillLegacyFloorV1:{1:50,2:38},stageSkillLegacyBaselineV1:{1:24,2:18}}});
-assert.equal(cloud.levelStats[0].starTarget,48,'cloud target round-trip');
+const cloud=cloudContext.__safePayload({grade:1,studentName:'Synthetic learner',className:'1/1',attempts:2,correctAnswers:2,levelStats:[{level:1,mastered:0,stars:48,starTarget:50,skillCap:48,total:200,masteryPercent:100}],privateState:{stageSkillLegacyFloorV1:{1:50,2:38},stageSkillLegacyBaselineV1:{1:24,2:18}}});
+assert.equal(cloud.levelStats[0].starTarget,50,'cloud starTarget remains the fixed legacy/migration target');
+assert.equal(cloud.levelStats[0].skillCap,48,'cloud carries the actual skill cap separately');
 const olderCloud=cloudContext.__safePayload({grade:1,studentName:'Legacy synthetic',className:'1/1',attempts:0,correctAnswers:0,levelStats:[{level:1,mastered:0,stars:0,total:200,masteryPercent:0}]});
-assert.equal(olderCloud.levelStats[0].starTarget,50,'older cloud clients without starTarget retain the legacy default');
+assert.equal(olderCloud.levelStats[0].starTarget,50,'older cloud clients retain the fixed legacy target');
+assert.equal(olderCloud.levelStats[0].skillCap,50,'older cloud clients default skillCap safely');
 assert.deepEqual(JSON.parse(JSON.stringify(cloud.privateState.stageSkillLegacyFloorV1)),{1:50,2:38},'cloud floor round-trip');
 assert.deepEqual(JSON.parse(JSON.stringify(cloud.privateState.stageSkillLegacyBaselineV1)),{1:24,2:18},'cloud baseline round-trip');
 const edge=fs.readFileSync('admin-backend/supabase/functions/mej-progress/index.ts','utf8');
 assert.match(edge,/stageSkillLegacyFloorV1/,'edge validator floor');
 assert.match(edge,/stageSkillLegacyBaselineV1/,'edge validator baseline');
-console.log('Grandfather completion, 48-star targets, badge 9/10, backup and cloud round-trip OK.');
+console.log('Grandfather completion, fixed 50-star payloads, separate skillCap, 5n badges, backup and cloud round-trip OK.');
+const payloadTargetAssignments=(html.match(/starTarget=MEJ_STAGE_TARGET/g)||[]).length;
+assert.equal(payloadTargetAssignments,2,'both student progress payloads must always use starTarget=50');
+assert.match(html,/skillCap=mejStageStarTarget\\(g,p\\)/,'report payload carries the dynamic skillCap');
+assert.match(html,/skillCap=mejStageStarTarget\\(g,profile\\)/,'cloud snapshot carries the dynamic skillCap');
+const sailor=fs.readFileSync('assets/mej-sailor-host.js','utf8');
+assert.match(sailor,/stageEffectiveStars\\(g,person\\)<b\\*5/,'sailor badge gate uses fixed 5n thresholds');
+assert.match(sailor,/earnedStars<5\\*badge/,'sailor launch gate uses fixed 5n thresholds');
+

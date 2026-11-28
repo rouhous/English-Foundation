@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'coastal-arcade/app-bridge.js'
+      - 'boat-game/rewards.js'
+      - 'boat-game/index.html'
       - 'supabase/migrations/*arcade_badge_5_star_thresholds.sql'
       - 'tests/arcade-badge-thresholds.test.mjs'
       - '.github/workflows/arcade-badge-thresholds.yml'
@@ -23,4 +25,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: node --check coastal-arcade/app-bridge.js
+      - run: node --input-type=module --check < boat-game/rewards.js
       - run: node --test tests/arcade-badge-thresholds.test.mjs

@@ -207,7 +207,13 @@ if(g[0]==='hidden'){
    toast('Hidden Objects: اللعبة الأصلية متاحة للتدريب؛ المكافآت تُعتمد بعد التحقق من المشاهد.');return;
 }
 const query='?game='+encodeURIComponent(g[0])+'&grade='+state.grade+'&run='+state.current.run;
-if(window.MEJV11Inline?.game){const h=window.MEJV11Inline.game;const init='<script>window.MEJ_GAME_CONTEXT={search:'+JSON.stringify(query)+'};<\/script>';f.srcdoc=h.replace('<!-- MEJ_INLINE_CONTEXT -->',init)}else f.src='games/new-games.html'+query;
+if(window.MEJV11Inline?.game){
+ const h=window.MEJV11Inline.game,bankStage=LIVE?liveStage:state.grade;let bank=null;
+ try{bank=window.parent?.MEJ_GAME_BANK_PROVIDER?.(bankStage)||null}catch(_){}
+ const context={search:query,bankStage,bank};
+ const init='<script>window.MEJ_GAME_CONTEXT='+JSON.stringify(context)+';<\\/script>';
+ f.srcdoc=h.replace('<!-- MEJ_INLINE_CONTEXT -->',init)
+}else f.src='games/new-games.html'+query;
 }
 async function settle(score,reason){if(!state.current||state.settled)return;state.settled=true;const c=state.current;
  if(LIVE){
@@ -225,7 +231,14 @@ if(d.type==='mej:v10-close'||d.type==='mej:hidden-close'){closeGame();return}
 if(d.type==='mej:v10-replay'){if(c.id!=='hidden'&&d.game===c.id&&Number(d.run)===c.run)openGame(c.index);return}
 if(d.type==='mej:v10-finished'){if(c.id==='hidden'||d.game!==c.id||d.grade!==c.grade||Number(d.run)!==c.run)return;const valid=['all','time','lives','quit','overflow'];if(!valid.includes(d.reason)||!Number.isInteger(d.score)||d.score<0||d.score>10)return;settle(d.score,d.reason);return}
 if(c.id!=='hidden')return;
-if(d.type==='mej:hidden-ready'){try{frame.contentWindow.postMessage({type:'mej:hidden-init',stage:LIVE?liveStage:state.grade,badge:c.index,scene:(c.index-1)%4,practice:true,preview:!LIVE,masteredWords:[],levelWords:[]},location.origin==='null'?'*':location.origin)}catch(e){}return}
+if(d.type==='mej:hidden-ready'){
+ let bank=null;try{bank=window.parent?.MEJ_GAME_BANK_PROVIDER?.(LIVE?liveStage:state.grade)||null}catch(_){}
+ try{frame.contentWindow.postMessage({
+  type:'mej:hidden-init',stage:LIVE?liveStage:state.grade,grade:state.grade,
+  badge:c.index,scene:(c.index-1)%4,practice:true,preview:!LIVE,
+  masteredWords:bank?.masteredWords||[],levelWords:bank?.levelWords||[]
+ },location.origin==='null'?'*':location.origin)}catch(e){}return
+}
 if(d.type==='mej:hidden-progress'){const found=Array.isArray(d.found)?Math.min(10,d.found.length):0;if(d.ended)toast('Hidden Objects: '+found+'/10. لا تُحتسب نجوم قبل اعتماد المشاهد.');}
 });
 $('closeBadge').onclick=closeBadge;$('backBadges').onclick=closeBadge;$('closeGame').onclick=closeGame;

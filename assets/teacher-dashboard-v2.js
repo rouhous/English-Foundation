@@ -99,8 +99,14 @@ function weeklyLevelText(s,level){
 function levelStars(s,level){
  if(s.kind!=='live'||!Array.isArray(s.levelStats)||!s.levelStats.length)return null;
  const item=s.levelStats.find(x=>Number(x?.level)===level);
- if(!item||!Number.isFinite(Number(item.mastered)))return null;
- return Math.min(200,integer(item.mastered))
+ if(!item)return null;
+ if(Number.isFinite(Number(item.stars)))return Math.min(50,integer(item.stars));
+ if(Number.isFinite(Number(item.mastered)))return Math.min(50,integer(item.mastered)*2);
+ return null
+}
+function legacyLevelStars(s,level){
+ const item=(s.levelStats||[]).find(x=>Number(x?.level)===level);
+ return !!item&&!Number.isFinite(Number(item.stars))&&Number.isFinite(Number(item.mastered))
 }
 function assignedStars(s){
  let sum=0;for(let i=0;i<=12;i++)sum+=levelStars(s,i)||0;
@@ -116,7 +122,7 @@ function levelPills(s){
  let count=0;
  for(let i=0;i<=12;i++){
   const value=levelStars(s,i);
-  if(value>0){wrap.append(node('span','levelPill','L'+i+' · ⭐ '+value));count++}
+  if(value>0){wrap.append(node('span','levelPill','L'+i+' · ⭐ '+(legacyLevelStars(s,i)?'≥ ':'')+value+'/50'));count++}
  }
  if(!count)wrap.append(node('span','noLevelBreakdown','لا توجد نجوم مسجلة في المستويات بعد'));
  const difference=otherStars(s);
@@ -149,8 +155,8 @@ function renderLevelComparison(students){
   tr.append(node('td','matrixEarned',previousWeekText(s)));
   for(let i=0;i<=12;i++){
    const v=levelStars(s,i);
-   const td=node('td',v>0?'matrixEarned':(v===null?'matrixUnavailable':'matrixZero'),v===null?'—':v);
-   td.title=v===null?'لا تتوفر بيانات المستوى '+i:'المستوى '+i+': '+v+' نجمة من 200';
+   const td=node('td',v>0?'matrixEarned':(v===null?'matrixUnavailable':'matrixZero'),v===null?'—':(legacyLevelStars(s,i)?'≥ ':'')+v);
+   td.title=v===null?'لا تتوفر بيانات المستوى '+i:'المستوى '+i+': '+(legacyLevelStars(s,i)?'حد أدنى تقديري ':'')+v+' من 50 نجمة';
    tr.append(td)
   }
   const extra=otherStars(s);
@@ -314,7 +320,7 @@ function renderList(students){
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
    b.append(node('span','', 'المستوى '+s.level+' · ⭐ المجموع '+s.stars+' · ⭐ هذا الأسبوع '+weeklyStarsText(s)+' ('+weeklyText(s)+') · ⭐ الأسبوع الماضي '+previousWeekStarsText(s)+' ('+previousWeekText(s)+')'));
    b.append(levelPills(s));
-   const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,s.mastered/200*100))+'%';
+   const track=node('div','progress'),fill=node('i');const currentIslandStars=levelStars(s,s.level);fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,(currentIslandStars||0)/50*100))+'%';
    track.append(fill);b.append(track);
    b.onclick=()=>studentDetails(s);host.append(b)
  }
@@ -418,12 +424,12 @@ function studentDetails(s){
   const total=section('توزيع نجوم الطالب');
   const assigned=assignedStars(s),difference=otherStars(s);
   total.append(node('p','notice','المجموع الكلي: '+s.stars+' ⭐ · نجوم المستويات: '+assigned+' ⭐'+(difference>0?' · غير موزعة: '+difference+' ⭐':difference<0?' · يوجد اختلاف بين السجل والمجموع':'')));
-  const div=section('نجوم كل مستوى (من 200)');
+  const div=section('نجوم كل جزيرة (من 50)');
   for(let level=0;level<=12;level++){
    const value=levelStars(s,level),r=node('div','chartRow');
    const bar=node('div','bar'),fill=node('i');
-   fill.style.width=(value===null?0:value/200*100)+'%';bar.append(fill);
-   r.append(node('span','','L'+level),bar,node('strong','',value===null?'—':value+' / 200'));div.append(r)
+   fill.style.width=(value===null?0:value/50*100)+'%';bar.append(fill);
+   r.append(node('span','','L'+level),bar,node('strong','',value===null?'—':(legacyLevelStars(s,level)?'≥ ':'')+value+' / 50'));div.append(r)
   }
   host.append(total,div);
   const weekly=section('النجوم المكتسبة في مستويات هذا الأسبوع');

@@ -6,10 +6,14 @@ const index=read('index.html');
 const sw=read('sw.js');
 const login=read('reviews/owner-login.html');
 const preview=read('reviews/admin-preview.html');
-assert.match(index,/<a class="emblem" href="\.\/reviews\/owner-login\.html" aria-label="دخول المالك"/);
-assert.match(index,/⚓<\/a>/);
-assert.match(sw,/mej-maintenance-20261128-v2/);
-assert.ok(sw.includes('href=\\\"./reviews/owner-login.html\\\"'),'Offline maintenance shell must use the same anchor destination');
+
+// The public app no longer exposes the former owner-login emblem entry.
+// Keep this as a negative assertion so the test reflects the reopened app shell.
+assert.doesNotMatch(index,/href=["']\.\/reviews\/owner-login\.html["']/,
+  'Public app shell must not expose the retired owner-login entry');
+
+// Track the active app-shell cache, not the retired maintenance-mode cache.
+assert.match(sw,/mej-journey-release-20261128-v5/);
 assert.match(login,/id="reviewLink" href="admin-preview\.html" hidden>معاينة التطبيق المحدثة/);
 assert.match(preview,/MEJ_PREVIEW_BASE/);
 assert.match(preview,/savedCredential/);

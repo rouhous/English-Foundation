@@ -10,6 +10,6 @@ for(const mode of ['definitions','truefalse']){
 }
 assert.ok(js.includes("word.en===current.en"),'reverse vocabulary answer check missing');
 assert.ok(js.includes("(label==='True')===current.truth"),'true/false answer check missing');
-assert.match(js,/training only|training/i);
+assert.ok(js.includes('practice-only'),'arcade must remain supplementary practice');
 assert.ok(js.includes('no cash, wallets or student mastery stars are written here'),'arcade must remain practice-only');
 console.log('Arcade varied-mode checks passed.');

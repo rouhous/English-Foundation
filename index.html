@@ -12,10 +12,12 @@
 html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
 body{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 12%,#fff3d9,#dfc18e 70%,#b58a56);color:#17392e}
 main{width:min(100%,520px);padding:clamp(26px,7vw,46px) 24px;text-align:center;background:linear-gradient(150deg,#fffaf0,#fff0d2);border:2px solid var(--gold);border-radius:24px;box-shadow:0 12px 35px #3d2b1838}
-.emblem{width:78px;height:78px;margin:0 auto 18px;display:grid;place-items:center;border-radius:50%;background:var(--green);border:3px solid var(--gold);color:var(--cream);font-size:38px;text-decoration:none;cursor:pointer}
+.emblem{width:78px;height:78px;margin:0 auto 18px;display:grid;place-items:center;border-radius:50%;background:var(--green);border:3px solid var(--gold);color:var(--cream);font-size:38px;text-decoration:none}
 h1{margin:0 0 12px;color:var(--green);font-size:clamp(25px,6vw,34px)}
 p{margin:0;font-size:clamp(16px,4vw,19px);line-height:1.9}
 .note{margin-top:18px;color:#6b5637;font-size:14px}
+button{margin-top:24px;padding:12px 28px;border:0;border-radius:999px;background:var(--green);color:#fff4dc;font:inherit;font-weight:700;cursor:pointer}
+button:focus-visible{outline:3px solid #b58a56;outline-offset:3px}
 </style>
 </head>
 <body>
@@ -24,6 +26,41 @@ p{margin:0;font-size:clamp(16px,4vw,19px);line-height:1.9}
 <h1>رحلتي مع الإنجليزية</h1>
 <p>التطبيق متوقف مؤقتًا لإجراء بعض التحديثات والتحسينات.</p>
 <p class="note">سنعود إليكم قريبًا بإصدار أفضل. شكرًا لصبركم وتفهمكم.</p>
+<button id="refresh-now" type="button">تحديث الآن</button>
 </main>
+<script>
+(() => {
+  let reloadIssued = false;
+  let registration = null;
+  const reloadOnce = () => {
+    if (reloadIssued) return;
+    reloadIssued = true;
+    location.reload();
+  };
+  const checkForUpdate = async () => {
+    try {
+      if (!registration && navigator.serviceWorker) {
+        registration = await navigator.serviceWorker.register('./sw.js', {scope:'./'});
+      }
+      if (registration) await registration.update();
+    } catch (error) {
+      console.warn('Maintenance update check failed:', error);
+    }
+  };
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', reloadOnce);
+    checkForUpdate();
+    window.addEventListener('online', checkForUpdate);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') checkForUpdate();
+    });
+    window.setInterval(checkForUpdate, 6 * 60 * 60 * 1000);
+  }
+  document.getElementById('refresh-now').addEventListener('click', async () => {
+    await checkForUpdate();
+    reloadOnce();
+  });
+})();
+</script>
 </body>
 </html>

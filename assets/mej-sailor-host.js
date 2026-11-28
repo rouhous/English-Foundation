@@ -96,7 +96,7 @@
    const g=Number(stage),b=Number(badge);
    if(!Number.isInteger(g)||g<0||g>12||!validIndex(b))return {status:'locked',award:0};
    const person=p||active();
-   if(!person||stageStars(g,person)<b*5)return {status:'locked',award:0};
+   if(!person||stageEffectiveStars(g,person)<b*5)return {status:'locked',award:0};
    const item=sanitized(ledger(person)[key(g,b)],g,b);
    return {status:item?.status==='finished'?'finished':item?.status==='pending'?'pending':'available',award:item?.award||0};
  };

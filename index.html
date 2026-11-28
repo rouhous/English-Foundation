@@ -1579,15 +1579,16 @@ const MEJ_TYPE_SKILL={'Listening':'listening','Phonics':'listening','Blend':'lis
 function mejSkillForQuestion(q){return MEJ_TYPE_SKILL[q?.type]||null}
 function mejSkillProgress(g,p=active()){
  const correct=(p&&p.correct)||{},out={};
- for(const skill of MEJ_SKILL_ORDER)out[skill]={stars:0,items:0,maxReachable:0};
+ for(const skill of MEJ_SKILL_ORDER)out[skill]={stars:0,items:0,maxReachable:0,target:0};
  for(const q of byGrade[g]||[]){
   const skill=mejSkillForQuestion(q);if(!skill)continue;
   out[skill].items++;
   out[skill].stars+=Math.min(2,Math.max(0,Number(correct[q.id])||0));
  }
  for(const skill of MEJ_SKILL_ORDER){
-  out[skill].stars=Math.min(10,out[skill].stars);
-  out[skill].maxReachable=Math.min(10,out[skill].items*2);
+  out[skill].target=Math.min(10,2*out[skill].items);
+  out[skill].stars=Math.min(out[skill].target,out[skill].stars);
+  out[skill].maxReachable=out[skill].target;
  }
  return out;
 }
@@ -1597,11 +1598,12 @@ function renderStageSkillBars(g,p=active()){
  return `<section class="mej-skill-progress" aria-label="تقدم المهارات الخمس">
   <div class="mej-skill-progress-head"><strong>المهارات الخمس</strong><b>${stageStars(g,p)}/50 نجمة</b></div>
   <div class="mej-skill-grid">${MEJ_SKILL_ORDER.map(skill=>{
-   const item=progress[skill],shortage=item.maxReachable<10;
+   const item=progress[skill],shortage=item.target<10;
+   const fill=item.target?item.stars/item.target*100:0;
    return `<div class="mej-skill-item">
-    <div class="mej-skill-label"><strong>${MEJ_SKILL_LABELS[skill]}</strong><b>${item.stars}/10</b></div>
-    <div class="mej-skill-track" role="progressbar" aria-label="${MEJ_SKILL_LABELS[skill]}" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${item.stars}"><i style="width:${item.stars*10}%"></i></div>
-    <small>${item.items} عناصر في البنك${shortage?` · الحد الأقصى ${item.maxReachable}/10`:''}</small>
+    <div class="mej-skill-label"><strong>${MEJ_SKILL_LABELS[skill]}</strong><b>${item.stars}/${item.target}</b></div>
+    <div class="mej-skill-track" role="progressbar" aria-label="${MEJ_SKILL_LABELS[skill]}" aria-valuemin="0" aria-valuemax="${item.target}" aria-valuenow="${item.stars}"><i style="width:${fill}%"></i></div>
+    <small>${item.items} عناصر في البنك · الحد الأقصى الممكن ${item.target}/10</small>
    </div>`;
   }).join('')}</div>
  </section>`;
@@ -1610,27 +1612,40 @@ function mejLegacyRawStageStars(g,p){
  const c=(p&&p.correct)||{};
  return (byGrade[g]||[]).reduce((sum,q)=>sum+Math.min(2,Math.max(0,Number(c[q.id])||0)),0);
 }
-function mejEnsureSkillLegacyFloor(p){
- if(!p||Object.prototype.hasOwnProperty.call(p,'stageSkillLegacyFloorV1'))return;
- const floor=Object.create(null);
- for(let g=1;g<=12;g++){
-  const raw=mejLegacyRawStageStars(g,p);
-  floor[g]=Math.min(50,Math.max(raw,p.completed&&p.completed[g]===true?50:0));
- }
- p.stageSkillLegacyFloorV1=floor;
-}
-function stageStars(g,p=active()){
- if(Number(g)===0)return mejLegacyRawStageStars(0,p);
+function mejSkillBarsSum(g,p){
  const progress=mejSkillProgress(g,p);
  return MEJ_SKILL_ORDER.reduce((sum,skill)=>sum+progress[skill].stars,0);
 }
-function stageEffectiveStars(g,p=active()){
- const current=stageStars(g,p);
- if(Number(g)===0)return current;
- mejEnsureSkillLegacyFloor(p);
- return Math.max(current,Math.min(50,Math.max(0,Number(p.stageSkillLegacyFloorV1?.[g])||0)));
+function mejEnsureSkillLegacyFloor(p){
+ if(!p)return;
+ const savedFloor=p.stageSkillLegacyFloorV1&&typeof p.stageSkillLegacyFloorV1==='object'&&!Array.isArray(p.stageSkillLegacyFloorV1)?p.stageSkillLegacyFloorV1:{};
+ const savedBaseline=p.stageSkillLegacyBaselineV1&&typeof p.stageSkillLegacyBaselineV1==='object'&&!Array.isArray(p.stageSkillLegacyBaselineV1)?p.stageSkillLegacyBaselineV1:{};
+ const floor=Object.create(null),baseline=Object.create(null);
+ for(let g=1;g<=12;g++){
+  const bars=mejSkillBarsSum(g,p),raw=mejLegacyRawStageStars(g,p);
+  const previous=Number.isSafeInteger(savedFloor[g])&&savedFloor[g]>=0&&savedFloor[g]<=50?savedFloor[g]:0;
+  const oldBaseline=Number.isSafeInteger(savedBaseline[g])&&savedBaseline[g]>=0&&savedBaseline[g]<=50?savedBaseline[g]:null;
+  floor[g]=Math.min(50,Math.max(previous,raw,bars,p.completed&&p.completed[g]===true?50:0));
+  baseline[g]=oldBaseline===null?bars:oldBaseline;
+ }
+ p.stageSkillLegacyFloorV1=floor;
+ p.stageSkillLegacyBaselineV1=baseline;
 }
-function achieved(g,p=active()){return stageEffectiveStars(g,p)>=MEJ_STAGE_TARGET}
+function stageStars(g,p=active()){
+ if(Number(g)===0)return mejLegacyRawStageStars(0,p);
+ mejEnsureSkillLegacyFloor(p);
+ const current=mejSkillBarsSum(g,p);
+ const floor=Math.max(0,Math.min(50,Number(p.stageSkillLegacyFloorV1?.[g])||0));
+ const baseline=Math.max(0,Math.min(50,Number(p.stageSkillLegacyBaselineV1?.[g])||0));
+ return Math.min(50,floor+Math.max(0,current-baseline));
+}
+function stageEffectiveStars(g,p=active()){return stageStars(g,p)}
+function achieved(g,p=active()){
+ if(Number(g)===0)return stageEffectiveStars(g,p)>=MEJ_STAGE_TARGET;
+ const progress=mejSkillProgress(g,p);
+ const target=MEJ_SKILL_ORDER.reduce((sum,skill)=>sum+progress[skill].target,0);
+ return stageEffectiveStars(g,p)>=target&&MEJ_SKILL_ORDER.every(skill=>progress[skill].stars>=progress[skill].target);
+}
 // MEJ_STAGE1_LEVEL_UNLOCK_V2
 // MEJ_VERIFIED_OWNER_FULL_ACCESS_20261114_V1: owner read-only learning and game preview without modifying student stars.
 function maxAllowed(p=active()){
@@ -2010,7 +2025,7 @@ if(teacherCode && !/^(?:[1-9]|1[0-2])$/.test(grade)){toast('اختر صفًا م
  try{if(!await mejPilotReserveStudent(p.id,null))return false}
  finally{mejPilotSaving=false}
 }p.name=name;p.grade=grade;p.school=school||'';p.className=className;p.teacherCode=teacherCode;p.syncStatus=teacherCode?'رمز المعلم مسجّل. سيتم التحقق منه عند إرسال التقرير.':'وضع التعلم العام: لا تُرسل بيانات هذا الطالب إلى المعلم.';persist(!!teacherCode);toast('تم حفظ ملف الطالب ✅');home();return true}
-function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},stageSkillLegacyFloorV1:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
+function newProfile(){let id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return {id,name:'',grade:'',school:'',correct:{},wrong:{},stars:0,attempts:0,right:0,diagnosed:false,assigned:0,diagnosticScore:null,completed:{},stageSkillLegacyFloorV1:{},stageSkillLegacyBaselineV1:{},activity:[],writing:{},speaking:{},createdAt:Date.now(),lastActivity:Date.now()}}
 async function addUser(){if(!await mejPilotMayCreateStudent())return;mejCapture(db.active);let p=newProfile();db.profiles[p.id]=p;db.active=p.id;mejSwitch(p.id);activeSession=null;persist(false);home();document.getElementById('studentName')?.focus();toast('أضف اسم الطالب الجديد واحفظ بياناته')}
 function switchUser(id){id=String(id||'');if(!db.profiles[id]){toast('تعذر العثور على حساب الطالب؛ حاول استيراد النسخة الاحتياطية');return}if(db.active===id){toast('هذا هو حساب الطالب الحالي');return}mejCapture(db.active);db.active=id;mejSwitch(id);activeSession=null;persist(false);route('home');toast('✅ تم الانتقال إلى حساب ' +(active().name||'الطالب الجديد'))}
 function checkAccess(g){if(!permitted(g)){toast(window.__MEJ_ACCESS_ROLE==='public'&&Number(g)>4?'لإكمال الرحلة أدخل رمز المعلم المكون من 6 أرقام عند تسجيل الطالب.':'هذه المحطة مقفلة. أكمل التشخيص وأتقن أنشطة المحطات السابقة.');return false}return true}
@@ -2592,6 +2607,8 @@ async function sendReport(manual=false){
     diagnosticScore:profile.diagnosticScore??null,
     diagnosticDate:profile.diagnosticDate||'',
     journeyIsland:profile.journeyIsland??null,
+    stageSkillLegacyFloorV1:profile.stageSkillLegacyFloorV1||{},
+    stageSkillLegacyBaselineV1:profile.stageSkillLegacyBaselineV1||{},
     hiddenObjectsLedger:profile.hiddenObjectsLedger||{}
    }
   };
@@ -2681,12 +2698,15 @@ function normalizeBackupProfile(id,raw){
  for(const k of ['completed','writing','speaking']){
   const o=raw[k];p[k]=(o&&typeof o==='object'&&!Array.isArray(o))?Object.fromEntries(Object.entries(o).filter(([name])=>name!=='__proto__'&&name!=='constructor'&&name!=='prototype').slice(0,3000)):{};
  }
- if(raw.stageSkillLegacyFloorV1&&typeof raw.stageSkillLegacyFloorV1==='object'&&!Array.isArray(raw.stageSkillLegacyFloorV1)){
-  p.stageSkillLegacyFloorV1=Object.create(null);
-  for(const [level,value] of Object.entries(raw.stageSkillLegacyFloorV1)){
-   if(/^(?:[1-9]|1[0-2])$/.test(level)&&Number.isSafeInteger(value)&&value>=0&&value<=50)p.stageSkillLegacyFloorV1[level]=value;
-  }
- }else delete p.stageSkillLegacyFloorV1;
+ for(const field of ['stageSkillLegacyFloorV1','stageSkillLegacyBaselineV1']){
+  const source=raw[field];
+  if(source&&typeof source==='object'&&!Array.isArray(source)){
+   p[field]=Object.create(null);
+   for(const [level,value] of Object.entries(source)){
+    if(/^(?:[1-9]|1[0-2])$/.test(level)&&Number.isSafeInteger(value)&&value>=0&&value<=50)p[field][level]=value;
+   }
+  }else delete p[field];
+ }
  p.activity=Array.isArray(raw.activity)?raw.activity.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(-10000):[];
  if(typeof raw.syncStatus==='string')p.syncStatus=raw.syncStatus.slice(0,450);
  if(typeof raw.lastConfirmedReport==='string')p.lastConfirmedReport=raw.lastConfirmedReport.slice(0,150);

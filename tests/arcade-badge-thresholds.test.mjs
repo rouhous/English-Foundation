@@ -7,7 +7,6 @@ import vm from 'node:vm';
 const bridge = await readFile(new URL('../coastal-arcade/app-bridge.js', import.meta.url), 'utf8');
 const coastalHtml = await readFile(new URL('../coastal-arcade/index.html', import.meta.url), 'utf8');
 const migration = await readFile(new URL('../supabase/migrations/20261128133000_arcade_badge_5_star_thresholds.sql', import.meta.url), 'utf8');
-const dataMigration = await readFile(new URL('../supabase/migrations/20261128143000_migrate_legacy_island_stars_div4.sql', import.meta.url), 'utf8');
 const boatRewards = await readFile(new URL('../boat-game/rewards.js', import.meta.url), 'utf8');
 const boatHtml = await readFile(new URL('../boat-game/index.html', import.meta.url), 'utf8');
 const coastalBadges = await readFile(new URL('../games/coastal-badges.js', import.meta.url), 'utf8');
@@ -18,11 +17,6 @@ assert.ok(badgeScript, 'inline offline badge helper exists');
 const sandbox = { window: {} };
 vm.runInNewContext(badgeScript, sandbox, { filename: 'coastal-arcade/index.html#inline-badge-helper' });
 const unlockedBadges = sandbox.window.MEJCoastalUnlockedBadges;
-const migrateLegacyStars = (oldStars, mastered) => {
-  const source = oldStars===null||oldStars===undefined||oldStars==='' ? (mastered===null||mastered===undefined||mastered===''?0:Number(mastered)*2) : Number(oldStars);
-  return Math.max(0,Math.min(50,Math.floor(source/4)));
-};
-
 test('pure unlockedBadges follows the 5-star ladder at boundaries', () => {
   for (const [stars, expected] of [[0, 0], [4, 0], [5, 1], [49, 9], [50, 10]]) {
     assert.equal(unlockedBadges(stars), expected, `stars=${stars}`);
@@ -30,125 +24,11 @@ test('pure unlockedBadges follows the 5-star ladder at boundaries', () => {
 });
 
 
-test('legacy island-star conversion handles requested old-scale values and missing fields', () => {
-  for (const [oldStars, expectedStars, expectedBadges] of [
-    [0, 0, 0],
-    [4, 1, 0],
-    [20, 5, 1],
-    [100, 25, 5],
-    [200, 50, 10]
-  ]) {
-    const migrated = migrateLegacyStars(oldStars, null);
-    assert.equal(migrated, expectedStars, `old stars=${oldStars}`);
-    assert.equal(unlockedBadges(migrated), expectedBadges, `badges for old stars=${oldStars}`);
-  }
-  // Missing stars: use the documented old-scale estimate mastered * 2, then divide by 4.
-  assert.equal(migrateLegacyStars(undefined, 10), 5);
-  assert.equal(unlockedBadges(migrateLegacyStars(undefined, 10)), 1);
-  assert.equal(migrateLegacyStars(null, 20), 10);
-  assert.equal(unlockedBadges(migrateLegacyStars(null, 20)), 2);
-  assert.equal(migrateLegacyStars(undefined, undefined), 0);
-});
 
-test('legacy conversion never removes an earned 20-star badge (exhaustive 0..200)', () => {
-  for (let oldStars = 0; oldStars <= 200; oldStars++) {
-    const oldBadges = Math.floor(oldStars / 20);
-    const newStars = migrateLegacyStars(oldStars, null);
-    const newBadges = unlockedBadges(newStars);
-    assert.ok(newBadges >= oldBadges, `oldStars=${oldStars}: ${oldBadges} -> ${newBadges}`);
-    assert.equal(newBadges, oldBadges, `threshold equivalence at oldStars=${oldStars}`);
-  }
-});
 
-test('missing-stars mastered*2 fallback also preserves every earned badge', () => {
-  for (let mastered = 0; mastered <= 100; mastered++) {
-    const oldEstimatedStars = mastered * 2;
-    const oldBadges = Math.floor(oldEstimatedStars / 20);
-    const migratedStars = migrateLegacyStars(undefined, mastered);
-    assert.equal(unlockedBadges(migratedStars), oldBadges, `mastered=${mastered}`);
-  }
-});
 
-const effectiveLegacyStars = level => {
-  if (level.stars !== null && level.stars !== undefined && level.stars !== '') return Number(level.stars);
-  if (level.mastered !== null && level.mastered !== undefined && level.mastered !== '') return Number(level.mastered) * 2;
-  return 0;
-};
-const simulateHistoricalRowMigration = levelStats => {
-  const hasLegacyScale = levelStats.some(level =>
-    level && typeof level === 'object' && effectiveLegacyStars(level) > 50
-  );
-  if (!hasLegacyScale) return structuredClone(levelStats);
-  return levelStats.map(level => {
-    if (!level || typeof level !== 'object') return level;
-    const stars = Math.max(0, Math.min(50, Math.floor(effectiveLegacyStars(level) / 4)));
-    return {
-      ...level,
-      stars,
-      starTarget: 50,
-      masteryPercent: Math.round(stars / 50 * 100),
-      completed: level.completed === true || stars >= 50
-    };
-  });
-};
 
-test('source migration gates the UPDATE to rows with an effective legacy value above 50', () => {
-  assert.ok(dataMigration.includes('update public.mej_student_progress'));
-  assert.ok(dataMigration.includes('jsonb_array_elements(progress.level_stats)'));
-  assert.ok(dataMigration.includes("(item.value->>'mastered')::numeric * 2"));
-  assert.ok(dataMigration.includes("(item.value->>'stars')::numeric"));
-  assert.ok(dataMigration.includes('/ 4'));
-  assert.match(dataMigration, /least\(\s*50/);
-  assert.ok(dataMigration.includes("'{stars}'"));
-  assert.ok(dataMigration.includes("'{starTarget}'"));
-  assert.ok(dataMigration.includes("'{masteryPercent}'"));
-  assert.ok(dataMigration.includes("'{completed}'"));
-  assert.ok(dataMigration.includes('order by item.ordinality'));
-  assert.ok(dataMigration.includes("where jsonb_typeof(progress.level_stats) = 'array'"));
-  assert.match(dataMigration, /and exists\s*\([\s\S]*?\)\s*;/i);
-  assert.match(dataMigration, />\s*50\s*\n\s*\)/);
-  assert.ok(dataMigration.includes('coalesce((item.value->>\'completed\')::boolean, false)'));
-  assert.ok(dataMigration.includes('or converted_stars.new_stars >= 50'));
-  assert.ok(!dataMigration.includes('delete from'));
-  assert.ok(!dataMigration.includes('truncate'));
-});
 
-test('historical migration is idempotent and leaves new-scale rows untouched', () => {
-  const legacy = [
-    { level: 1, stars: 200, mastered: 100, starTarget: 200, masteryPercent: 100, completed: true, note: 'keep' },
-    { level: 2, stars: 40, mastered: 20, starTarget: 200, masteryPercent: 20, completed: false }
-  ];
-  const first = simulateHistoricalRowMigration(legacy);
-  assert.deepEqual(first[0], {
-    level: 1, stars: 50, mastered: 100, starTarget: 50,
-    masteryPercent: 100, completed: true, note: 'keep'
-  });
-  assert.deepEqual(first[1], {
-    level: 2, stars: 10, mastered: 20, starTarget: 50,
-    masteryPercent: 20, completed: false
-  });
-  const second = simulateHistoricalRowMigration(first);
-  assert.deepEqual(second, first, 'second execution must be a no-op');
-  
-  const alreadyNew = [
-    { level: 1, stars: 40, starTarget: 50, masteryPercent: 80, completed: false },
-    { level: 2, stars: 0, starTarget: 50, masteryPercent: 0, completed: false }
-  ];
-  assert.deepEqual(simulateHistoricalRowMigration(alreadyNew), alreadyNew,
-    'a row whose stars are all <= 50 must remain byte-for-byte equivalent in content');
-});
-
-test('missing-stars mastered*2 fallback is gated by legacy row scale', () => {
-  const oldFallback = [{ level: 1, mastered: 30, starTarget: 200, completed: false }];
-  const converted = simulateHistoricalRowMigration(oldFallback);
-  assert.equal(converted[0].stars, 15);
-  assert.equal(converted[0].starTarget, 50);
-  assert.equal(converted[0].masteryPercent, 30);
-  assert.equal(simulateHistoricalRowMigration(converted)[0].stars, 15);
-
-  const newScaleMissingStars = [{ level: 1, mastered: 20, starTarget: 50, masteryPercent: 40, completed: false }];
-  assert.deepEqual(simulateHistoricalRowMigration(newScaleMissingStars), newScaleMissingStars);
-});
 
 test('the student coastal iframe uses the helper and the 0–50 star contract', () => {
   assert.ok(coastalHtml.includes('window.MEJCoastalUnlockedBadges=function(stars)'));

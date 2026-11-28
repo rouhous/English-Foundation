@@ -60,24 +60,31 @@
  }
  window.mejHiddenWordEvidence=stageWordEvidence;
  function gradeItems(stage,badge){
-   const pool=[],seen=new Set();
+   const unmastered=[],mastered=[],seen=new Set();
    try{
      const qs=typeof byGrade!=='undefined'?(byGrade[stage]||[]):[];
+     const correct=active()?.correct||{};
      for(const q of qs){
-       if(!['Vocabulary','Spelling','Match','Describe'].includes(q.type))continue;
-       const raw=String(q.prompt||'');
-       const quoted=raw.match(/[“'«"]([A-Za-z][A-Za-z '-]{1,40})[”'»"]/);
-       const word=String(q.word||quoted?.[1]||'').trim().toLowerCase();
-       if(!/^[a-z][a-z '-]{1,35}$/.test(word)||seen.has(word))continue;
+       if(!['Vocabulary','Spelling','Match','Describe','Phonics','Blend'].includes(q.type))continue;
+       const clean=value=>String(value||'').trim().toLowerCase();
+       const candidates=[q.word,q.pic,q.audio,q.answer];
+       let word=candidates.map(clean).find(value=>/^[a-z][a-z'-]{1,35}$/.test(value))||'';
+       if(!word){
+         const quoted=String(q.prompt||'').match(/[“'«"]([A-Za-z][A-Za-z'-]{1,35})[”'»"]/);
+         if(quoted)word=clean(quoted[1]);
+       }
+       if(!word||seen.has(word))continue;
        let src='';
        try{src=typeof mejApprovedPhoto==='function'?mejApprovedPhoto(word):''}catch(_){}
        if(!src)try{src=typeof realPhoto==='function'?realPhoto(word):''}catch(_){}
        if(typeof src!=='string'||!(/^(data:image\/(?:webp|png|jpeg);base64,|\.\.?\/assets\/)/i.test(src)))continue;
-       if(src.length>180000)continue; // avoid freezing iOS with oversized base64 sprites
-       seen.add(word);pool.push({word,src});
+       if(src.length>180000)continue;
+       seen.add(word);
+       (Number(correct[q.id])>=2?mastered:unmastered).push({word,src});
      }
    }catch(_){}
-   const selected=shuffle(pool,stage*197+badge*173).slice(0,15);
+   // Prioritise items this learner has not mastered; mastered words fill any remaining slots.
+   const selected=[...shuffle(unmastered,stage*197+badge*173),...shuffle(mastered,stage*197+badge*173+1)].slice(0,15);
    const items=Array.from({length:16},()=>null);
    allIDs.forEach((id,i)=>{if(selected[i])items[id]=selected[i]});
    return items;

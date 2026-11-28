@@ -122,10 +122,20 @@ function prelude(html){
  }
  // Blob document URLs have no usable relative file hierarchy. Without this
  // absolute base the desktop image and companion/game assets fail to resolve.
+ const previewBase='https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates';
+ const previewAssets=[
+  ['<script src="./assets/mej-sailor-host.js"></script>','<script src="'+previewBase+'/assets/mej-sailor-host.js"></script>'],
+  ['<script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>','<script src="'+previewBase+'/assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>'],
+  ['<script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>','<script src="'+previewBase+'/assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>']
+ ];
+ for(const [from,to] of previewAssets){
+  if(!html.includes(from))throw Error('PREVIEW_ASSET_ANCHOR_MISSING');
+  html=html.replace(from,to);
+ }
  const appBase=new URL('../',location.href).href;
  if(!/^https:\/\//.test(appBase)||new URL(appBase).origin!==location.origin)throw Error('INVALID_PREVIEW_BASE');
  if(!/<head(?:\s[^>]*)?>/i.test(html))throw Error('INVALID_PREVIEW_HEAD');
- html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'">');
+ html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'"><script>window.__MEJ_PREVIEW_BASE="'+raw+'";<'+'/script>');
  return html;
 }
 function applyScreenMode(){

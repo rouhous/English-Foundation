@@ -40,12 +40,12 @@ function validHiddenLedger(raw:unknown,levelStats:unknown):Record<string,unknown
  const entries=Object.entries(raw as Record<string,unknown>);
  if(entries.length>130)throw Error('INVALID_HIDDEN_LEDGER');
  const byLevel=new Map<number,number>();
- if(Array.isArray(levelStats))for(const row of levelStats){const x=row as Record<string,unknown>;if(Number.isInteger(x?.level)&&Number.isInteger(x?.mastered))byLevel.set(Number(x.level),Number(x.mastered))}
+ if(Array.isArray(levelStats))for(const row of levelStats){const x=row as Record<string,unknown>;if(!Number.isInteger(x?.level))continue;const stars=Number.isInteger(x?.stars)?Number(x.stars):(Number.isInteger(x?.mastered)?Number(x.mastered)*2:null);if(stars!==null)byLevel.set(Number(x.level),Math.min(50,Math.max(0,stars)))}
  const output:Record<string,unknown>={};
  for(const [key,value] of entries){
   if(!/^(?:[0-9]|1[0-2])-(?:[1-9]|10)$/.test(key)||!value||typeof value!=='object'||Array.isArray(value))throw Error('INVALID_HIDDEN_LEDGER');
   const [stage,badge]=key.split('-').map(Number),v=value as Record<string,unknown>;
-  if((byLevel.get(stage)||0)<badge*20)throw Error('INVALID_HIDDEN_UNLOCK');
+  if((byLevel.get(stage)||0)<badge*5)throw Error('INVALID_HIDDEN_UNLOCK');
   if(!Array.isArray(v.found)||v.found.length>10||!Number.isInteger(v.misses)||Number(v.misses)<0||Number(v.misses)>3)throw Error('INVALID_HIDDEN_LEDGER');
   const all=Array.from({length:16},(_,i)=>i).filter(i=>i!==6);
   let t=(stage*7919+badge*1013)>>>0;

@@ -43,7 +43,7 @@ test('the boat game client uses the same 5-star / 50-star scale', () => {
   assert.ok(boatRewards.includes('STARS_PER_BADGE=5'));
   assert.ok(boatRewards.includes('STAGE_MAX_STARS=50'));
   assert.ok(boatHtml.includes('max="50"'));
-  assert.ok(boatHtml.includes('نجوم التعلم: 0 / 50'));
+  assert.ok(boatHtml.includes('نجوم المرحلة: 0 / 50'));
   assert.ok(!boatHtml.includes('/ 200'));
   assert.ok(!boatHtml.includes('0,200'));
 });

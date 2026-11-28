@@ -1,0 +1,70 @@
+name: Publish runtime-only GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-runtime-publish
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Assemble the runtime-only site
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_dir="$GITHUB_WORKSPACE"
+          publish_dir="$RUNNER_TEMP/mej-pages"
+          mkdir -p "$publish_dir"
+
+          # Root shell and PWA metadata referenced by index.html / manifest.
+          for file in index.html sw.js manifest.webmanifest mobile-home-fix.css icon-192.png icon-512.png; do
+            test -f "$source_dir/$file" || { echo "Missing required runtime file: $file" >&2; exit 1; }
+            cp -a "$source_dir/$file" "$publish_dir/"
+          done
+
+          # Runtime asset banks and app/game entry points. Copy recursively so
+          # relative imports, images, audio, CSS, and nested game resources survive.
+          for dir in assets coastal-arcade hidden-objects boat-game exam-practice games omani-sailor; do
+            test -d "$source_dir/$dir" || { echo "Missing required runtime directory: $dir" >&2; exit 1; }
+            cp -a "$source_dir/$dir" "$publish_dir/"
+          done
+
+          # Public review/teacher routes explicitly retained for the app.
+          mkdir -p "$publish_dir/reviews"
+          for file in teacher-portal.html owner-login.html admin-preview.html pilot-full.html; do
+            test -f "$source_dir/reviews/$file" || { echo "Missing required public review page: reviews/$file" >&2; exit 1; }
+            cp -a "$source_dir/reviews/$file" "$publish_dir/reviews/"
+          done
+
+          # GitHub Pages must not apply Jekyll processing to runtime assets.
+          : > "$publish_dir/.nojekyll"
+
+      - name: Replace gh-pages with the assembled runtime output
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # This is an output branch, rebuilt from scratch on every main push.
+          git branch -D gh-pages 2>/dev/null || true
+          git checkout --orphan gh-pages
+          git rm -rf . >/dev/null 2>&1 || true
+          git clean -fdx
+          cp -a "$RUNNER_TEMP/mej-pages/." "$GITHUB_WORKSPACE/"
+          git add --all
+          git commit -m "Publish runtime-only Pages output from ${GITHUB_SHA}"
+          git push --force origin gh-pages

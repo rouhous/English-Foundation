@@ -2144,54 +2144,14 @@ function submitTyped(){const e=document.getElementById('typed');if(e)gradeAnswer
 /* Grammar-specific explanations appear in the existing answer-feedback panel. */
 function mejGrammarCorrection(q){
  if(!q||q.type!=='Grammar')return '';
- const p=String(q.prompt||'').toLowerCase(),a=String(q.answer||'').trim().toLowerCase();
- const tests=[
-  // Context first: going to takes the bare infinitive, not past/simple-present forms.
-  [/\b(?:am|is|are|was|were)\s+going\s+to\s+(?:_{2,}|\b[a-z]+\b)/,()=> 'للتعبير عن النية أو الخطة المستقبلية نستخدم am/is/are + going to + الفعل في صورته الأساسية (المجرّد) دون ed أو s أو ing. مثال: I am going to finish my project.'],
-  [/\b(?:want|wants|wanted|need|needs|needed|plan|plans|planned|hope|hopes|decide|decides|decided|would like)\s+to\s+_{2,}/,()=> 'بعد to المصدرية نستخدم الفعل في صورته الأساسية دون s أو ed أو ing، مثل: I want to learn English.'],
-  [/\b(am|is|are|was|were)\b/,()=>/was|were/.test(a)?'في الماضي نستخدم was مع I/he/she/it، وwere مع you/we/they.':'نستخدم am مع I، وis مع he/she/it والمفرد، وare مع you/we/they والجمع.'],
-  [/\b(a|an|the)\b/,()=>a==='an'?'نستخدم an قبل الكلمة التي تبدأ بصوت متحرك، مثل an apple.':a==='a'?'نستخدم a قبل الاسم المفرد المعدود الذي يبدأ بصوت ساكن، مثل a book.':'نستخدم the عندما نشير إلى اسم محدد أو معروف.'],
-  [/\b(he|she|it|they|we|you|i)\b/,()=>['he','she','it','they','we','you','i'].includes(a)?'اختر الضمير بحسب المعنى: he للمذكر، she للمؤنث، it لغير العاقل، they للجمع.':'طابق الفعل مع الفاعل، وفي المضارع البسيط نضيف s أو es مع he/she/it.'],
-  [/\b(this|that|these|those)\b/,()=> 'This وThat للمفرد، وThese وThose للجمع؛ This وThese للقريب.'],
-  [/\b(do|does|did|don.t|doesn.t)\b/,()=> 'نستخدم do مع I/you/we/they وdoes مع he/she/it، وdid للماضي. بعد الفعل المساعد يأتي الفعل في صورته الأساسية.'],
-  [/\b(have|has|had)\b/,()=> 'نستخدم have مع I/you/we/they، وhas مع he/she/it، وhad للماضي.'],
-  [/\b(can|could|should|must|may|might|will|would)\b/,()=> 'بعد الأفعال الناقصة مثل can وshould وmust وwill نستخدم الفعل الأساسي دون s أو to.'],
-  [/\b(there is|there are|much|many|some|any)\b/,()=> 'نستخدم there is للمفرد وthere are للجمع؛ many مع الأسماء المعدودة وmuch مع غير المعدودة.'],
-  [/\b(in|on|at)\b/,()=> 'في الوقت نستخدم at للساعات، وon للأيام والتواريخ، وin للشهور والسنوات.'],
-  [/\b(than|most|more|better|best|bigger|biggest)\b/,()=> 'للمقارنة نستخدم الصفة + er أو more ثم than، وللتفضيل نستخدم the + est أو the most.'],
-  [/\b(yesterday|ago|last week|last year|past)\b/,()=> 'عند الحديث عن حدث انتهى في الماضي نستخدم الماضي البسيط، مثل played أو went.'],
-  [/\b(now|at the moment|look!)\b/,()=> 'للحدث الجاري الآن نستخدم am/is/are + الفعل مع ing.']
- ];
- let explanation='';
- const options=(Array.isArray(q.options)?q.options:[]).map(v=>String(v).toLowerCase().trim());
- const stateVerbs=/^(?:know|knows|knew|like|likes|love|loves|hate|hates|want|wants|need|needs|believe|believes|understand|understands|remember|remembers|prefer|prefers|own|owns|seem|seems)$/;
- // Match the grammar target (the missing answer), never incidental words in the sentence.
- if(stateVerbs.test(a) && (options.some(v=>/^(?:am|is|are)\s+\w+ing$/.test(v)) || /\b(?:now|right now|at the moment)\b/.test(p))){
-  explanation='هذه من أفعال الحالة (Stative Verbs) التي لا تُستخدم عادةً في المضارع المستمر. نستخدم المضارع البسيط حتى مع right now؛ ومع he/she/it نضيف s أو es للفعل عند الحاجة. مثال: He knows the answer.';
+ const api=window.MEJ_GRAMMAR_FEEDBACK_V1;
+ if(!api||typeof api.render!=='function'){
+  console.warn('[MEJ grammar feedback] Feedback module unavailable; neutral fallback shown.');
+  return '<div class="mej-grammar-rule" dir="rtl"><strong>📘 شرح القاعدة</strong><div>تعذر تحميل شرح القاعدة. راجع الإجابة الصحيحة.</div></div>';
  }
- for(let i=0;!explanation && i<tests.length;i++){
-  const [re,fn]=tests[i];
-  if(!(re.test(p)||re.test(a)))continue;
-  if(i===2 && !/^(?:am|is|are|was|were)$/.test(a))continue;
-  if(i===3 && !/^(?:a|an|the)$/.test(a))continue;
-  if(i===4 && !/^(?:he|she|it|they|we|you|i)$/.test(a) && !/^(?:he|she|it)\s+_{2,}/.test(p))continue;
-  if(i===5 && !/^(?:this|that|these|those)$/.test(a))continue;
-  if(i===6 && !/^(?:do|does|did|don't|doesn't)$/.test(a) && !/\b(?:do|does|did)\s+_{2,}/.test(p))continue;
-  if(i===7 && !/^(?:have|has|had)$/.test(a))continue;
-  if(i===8 && !/^(?:can|could|should|must|may|might|will|would)$/.test(a) && !/\b(?:can|could|should|must|may|might|will|would)\s+_{2,}/.test(p))continue;
-  if(i===9 && !/^(?:much|many|some|any|there is|there are)$/.test(a))continue;
-  if(i===10 && !/^(?:in|on|at)$/.test(a))continue;
-  if(i===11 && !/(?:er|est)$|^(?:more|most|better|best|worse|worst)$/.test(a))continue;
-  if(i===12 && !/(?:ed)$|^(?:went|saw|ate|did|had|was|were|wrote|bought|took|made|came|got|gave)$/.test(a))continue;
-  if(i===13 && !/(?:ing)$|^(?:am|is|are)\s+\w+ing$/.test(a))continue;
-  explanation=fn();
- }
- if(!explanation&&/\b\w+(ed|ing)\b/.test(a))explanation=/ing$/.test(a)?'للتعبير عن فعل مستمر نستخدم الفعل مع ing بعد فعل be المناسب.':'في الماضي البسيط للأفعال المنتظمة نضيف ed، أما الأفعال الشاذة فلها تصريف خاص.';
- if(!explanation&&/s$/.test(a)&&!/\s/.test(a))explanation='في المضارع البسيط نضيف s أو es إلى الفعل مع he/she/it.';
- if(!explanation&&q.tip&&String(q.tip).trim()!=='اقرأ الجملة كاملة قبل الاختيار.')explanation=String(q.tip);
- if(!explanation)explanation='انظر إلى الفاعل والزمن في الجملة ثم اختر الصيغة التي تطابقهما، وقارنها بالإجابة الصحيحة.';
- return '<div class="mej-grammar-rule" dir="rtl" style="margin-top:12px;padding:12px 14px;background:#edf8ff;border:2px solid #69b5e4;border-radius:12px;color:#164069;font-size:16px;line-height:1.8;text-align:right"><strong>📘 شرح القاعدة</strong><div>'+esc(explanation)+'</div><div style="margin-top:5px;font-weight:700;color:#116047">✓ '+esc(q.prompt||'').replace(/___|_{2,}/g,esc(q.answer))+'</div></div>';
+ return api.render(q,esc);
 }
+
 function gradeAnswer(response,node){if(answerLock||!activeSession)return;const q=questionById[shownId];answerLock=true;const ok=normalize(response)===normalize(q.answer);const p=active();activeSession.responses.push({grade:q.g,id:q.id,ok});if(ok)activeSession.score++;else activeSession.mistakes.push(q.id);if(activeSession.kind==='practice'){
   p.attempts++;let earnedStars=0;if(ok){p.right++;const priorCorrect=p.correct[q.id]||0;p.correct[q.id]=Math.min(2,priorCorrect+1);if(priorCorrect<2){p.stars++;earnedStars=1;const ss=stageStars(q.g,p);if(ss%MEJ_BADGE_STEP===0&&ss/MEJ_BADGE_STEP<=JOURNEY_BADGES.length){const badge=JOURNEY_BADGES[ss/MEJ_BADGE_STEP-1];toast('🏅 شارة جديدة: '+badge[1]+'! 🎉')}else toast(priorCorrect===0?'⭐ نجمة جديدة!':'🌟 نجمة إضافية — العنصر متقن!')}}else p.wrong[q.id]=(p.wrong[q.id]||0)+1;
   p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok,earnedStars}); /* MEJ_WEEKLY_EARNED_STARS_20261120 */if(p.activity.length>3000)p.activity=p.activity.slice(-3000);p.completed[q.g]=achieved(q.g);persist();}
@@ -3030,4 +2990,4 @@ body:has(#app > .mobile-ocean-v31) #mej-owner-rights-notice{display:block!import
 <span class="mej-rights-owner"><b>حسام لطفي الرواتبي</b> <span aria-hidden="true">|</span> <b dir="ltr" lang="en">Houssem Lotfi Rouatbi</b></span>
 </div>
 
-<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script></body></html>
+<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script><script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script></body></html>

@@ -1,0 +1,20 @@
+name: Verify explicit grammar feedback mapping
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'assets/mej-grammar-feedback-v1.js'
+      - 'scripts/test_grammar_feedback_mapping.cjs'
+      - '.github/workflows/verify-grammar-feedback-mapping.yml'
+  push:
+    branches: [fix/grammar-feedback-explicit-mapping]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --check assets/mej-grammar-feedback-v1.js
+      - run: node scripts/test_grammar_feedback_mapping.cjs

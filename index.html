@@ -1623,9 +1623,10 @@ function mejEnsureSkillLegacyFloor(p){
  const floor=Object.create(null),baseline=Object.create(null);
  for(let g=1;g<=12;g++){
   const bars=mejSkillBarsSum(g,p),raw=mejLegacyRawStageStars(g,p);
-  const previous=Number.isSafeInteger(savedFloor[g])&&savedFloor[g]>=0&&savedFloor[g]<=50?savedFloor[g]:0;
+  const hasSavedFloor=Number.isSafeInteger(savedFloor[g])&&savedFloor[g]>=0&&savedFloor[g]<=50;
   const oldBaseline=Number.isSafeInteger(savedBaseline[g])&&savedBaseline[g]>=0&&savedBaseline[g]<=50?savedBaseline[g]:null;
-  floor[g]=Math.min(50,Math.max(previous,raw,bars,p.completed&&p.completed[g]===true?50:0));
+  const legacy=hasSavedFloor?Math.max(savedFloor[g],p.completed&&p.completed[g]===true?50:0):Math.max(raw,bars,p.completed&&p.completed[g]===true?50:0);
+  floor[g]=Math.min(50,legacy);
   baseline[g]=oldBaseline===null?bars:oldBaseline;
  }
  p.stageSkillLegacyFloorV1=floor;

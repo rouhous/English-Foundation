@@ -107,7 +107,7 @@
    const p=active();stage=Number(stage);badge=Number(badge);
    if(!p||!p.id||!Number.isInteger(stage)||stage<0||stage>12||!validIndex(badge))return;
    if(!permitted(stage)){toast('هذه الجزيرة لم تُفتح بعد.');return}
-   const earnedStars=stageStars(stage,p);
+   const earnedStars=stageEffectiveStars(stage,p);
    if(earnedStars<5*badge){toast('تفتح اللعبة بعد الحصول على '+(5*badge)+' نجوم أساسية في هذه الجزيرة.');return}
    const k=key(stage,badge),existing=sanitized(ledger(p)[k],stage,badge);
    if(existing?.status==='finished'){toast('أكملت هذه الجولة وحصلت على '+existing.award+' نجوم إضافية. افتح الشارة التالية للمزيد.');return}
@@ -199,7 +199,7 @@
      const now=active();
      if(!dialog.open||now?.id!==learner.id)return;
      const stage=currentIsland(now);
-     const starsNow=stageStars(stage,now);
+     const starsNow=stageEffectiveStars(stage,now);
      frame.contentWindow?.postMessage({type:'mej:arcade-init',stageStars:starsNow,stage},location.origin);
    };
    const onArcadeMessage=event=>{

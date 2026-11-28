@@ -1,7 +1,22 @@
 name: MEJ owner preview safety checks
 on:
+  pull_request:
+    branches: [development/phase2-learning-features, main]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'reviews/admin-preview.html'
+      - 'assets/mej-sailor-host.js'
+      - 'assets/mej-grammar-feedback-v1.js'
+      - 'assets/mej-spaced-review-v1.js'
+      - 'games/release.js'
+      - 'games/arcade.js'
+      - 'admin-backend/supabase/functions/mej-owner-preview-content/**'
+      - 'admin-backend/supabase/functions/mej-owner-preview-gate/**'
+      - 'scripts/qa-admin-preview.mjs'
+      - '.github/workflows/mej-owner-preview-qa.yml'
   push:
-    branches: [main]
+    branches: [main, preview/owner-review-updates]
     paths:
       - 'index.html'
       - 'sw.js'

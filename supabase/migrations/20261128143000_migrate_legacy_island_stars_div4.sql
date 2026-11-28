@@ -66,7 +66,13 @@ set level_stats = coalesce((
 where jsonb_typeof(progress.level_stats) = 'array'
   and exists (
     select 1
-    from jsonb_array_elements(progress.level_stats) as legacy_item(value)
+    from jsonb_array_elements(
+      case
+        when jsonb_typeof(progress.level_stats) = 'array'
+          then progress.level_stats
+        else '[]'::jsonb
+      end
+    ) as legacy_item(value)
     where jsonb_typeof(legacy_item.value) = 'object'
       and coalesce(
         case

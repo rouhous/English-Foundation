@@ -2,6 +2,70 @@
 (()=>{'use strict';
 const places=[['خصب','Khasab'],['صحار','Sohar'],['ميناء صحار','Port of Sohar'],['مسقط','Muscat'],['ميناء مطرح','Muttrah Port'],['صور','Sur'],['الدقم','Duqm'],['جزيرة مصيرة','Masirah Island'],['جزر الديمانيات','Daymaniyat Islands'],['صلالة','Salalah']];
 const badgeRoot=new URL('./coastal-arcade/badges/',document.baseURI).href;let activeProfile=null;
+
+/* MEJ_ISLAND_BANK_PROVIDER_V1_START
+ * Read-only adapter from the authoritative root BANK/byGrade data.
+ * Word mastery is conservative: every word-centric question for a word
+ * must have two correct answers before that word is considered mastered.
+ */
+function mejGameWord(q){
+ const direct=String(q?.word||q?.pic||'').trim();
+ if(direct)return direct;
+ const prompt=String(q?.prompt||'');
+ const quoted=prompt.match(/[“"']([^“”"']+)[”"']/);
+ if(quoted&&/[A-Za-z]/.test(quoted[1])&&!/[\u0600-\u06FF]/.test(quoted[1]))return quoted[1].trim();
+ const answer=String(q?.answer||'').trim();
+ return /[A-Za-z]/.test(answer)&&!/[\u0600-\u06FF]/.test(answer)?answer:'';
+}
+function mejGameArabic(q){
+ const answer=String(q?.answer||'').trim();
+ if(/[\u0600-\u06FF]/.test(answer))return answer;
+ const prompt=String(q?.prompt||'');
+ const match=prompt.match(/(?:اختر الكلمة الإنجليزية|Choose the correct spelling for)\s*[:：]\s*[«"']?(.+?)[»"']?\s*$/i);
+ return match&&/[\u0600-\u06FF]/.test(match[1])?match[1].trim():'';
+}
+function mejBuildGameVocabulary(questions,correct={}){
+ const rows=new Map();
+ const allowed=new Set(['Vocabulary','Spelling','Listening','Phonics','Blend','Match']);
+ (Array.isArray(questions)?questions:[]).forEach((q,index)=>{
+  if(!q||!allowed.has(q.type))return;
+  const word=mejGameWord(q);if(!word)return;
+  const key=word.normalize('NFKC').toLocaleLowerCase('en').trim().replace(/\s+/g,' ');
+  if(!key)return;
+  let row=rows.get(key);
+  if(!row){row={word,arabic:'',ids:[],order:index};rows.set(key,row)}
+  const arabic=mejGameArabic(q);if(arabic&&!row.arabic)row.arabic=arabic;
+  if(q.id&&!row.ids.includes(q.id))row.ids.push(q.id);
+ });
+ return [...rows.values()].map(row=>{
+  const mastered=row.ids.length>0&&row.ids.every(id=>Number(correct[id]||0)>=2);
+  return [row.word,row.arabic,'🔎',row.arabic||row.word,{
+   id:row.ids[0]||row.word,ids:row.ids,mastered,source:'island-bank'
+  }];
+ }).sort((a,b)=>Number(a[4].mastered)-Number(b[4].mastered));
+}
+window.MEJ_GAME_BANK_PROVIDER=function(stage){
+ const level=Math.max(0,Math.min(12,Math.floor(Number(stage)||0)));
+ const profile=typeof active==='function'?active():null;
+ const correct=profile?.correct&&typeof profile.correct==='object'?profile.correct:{};
+ const questions=Array.isArray(byGrade[level])?byGrade[level]:[];
+ const vocabulary=mejBuildGameVocabulary(questions,correct);
+ const bottom=level<=4?1:level<=9?5:10;
+ const visualRows=new Map();
+ for(let grade=level;grade>=bottom;grade--){
+  for(const row of mejBuildGameVocabulary(byGrade[grade]||[],correct)){
+   const key=String(row[0]).normalize('NFKC').toLocaleLowerCase('en').trim().replace(/\s+/g,' ');
+   if(!visualRows.has(key))visualRows.set(key,row);
+  }
+ }
+ return {
+  stage:level,questionCount:questions.length,vocabulary,
+  visualVocabulary:[...visualRows.values()],
+  levelWords:vocabulary.map(row=>row[0]),
+  masteredWords:vocabulary.filter(row=>row[4].mastered).map(row=>row[0])
+ };
+};
+/* MEJ_ISLAND_BANK_PROVIDER_V1_END */
 // MEJ_OWNER_PREVIEW_BADGES_V1 — authenticated owner review only; no reward writes.
 function ownerPreview(){
  return window.__MEJ_ACCESS_ROLE==='owner' &&

@@ -108,9 +108,9 @@ assert.match(edge,/stageSkillLegacyBaselineV1/,'edge validator baseline');
 console.log('Grandfather completion, fixed 50-star payloads, separate skillCap, 5n badges, backup and cloud round-trip OK.');
 const payloadTargetAssignments=(html.match(/starTarget=MEJ_STAGE_TARGET/g)||[]).length;
 assert.equal(payloadTargetAssignments,2,'both student progress payloads must always use starTarget=50');
-assert.match(html,/skillCap=mejStageStarTarget\\(g,p\\)/,'report payload carries the dynamic skillCap');
-assert.match(html,/skillCap=mejStageStarTarget\\(g,profile\\)/,'cloud snapshot carries the dynamic skillCap');
+assert.match(html,/skillCap=mejStageStarTarget\(g,p\)/,'report payload carries the dynamic skillCap');
+assert.match(html,/skillCap=mejStageStarTarget\(g,profile\)/,'cloud snapshot carries the dynamic skillCap');
 const sailor=fs.readFileSync('assets/mej-sailor-host.js','utf8');
-assert.match(sailor,/stageEffectiveStars\\(g,person\\)<b\\*5/,'sailor badge gate uses fixed 5n thresholds');
-assert.match(sailor,/earnedStars<5\\*badge/,'sailor launch gate uses fixed 5n thresholds');
+assert.match(sailor,/stageEffectiveStars\(g,person\)<b\*5/,'sailor badge gate uses fixed 5n thresholds');
+assert.match(sailor,/earnedStars<5\*badge/,'sailor launch gate uses fixed 5n thresholds');
 

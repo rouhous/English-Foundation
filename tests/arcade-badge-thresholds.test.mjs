@@ -28,7 +28,7 @@ test('the student coastal iframe uses the helper and the 0–50 star contract', 
   assert.ok(coastalHtml.includes('<script src="badge-unlocks.js"></script>'));
   assert.ok(coastalHtml.includes('state.unlocked=window.MEJCoastalUnlockedBadges(d.stageStars)'));
   assert.ok(coastalHtml.includes('d.stageStars>50'));
-  assert.ok(coastalHtml.includes("d.stageStars+'/50 نجمة إتقان'"));
+  assert.ok(coastalHtml.includes("d.stageStars+'/50 نجمة إتقان · '"));
   assert.ok(!coastalHtml.includes('Math.floor(d.stageStars/20)'));
   assert.ok(!coastalHtml.includes('/200 نجمة إتقان'));
 });

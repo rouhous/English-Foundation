@@ -85,19 +85,30 @@ jobs:
           # GitHub Pages must not apply Jekyll processing to runtime assets.
           : > "$publish_dir/.nojekyll"
 
-      - name: Replace gh-pages with the assembled runtime output
+      - name: Update gh-pages without rewriting its history
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # This is an output branch, rebuilt from scratch on every main push.
-          git branch -D gh-pages 2>/dev/null || true
-          git checkout --orphan gh-pages
-          git rm -rf . >/dev/null 2>&1 || true
-          git clean -fdx
+          # Preserve the output branch's history; create it only on first publication.
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
+            git fetch origin gh-pages
+            git checkout -B gh-pages origin/gh-pages
+            git rm -rf . >/dev/null 2>&1 || true
+            git clean -fdx
+          else
+            git checkout --orphan gh-pages
+            git rm -rf . >/dev/null 2>&1 || true
+            git clean -fdx
+          fi
+
           cp -a "$RUNNER_TEMP/mej-pages/." "$GITHUB_WORKSPACE/"
           git add --all
-          git commit -m "Publish runtime-only Pages output from ${GITHUB_SHA}"
-          git push --force origin gh-pages
+          if git diff --cached --quiet; then
+            echo "Runtime output is unchanged; no commit is needed."
+          else
+            git commit -m "Publish runtime-only Pages output from ${GITHUB_SHA}"
+          fi
+          git push origin gh-pages

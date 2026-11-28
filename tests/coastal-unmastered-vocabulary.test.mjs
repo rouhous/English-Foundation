@@ -19,7 +19,7 @@ test('selects only unmastered unique vocabulary and recovers Arabic meaning',()=
   {id:'v1',type:'Vocabulary',word:'coast',answer:'ساحل'},
   {id:'v2',type:'Vocabulary',word:'coast',answer:'coast'},
   {id:'v3',type:'Vocabulary',word:'harbour',answer:'harbour'},
-  {id:'a3',type:'Audio',word:'harbour',answer:'ميناء'},
+  {id:'v3-ar',type:'Vocabulary',word:'harbour',answer:'ميناء'},
   {id:'v4',type:'Vocabulary',word:'island',answer:'جزيرة'}
  ];
  const out=run(rows,{v1:2});

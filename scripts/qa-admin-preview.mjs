@@ -48,7 +48,7 @@ assert.ok(!arcade.includes('omani-sailor/index.html'),'Retired boat game must no
 assert.match(server,/jwtVerify/);
 assert.match(server,/mej_owner_preview_sessions/);
 assert.ok(server.includes('preview/owner-review-updates/index.html'));
-assert.ok(preview.includes('preview/owner-review-updates'));
+assert.ok(preview.includes('cdn.jsdelivr.net/gh/rouhous/English-Foundation@b16d233a3c38dc591457a9379905791eb75952e0'));
 assert.ok(root.includes('mej-grammar-feedback-v1.js'));
 assert.ok(root.includes('mej-spaced-review-v1.js'));
 assert.ok(!root.includes('mej-safe-admin-settings-entry'),'Old hidden gear entry must be removed from the app shell');

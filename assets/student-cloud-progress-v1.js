@@ -27,7 +27,7 @@ function safePayload(value){
   masteredItems:asInt(value.masteredItems,2600),weeklyAttempts:asInt(value.weeklyAttempts,1000000),
   diagnosticDone:value.diagnosticDone===true,diagnosticLevel:Number.isInteger(value.diagnosticLevel)?value.diagnosticLevel:null,
   highestLevel:Number.isInteger(value.highestLevel)?value.highestLevel:null,
-  levelStats:value.levelStats.slice(0,13).map(v=>({level:asInt(v.level,12),mastered:asInt(v.mastered,200),total:200,
+  levelStats:value.levelStats.slice(0,13).map(v=>({level:asInt(v.level,12),mastered:asInt(v.mastered,200),stars:asInt(v.stars,50),starTarget:50,skillCap:asInt(v.skillCap??50,50),total:200,
     masteryPercent:asInt(v.masteryPercent,100)})),
   privateState:(()=>{
    const p=value.privateState||{},out={};
@@ -38,6 +38,13 @@ function safePayload(value){
    out.diagnosticDate=String(p.diagnosticDate||'').slice(0,40);
    out.journeyIsland=Number.isInteger(Number(p.journeyIsland))?Number(p.journeyIsland):null;
    if(p.hiddenObjectsLedger&&typeof p.hiddenObjectsLedger==='object'&&!Array.isArray(p.hiddenObjectsLedger))out.hiddenObjectsLedger=p.hiddenObjectsLedger;
+   for(const field of ['stageSkillLegacyFloorV1','stageSkillLegacyBaselineV1']){
+    const source=p[field];
+    if(source&&typeof source==='object'&&!Array.isArray(source)){
+     const map={};for(const [level,value] of Object.entries(source))if(/^(?:[1-9]|1[0-2])$/.test(level)&&Number.isSafeInteger(value)&&value>=0&&value<=50)map[level]=value;
+     out[field]=map;
+    }
+   }
    if(JSON.stringify(out).length>150000)return {};
    return out;
   })()};
@@ -124,7 +131,7 @@ const sixDigits=code=>/^[0-9]{6}$/.test(normalizedRecovery(code));
 const validRecovery=code=>sixDigits(code)||/^[A-HJ-NP-Z2-9]{20}$/.test(normalizedRecovery(code));
 const ownerSession=()=>window.__MEJ_ACCESS_ROLE==='owner';
 const needsGrade=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())===null;
-const pending=()=>!ownerSession()&&!!active()?.name&&!active().diagnosed&&placementCeiling(active())!==null;
+const pending=()=>false; /* phase1: placement quiz is optional */
 const registered=()=>!!active()?.name&&placementCeiling(active())!==null;
 const linked=p=>!!(p.teacherCode||mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1);
 let saving=false;
@@ -379,7 +386,7 @@ saveProfileModal=async function(isNew){
    db.profiles[id]=p;db.active=id;mejSwitch(id);
    if(teacherCode){p.school=r.schoolName||'';attach(p,r,teacherCode)}
    storeCode(p,r.recoveryCode);activeSession=null;write();if(teacherCode)scheduleReport();
-   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode+'\nاحتفظ به في مكان آمن.');route(p.diagnosed?'journey':'diagnostic');
+   closeProfile();if(!recover)alert('تم التسجيل. رمز الطالب لاستعادة تقدمك على جهاز آخر:\n'+r.recoveryCode+'\nاحتفظ به في مكان آمن.');route('journey');
   }else{
    const token=mejCreds()[p.id]?.MEJ_STUDENT_ACCESS_V1||localStorage.getItem('MEJ_STUDENT_ACCESS_V1');
    if(placementCeiling(p)!==null)await issue(p);

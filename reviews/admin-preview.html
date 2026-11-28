@@ -31,9 +31,6 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
 .toolbar button{padding:7px 12px;border-radius:10px;border:1px solid #9bd1de;background:#f6fdff;color:#10435b;font-weight:750}
 .toolbar button[aria-pressed="true"]{background:#efcb80}
 .preview-note{background:#fff7d8;color:#664500;padding:7px 14px;font-size:12px;line-height:1.5}
-.preview-status{background:#e8f7ff;color:#084b68;padding:8px 14px;font-size:12px;line-height:1.6;border-bottom:1px solid #8bc8dc;direction:rtl}
-.preview-status[data-kind="error"]{background:#fff0ed;color:#8b2519;border-color:#e9a59b}
-.preview-status[data-kind="success"]{background:#e9f8ec;color:#185b2b;border-color:#9bcda5}
 #previewViewport{flex:1;min-height:0;position:relative;overflow:auto;background:#05324f;direction:ltr;overscroll-behavior:contain}
 #frameCanvas{position:relative;width:100%;height:100%;min-height:100px;background:#063b5e url("../assets/background%20PC.png") center top / contain no-repeat}
 #previewFrame{position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:#e8f4f6;transform-origin:top left;display:block}
@@ -70,7 +67,6 @@ button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;curso
     <button type="button" id="exit">إنهاء المعاينة</button>
   </header>
   <div class="preview-note">معاينة المالك الخاصة • الشارات العشر والألعاب متاحة للمراجعة بعد تسجيل Admin • لا تُمنح نجوم أو مكافآت فعلية • تقدم الطلاب يبقى دون تغيير</div>
-  <div id="previewStatus" class="preview-status" role="status" aria-live="polite" hidden></div>
   <div id="previewViewport"><div id="frameCanvas"><iframe id="previewFrame" title="معاينة تطبيق رحلتي مع الإنجليزية" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 <script>
@@ -80,10 +76,8 @@ const CLIENT_ID='825380653679-o9dn1pl3m19olr8de2edjl0hcnngm961.apps.googleuserco
 const API='https://xboracsbzikojobumcke.supabase.co/functions/v1/';
 const VERIFY=API+'mej-owner-verify', GATE=API+'mej-owner-preview-gate', CONTENT=API+'mej-owner-preview-content';
 const $=id=>document.getElementById(id);
-let credential=null,reviewSession=null,blobURL=null,fullHTML=null,activeTab=null,busy=false,screenMode="phone",zoomed=false,previewStage="";
+let credential=null,reviewSession=null,blobURL=null,fullHTML=null,activeTab=null,busy=false,screenMode="phone",zoomed=false;
 function say(message){$('status').textContent=message}
-function previewStatus(message,kind="info"){$("previewStatus").textContent=message;$("previewStatus").dataset.kind=kind;$("previewStatus").hidden=false}
-function previewStageLabel(stage){return stage==="fetch"?"جلب المحتوى من خدمة المراجعة":stage==="prelude"?"معالجة محتوى التطبيق والتحقق من مواضع prelude()":stage==="iframe"?"عرض التطبيق داخل iframe":"مرحلة غير محددة"}
 function hideAccess(){credential=null;reviewSession=null;fullHTML=null;$('pinPanel').hidden=true;$('review').hidden=true;$('login').hidden=false;window.__MEJ_ADMIN_PREVIEW_ACTIVE=false;}
 async function readJSON(r){try{return await r.json()}catch{return {}}}
 async function verifyGoogle(response){
@@ -108,10 +102,6 @@ async function gate(action,code){
 }
 function prelude(html){
  if(!/id="mej-owner-only-gate"/.test(html))throw Error('INVALID_PREVIEW_SOURCE');
- // Remove the owner-gate stylesheet only from this isolated, authenticated preview.
- // Its html{visibility:hidden} rule otherwise hides the app after the gate script is replaced.
- const ownerGateStyle=/<style\b(?=[^>]*\bid=["']mej-owner-gate-style["'])[^>]*>[\s\S]*?<\/style>/i;
- html=html.replace(ownerGateStyle,'');
  // Server has verified the Google owner, existing Admin PIN and expiring session.
  // Remove the original student-freemium redirect gate only inside this isolated preview.
  const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
@@ -124,13 +114,12 @@ function prelude(html){
   ["function maxAllowed(p=active()){","function maxAllowed(p=active()){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return 12;"],
   ["function permitted(g){","function permitted(g){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12;"],
   ["function mejPartUnlocked(g,part,p=active()){","function mejPartUnlocked(g,part,p=active()){\n if(window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')return Number.isInteger(Number(g))&&Number(g)>=0&&Number(g)<=12&&(Number(part)===1||Number(part)===2);"],
-  ["const maxG=(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true||p.diagnosed)?Math.min(cap,limit):0;","const maxG=(window.__MEJ_ACCESS_ROLE==='owner'&&window.__MEJ_OWNER_VERIFIED_SESSION===true||p.diagnosed)?Math.min(cap,limit):0;","maxG (PR #15)"]
+  ["const maxG=p.diagnosed?Math.min(cap,limit):0;","const maxG=(p.diagnosed||window.__MEJ_ADMIN_PREVIEW_ACTIVE&&window.__MEJ_ACCESS_ROLE==='owner')?Math.min(cap,limit):0;"]
  ];
- for(const [needle,label] of reviewUnlocks){
-  if(!html.includes(needle))throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING:'+ (label||needle.slice(0,72)));
+ for(const [needle,edited] of reviewUnlocks){
+  if(!html.includes(needle))throw Error('PREVIEW_UNLOCK_ANCHOR_MISSING');
+  html=html.replace(needle,edited);
  }
- // PR #15 already contains owner-only unlock checks; the verified marker above activates them.
- // Validate the real source anchors without rewriting those functions a second time.
  // Blob document URLs have no usable relative file hierarchy. Without this
  // absolute base the desktop image and companion/game assets fail to resolve.
  const previewBase='https://cdn.jsdelivr.net/gh/rouhous/English-Foundation@b16d233a3c38dc591457a9379905791eb75952e0';
@@ -140,7 +129,7 @@ function prelude(html){
   ['src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1"','src="'+previewBase+'/assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1"']
  ];
  for(const [from,to] of previewAssets){
-  if(!html.includes(from))throw Error('PREVIEW_ASSET_ANCHOR_MISSING:'+from);
+  if(!html.includes(from))throw Error('PREVIEW_ASSET_ANCHOR_MISSING');
   html=html.replace(from,to);
  }
  const appBase=new URL('../',location.href).href;
@@ -221,11 +210,7 @@ function enableOwnerArcadeReview(){
  const board=child.querySelector('.shell')||child.querySelector('main');
  if(board&&!note.isConnected)board.prepend(note);
 }
-$('previewFrame').addEventListener('load',()=>{
- if(activeTab==='app'&&$('previewFrame').srcdoc)previewStatus('اكتمل تحميل مستند التطبيق داخل iframe.','success');
- enableOwnerArcadeReview();
-});
-$('previewFrame').addEventListener('error',()=>previewStatus('حدث خطأ أثناء تحميل iframe. افحص اتصال ملفات التطبيق.','error'));
+$('previewFrame').addEventListener('load',enableOwnerArcadeReview);
 function showFrame(tab){
  if(!reviewSession||!fullHTML)return;
  const frame=$('previewFrame');
@@ -238,11 +223,7 @@ function showFrame(tab){
   // Prefer srcdoc to avoid blank/blob-URL frame failures observed in mobile preview.
   // The absolute <base> inserted by prelude() resolves existing PC background, dhow,
   // child, islands, fort and other app assets against the original deployment.
-  try{frame.srcdoc=fullHTML;}catch(err){
-   if(!blobURL)throw new Error('IFRAME_SRCDOC_FAILED: '+(err?.message||String(err)));
-   try{frame.src=blobURL;previewStatus('تعذر العرض عبر srcdoc؛ تم استخدام مسار Blob الاحتياطي.','info');}
-   catch(fallbackError){throw new Error('IFRAME_BLOB_FALLBACK_FAILED: '+(fallbackError?.message||String(fallbackError)));}
-  }
+  try{frame.srcdoc=fullHTML;}catch(_){frame.src=blobURL;}
  }else if(tab==='games'){
   frame.title='معاينة الألعاب التفاعلية';
   frame.src='../coastal-arcade/index.html?mode=owner';
@@ -254,31 +235,22 @@ function showFrame(tab){
  applyScreenMode();
 }
 async function openPreview(){
- previewStage='fetch';
- say('جار جلب محتوى المعاينة...');
- previewStatus('1/3 — جار جلب محتوى التطبيق من خدمة المراجعة.','info');
- try{
-  const r=await fetch(CONTENT,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
-   headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},
-   body:JSON.stringify({action:'preview-content',reviewSession}),
-   signal:AbortSignal.timeout(30000)});
-  if(!r.ok)throw new Error('CONTENT_FETCH_HTTP_'+r.status);
-  const raw=await r.text();
-  if(!raw||raw.length<1000)throw new Error('CONTENT_BODY_EMPTY_OR_TRUNCATED');
-  previewStage='prelude';
-  previewStatus('2/3 — تم جلب المحتوى. جار التحقق من مواضع prelude() وتهيئة نسخة المالك.','info');
-  fullHTML=prelude(raw);
-  sessionStorage.setItem('MEJ_OWNER_ACCESS_V1',credential);
-  if(blobURL)URL.revokeObjectURL(blobURL);
-  blobURL=URL.createObjectURL(new Blob([fullHTML],{type:'text/html'}));
-  window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;
-  $('login').hidden=true;$('review').hidden=false;
-  $('gamesTab').hidden=false;$('badgesTab').hidden=false;
-  screenMode='phone';zoomed=false;
-  previewStage='iframe';
-  previewStatus('3/3 — اكتملت المعالجة. جار عرض التطبيق داخل iframe.','info');
-  showFrame('app');
- }catch(err){err.previewStage=previewStage;throw err;}
+ say('جار تجهيز نسخة المراجعة...');
+ const r=await fetch(CONTENT,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
+  headers:{Authorization:'Bearer '+credential,'Content-Type':'application/json'},
+  body:JSON.stringify({action:'preview-content',reviewSession}),
+  signal:AbortSignal.timeout(30000)});
+ if(!r.ok)throw Error('CONTENT_FETCH_'+r.status);
+ const raw=await r.text();
+ fullHTML=prelude(raw);
+ sessionStorage.setItem('MEJ_OWNER_ACCESS_V1',credential);
+ if(blobURL)URL.revokeObjectURL(blobURL);
+ blobURL=URL.createObjectURL(new Blob([fullHTML],{type:'text/html'}));
+ window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;
+ $('login').hidden=true;$('review').hidden=false;
+ $('gamesTab').hidden=false;$('badgesTab').hidden=false;
+ screenMode='phone';zoomed=false;
+ showFrame('app');
 }
 $('pinPanel').addEventListener('submit',async e=>{
  e.preventDefault();
@@ -299,10 +271,7 @@ $('pinPanel').addEventListener('submit',async e=>{
   $('adminCode').value='';
   await openPreview();
  }catch(err){
-  const stage=err?.previewStage||previewStage||'unknown';
-  const detail=String(err?.message||err||'UNKNOWN_ERROR').slice(0,180);
-  const message='فشل في مرحلة: '+previewStageLabel(stage)+' — '+detail;
-  say(message);previewStatus(message,'error');
+  say('تعذر فتح المعاينة. تحقق من اتصال الإنترنت وخدمة المراجعة.');
  }finally{busy=false;$('unlock').disabled=false}
 });
 window.addEventListener('message',event=>{

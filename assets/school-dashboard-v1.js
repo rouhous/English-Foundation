@@ -13,6 +13,12 @@ function node(tag,className,text){const e=document.createElement(tag);if(classNa
 function clear(e){e.replaceChildren();return e}
 function message(t){$('message').textContent=t;$('loading').hidden=false}
 function percent(v){return Math.max(0,Math.min(100,Number(v)||0))}
+function schoolIslandStars(s){
+ const item=(s.levelStats||[]).find(x=>Number(x?.level)===Number(s.level));
+ if(!item)return 0;
+ if(Number.isFinite(Number(item.stars)))return Math.min(50,Math.max(0,Number(item.stars)));
+ return Math.min(50,Math.max(0,Number(item.mastered)||0)*2)
+}
 function status(t){$('identity').textContent=t}
 function cName(v){return String(v||'غير محدد').trim()||'غير محدد'}
 function key(v){return cName(v).replace(/[\u200e\u200f]/g,'')}
@@ -221,7 +227,7 @@ function renderList(students){
    const b=node('button','student');b.type='button';
    b.append(node('strong','',s.name),node('span','',studentLabel(s)));
    b.append(node('span','', 'المستوى '+s.level+' · ⭐ '+s.stars+' · نشاط الأسبوع '+s.weekly));
-   const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,s.mastered/200*100))+'%';
+   const track=node('div','progress'),fill=node('i');fill.style.width=(s.kind==='trial'?s.mastery||0:Math.min(100,schoolIslandStars(s)/50*100))+'%';
    track.append(fill);b.append(track);
    b.onclick=()=>studentDetails(s);host.append(b)
  }
@@ -238,12 +244,12 @@ function studentDetails(s){
  else lines.push(['المحاولات',s.attempts],['الإجابات الصحيحة',s.correct],['دقة الإجابات',s.score===null?'—':s.score+'%'],['العناصر المتقنة',s.mastered],['أنجز التشخيص',s.diagnostic?'نعم':'لا'],['آخر مزامنة',s.updated?new Date(s.updated).toLocaleString('ar-OM'):'—']);
  for(const [a,b] of lines){const tr=node('tr');tr.append(node('td','',a),node('td','',safe(b)));t.append(tr)}host.append(t);
  if(s.levelStats.length){
-  const div=section('الإتقان بحسب المستوى');
+  const div=section('النجوم بحسب الجزيرة (من 50)');
   for(const v of s.levelStats){
    const r=node('div','chartRow'),bar=node('div','bar'),fill=node('i');
-   const n=percent(v.masteryPercent??(Number(v.mastered||0)/200*100));
+   const n=percent(Number.isFinite(Number(v.stars))?Number(v.stars)/50*100:Math.min(50,(Number(v.mastered)||0)*2)/50*100);
    fill.style.width=n+'%';bar.append(fill);
-   r.append(node('span','','L'+v.level),bar,node('span','',Math.round(n)+'%'));div.append(r)
+   r.append(node('span','','L'+v.level),bar,node('span','',Math.round(n)+'% · '+(Number.isFinite(Number(v.stars))?Math.min(50,Number(v.stars)):'≥ '+Math.min(50,(Number(v.mastered)||0)*2))+'/50'));div.append(r)
   }host.append(div)
  }
  $('studentDetail').scrollIntoView({behavior:'smooth',block:'start'})

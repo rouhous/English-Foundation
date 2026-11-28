@@ -24,6 +24,7 @@ on:
       - 'games/coastal-badges.js'
       - 'games/arcade.js'
       - 'supabase/migrations/*arcade_badge_5_star_thresholds.sql'
+      - 'supabase/migrations/*migrate_legacy_island_stars_div4.sql'
       - 'tests/arcade-badge-thresholds.test.mjs'
       - '.github/workflows/arcade-badge-thresholds.yml'
 jobs:

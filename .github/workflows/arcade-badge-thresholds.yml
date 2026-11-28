@@ -18,6 +18,10 @@ on:
       - fix/arcade-badge-5-star-rpc-20261128
     paths:
       - 'coastal-arcade/app-bridge.js'
+      - 'coastal-arcade/index.html'
+      - 'coastal-arcade/badge-unlocks.js'
+      - 'games/coastal-badges.js'
+      - 'games/arcade.js'
       - 'supabase/migrations/*arcade_badge_5_star_thresholds.sql'
       - 'tests/arcade-badge-thresholds.test.mjs'
       - '.github/workflows/arcade-badge-thresholds.yml'

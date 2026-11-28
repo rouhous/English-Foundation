@@ -1901,9 +1901,11 @@ function journey(){const p=active(),g=currentIsland(p),m=stageStars(g,p),badges=
 const actions=[['🏝️','المحطات',"route('levels')"],['🎯','المهارات',"route('skills')"],['🧭','التشخيص',"route('diagnostic')"],['📊','المعاينة',"route('reports')"]];
 document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-v23">
 <section class="j23-head j26-head"><div class="j23-brand j26-brand"><span class="j23-avatar" aria-hidden="true">👨🏻‍🎓</span><div class="j26-brand-title"><strong lang="en" dir="ltr">My English Journey</strong><small>رحلتي مع الإنجليزية</small></div></div><div class="j34-card-toolbar"><button type="button" class="journey-home-mini" onclick="route('home')" aria-label="العودة إلى الصفحة الرئيسية">🏠 الرئيسية</button></div><div class="j23-status j26-status"><strong>⛵ رحلتي الحالية <span lang="en" dir="ltr">Current Journey</span></strong><div class="j26-detail"><span class="j26-name">${esc(p.name||'الطالب')}</span><span>الصف ${esc(p.grade||'—')}</span><span>${mejVoyagePlace(g)} · ${esc(mejVoyageGrade(g))}</span></div><div class="j23-meter"><div class="j23-progress" role="progressbar" aria-label="إتقان المستوى الحالي" aria-valuemin="0" aria-valuemax="50" aria-valuenow="${m}"><i style="width:${pct(m,50)}%"></i></div><span class="j26-count">${m}/50 · ${pct(m,50)}%</span><span class="j26-stars">⭐ ${fmt(p.stars)}</span></div>${renderStageSkillBars(g,p)}<div class="j34-progress-note">📘 الإتقان: تُحتسب الكلمة أو المهارة بعد إجابتين صحيحتين عنها. <span>📊 إنجاز البرنامج: ${(totalMaster(p)/2600*100).toFixed(2)}% · ${totalMaster(p)}/2600</span></div></div></section>
-<section class="j23-panel" id="mejDailyReview" aria-label="المراجعة اليومية">
- <div class="j23-heading"><div><h2>📚 مراجعتك اليومية</h2><p>راجع الكلمات التي تحتاج إلى تثبيت وفق فواصل زمنية متدرجة</p></div><b>🗓️</b></div>
- <div class="mej-hidden-rewards"><b>📌 عناصر مستحقة: ${reviewCount}</b><b>🔥 سلسلة الإنجاز: ${streak} يوم</b></div>
+<section class="j23-panel" id="mejDailyReview" aria-label="أراجع كلماتي">
+ <div class="j23-heading"><div><h2>📚 أراجع كلماتي</h2></div><b>🗓️</b></div>
+ <div class="mej-hidden-rewards mej-daily-stats"><b>📌 مهمة اليوم: ${reviewCount}</b><b>🔥 الانجاز: ${streak} يوم</b></div>
+ <p class="mej-daily-motivation">راجع كلماتك كل يوم، اجمع نجوم أكثر و افتح شارات جديدة</p>
+ ${mejMissionBadgeMarkup(p)}
  <button class="btn mint" type="button" onclick="beginSpacedReview()">ابدأ مهمة اليوم · 8 أسئلة كحد أقصى</button>
 </section>
 
@@ -2134,6 +2136,79 @@ function startDiagnostic(){
 // MEJ_STAGE1_ALL_PATHS_GUARDED_V3
 function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;mejQuizOrigin=type?'skills':'levels';let p=active();let permittedPool=type?byGrade[g]:(mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1));let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,origin:mejQuizOrigin,skillType:type,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
 function trainWrong(g){beginLevel(g,null,true)}
+// MEJ_DAILY_MISSION_BADGES_V1 — independent, local-only streak and badge family.
+const MEJ_MISSION_BADGE_TIERS=[
+ {days:3,key:'bronze',label:'برونزية',symbol:'🥉'},
+ {days:7,key:'silver',label:'فضية',symbol:'🥈'},
+ {days:10,key:'gold',label:'ذهبية',symbol:'🥇'},
+ {days:14,key:'diamond',label:'ماسية',symbol:'💎'}
+];
+function mejMissionStorageKey(profile){
+ const id=String(profile?.id||'').trim();
+ return id?'MEJ_DAILY_MISSION_BADGES_V1:'+encodeURIComponent(id):'';
+}
+function mejMissionRead(profile){
+ const key=mejMissionStorageKey(profile);
+ let raw=null;
+ try{raw=key?JSON.parse(localStorage.getItem(key)||'null'):null}catch(_){}
+ const days=Array.isArray(raw?.days)?raw.days.filter(x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)):[];
+ const unique=[...new Set(days)].sort();
+ const best=Number.isSafeInteger(raw?.bestStreak)&&raw.bestStreak>=0?raw.bestStreak:0;
+ let highest=Number.isInteger(raw?.highestTier)?raw.highestTier:-1;
+ if(highest<0||highest>=MEJ_MISSION_BADGE_TIERS.length)highest=MEJ_MISSION_BADGE_TIERS.reduce((n,t,i)=>best>=t.days?i:n,-1);
+ return {key,days:unique,bestStreak:best,highestTier:highest};
+}
+function mejMissionCurrentStreak(days,now=Date.now()){
+ const set=new Set(days),oman=new Date(now+14400000);
+ let cursor=Date.UTC(oman.getUTCFullYear(),oman.getUTCMonth(),oman.getUTCDate());
+ const today=new Date(cursor).toISOString().slice(0,10);
+ if(!set.has(today))cursor-=86400000;
+ let count=0;
+ while(set.has(new Date(cursor).toISOString().slice(0,10))){count++;cursor-=86400000}
+ return count;
+}
+function mejMissionBadgeState(profile,now=Date.now()){
+ const data=mejMissionRead(profile),streak=mejMissionCurrentStreak(data.days,now),best=Math.max(data.bestStreak,streak);
+ const tierIndex=Math.max(data.highestTier,MEJ_MISSION_BADGE_TIERS.reduce((n,t,i)=>best>=t.days?i:n,-1));
+ return {streak,bestStreak:best,tierIndex,tier:MEJ_MISSION_BADGE_TIERS[tierIndex]||null,next:MEJ_MISSION_BADGE_TIERS[tierIndex+1]||null};
+}
+function mejRecordMissionCompletion(profile){
+ const data=mejMissionRead(profile),today=mejOmanDayNow();
+ if(data.days.includes(today))return mejMissionBadgeState(profile);
+ data.days.push(today);data.days.sort();
+ const streak=mejMissionCurrentStreak(data.days),best=Math.max(data.bestStreak,streak);
+ const earned=MEJ_MISSION_BADGE_TIERS.reduce((n,t,i)=>best>=t.days?i:n,-1),highest=Math.max(data.highestTier,earned);
+ try{
+  if(!data.key)throw Error('missing profile key');
+  localStorage.setItem(data.key,JSON.stringify({version:1,days:data.days,bestStreak:best,highestTier:highest,updatedAt:new Date().toISOString()}));
+ }catch(error){console.warn('[MEJ mission badges] Local badge state could not be saved.',error);return mejMissionBadgeState(profile)}
+ return mejMissionBadgeState(profile);
+}
+function mejMissionBadgeMarkup(profile){
+ const state=mejMissionBadgeState(profile),tier=state.tier,next=state.next;
+ const tierClass=tier?'tier-'+tier.key:'tier-locked';
+ const title=tier?'أعلى شارة مكتسبة: '+tier.label:'شارة المراجعة الأولى';
+ return '<div class="mej-mission-badge-area" aria-label="شارات مهام المراجعة">'+
+  '<div class="mej-mission-award '+tierClass+'" title="'+title+'">'+
+   '<span class="mej-mission-medal-face" aria-hidden="true">'+(tier?tier.symbol:'🔒')+'</span>'+
+   '<span class="mej-mission-award-copy"><strong>'+(tier?'شارة '+tier.label:'ابدأ طريق الشارات')+'</strong>'+
+   '<small>'+(tier?'أفضل سلسلة: '+state.bestStreak+' يوم':'أول شارة عند إكمال 3 أيام متتالية')+'</small></span></div>'+
+  '<div class="mej-mission-next"><b>سلسلة مهام المراجعة: '+state.streak+' يوم</b>'+
+   (next?'<small>المحطة التالية: '+next.symbol+' '+next.label+' عند '+next.days+' أيام</small>':'<small>واصل التقدم؛ يمكن إضافة مستويات شارات جديدة لاحقاً.</small>')+
+  '</div></div>';
+}
+function mejDecorateClassRanking(){
+ const name=document.querySelector('#mej-ranking-root .mej-ranking-self .mej-ranking-name');
+ if(!name||name.querySelector('.mej-ranking-mission-badge'))return;
+ const tier=mejMissionBadgeState(active()).tier;
+ if(!tier)return;
+ const badge=document.createElement('span');
+ badge.className='mej-ranking-mission-badge tier-'+tier.key;
+ badge.textContent=tier.symbol+' '+tier.label;
+ badge.title='شارة مهام المراجعة — '+tier.days+' أيام متتالية';
+ badge.setAttribute('aria-label',badge.title);
+ name.appendChild(badge);
+}
 // MEJ_SPACED_REVIEW_AND_STREAK_V1 — schedule from the student's own attempt history.
 function mejReviewQueue(profile,now=Date.now()){
  const scheduler=window.MEJ_SPACED_REVIEW_V1;
@@ -2233,6 +2308,7 @@ function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;act
 function nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}
 function stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
 function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='journey'?'journey':s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
+if(s.kind==='practice'&&s.skillType==='spaced-review'&&s.responses.length===s.ids.length&&s.responses.every(r=>r&&r.skipped!==true)){const before=mejMissionBadgeState(p).tierIndex;const after=mejRecordMissionCompletion(p);if(after.tierIndex>before&&after.tier)toast('🏅 شارة مهام جديدة: '+after.tier.label+'! 🎉');}
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.
   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
@@ -2968,4 +3044,30 @@ body:has(#app > .mobile-ocean-v31) #mej-owner-rights-notice{display:block!import
 <span class="mej-rights-owner"><b>حسام لطفي الرواتبي</b> <span aria-hidden="true">|</span> <b dir="ltr" lang="en">Houssem Lotfi Rouatbi</b></span>
 </div>
 
-<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script><script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script></body></html>
+<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script><script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script><style id="mej-daily-mission-badges-v1">
+#mejDailyReview .mej-daily-stats{display:flex!important;flex-wrap:nowrap!important;align-items:center;justify-content:space-between;gap:8px;width:100%;margin:10px 0 7px}
+#mejDailyReview .mej-daily-stats b{flex:1 1 0;min-width:0;text-align:center;white-space:nowrap;font-size:clamp(11px,2.8vw,14px);padding:8px 5px;border-radius:12px;background:linear-gradient(135deg,#0759a8,#087db8);border:1px solid #7bdcff;color:#fff;box-shadow:inset 0 1px 8px #ffffff20}
+#mejDailyReview .mej-daily-motivation{margin:7px 0 12px;padding:9px 12px;border-radius:12px;background:#e3f7ff;border:1px solid #8bd7f5;color:#124b79;font-size:clamp(12px,3vw,14px);font-weight:800;line-height:1.7;text-align:center}
+.mej-mission-badge-area{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0 14px;padding:12px;border-radius:19px;background:linear-gradient(145deg,#064b91,#06316d 72%,#08265c);border:2px solid #59c9ff;box-shadow:inset 0 2px 16px #ffffff18,0 7px 18px #00295d55;color:#fff}
+.mej-mission-award{display:flex;align-items:center;gap:10px;min-width:0}
+.mej-mission-medal-face{height:61px;width:61px;flex:none;display:grid;place-items:center;font-size:34px;line-height:1;border-radius:19px;border:4px ridge #ffd772;background:radial-gradient(circle at 35% 20%,#ffffffdc,#f9de84 35%,#c38a23 77%,#714208);box-shadow:0 5px 0 #071e4780,0 7px 18px #001a5a7b;text-shadow:0 2px 3px #78551888}
+.mej-mission-award.tier-bronze .mej-mission-medal-face{background:radial-gradient(circle at 35% 20%,#fff1e4,#e7a36c 38%,#a95b2e 78%,#673014);border-color:#ffd0a2}
+.mej-mission-award.tier-silver .mej-mission-medal-face{background:radial-gradient(circle at 35% 20%,#fff,#e9f1fa 38%,#9eafc2 78%,#53677e);border-color:#f2f7ff}
+.mej-mission-award.tier-gold .mej-mission-medal-face{background:radial-gradient(circle at 35% 20%,#fffbdc,#ffe16e 38%,#d79b18 78%,#80510a);border-color:#fff0a5}
+.mej-mission-award.tier-diamond .mej-mission-medal-face{background:radial-gradient(circle at 35% 20%,#fff,#b8f5ff 38%,#4ab6df 78%,#17639d);border-color:#d8fbff}
+.mej-mission-award.tier-locked .mej-mission-medal-face{filter:saturate(.35);opacity:.8}
+.mej-mission-award-copy{display:grid;gap:3px;min-width:0}
+.mej-mission-award-copy strong{font-size:13px;color:#fff}
+.mej-mission-award-copy small,.mej-mission-next small{font-size:11px;color:#d9f2ff;line-height:1.5}
+.mej-mission-next{display:grid;gap:3px;text-align:end;min-width:0}
+.mej-mission-next b{font-size:12px;color:#fff}
+.mej-ranking-mission-badge{display:inline-block;margin-inline-start:7px;padding:2px 7px;border-radius:9px;border:1px solid #7bdcff;background:linear-gradient(145deg,#0759a8,#06316d);color:#fff;font-size:11px;font-weight:900;white-space:nowrap;vertical-align:middle}
+.mej-ranking-mission-badge.tier-bronze{border-color:#e7a36c}.mej-ranking-mission-badge.tier-silver{border-color:#e9f1fa}.mej-ranking-mission-badge.tier-gold{border-color:#ffe16e}.mej-ranking-mission-badge.tier-diamond{border-color:#8ceaff}
+@media(max-width:430px){.mej-mission-badge-area{gap:7px;padding:9px}.mej-mission-medal-face{height:49px;width:49px;font-size:27px;border-radius:15px}.mej-mission-award{gap:7px}.mej-mission-award-copy strong,.mej-mission-next b{font-size:10px}.mej-mission-award-copy small,.mej-mission-next small{font-size:9px}.mej-mission-badge-area{align-items:flex-start}.mej-mission-next{max-width:45%}}
+@media(max-width:340px){#mejDailyReview .mej-daily-stats{gap:4px}#mejDailyReview .mej-daily-stats b{font-size:10px;padding:7px 2px}}
+</style>
+<script>
+const mejRankingBadgeObserver=new MutationObserver(()=>mejDecorateClassRanking());
+mejRankingBadgeObserver.observe(document.getElementById('app'),{subtree:true,childList:true});
+</script>
+</body></html>

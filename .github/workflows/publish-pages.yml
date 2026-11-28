@@ -67,12 +67,12 @@ jobs:
           const path = require('node:path');
           const output = process.env.RUNNER_TEMP + '/mej-pages';
           const sw = fs.readFileSync(path.join(output, 'sw.js'), 'utf8');
-          const match = sw.match(/const\\s+CORE\\s*=\\s*\\[([\\s\\S]*?)\\];/);
+          const match = sw.match(/const\s+CORE\s*=\s*\[([\s\S]*?)\];/);
           if (!match) throw new Error('Could not locate the CORE array in sw.js');
-          const entries = [...match[1].matchAll(/(['"])(.*?)\\1/g)].map(m => m[2]);
+          const entries = [...match[1].matchAll(/(['"])(.*?)\1/g)].map(m => m[2]);
           if (!entries.length) throw new Error('The sw.js CORE array is empty or unreadable');
           const missing = entries.filter(entry => {
-            const relative = decodeURIComponent(entry).replace(/^\\.\\//, '');
+            const relative = decodeURIComponent(entry).replace(/^\.\//, '');
             return !fs.existsSync(path.resolve(output, relative));
           });
           if (missing.length) {

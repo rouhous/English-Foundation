@@ -94,3 +94,5 @@ result={"status":"PASS" if all(checks.values()) else "FAIL","checks":checks}
 Path("diagnostics/mej-mobile-ui-qa.json").write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding="utf-8")
 assert all(checks.values()),result
 print(json.dumps(result,indent=2,ensure_ascii=False))
+
+# The CI job also captures the five-skill RTL phone viewport and stages its QA image.

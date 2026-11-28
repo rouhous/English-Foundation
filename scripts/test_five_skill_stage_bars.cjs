@@ -35,12 +35,19 @@ for(let g=1;g<=12;g++){
  assert.ok(api.stageStars(g,p)<=50,`island ${g} stars must not exceed 50`);
  assert.equal(api.achieved(g,p),true,`full mastery must complete island ${g}`);
 }
-const reading=byGrade[1].find(q=>api.mejSkillForQuestion(q)==='reading');
-const legacy={correct:{[reading.id]:1},completed:{},stageSkillLegacyFloorV1:{1:40}};
+const legacyCorrect={},desired={listening:10,reading:8,writing:10,vocabulary:10,grammar:2};
+for(const [skill,stars] of Object.entries(desired)){
+ const needed=stars/2;
+ const candidates=byGrade[1].filter(q=>api.mejSkillForQuestion(q)===skill).slice(0,needed);
+ assert.equal(candidates.length,needed,`fixture capacity for ${skill}`);
+ for(const q of candidates)legacyCorrect[q.id]=2;
+}
+const legacy={correct:legacyCorrect,completed:{},stageSkillLegacyFloorV1:{1:40}};
 const before=api.stageStars(1,legacy);
 assert.equal(before,40,'legacy learner must immediately see the preserved 40-star floor');
-legacy.correct[reading.id]=2;
+const nextGrammar=byGrade[1].filter(q=>api.mejSkillForQuestion(q)==='grammar').find(q=>!legacy.correct[q.id]);
+legacy.correct[nextGrammar.id]=2;
 const after=api.stageStars(1,legacy);
-assert.equal(after,41,'new mastery beyond the saved baseline must visibly increase progress');
+assert.equal(after,42,'new mastery above a 40-star baseline must add only the newly earned two stars');
 assert.ok(legacy.stageSkillLegacyBaselineV1&&Number.isInteger(legacy.stageSkillLegacyBaselineV1[1]),'baseline snapshot must be created');
 console.log(JSON.stringify({status:'PASS',bankItems:bank.length,bankTypes:[...new Set(bank.map(q=>q.type))],islands:12,legacyBefore:before,legacyAfter:after},null,2));

@@ -9,8 +9,8 @@ checks={
  "compact_grid": "#app > .levels" in css and "repeat(2,minmax(0,1fr))" in css,
  "head_stylesheet": 'mej-mobile-ui-v2.css?v=20261109' in html,
  "skill_origin": "mejQuizOrigin=type?'skills':'levels'" in html,
- "exit_origin": "function stopQuiz(){const target=activeSession?.origin" in html,
- "result_origin": "const returnTarget=s.origin==='skills'?'skills':'levels'" in html,
+ "exit_origin": "const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)" in html,
+ "result_origin": "const returnTarget=s.origin==='journey'?'journey':s.origin==='skills'?'skills':'levels'" in html,
  "match_modal": "MEJ_COMPACT_ACTIVITY_MODAL_V2" in js,
  "no_disclaimer": "دون تغيير النجوم أو إتقان الأنشطة الأصلية حتى اعتماد التقييم" not in js,
  "match_close": "route('skills')" in js,
@@ -36,6 +36,8 @@ def mobile_capture():
  except ImportError:
   subprocess.run([sys.executable,"-m","pip","install","playwright"],check=True)
   subprocess.run([sys.executable,"-m","playwright","install","--with-deps","chromium"],check=True)
+  import site
+  sys.path.append(site.getusersitepackages())
   from playwright.sync_api import sync_playwright
  bank_start=html.index("const BANK=")+len("const BANK=")
  bank_end=html.index("];",bank_start)+1

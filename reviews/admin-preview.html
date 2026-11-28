@@ -82,16 +82,17 @@ function hideAccess(){credential=null;reviewSession=null;fullHTML=null;$('pinPan
 async function readJSON(r){try{return await r.json()}catch{return {}}}
 async function verifyGoogle(response){
  hideAccess();
+ $('googleButton').hidden=false;
  const token=response?.credential;
- if(typeof token!=='string'||token.length>8192){say('تعذر تسجيل الدخول بواسطة Google.');return}
+ if(typeof token!=='string'||token.length>8192){sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('تعذر تسجيل الدخول بواسطة Google.');return}
  say('جار التحقق من حساب المالك...');
  try{
    const r=await fetch(VERIFY,{method:'GET',mode:'cors',cache:'no-store',credentials:'omit',headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(15000)});
    const data=await readJSON(r);
-   if(!r.ok||data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){say('هذا الحساب غير مخوّل بمراجعة التطبيق.');return}
-   credential=token;$('pinPanel').hidden=false;say('تم التحقق من Google. أدخل رمز Admin الحالي.');
+   if(!r.ok||data.ok!==true||data.role!=='owner'||data.email!=='rouhous@gmail.com'){sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('هذا الحساب غير مخوّل بمراجعة التطبيق.');return}
+   credential=token;$('googleButton').hidden=true;$('pinPanel').hidden=false;say('تم التحقق من Google. أدخل رمز Admin الحالي.');
    $('adminCode').focus();
- }catch{say('تعذر الاتصال بخدمة التحقق. تحقق من الإنترنت ثم أعد المحاولة.')}
+ }catch{sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');savedCredential=null;say('تعذر الاتصال بخدمة التحقق. تحقق من الإنترنت ثم أعد المحاولة.')}
 }
 async function gate(action,code){
  const res=await fetch(GATE,{method:'POST',mode:'cors',cache:'no-store',credentials:'omit',
@@ -121,10 +122,20 @@ function prelude(html){
  }
  // Blob document URLs have no usable relative file hierarchy. Without this
  // absolute base the desktop image and companion/game assets fail to resolve.
+ const previewBase='https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates';
+ const previewAssets=[
+  ['<script src="./assets/mej-sailor-host.js"></script>','<script src="'+previewBase+'/assets/mej-sailor-host.js"></script>'],
+  ['<script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>','<script src="'+previewBase+'/assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>'],
+  ['<script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>','<script src="'+previewBase+'/assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>']
+ ];
+ for(const [from,to] of previewAssets){
+  if(!html.includes(from))throw Error('PREVIEW_ASSET_ANCHOR_MISSING');
+  html=html.replace(from,to);
+ }
  const appBase=new URL('../',location.href).href;
  if(!/^https:\/\//.test(appBase)||new URL(appBase).origin!==location.origin)throw Error('INVALID_PREVIEW_BASE');
  if(!/<head(?:\s[^>]*)?>/i.test(html))throw Error('INVALID_PREVIEW_HEAD');
- html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'">');
+ html=html.replace(/<head(?:\s[^>]*)?>/i,tag=>tag+'<base href="'+appBase+'"><script>window.__MEJ_PREVIEW_BASE="'+raw+'";<'+'/script>');
  return html;
 }
 function applyScreenMode(){
@@ -286,8 +297,11 @@ async function exit(){
 }
 $('exit').addEventListener('click',exit);
 window.addEventListener('pagehide',()=>{sessionStorage.removeItem('MEJ_OWNER_ACCESS_V1');});
+let savedCredential=sessionStorage.getItem('MEJ_OWNER_ACCESS_V1');
+if(savedCredential){$('googleButton').hidden=true;verifyGoogle({credential:savedCredential});}
 let checks=0;
 const loader=setInterval(()=>{
+ if(savedCredential){clearInterval(loader);return;}
  if(window.google?.accounts?.id){
   clearInterval(loader);
   try{

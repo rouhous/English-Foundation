@@ -50,7 +50,7 @@ window.MEJ_GAME_BANK_PROVIDER=function(stage){
  const correct=profile?.correct&&typeof profile.correct==='object'?profile.correct:{};
  const questions=Array.isArray(byGrade[level])?byGrade[level]:[];
  const vocabulary=mejBuildGameVocabulary(questions,correct);
- const bottom=level<=4?1:level<=9?5:10;
+ const bottom=0;
  const visualRows=new Map();
  for(let grade=level;grade>=bottom;grade--){
   for(const row of mejBuildGameVocabulary(byGrade[grade]||[],correct)){
@@ -60,7 +60,7 @@ window.MEJ_GAME_BANK_PROVIDER=function(stage){
  }
  return {
   stage:level,questionCount:questions.length,vocabulary,
-  visualVocabulary:[...visualRows.values()],
+  visualVocabulary:[...visualRows.values()].sort((a,b)=>Number(a[4].mastered)-Number(b[4].mastered)),
   levelWords:vocabulary.map(row=>row[0]),
   masteredWords:vocabulary.filter(row=>row[4].mastered).map(row=>row[0])
  };

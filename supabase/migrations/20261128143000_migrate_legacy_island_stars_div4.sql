@@ -1,9 +1,9 @@
 -- One-time conversion of historical island stats from the 0–200 scale to 0–50.
 -- The historical client (before the 2026-11-28 50-star progress payload)
 -- wrote level/mastered/total/masteryPercent/completed, but no stars or starTarget.
--- The current client writes starTarget: 50. Treat only each object whose
--- starTarget is not 50 AND whose effective old-scale stars exceed 50 as legacy.
--- Missing/null stars use mastered * 2 as the old-scale estimate.
+-- The current client writes starTarget: 50. Any object whose starTarget
+-- is distinct from 50 (including a missing marker) is legacy, regardless
+-- of its effective star count. Missing/null stars use mastered * 2.
 -- Items already marked starTarget: 50 are never converted, even in mixed arrays.
 -- Source-only in this PR: never apply to the live database without explicit approval.
 

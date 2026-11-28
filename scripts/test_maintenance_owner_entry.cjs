@@ -19,6 +19,6 @@ assert.match(preview,/cdn\.jsdelivr\.net/);
 const scriptStart=preview.indexOf('<script>');
 const scriptEnd=preview.indexOf('</script>',scriptStart);
 assert.ok(scriptStart>=0&&scriptEnd>scriptStart,'Owner preview must keep one syntactically complete inline controller');
-assert.equal(preview.indexOf('<script>',scriptStart+1),-1,'Unexpected second inline controller');
+assert.equal(preview.indexOf('</script>',scriptEnd+9),-1,'Unexpected second inline controller');
 new Function(preview.slice(scriptStart+8,scriptEnd));
 console.log('MAINTENANCE_OWNER_ENTRY_CHECKS_PASSED');

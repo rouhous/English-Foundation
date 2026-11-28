@@ -4,6 +4,8 @@ import { readFile } from 'node:fs/promises';
 
 const bridge = await readFile(new URL('../coastal-arcade/app-bridge.js', import.meta.url), 'utf8');
 const migration = await readFile(new URL('../supabase/migrations/20261128133000_arcade_badge_5_star_thresholds.sql', import.meta.url), 'utf8');
+const boatRewards = await readFile(new URL('../boat-game/rewards.js', import.meta.url), 'utf8');
+const boatHtml = await readFile(new URL('../boat-game/index.html', import.meta.url), 'utf8');
 
 test('the ten coastal badges follow the 5n star ladder', () => {
   const thresholds = Array.from({ length: 10 }, (_, i) => (i + 1) * 5);
@@ -35,4 +37,13 @@ test('sailor reward milestones map to badges 2, 5, 7 and 10', () => {
     "when coalesce(stars,0)>=50 then 300"
   ]) assert.ok(migration.includes(expected), expected);
   assert.ok(migration.includes("coalesce((j->>'stars')::int,coalesce((j->>'mastered')::int,0)*2)"));
+});
+
+test('the boat game client uses the same 5-star / 50-star scale', () => {
+  assert.ok(boatRewards.includes('STARS_PER_BADGE=5'));
+  assert.ok(boatRewards.includes('STAGE_MAX_STARS=50'));
+  assert.ok(boatHtml.includes('max="50"'));
+  assert.ok(boatHtml.includes('نجوم التعلم: 0 / 50'));
+  assert.ok(!boatHtml.includes('/ 200'));
+  assert.ok(!boatHtml.includes('0,200'));
 });

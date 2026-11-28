@@ -7,18 +7,18 @@ function ownerPreview(){
  return window.__MEJ_ACCESS_ROLE==='owner' &&
         window.__MEJ_OWNER_VERIFIED_SESSION===true;
 }
-function count(stage){try{return Math.max(0,Math.min(200,Number(countMaster(stage,active()))||0))}catch(_){return 0}}
+function count(stage){try{return Math.max(0,Math.min(50,Number(stageStars(stage,active()))||0))}catch(_){return 0}}
 function safe(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function repaint(){
  const grid=document.querySelector('#app .j23-badge-grid');if(!grid)return;const role=ownerPreview()?'owner':'student';if(grid.dataset.coastalReady==='yes'&&grid.dataset.coastalAccess===role)return;
  if(typeof active!=='function'||typeof currentIsland!=='function')return;
  const stage=currentIsland(active());if(!Number.isInteger(stage)||stage<0||stage>12)return;
- const stars=count(stage),admin=ownerPreview(),opened=admin?10:Math.floor(stars/20);grid.dataset.coastalReady='yes';grid.dataset.coastalAccess=role;
+ const stars=count(stage),admin=ownerPreview(),opened=admin?10:Math.floor(stars/5);grid.dataset.coastalReady='yes';grid.dataset.coastalAccess=role;
  const intro=document.querySelector('#app .mej-hidden-intro');
  if(intro)intro.remove();
  const h=document.querySelector('#app .j23-badges h2');if(h)h.textContent=admin?'🏅 معاينة الشارات · 10/10':'🏅 شاراتي · '+opened+'/10';
  const note=document.querySelector('#app .j23-badges .j23-heading p');if(note)note.hidden=true;
- grid.innerHTML=places.map(([ar,en],i)=>{const n=i+1,yes=n<=opened;return '<button type="button" class="j23-medal mej-coastal-medal '+(yes?'unlocked':'locked')+'" '+(yes?'':'disabled')+' onclick="mejCoastalOpen('+stage+','+n+')" aria-label="'+(yes?'افتح ':'مقفلة ')+safe(ar)+'"><img alt="'+safe(ar)+'" loading="lazy" src="'+badgeRoot+'coast-'+String(n).padStart(2,'0')+'.webp"><strong>'+safe(ar)+'</strong><small lang="en">'+safe(en)+'</small><small>'+n*20+'/200 ⭐</small></button>'}).join('');
+ grid.innerHTML=places.map(([ar,en],i)=>{const n=i+1,yes=n<=opened;return '<button type="button" class="j23-medal mej-coastal-medal '+(yes?'unlocked':'locked')+'" '+(yes?'':'disabled')+' onclick="mejCoastalOpen('+stage+','+n+')" aria-label="'+(yes?'افتح ':'مقفلة ')+safe(ar)+'"><img alt="'+safe(ar)+'" loading="lazy" src="'+badgeRoot+'coast-'+String(n).padStart(2,'0')+'.webp"><strong>'+safe(ar)+'</strong><small lang="en">'+safe(en)+'</small><small>'+n*5+'/50 ⭐</small></button>'}).join('');
  compactJourney();
 }
 
@@ -217,7 +217,7 @@ function installStudentQuickplay(frame,clicked){
    const empty=doc.getElementById('mej-live-no-games');
    if(n===0&&!empty){
     const tip=doc.createElement('p');tip.id='mej-live-no-games';
-    tip.textContent='اجمع 20 نجمة إتقان لفتح أول لعبة.';
+    tip.textContent='اجمع 5 نجوم إتقان لفتح أول لعبة.';
     games.insertBefore(tip,grid);
    }else if(n>0&&empty)empty.remove();
   }
@@ -251,11 +251,11 @@ function close(){const e=document.getElementById('mejCoastalOverlay');if(!e)retu
 function open(stage,badge){
  if(typeof active!=='function'||typeof permitted!=='function')return;
  stage=Number(stage);badge=Number(badge);
- if(!Number.isInteger(stage)||stage<0||stage>12||!permitted(stage)||!Number.isInteger(badge)||badge<1||badge>10||(!ownerPreview()&&count(stage)<badge*20)){if(typeof toast==='function')toast('الشارة مقفلة حتى تحقق نجوم الإتقان المطلوبة.');return}
+ if(!Number.isInteger(stage)||stage<0||stage>12||!permitted(stage)||!Number.isInteger(badge)||badge<1||badge>10||(!ownerPreview()&&count(stage)<badge*5)){if(typeof toast==='function')toast('الشارة مقفلة حتى تحقق نجوم الإتقان المطلوبة.');return}
  close();const student=active();activeProfile=String(student.id||'');
  const dialog=document.createElement('div');dialog.id='mejCoastalOverlay';dialog.dataset.stage=String(stage);dialog.dataset.badge=String(badge);dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','رحلة الشارات الساحلية');
  const header=document.createElement('header');header.className='mej-coastal-top';
- const name=document.createElement('strong');name.textContent='🏅 شارات عُمان · '+stage+' · ⭐ '+count(stage)+'/200'+(ownerPreview()?' · 🔓 معاينة':'');
+ const name=document.createElement('strong');name.textContent='🏅 شارات عُمان · '+stage+' · ⭐ '+count(stage)+'/50'+(ownerPreview()?' · 🔓 معاينة':'');
  const back=document.createElement('button');back.type='button';back.textContent='↩ عودة';back.onclick=close;header.append(name,back);
  const frame=document.createElement('iframe');frame.id='mejCoastalFrame';frame.title='الألعاب التفاعلية والشارات';frame.allow='autoplay';frame.src='./coastal-arcade/index.html?mode=student&photoBank=20261115-v2&quickplay=20261116-v2';
  frame.addEventListener('load',()=>{
@@ -281,7 +281,7 @@ window.addEventListener('message',event=>{
  const stage=Number(box.dataset.stage),grade=stage===0?1:Math.max(1,Math.min(12,stage)),token=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'':'';
  const owner=ownerPreview();
  // The selected learning stage (0-12), not the student's registered school grade, sets game difficulty.
- f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
+ f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?50:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('mejCoastalOverlay')){e.preventDefault();close()}});
 function init(){

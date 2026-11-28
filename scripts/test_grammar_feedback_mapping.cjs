@@ -25,3 +25,6 @@ assert.match(render,/لم تُسند إلى هذا السؤال قاعدة مح�
 assert.doesNotMatch(feedback.rules.enjoy_gerund.explanation,/مضارع مستمر/);
 assert.match(feedback.rules.enjoy_gerund.explanation,/enjoy/);
 console.log('Grammar feedback mapping OK: 198 questions / 86 stems / '+Object.keys(feedback.rules).length+' rule definitions.');
+
+// Attach five-skill regression tests to this existing pull_request check (index.html is already in its path filter).
+require('node:child_process').execFileSync(process.execPath,[path.join(__dirname,'test_five_skill_stage_bars.cjs')],{stdio:'inherit'});

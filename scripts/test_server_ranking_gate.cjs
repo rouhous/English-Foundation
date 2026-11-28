@@ -1,0 +1,10 @@
+'use strict';
+const fs=require('node:fs');
+const assert=require('node:assert/strict');
+const ranking=fs.readFileSync('admin-backend/supabase/functions/mej-class-ranking/index.ts','utf8');
+const progress=fs.readFileSync('admin-backend/supabase/functions/mej-progress/index.ts','utf8');
+assert.ok(ranking.includes("s.score_source==='SERVER_VERIFIED'"),'competition must accept only server-verified records');
+assert.ok(!ranking.includes("s.score_source==='CLIENT_REPORTED_UNVERIFIED'"),'client-reported scores must not be ranked');
+assert.ok(ranking.includes('NO_SERVER_VERIFIED_RESULTS'),'empty verified ranking must be explicit');
+assert.ok(progress.includes("scoreVerification:'CLIENT_REPORTED_UNVERIFIED'"),'ordinary snapshots must remain explicitly unverified until answer validation exists');
+console.log('Server ranking gate checks passed.');

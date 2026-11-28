@@ -27,7 +27,7 @@ function safePayload(value){
   masteredItems:asInt(value.masteredItems,2600),weeklyAttempts:asInt(value.weeklyAttempts,1000000),
   diagnosticDone:value.diagnosticDone===true,diagnosticLevel:Number.isInteger(value.diagnosticLevel)?value.diagnosticLevel:null,
   highestLevel:Number.isInteger(value.highestLevel)?value.highestLevel:null,
-  levelStats:value.levelStats.slice(0,13).map(v=>({level:asInt(v.level,12),mastered:asInt(v.mastered,200),total:200,
+  levelStats:value.levelStats.slice(0,13).map(v=>({level:asInt(v.level,12),mastered:asInt(v.mastered,200),stars:asInt(v.stars,50),starTarget:50,total:200,
     masteryPercent:asInt(v.masteryPercent,100)})),
   privateState:(()=>{
    const p=value.privateState||{},out={};

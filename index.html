@@ -1801,10 +1801,15 @@ document.getElementById('studentName')?.focus()}
 function closeProfile(){document.getElementById('journeyModal')?.remove()}
 async function saveProfileModal(isNew){const name=document.getElementById('studentName').value.trim();if(!name){toast('يرجى كتابة اسم الطالب');return}const oldId=db.active;mejCapture(oldId);let created=null;if(isNew){created=newProfile();db.profiles[created.id]=created;db.active=created.id;mejSwitch(created.id)}const ok=await saveStudent();if(!ok){if(created){delete db.profiles[created.id];db.active=oldId;mejSwitch(oldId)}return}closeProfile()}
 function letsGo(){if(!active().name){openProfile(true);toast('سجّل بياناتك أولًا لتبدأ الرحلة');return}const scene=document.getElementById('voyageScene');scene?.classList.add('depart');setTimeout(()=>route('journey'),1550)}
-function journey(){const p=active(),g=currentIsland(p),m=stageStars(g,p),badges=islandBadges(g,p),earned=badges.filter(b=>b.earned).length;
+function journey(){const p=active(),g=currentIsland(p),m=stageStars(g,p),badges=islandBadges(g,p),earned=badges.filter(b=>b.earned).length,reviewCount=mejReviewQueue(p).length,streak=mejActivityStreak(p);
 const actions=[['🏝️','المحطات',"route('levels')"],['🎯','المهارات',"route('skills')"],['🧭','التشخيص',"route('diagnostic')"],['📊','المعاينة',"route('reports')"]];
 document.getElementById('app').innerHTML=`<div class="journey-dashboard journey-v23">
 <section class="j23-head j26-head"><div class="j23-brand j26-brand"><span class="j23-avatar" aria-hidden="true">👨🏻‍🎓</span><div class="j26-brand-title"><strong lang="en" dir="ltr">My English Journey</strong><small>رحلتي مع الإنجليزية</small></div></div><div class="j34-card-toolbar"><button type="button" class="journey-home-mini" onclick="route('home')" aria-label="العودة إلى الصفحة الرئيسية">🏠 الرئيسية</button></div><div class="j23-status j26-status"><strong>⛵ رحلتي الحالية <span lang="en" dir="ltr">Current Journey</span></strong><div class="j26-detail"><span class="j26-name">${esc(p.name||'الطالب')}</span><span>الصف ${esc(p.grade||'—')}</span><span>${mejVoyagePlace(g)} · ${esc(mejVoyageGrade(g))}</span></div><div class="j23-meter"><div class="j23-progress" role="progressbar" aria-label="إتقان المستوى الحالي" aria-valuemin="0" aria-valuemax="50" aria-valuenow="${m}"><i style="width:${pct(m,50)}%"></i></div><span class="j26-count">${m}/50 · ${pct(m,50)}%</span><span class="j26-stars">⭐ ${fmt(p.stars)}</span></div><div class="j34-progress-note">📘 الإتقان: تُحتسب الكلمة أو المهارة بعد إجابتين صحيحتين عنها. <span>📊 إنجاز البرنامج: ${(totalMaster(p)/2600*100).toFixed(2)}% · ${totalMaster(p)}/2600</span></div></div></section>
+<section class="j23-panel" id="mejDailyReview" aria-label="المراجعة اليومية">
+ <div class="j23-heading"><div><h2>📚 مراجعتك اليومية</h2><p>راجع الكلمات التي تحتاج إلى تثبيت وفق فواصل زمنية متدرجة</p></div><b>🗓️</b></div>
+ <div class="mej-hidden-rewards"><b>📌 عناصر مستحقة: ${reviewCount}</b><b>🔥 سلسلة الإنجاز: ${streak} يوم</b></div>
+ <button class="btn mint" type="button" onclick="beginSpacedReview()">ابدأ مهمة اليوم · 8 أسئلة كحد أقصى</button>
+</section>
 
 <section class="j23-panel mej-hidden-intro"><h2>🔎 Hidden Objects · كنوز المفردات</h2><p>افتح الشارات لتفتح ألعابًا وتحصل على نجوم إضافية.</p><div class="mej-hidden-rewards"><b>⭐ ${m}/50 نجمة أساسية</b><b>✨ ${window.mejHiddenStageBonus?.(g,p)||0}/50 نجمة بونص</b><b>🏆 ${(m+(window.mejHiddenStageBonus?.(g,p)||0))}/100</b></div><small>كل 5 نجوم أساسية تفتح شارة وجولة جديدة. اجمع 10 أغراض للحصول على 5 نجوم إضافية، وتنتهي الجولة بعد 3 أخطاء.</small></section>
 <section class="j23-panel j23-badges"><div class="j23-heading"><div><h2>🏆 شارات الجزيرة <span lang="en" dir="ltr">Island Badges</span></h2><p>اجمع شارة جديدة كل 5 نجوم · ${earned}/10 شارات</p></div><b>🏅</b></div><div class="j23-badge-grid">${badges.map((b,i)=>`<button type="button" class="j23-medal mej-gate ${b.earned?'unlocked':'locked'}" aria-label="${b.earned?'فتح لعبة Hidden Objects، الشارة '+(i+1):'شارة مغلقة حتى '+b.target+' نجمة'}" title="${b.target}/50" onclick="openMejHiddenObjects(${g},${i+1})" ${b.earned?'':'disabled'}><span class="mej-gate-inner"><span class="mej-gate-symbol" aria-hidden="true">${esc(b.em)}</span><span class="mej-gate-door" aria-hidden="true"><span class="mej-gate-lock">🔒</span></span></span><strong>${b.earned?esc(b.name):'مجهولة'}</strong><small>${b.target}/50</small>${b.earned?'<span class="mej-gate-reward">'+((window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='finished')?'✅ +'+window.mejHiddenRoundStatus(g,i+1,p).award+' ⭐':(window.mejHiddenRoundStatus?.(g,i+1,p)?.status==='pending'?'🔄 استكمل اللعبة':'🎮 العب الآن'))+'</span>':''}</button>`).join('')}</div></section>
@@ -2033,6 +2038,56 @@ function startDiagnostic(){
 // MEJ_STAGE1_ALL_PATHS_GUARDED_V3
 function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;mejQuizOrigin=type?'skills':'levels';let p=active();let permittedPool=type?byGrade[g]:(mejPartUnlocked(g,2)?byGrade[g]:mejStageQuestions(g,1));let pool=permittedPool.filter(q=>!type||q.type===type);if(wrongOnly)pool=pool.filter(q=>(p.wrong[q.id]||0)>0&&(p.correct[q.id]||0)<2);if(!pool.length){toast('لا توجد أسئلة مناسبة بعد.');return}let unmastered=pool.filter(q=>(p.correct[q.id]||0)<2);let ids=shuffle(unmastered.length?unmastered:pool).slice(0,Math.min(12,pool.length)).map(x=>x.id);activeSession={kind:'practice',grade:g,origin:mejQuizOrigin,skillType:type,ids,index:0,score:0,mistakes:[],responses:[]};displayQuestion()}
 function trainWrong(g){beginLevel(g,null,true)}
+// MEJ_SPACED_REVIEW_AND_STREAK_V1 — schedule from the student's own attempt history.
+function mejReviewQueue(profile,now=Date.now()){
+ const latest=new Map();
+ for(const event of (profile?.activity||[])){
+  if(!event||typeof event.id!=='string'||!questionById[event.id])continue;
+  const at=typeof event.at==='string'?Date.parse(event.at):NaN;
+  const old=latest.get(event.id);
+  if(!old||(!Number.isFinite(old.at)&&Number.isFinite(at))||(Number.isFinite(at)&&at>=old.at))latest.set(event.id,{at,ok:event.ok===true});
+ }
+ const due=[];
+ for(const [id,value] of Object.entries(profile?.correct||{})){
+  const correct=Math.max(0,Math.min(2,Number(value)||0));
+  if(correct>=2||!questionById[id])continue;
+  const last=latest.get(id);
+  let dueAt=now;
+  if(last&&Number.isFinite(last.at))dueAt=last.at+(correct>=1?86400000:(last.ok?86400000:600000));
+  if(dueAt<=now)due.push({id,dueAt,grade:questionById[id].g});
+ }
+ return due.sort((a,b)=>a.dueAt-b.dueAt);
+}
+function mejActivityStreak(profile,now=Date.now()){
+ const days=new Set((profile?.activity||[]).filter(x=>x&&!x.skipped).map(x=>{
+  if(typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day))return x.day;
+  const at=Date.parse(x.at||'');return Number.isFinite(at)?new Date(at+14400000).toISOString().slice(0,10):'';
+ }).filter(Boolean));
+ const local=new Date(now+14400000);
+ let cursor=Date.UTC(local.getUTCFullYear(),local.getUTCMonth(),local.getUTCDate());
+ let key=new Date(cursor).toISOString().slice(0,10);
+ if(!days.has(key))cursor-=86400000;
+ let streak=0;
+ while(days.has(new Date(cursor).toISOString().slice(0,10))&&streak<3650){streak++;cursor-=86400000}
+ return streak;
+}
+function beginSpacedReview(){
+ const p=active(),now=Date.now(),due=mejReviewQueue(p,now);
+ let ids=due.map(x=>x.id);
+ if(!ids.length){
+  ids=Object.keys(p.wrong||{}).filter(id=>questionById[id]&&(Number(p.correct?.[id])||0)<2)
+   .sort((a,b)=>(Number(p.wrong[b])||0)-(Number(p.wrong[a])||0));
+ }
+ if(!ids.length){
+  const g=currentIsland(p);
+  ids=shuffle((byGrade[g]||[]).filter(q=>(Number(p.correct?.[q.id])||0)<2).map(q=>q.id));
+ }
+ ids=ids.slice(0,8);
+ if(!ids.length){toast('أحسنت! لا توجد عناصر للمراجعة حاليًا.');return}
+ const grade=currentIsland(p);
+ activeSession={kind:'practice',grade,origin:'journey',skillType:'spaced-review',ids,index:0,score:0,mistakes:[],responses:[]};
+ displayQuestion();
+}
 // MEJ_QUESTION_FORMAT_20261112_V1
 function mejQuestionPresentation(q,raw){
  const s=String(raw||'').trim(),t=String(q?.type||'');
@@ -2145,7 +2200,7 @@ document.getElementById('feedback').innerHTML=`<div class="${ok?'correct':'incor
 function skipQuestion(){if(answerLock||!activeSession)return;answerLock=true;activeSession.mistakes.push(shownId);activeSession.responses.push({grade:questionById[shownId].g,id:shownId,ok:false,skipped:true});if(activeSession.kind==='practice'){const p=active(),q=questionById[shownId];p.attempts++;p.wrong[q.id]=(p.wrong[q.id]||0)+1;p.activity.push({day:mejOmanDayNow(),at:new Date().toISOString(),id:q.id,ok:false,skipped:true,earnedStars:0});if(p.activity.length>3000)p.activity=p.activity.slice(-3000);persist();}nextQuestion()}
 function nextQuestion(){if(!activeSession)return;activeSession.index++;mejSaveDiagnostic();displayQuestion()}
 function stopQuiz(){if(activeSession?.kind==='diagnostic'){if(!answerLock)mejSaveDiagnostic();activeSession=null;route('diagnostic');return}const target=activeSession?.origin||mejQuizOrigin||'levels';activeSession=null;route(target)}
-function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
+function endSession(){let s=activeSession;if(!s)return;const returnTarget=s.origin==='journey'?'journey':s.origin==='skills'?'skills':'levels';const p=active();const pc=pct(s.score,s.ids.length);
 if(s.kind==='diagnostic'){
   // approximate placement, never claims standardized grade or CEFR test.
   const bounds=[[95,12],[90,11],[83,10],[76,9],[70,8],[63,7],[57,6],[51,5],[45,4],[38,3],[30,2]];
@@ -2410,7 +2465,7 @@ function reports(){
  document.getElementById('app').innerHTML=`<section class="card student-summary"><h1 class="section-title">📊 معاينة تقدّم الطالب</h1><p class="caption">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—')}</p><div class="student-summary-grid"><div class="info"><b>⭐ ${fmt(p.stars)}</b><small>النجوم</small></div><div class="info"><b>${stageStars(g,p)}/50</b><small>الإتقان في المستوى الحالي ${g}</small></div><div class="info"><b>${pct(p.right,p.attempts)}%</b><small>دقة التدريب</small></div><div class="info"><b>${p.diagnosed?esc(p.assigned):'—'}</b><small>مستوى التشخيص</small></div></div><div class="week"><b>📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class="actions"><button class="btn light" onclick="route('journey')">⛵ رحلتي الحالية</button><button class="btn light" onclick="route('home')">🏠 الرئيسية</button></div></section>`;
 }
 function payload(p,event='progress',reportId=''){
- let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));
+ let levelStats=Array.from({length:13},(_,g)=>{const stars=Math.min(50,stageStars(g,p));return {level:g,mastered:countMaster(g,p),stars,starTarget:50,total:200,masteryPercent:pct(stars,50),completed:achieved(g,p)}});
  const weekWindow=mejOmanWeekWindow();const weekly=(p.activity||[]).filter(x=>mejIsCurrentWeekEvent(x,weekWindow));
  return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};
 }
@@ -2510,7 +2565,8 @@ async function sendReport(manual=false){
   const profileRef=Array.from(new Uint8Array(hash),n=>n.toString(16).padStart(2,'0')).join('');
   const levelStats=Array.from({length:13},(_,g)=>{
    const mastered=Math.max(0,Math.min(200,countMaster(g,profile)));
-   return {level:g,mastered,total:200,masteryPercent:Math.round(mastered*100/200)};
+   const stars=Math.min(50,stageStars(g,profile));
+   return {level:g,mastered,stars,starTarget:50,total:200,masteryPercent:Math.round(stars*100/50)};
   });
   const weekWindow=mejOmanWeekWindow();
   const attempts=Math.max(0,Math.min(10000000,Number(profile.attempts)||0));

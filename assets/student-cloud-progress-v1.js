@@ -38,6 +38,10 @@ function safePayload(value){
    out.diagnosticDate=String(p.diagnosticDate||'').slice(0,40);
    out.journeyIsland=Number.isInteger(Number(p.journeyIsland))?Number(p.journeyIsland):null;
    if(p.hiddenObjectsLedger&&typeof p.hiddenObjectsLedger==='object'&&!Array.isArray(p.hiddenObjectsLedger))out.hiddenObjectsLedger=p.hiddenObjectsLedger;
+   if(p.stageSkillLegacyFloorV1&&typeof p.stageSkillLegacyFloorV1==='object'&&!Array.isArray(p.stageSkillLegacyFloorV1)){
+    const floor={};for(const [level,value] of Object.entries(p.stageSkillLegacyFloorV1))if(/^(?:[1-9]|1[0-2])$/.test(level)&&Number.isSafeInteger(value)&&value>=0&&value<=50)floor[level]=value;
+    out.stageSkillLegacyFloorV1=floor;
+   }
    if(JSON.stringify(out).length>150000)return {};
    return out;
   })()};

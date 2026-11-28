@@ -57,6 +57,15 @@ test('legacy conversion never removes an earned 20-star badge (exhaustive 0..200
   }
 });
 
+test('missing-stars mastered*2 fallback also preserves every earned badge', () => {
+  for (let mastered = 0; mastered <= 100; mastered++) {
+    const oldEstimatedStars = mastered * 2;
+    const oldBadges = Math.floor(oldEstimatedStars / 20);
+    const migratedStars = migrateLegacyStars(undefined, mastered);
+    assert.equal(unlockedBadges(migratedStars), oldBadges, `mastered=${mastered}`);
+  }
+});
+
 test('source migration converts every level_stats object and preserves other JSON fields', () => {
   assert.ok(dataMigration.includes('update public.mej_student_progress'));
   assert.ok(dataMigration.includes('jsonb_array_elements(progress.level_stats)'));

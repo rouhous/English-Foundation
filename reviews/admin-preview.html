@@ -103,8 +103,12 @@ async function gate(action,code){
 function prelude(html){
  if(!/id="mej-owner-only-gate"/.test(html))throw Error('INVALID_PREVIEW_SOURCE');
  // Server has verified the Google owner, existing Admin PIN and expiring session.
- // Remove the original student-freemium redirect gate only inside this isolated preview.
- const gate=/<script\s+id="mej-owner-only-gate">[\s\S]*?<\/script>/i;
+ // Remove both parts of the original student-freemium gate inside this isolated,
+ // authenticated owner preview. Replacing only the script leaves its CSS cloak
+ // (html{visibility:hidden!important}) active and hides the entire app iframe.
+ const gateStyle=/<style\\s+id=["']mej-owner-gate-style["'][^>]*>[\\s\\S]*?<\\/style>/i;
+ if(gateStyle.test(html))html=html.replace(gateStyle,'');
+ const gate=/<script\\s+id="mej-owner-only-gate">[\\s\\S]*?<\\/script>/i;
  if(!gate.test(html))throw Error('INVALID_OWNER_GATE');
  const mark='<script>window.__MEJ_ADMIN_PREVIEW_ACTIVE=true;window.__MEJ_ACCESS_ROLE="owner";window.__MEJ_OWNER_VERIFIED_SESSION=true;window.__MEJ_PREVIEW_BASE="https://cdn.jsdelivr.net/gh/rouhous/English-Foundation@b16d233a3c38dc591457a9379905791eb75952e0";<'+'/script>';
  html=html.replace(gate,mark);

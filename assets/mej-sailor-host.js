@@ -175,7 +175,26 @@
    frame.title='بوابة الألعاب — رحلتي مع الإنجليزية';
    frame.style.cssText='display:block;width:100%;height:calc(100% - 44px);border:0;background:#092f51';
    frame.setAttribute('allow','fullscreen');
-   frame.src='./games/index.html?grade='+encodeURIComponent(Math.max(1,Math.min(12,Number(learner.grade)||1)));
+   const gameGrade=Math.max(1,Math.min(12,Number(learner.grade)||1));
+   const previewBase=typeof window.__MEJ_PREVIEW_BASE==='string'?window.__MEJ_PREVIEW_BASE:'';
+   const rawBase=previewBase.endsWith('/')?previewBase.slice(0,-1):previewBase;
+   if(rawBase){
+     fetch(rawBase+'/games/index.html',{cache:'no-store'}).then(response=>{
+       if(!response.ok)throw new Error('PREVIEW_GAMES_UNAVAILABLE');
+       return response.text();
+     }).then(documentHtml=>{
+       const gameBase='https://rouhous.github.io/English-Foundation/games/';
+       documentHtml=documentHtml.replace('<head>','<head><base href="'+gameBase+'">');
+       const arcadeTag='<script src="./arcade.js"></script>';
+       if(!documentHtml.includes(arcadeTag))throw new Error('PREVIEW_ARCADE_SCRIPT_MISSING');
+       documentHtml=documentHtml.replace(arcadeTag,'<script src="'+rawBase+'/games/arcade.js"><\/script>');
+       frame.srcdoc=documentHtml;
+     }).catch(()=>{
+       frame.srcdoc='<main dir="rtl" style="font:700 16px system-ui;padding:24px;color:#fff;background:#073b59">تعذر تحميل نسخة الألعاب المحدّثة للمعاينة. أعد المحاولة بعد التحقق من الاتصال.</main>';
+     });
+   }else{
+     frame.src='./games/index.html?grade='+encodeURIComponent(gameGrade);
+   }
    const sendInit=()=>{
      const now=active();
      if(!dialog.open||now?.id!==learner.id)return;

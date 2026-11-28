@@ -71,7 +71,7 @@
   if(event.origin!==location.origin||event.source!==window.parent)return;
   if(event.data?.type!=='mej:arcade-init')return;
   const n=Number(event.data.stageStars),s=Number(event.data.stage);
-  if(!Number.isInteger(s)||s<0||s>12||!Number.isInteger(n)||n<0||n>200)return;
+  if(!Number.isInteger(s)||s<0||s>12||!Number.isInteger(n)||n<0||n>50)return;
   hostStage=s;hostUnlockStars=n;hostAuthorized=true;
   applyBadgeLocks();
  });

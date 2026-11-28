@@ -20,16 +20,16 @@ small{color:#b9d3dc}
 <header><h1>⛵ رحلة القارب والكنز</h1><span class="chip" id="starsBadge">⭐ 0</span><span class="chip" id="rewardBadge">🏅 0 / 10 شارات</span></header>
 <div class="board"><canvas id="game" width="450" height="650" aria-label="لعبة القارب: اسحب القارب يمينًا ويسارًا لتجنب العوائق وجمع الكنوز"></canvas></div>
 <p class="tip">اسحب القارب بإصبعك أو حرّكه بالأسهم. اجمع الجواهر وتجنب الصخور وافتح الكنوز لتحصل على نقاط لعب. النجوم التعليمية تُكتسب من أنشطة التعلم فقط.</p>
-<div class="actions"><button id="start">ابدأ / أعد اللعب</button><button id="back" class="secondary">عودة</button><label>نجوم المرحلة (تجربة): <input id="stars" type="number" min="0" max="200" step="1" value="40"></label></div>
-<div class="chip" id="starsSummary" aria-live="polite">نجوم المرحلة: 0 / 200</div><p id="notice" aria-live="polite"></p>
+<div class="actions"><button id="start">ابدأ / أعد اللعب</button><button id="back" class="secondary">عودة</button><label>نجوم المرحلة (تجربة): <input id="stars" type="number" min="0" max="50" step="1" value="10"></label></div>
+<div class="chip" id="starsSummary" aria-live="polite">نجوم المرحلة: 0 / 50</div><p id="notice" aria-live="polite"></p>
 <small>نسخة تدريبية: الجواهر والكنوز تمنح نقاطًا داخل اللعبة فقط؛ لا تُضاف تلقائيًا إلى نجوم التعلم.</small>
 <script type="module">
 import {stageStatus,collectGameObject} from './rewards.js';
 const el=id=>document.getElementById(id),cv=el('game'),ctx=cv.getContext('2d');
 const W=cv.width,H=cv.height, lanes=[100,225,350], boat={x:225,y:550,w:48,h:62};
-let stars=40,objects=[],running=false,last=0,spawn=0,score=0,frames=0;
+let stars=10,objects=[],running=false,last=0,spawn=0,score=0,frames=0;
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-function update(){const s=stageStatus({stars});el('starsBadge').textContent='⭐ '+s.stars;el('rewardBadge').textContent='🏅 '+s.badges+' / '+s.maxBadges+' شارات';el('starsSummary').textContent='نجوم التعلم: '+s.stars+' / 200 | المتبقي: '+s.remainingStars;el('notice').textContent=s.nextBadgeStars?'الشارة القادمة عند '+s.nextBadgeStars+' نجمة تعليمية.':'اكتملت شارات المرحلة! يمكنك الاستمرار باللعب.';}
+function update(){const s=stageStatus({stars});el('starsBadge').textContent='⭐ '+s.stars;el('rewardBadge').textContent='🏅 '+s.badges+' / '+s.maxBadges+' شارات';el('starsSummary').textContent='نجوم التعلم: '+s.stars+' / 50 | المتبقي: '+s.remainingStars;el('notice').textContent=s.nextBadgeStars?'الشارة القادمة عند '+s.nextBadgeStars+' نجمة تعليمية.':'اكتملت شارات المرحلة! يمكنك الاستمرار باللعب.';}
 function drawBoat(){ctx.save();ctx.translate(boat.x,boat.y);ctx.font='49px system-ui';ctx.textAlign='center';ctx.fillText('⛵',0,17);ctx.restore();}
 function draw(){ctx.fillStyle='#0c5986';ctx.fillRect(0,0,W,H);ctx.fillStyle='#1881ab';for(let i=0;i<3;i++){ctx.fillRect(i*150+4,0,142,H);}ctx.strokeStyle='#bde4e977';ctx.lineWidth=3;ctx.setLineDash([22,22]);[150,300].forEach(x=>{ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();});ctx.setLineDash([]);
 ctx.textAlign='center';ctx.font='31px system-ui';for(const o of objects)ctx.fillText(o.type==='rock'?'🪨':o.type==='gem'?'💎':'🎁',o.x,o.y);drawBoat();ctx.fillStyle='#fff';ctx.textAlign='left';ctx.font='bold 17px system-ui';ctx.fillText('💎 '+score,14,30);
@@ -45,9 +45,9 @@ cv.addEventListener('pointerdown',ev=>{if(Math.abs(pointerX(ev)-boat.x)<90){drag
 cv.addEventListener('pointermove',ev=>{if(dragging){setBoat(pointerX(ev));if(!running)draw();}});
 cv.addEventListener('pointerup',()=>{dragging=false;});cv.addEventListener('pointercancel',()=>{dragging=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='ArrowLeft'||ev.key==='ArrowRight'){ev.preventDefault();setBoat(boat.x+(ev.key==='ArrowLeft'?-35:35));if(!running)draw();}});
-el('stars').addEventListener('input',ev=>{stars=clamp(Number(ev.target.value)||0,0,200);update();});
+el('stars').addEventListener('input',ev=>{stars=clamp(Number(ev.target.value)||0,0,50);update();});
 el('start').addEventListener('click',()=>{running=true;objects=[];score=0;boat.x=225;last=performance.now();spawn=0;requestAnimationFrame(step);});
 el('back').addEventListener('click',()=>{if(history.length>1)history.back();else location.href='../';});
-const p=new URLSearchParams(location.search);if(p.has('stars')){stars=clamp(Number(p.get('stars'))||0,0,200);el('stars').value=stars;}
+const p=new URLSearchParams(location.search);if(p.has('stars')){stars=clamp(Number(p.get('stars'))||0,0,50);el('stars').value=stars;}
 update();draw();
 </script></main></body></html>

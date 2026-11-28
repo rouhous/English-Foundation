@@ -5,7 +5,7 @@
 (()=>{'use strict';
  const places=[["خصب","Khasab"],["صحار","Sohar"],["ميناء صحار","Port of Sohar"],["مسقط","Muscat"],["ميناء مطرح","Muttrah Port"],["صور","Sur"],["الدقم","Duqm"],["جزيرة مصيرة","Masirah Island"],["جزر الديمانيات","Daymaniyat Islands"],["صلالة","Salalah"]];
  const badges=Object.freeze(places.map(([ar,en],i)=>Object.freeze({
-   number:i+1,ar,en,requiredMasteryStars:(i+1)*20,gameSlot:i+1
+   number:i+1,ar,en,requiredMasteryStars:(i+1)*5,gameSlot:i+1
  })));
  const gradeBands=Object.freeze([
    Object.freeze({name:'junior',from:1,to:4,targetGames:10}),
@@ -21,8 +21,8 @@
    upper:Object.freeze(["hidden","flip","grammar","vocab","sentence","falling","evidence","detective","argument","escape"])
  });
  const policy=Object.freeze({
-   masteryStarsPerBadge:20,
-   masteryStarsPerPhase:200,
+   masteryStarsPerBadge:5,
+   masteryStarsPerPhase:50,
    gamesPerGradeBand:10,
    tasksPerGame:10,
    maximumBonusStarsPerGame:10,

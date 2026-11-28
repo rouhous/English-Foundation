@@ -1,6 +1,6 @@
 /** My English Journey — stars-only boat game. No cash, wallet, or payout API. */
-export const STARS_PER_BADGE=20;
-export const STAGE_MAX_STARS=200;
+export const STARS_PER_BADGE=5;
+export const STAGE_MAX_STARS=50;
 export const MAX_BADGES=10;
 const whole=v=>Number.isFinite(Number(v))?Math.max(0,Math.floor(Number(v))):0;
 export function nextMilestone(stars){

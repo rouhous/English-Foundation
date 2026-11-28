@@ -24,7 +24,7 @@ test('selects only unmastered unique vocabulary and recovers Arabic meaning',()=
  ];
  const out=run(rows,{v1:2});
  assert.deepEqual(Array.from(out,x=>x.word),['coast','harbour','island']);
- assert.equal(out[0].answer,'ميناء');
+ assert.equal(out.find(x=>x.word==='harbour').answer,'ميناء');
 });
 
 test('keeps zero/one-correct attempts and excludes mastered words',()=>{

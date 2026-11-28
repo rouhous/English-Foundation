@@ -82,17 +82,21 @@ function normalized(data:Record<string,unknown>){
    if(!state||typeof state!=='object'||Array.isArray(state)||JSON.stringify(state).length>155000)throw Error('INVALID_PRIVATE_STATE');
    for(const key of ['correct','wrong','writing'])if(state[key]!==undefined&&(!state[key]||typeof state[key]!=='object'||Array.isArray(state[key])))throw Error('INVALID_PRIVATE_STATE');
    if(state.activity!==undefined&&(!Array.isArray(state.activity)||state.activity.length>1500))throw Error('INVALID_PRIVATE_STATE');
-   const floor=state.stageSkillLegacyFloorV1??{};
-   if(!floor||typeof floor!=='object'||Array.isArray(floor)||Object.entries(floor).length>12)throw Error('INVALID_PRIVATE_STATE');
-   const legacyFloor:Record<string,number>={};
+   const floor=state.stageSkillLegacyFloorV1??{},baseline=state.stageSkillLegacyBaselineV1??{};
+   for(const map of [floor,baseline])if(!map||typeof map!=='object'||Array.isArray(map)||Object.entries(map).length>12)throw Error('INVALID_PRIVATE_STATE');
+   const legacyFloor:Record<string,number>={},legacyBaseline:Record<string,number>={};
    for(const [level,value] of Object.entries(floor)){
     if(!/^(?:[1-9]|1[0-2])$/.test(level)||!Number.isInteger(value)||Number(value)<0||Number(value)>50)throw Error('INVALID_PRIVATE_STATE');
     legacyFloor[level]=Number(value);
    }
+   for(const [level,value] of Object.entries(baseline)){
+    if(!/^(?:[1-9]|1[0-2])$/.test(level)||!Number.isInteger(value)||Number(value)<0||Number(value)>50)throw Error('INVALID_PRIVATE_STATE');
+    legacyBaseline[level]=Number(value);
+   }
    return {correct:state.correct||{},wrong:state.wrong||{},writing:state.writing||{},
     activity:state.activity||[],diagnosticScore:state.diagnosticScore??null,
     diagnosticDate:String(state.diagnosticDate||'').slice(0,40),
-    journeyIsland:state.journeyIsland??null,stageSkillLegacyFloorV1:legacyFloor,
+    journeyIsland:state.journeyIsland??null,stageSkillLegacyFloorV1:legacyFloor,stageSkillLegacyBaselineV1:legacyBaseline,
     hiddenObjectsLedger:validHiddenLedger(state.hiddenObjectsLedger??{},data.levelStats)};
   })()};
 }

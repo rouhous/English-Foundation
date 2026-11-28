@@ -7,19 +7,33 @@ on:
       - 'coastal-arcade/**'
       - 'scripts/qa-coastal-live.mjs'
       - '.github/workflows/mej-coastal-live-qa.yml'
+  pull_request:
+    branches: [preview/owner-review-updates]
+    paths:
+      - 'coastal-arcade/**'
+      - 'scripts/qa-coastal-live.mjs'
+      - 'scripts/qa-coastal-srcdoc-init.mjs'
+      - 'tests/coastal-unmastered-vocabulary.test.mjs'
+      - '.github/workflows/mej-coastal-live-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   qa:
-    runs-on: ubuntu-latest
-    timeout-minutes: 7
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify original badge artwork and the student arcade bridge
+      - name: Install Chromium test runner
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify bridge, vocabulary helper, and real srcdoc initialization
         run: |
           node --check coastal-arcade/app-bridge.js
+          node --test tests/coastal-unmastered-vocabulary.test.mjs
           node scripts/qa-coastal-live.mjs
+          node scripts/qa-coastal-srcdoc-init.mjs

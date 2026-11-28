@@ -8,6 +8,34 @@ function ownerPreview(){
         window.__MEJ_OWNER_VERIFIED_SESSION===true;
 }
 function count(stage){try{return Math.max(0,Math.min(200,Number(countMaster(stage,active()))||0))}catch(_){return 0}}
+function coastalUnmasteredVocabulary(stage,profile){
+ const rows=typeof byGrade!=='undefined'&&Array.isArray(byGrade[stage])?byGrade[stage]:[];
+ const correct=profile?.correct&&typeof profile.correct==='object'?profile.correct:{};
+ const vocabulary=rows.filter(row=>row&&row.type==='Vocabulary');
+ const arabic=/[\u0600-\u06FF]/;
+ const meanings=new Map();
+ function wordOf(row){
+  const quoted=String(row?.prompt||'').match(/[“"']([^”"']+)[”"']/);
+  return String(row?.word||row?.audio||quoted?.[1]||'').trim();
+ }
+ for(const row of vocabulary){
+  const word=wordOf(row),answer=String(row?.answer||'').trim();
+  if(word&&arabic.test(answer)&&!meanings.has(word.toLowerCase()))meanings.set(word.toLowerCase(),answer);
+ }
+ const result=[],seen=new Set();
+ for(const row of vocabulary){
+  const word=wordOf(row),key=word.toLowerCase();
+  if(!word||seen.has(key))continue;
+  const attempts=Number(correct[row.id]??0);
+  if(Number.isFinite(attempts)&&attempts>=2)continue;
+  const rawAnswer=String(row?.answer||'').trim();
+  const answer=arabic.test(rawAnswer)?rawAnswer:(meanings.get(key)||'');
+  if(!answer)continue;
+  seen.add(key);
+  result.push({id:String(row.id||''),word,answer,pic:String(row.pic||word)});
+ }
+ return result;
+}
 function safe(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function repaint(){
  const grid=document.querySelector('#app .j23-badge-grid');if(!grid)return;const role=ownerPreview()?'owner':'student';if(grid.dataset.coastalReady==='yes'&&grid.dataset.coastalAccess===role)return;
@@ -281,7 +309,7 @@ window.addEventListener('message',event=>{
  const stage=Number(box.dataset.stage),grade=stage===0?1:Math.max(1,Math.min(12,stage)),token=window.__MEJ_ACCESS_ROLE==='student'?localStorage.getItem('MEJ_STUDENT_ACCESS_V1')||'':'';
  const owner=ownerPreview();
  // The selected learning stage (0-12), not the student's registered school grade, sets game difficulty.
- f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner},location.origin)
+ f.contentWindow.postMessage({type:'mej:coastal-init',selectedBadge:Number(box.dataset.badge),stage,grade:Number.isInteger(grade)&&grade>=1&&grade<=12?grade:1,stageStars:owner?200:count(stage),accessToken:!owner&&/^[a-f0-9]{64}$/.test(token)?token:'',ownerPreview:owner,masteryWords:coastalUnmasteredVocabulary(stage,p)},location.origin)
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('mejCoastalOverlay')){e.preventDefault();close()}});
 function init(){

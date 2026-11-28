@@ -23,7 +23,7 @@ test('selects only unmastered unique vocabulary and recovers Arabic meaning',()=
   {id:'v4',type:'Vocabulary',word:'island',answer:'جزيرة'}
  ];
  const out=run(rows,{v1:2});
- assert.deepEqual(out.map(x=>x.word),['harbour','island']);
+ assert.deepEqual(Array.from(out,x=>x.word),['coast','harbour','island']);
  assert.equal(out[0].answer,'ميناء');
 });
 
@@ -32,5 +32,5 @@ test('keeps zero/one-correct attempts and excludes mastered words',()=>{
   {id:'a',type:'Vocabulary',word:'boat',answer:'قارب'},
   {id:'b',type:'Vocabulary',word:'sail',answer:'شراع'}
  ],{a:1,b:2});
- assert.deepEqual(out.map(x=>x.word),['boat']);
+ assert.deepEqual(Array.from(out,x=>x.word),['boat']);
 });

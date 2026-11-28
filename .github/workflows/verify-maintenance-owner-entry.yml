@@ -1,0 +1,24 @@
+name: Verify maintenance owner entry
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'reviews/owner-login.html'
+      - 'reviews/admin-preview.html'
+      - 'scripts/test_maintenance_owner_entry.cjs'
+      - '.github/workflows/verify-maintenance-owner-entry.yml'
+  push:
+    branches: [feat/maintenance-anchor-owner-preview]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/test_maintenance_owner_entry.cjs

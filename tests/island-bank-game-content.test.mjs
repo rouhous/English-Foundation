@@ -21,7 +21,7 @@ const game = extractInlineGame(coastalHtml);
 const providerStart = bridge.indexOf('/* MEJ_ISLAND_BANK_PROVIDER_V1_START');
 const providerEnd = bridge.indexOf('/* MEJ_ISLAND_BANK_PROVIDER_V1_END */', providerStart);
 assert.ok(providerStart >= 0 && providerEnd > providerStart);
-const providerSource = bridge.slice(providerStart + '/* MEJ_ISLAND_BANK_PROVIDER_V1_START'.length, providerEnd);
+const providerSource = bridge.slice(providerStart, providerEnd);
 
 function buildVocabulary(questions, correct = {}) {
   const pure = providerSource.slice(0, providerSource.indexOf('window.MEJ_GAME_BANK_PROVIDER='));
@@ -58,7 +58,7 @@ test('game vocabulary is extracted from bank questions and deduplicated by word'
     'L6-004': 2, 'L6-005': 0
   });
   assert.equal(words.length, 3);
-  assert.deepEqual(words.map(w => w[0]).sort(), ['cycling', 'hobby', 'skating']);
+  assert.deepEqual(Array.from(words, w => w[0]).sort(), ['cycling', 'hobby', 'skating']);
   assert.equal(words.find(w => w[0] === 'hobby')[1], 'هواية');
   assert.equal(words.find(w => w[0] === 'cycling')[1], 'ركوب الدراجة');
   assert.equal(words.find(w => w[0] === 'skating')[4].mastered, true);

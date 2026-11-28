@@ -62,9 +62,9 @@
  function applyBadgeLocks(){
   const button=el('gameGrid').querySelector('[data-game="hidden"]');
   if(!button)return;
-  button.disabled=!hostAuthorized||hostUnlockStars<20;
-  button.textContent=button.disabled?'🔒 تفتح عند 20 نجمة':'🔎 ابدأ البحث';
-  button.title=button.disabled?'تحتاج إلى 20 نجمة أساسية في جزيرتك الحالية':'';
+  button.disabled=!hostAuthorized||hostUnlockStars<5;
+  button.textContent=button.disabled?'🔒 تفتح عند 5 نجوم':'🔎 ابدأ البحث';
+  button.title=button.disabled?'تحتاج إلى 5 نجوم أساسية في جزيرتك الحالية':'';
  }
  applyBadgeLocks();
  window.addEventListener('message',event=>{
@@ -92,7 +92,7 @@
  });
  function start(mode){
   if(!shortMode[mode])return;
-  if(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<20))return;
+  if(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<5))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
   state.deck=shuffle(mode==='words'||mode==='definitions'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:mode==='truefalse'?x.words.map((word,i)=>{const other=x.words[(i+1)%x.words.length];const truth=i%2===0;return {word:word.en,shown:truth?word.ar:other.ar,truth}}):[]).slice(0,mode==='words'||mode==='definitions'||mode==='truefalse'?8:mode==='sentences'?4:3);

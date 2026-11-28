@@ -48,8 +48,8 @@ test('no legacy /20 or /200 star scales remain anywhere under coastal-arcade', a
   for (const file of await collect(root.pathname)) {
     const source = await readFile(file, 'utf8');
     // Strip embedded image payloads; they are not executable scale logic.
-    const code = source.replace(/data:image\\/[^;]+;base64,[A-Za-z0-9+/=]+/g, '');
-    assert.doesNotMatch(code, /\\/(?:20|200)(?=\\D|$)/, path.relative(root.pathname, file));
+    const code = source.replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/g, '');
+    assert.doesNotMatch(code, /\/(?:20|200)(?=\D|$)/, path.relative(root.pathname, file));
   }
 });
 

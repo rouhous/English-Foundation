@@ -18,7 +18,7 @@
  };
  const set=(id,value)=>{el(id).textContent=String(value)};
  const show=(id,visible)=>{el(id).hidden=!visible};
- const shortMode={words:'🖼️ Word Explorer',sentences:'🧩 Sentence Builder',grammar:'🏰 Grammar Gate',hidden:'🔎 Hidden Objects'};
+ const shortMode={words:'🖼️ Word Explorer',definitions:'🔁 Reverse Vocabulary',truefalse:'⚖️ True or False',sentences:'🧩 Sentence Builder',grammar:'🏰 Grammar Gate',hidden:'🔎 Hidden Objects'};
  function tone(ok){
   if(!state.audioEnabled)return;
   try{
@@ -95,7 +95,7 @@
   if(mode==='hidden'&&(!hostAuthorized||hostUnlockStars<20))return;
   state.mode=mode;state.index=0;state.score=0;state.responded=false;
   const x=bank[state.grade];
-  state.deck=shuffle(mode==='words'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:[]).slice(0,mode==='words'?8:mode==='sentences'?4:3);
+  state.deck=shuffle(mode==='words'||mode==='definitions'?x.words:mode==='sentences'?x.sentences:mode==='grammar'?x.grammar:mode==='truefalse'?x.words.map((word,i)=>{const other=x.words[(i+1)%x.words.length];const truth=i%2===0;return {word:word.en,shown:truth?word.ar:other.ar,truth}}):[]).slice(0,mode==='words'||mode==='definitions'||mode==='truefalse'?8:mode==='sentences'?4:3);
   show('hero',false);show('selector',false);show('gameGrid',false);show('gameStage',true);
   show('practiceView',false);show('frameView',false);show('resultView',false);
   set('gameTitle',shortMode[mode]);
@@ -139,6 +139,17 @@
     b.onclick=()=>answerChoice(b,word.en===current.en,current.ar);
     area.append(b);
    });
+  } else if(state.mode==='definitions'){
+   set('promptKicker','اقرأ المعنى العربي واختر الكلمة الإنجليزية');
+   set('promptIcon','🔁');title.textContent=current.ar;title.dir='rtl';
+   const area=el('answers');area.replaceChildren();show('answers',true);
+   state.choices=shuffle([current,...shuffle(bank[state.grade].words.filter(w=>w.en!==current.en)).slice(0,3)]);
+   state.choices.forEach(word=>{const b=document.createElement('button');b.type='button';b.className='answer';b.dir='ltr';b.textContent=word.en;b.setAttribute('aria-label',word.en);b.onclick=()=>answerChoice(b,word.en===current.en,current.en);area.append(b)});
+  } else if(state.mode==='truefalse'){
+   set('promptKicker','هل العبارة صحيحة أم خاطئة؟');set('promptIcon','⚖️');
+   title.textContent='The word “'+current.word+'” means “'+current.shown+'”.';title.dir='ltr';
+   const area=el('answers');area.replaceChildren();show('answers',true);
+   ['True','False'].forEach(label=>{const b=document.createElement('button');b.type='button';b.className='answer';b.dir='ltr';b.textContent=label;b.onclick=()=>answerChoice(b,(label==='True')===current.truth,current.truth?'The meaning is correct.':'The correct meaning is different.');area.append(b)});
   } else if(state.mode==='grammar'){
    set('promptKicker','Grammar Challenge · اختر الإجابة');
    set('promptIcon','📘');
@@ -176,6 +187,12 @@
       if(state.mode==='grammar'){
        const current=state.deck[state.index];
        if(b.textContent===current.options[current.answer])b.classList.add('correct');
+      }else if(state.mode==='truefalse'){
+       const current=state.deck[state.index];
+       if(b.textContent===(current.truth?'True':'False'))b.classList.add('correct');
+      }else if(state.mode==='definitions'){
+       const current=state.deck[state.index];
+       if(b.getAttribute('aria-label')===current.en)b.classList.add('correct');
       }else{
        const current=state.deck[state.index];
        if(b.getAttribute('aria-label')===current.ar)b.classList.add('correct');

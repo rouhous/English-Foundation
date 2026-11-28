@@ -61,7 +61,7 @@ test('coastal games no longer contain the standalone 12-word/legacy grade banks'
   assert.ok(!gameHtml.includes('data[group]'));
   assert.ok(gameHtml.includes('window.MEJ_GAME_CONTEXT?.bank'));
   assert.ok(gameHtml.includes('const recordDeck=bankWordRows(120)'));
-  assert.ok(gameHtml.includes('const visualDeck=photoRecordsForGrade()'));
+  assert.ok(gameHtml.includes('visualDeck=photoRecordsForGrade()'));
   for (const name of ['vocabDeck', 'sentenceRows', 'grammarDeck', 'escapeDeck', 'evidenceDeck', 'detectiveDeck', 'argumentDeck', 'listeningDeck', 'storyDeck']) {
     assert.ok(gameHtml.includes('const ' + name + '=bankDeck('), name + ' uses the island bank');
   }

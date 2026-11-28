@@ -124,9 +124,9 @@ function prelude(html){
  // absolute base the desktop image and companion/game assets fail to resolve.
  const previewBase='https://raw.githubusercontent.com/rouhous/English-Foundation/preview/owner-review-updates';
  const previewAssets=[
-  ['<script src="./assets/mej-sailor-host.js"></script>','<script src="'+previewBase+'/assets/mej-sailor-host.js"></script>'],
-  ['<script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>','<script src="'+previewBase+'/assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script>'],
-  ['<script src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>','<script src="'+previewBase+'/assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1" defer></script>']
+  ['src="./assets/mej-sailor-host.js"','src="'+previewBase+'/assets/mej-sailor-host.js"'],
+  ['src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step"','src="'+previewBase+'/assets/mej-spaced-review-v1.js?v=20261128-spaced-4step"'],
+  ['src="./assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1"','src="'+previewBase+'/assets/mej-grammar-feedback-v1.js?v=20261128-grammar-map-v1"']
  ];
  for(const [from,to] of previewAssets){
   if(!html.includes(from))throw Error('PREVIEW_ASSET_ANCHOR_MISSING');

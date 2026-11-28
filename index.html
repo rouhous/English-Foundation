@@ -2040,23 +2040,8 @@ function beginLevel(g,type=null,wrongOnly=false){if(!checkAccess(g))return;mejQu
 function trainWrong(g){beginLevel(g,null,true)}
 // MEJ_SPACED_REVIEW_AND_STREAK_V1 — schedule from the student's own attempt history.
 function mejReviewQueue(profile,now=Date.now()){
- const latest=new Map();
- for(const event of (profile?.activity||[])){
-  if(!event||typeof event.id!=='string'||!questionById[event.id])continue;
-  const at=typeof event.at==='string'?Date.parse(event.at):NaN;
-  const old=latest.get(event.id);
-  if(!old||(!Number.isFinite(old.at)&&Number.isFinite(at))||(Number.isFinite(at)&&at>=old.at))latest.set(event.id,{at,ok:event.ok===true});
- }
- const due=[];
- for(const [id,value] of Object.entries(profile?.correct||{})){
-  const correct=Math.max(0,Math.min(2,Number(value)||0));
-  if(correct>=2||!questionById[id])continue;
-  const last=latest.get(id);
-  let dueAt=now;
-  if(last&&Number.isFinite(last.at))dueAt=last.at+(correct>=1?86400000:(last.ok?86400000:600000));
-  if(dueAt<=now)due.push({id,dueAt,grade:questionById[id].g});
- }
- return due.sort((a,b)=>a.dueAt-b.dueAt);
+ const scheduler=window.MEJ_SPACED_REVIEW_V1;
+ return scheduler?scheduler.buildQueue(profile,questionById,now):[];
 }
 function mejActivityStreak(profile,now=Date.now()){
  const days=new Set((profile?.activity||[]).filter(x=>x&&!x.skipped).map(x=>{
@@ -2072,18 +2057,9 @@ function mejActivityStreak(profile,now=Date.now()){
  return streak;
 }
 function beginSpacedReview(){
- const p=active(),now=Date.now(),due=mejReviewQueue(p,now);
- let ids=due.map(x=>x.id);
- if(!ids.length){
-  ids=Object.keys(p.wrong||{}).filter(id=>questionById[id]&&(Number(p.correct?.[id])||0)<2)
-   .sort((a,b)=>(Number(p.wrong[b])||0)-(Number(p.wrong[a])||0));
- }
- if(!ids.length){
-  const g=currentIsland(p);
-  ids=shuffle((byGrade[g]||[]).filter(q=>(Number(p.correct?.[q.id])||0)<2).map(q=>q.id));
- }
- ids=ids.slice(0,8);
- if(!ids.length){toast('أحسنت! لا توجد عناصر للمراجعة حاليًا.');return}
+ const p=active(),due=mejReviewQueue(p,Date.now());
+ const ids=due.slice(0,8).map(x=>x.id);
+ if(!ids.length){toast('لا توجد أسئلة مستحقة للمراجعة الآن. ستظهر بعد المواعيد المحددة.');return}
  const grade=currentIsland(p);
  activeSession={kind:'practice',grade,origin:'journey',skillType:'spaced-review',ids,index:0,score:0,mistakes:[],responses:[]};
  displayQuestion();
@@ -3030,4 +3006,4 @@ body:has(#app > .mobile-ocean-v31) #mej-owner-rights-notice{display:block!import
 <span class="mej-rights-owner"><b>حسام لطفي الرواتبي</b> <span aria-hidden="true">|</span> <b dir="ltr" lang="en">Houssem Lotfi Rouatbi</b></span>
 </div>
 
-<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script></body></html>
+<script src="./assets/mej-sailor-host.js"></script><script src="./assets/mej-spaced-review-v1.js?v=20261128-spaced-4step" defer></script><script src="./assets/mej-writing-skills-v1.js?v=20261119-souq-full" defer></script><script src="./assets/mej-writing-curriculum-v3.js?v=20261114-writing-curriculum" defer></script><script src="assets/mej-skill-expansion-v1.js?v=20261108-skill-fix2" defer></script><script src="assets/mej-study-companion.js?v=20261108-direct-match" defer></script><script src="./coastal-arcade/app-bridge.js?v=20261114-coastal-live" defer></script><link rel="stylesheet" href="./assets/sea-map/stations.css"><script src="./assets/sea-map/stations.js"></script></body></html>

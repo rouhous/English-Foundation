@@ -2410,7 +2410,7 @@ function reports(){
  document.getElementById('app').innerHTML=`<section class="card student-summary"><h1 class="section-title">📊 معاينة تقدّم الطالب</h1><p class="caption">${esc(p.name||'زائر')} • ${esc(p.school||'مدرسة وادي الحواسنة')} • الصف ${esc(p.grade||'—')}</p><div class="student-summary-grid"><div class="info"><b>⭐ ${fmt(p.stars)}</b><small>النجوم</small></div><div class="info"><b>${stageStars(g,p)}/50</b><small>الإتقان في المستوى الحالي ${g}</small></div><div class="info"><b>${pct(p.right,p.attempts)}%</b><small>دقة التدريب</small></div><div class="info"><b>${p.diagnosed?esc(p.assigned):'—'}</b><small>مستوى التشخيص</small></div></div><div class="week"><b>📅 نشاط هذا الأسبوع:</b> ${weekly.length} محاولة، ${wright} إجابة صحيحة.</div><div class="actions"><button class="btn light" onclick="route('journey')">⛵ رحلتي الحالية</button><button class="btn light" onclick="route('home')">🏠 الرئيسية</button></div></section>`;
 }
 function payload(p,event='progress',reportId=''){
- let levelStats=Array.from({length:13},(_,g)=>({level:g,mastered:countMaster(g,p),total:200,masteryPercent:pct(countMaster(g,p),200),completed:achieved(g,p)}));
+ let levelStats=Array.from({length:13},(_,g)=>{const stars=Math.min(50,stageStars(g,p));return {level:g,mastered:countMaster(g,p),stars,starTarget:50,total:200,masteryPercent:pct(stars,50),completed:achieved(g,p)}});
  const weekWindow=mejOmanWeekWindow();const weekly=(p.activity||[]).filter(x=>mejIsCurrentWeekEvent(x,weekWindow));
  return {schema:'english-foundation-oman-progress-v1',version:'2026-10-22',reportId,event,timestamp:new Date().toISOString(),studentId:'STAGING_TEST_'+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(0,40),studentName:'STAGING TEST '+String(p.id||'TEST').replace(/[^A-Za-z0-9_-]/g,'').slice(-10),studentGrade:p.grade,school:'STAGING TEST SCHOOL',className:p.className||'',teacherCode:p.teacherCode||'',teacher:'Houssem Rouatbi',diagnosticDone:!!p.diagnosed,assignedLevel:p.assigned||'',diagnosticPercent:p.diagnosticScore??'',diagnosticDate:p.diagnosticDate||'',maxAccessibleLevel:maxAllowed(p),completedLevels:levelStats.filter(x=>x.completed).map(x=>x.level).join(','),stars:p.stars||0,attempts:p.attempts||0,correctAnswers:p.right||0,accuracyPercent:pct(p.right,p.attempts),masteredItems:totalMaster(p),totalItems:2600,levelStats,lastActivity:new Date(p.lastActivity||Date.now()).toISOString(),weeklyAttempts:weekly.length,writingDraftCount:Object.keys(p.writing||{}).length};
 }
@@ -2510,7 +2510,8 @@ async function sendReport(manual=false){
   const profileRef=Array.from(new Uint8Array(hash),n=>n.toString(16).padStart(2,'0')).join('');
   const levelStats=Array.from({length:13},(_,g)=>{
    const mastered=Math.max(0,Math.min(200,countMaster(g,profile)));
-   return {level:g,mastered,total:200,masteryPercent:Math.round(mastered*100/200)};
+   const stars=Math.min(50,stageStars(g,profile));
+   return {level:g,mastered,stars,starTarget:50,total:200,masteryPercent:Math.round(stars*100/50)};
   });
   const weekWindow=mejOmanWeekWindow();
   const attempts=Math.max(0,Math.min(10000000,Number(profile.attempts)||0));

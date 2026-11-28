@@ -211,10 +211,10 @@ function forGrade(rawGrade){
  const evidence=(grade<=4?E.easy:grade<=9?E.middle:E.upper).map(x=>x.slice());
  const detective=(grade<=7?D.simple:D.advanced).map(x=>[x[0],x[1],[...x[2]]]);
  const argument=(grade<=9?A.early:A.upper).map(x=>x.slice());
- const vocabEscape=words.map((w,i)=>{
-  const options=[w[0],words[(i+3)%words.length][0],words[(i+7)%words.length][0]];
-  const q=grade<=5?'Which word means "'+w[1]+'"?':'Which word means: '+w[3]+'?';
-  return ['Door · Word code',q,w[0],options];
+ const vocabEscape=vocab.map((w,i)=>{
+  const options=[w[0],vocab[(i+3)%vocab.length]?.[0],vocab[(i+7)%vocab.length]?.[0]].filter(Boolean);
+  const q='Choose the English word for: '+(w[1]||w[0]);
+  return ['Door · Word code',q,w[0],options,w[4]||{}];
  });
  const grammarEscape=grammar.map(q=>['Door · Grammar code',q[0],q[2],[...q[1]]]);
  const evidenceEscape=evidence.map(q=>['Door · Evidence code','Which source best checks this claim? '+q[0],q[1],q.slice(1)]);

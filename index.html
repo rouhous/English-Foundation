@@ -1548,7 +1548,7 @@ function mejReconcileLocalStars(profile){
  profile.stars=Math.max(Number(profile.stars)||0,Math.min(3250,total+Math.max(0,Number(window.mejHiddenBonusTotal?.(profile)||0))));
  return profile.stars
 }
-function persist(send=true){mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
+function persist(send=true){mejEnsureSkillLegacyFloor(active());mejReconcileLocalStars(active());active().lastActivity=Date.now();let saved=false;try{localStorage.setItem(DBKEY,JSON.stringify(db));saved=true;}catch(e){toast('تعذر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية.')}if(saved&&send&&active().name)scheduleReport();if(saved&&typeof window.eeScheduleCloudSave==='function')window.eeScheduleCloudSave();return saved;}
 let reportTimer=null,reportBusy=false,reportDirty=false;
 function scheduleReport(){
  clearTimeout(reportTimer);
